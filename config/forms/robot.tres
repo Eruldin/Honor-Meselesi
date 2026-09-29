@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FormData" load_steps=2 format=3 uid="uid://cqformrobot001"]
+
+[ext_resource type="Script" path="res://src/player/forms/form_data.gd" id="1_fd"]
+
+[resource]
+script = ExtResource("1_fd")
+id = &"robot"
+display_name = "Robot"
+sprite_color = Color(0.55, 0.6, 0.7, 1)
+body_size = Vector2(14, 20)
+run_speed_mult = 0.62
+jump_velocity_mult = 0.85
+gravity_mult = 1.35
+damage_mult = 1.5
+knockback_resist = 0.85
+can_break_ground = true

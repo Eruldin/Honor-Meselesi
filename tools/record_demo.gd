@@ -27,29 +27,40 @@ func _run_script() -> void:
 	await _wait(0.6)
 	_capturing = true
 
-	_ai.axis(1.0)              # saga kos
-	await _wait(0.9)
-	_ai.tap(&"jump")           # platforma zipla
-	await _wait(0.5)
-	_ai.axis(0.0)
-	await _wait(0.4)
-
-	_ai.tap(&"attack")         # 3'lu kombo — kuklaya
-	await _wait(0.2)
-	_ai.tap(&"attack")
-	await _wait(0.2)
-	_ai.tap(&"attack")
+	_ai.axis(1.0)              # kos
 	await _wait(0.7)
+	_ai.axis(0.0)
+	await _wait(0.2)
 
-	_ai.tap(&"dash")           # dash
+	_ai.tap(&"form_next")      # samurai -> tavuk
+	await _wait(0.6)
+	_ai.tap(&"form_next")      # tavuk -> robot
+	await _wait(0.6)
+
+	_ai.axis(-1.0)             # robotla sola, catlak zemine yuruyus
+	await _wait(0.7)
+	_ai.axis(0.0)
+	await _wait(0.8)           # zemin kirilir
+
+	_ai.tap(&"form_prev")      # robot -> tavuk
+	await _wait(0.6)
+
+	_ai.axis(1.0)              # platforma dogru kos
+	await _wait(0.7)
+	_ai.tap(&"jump")
+	_ai.hold(&"jump")          # suzulus
+	await _wait(1.1)
+	_ai.release(&"jump")
 	await _wait(0.4)
 
-	_ai.axis(1.0)              # kulenin mermisine dogru kos
-	await _wait(1.3)
+	_ai.axis(1.0)              # dar tunelden yuru (sadece tavuk)
+	await _wait(1.6)
 	_ai.axis(0.0)
+
+	_ai.tap(&"attack")         # kukla onunde kombo
+	await _wait(0.2)
+	_ai.tap(&"attack")
 	await _wait(0.6)
-	_ai.tap(&"parry")          # parry dene
-	await _wait(1.0)
 
 	_capturing = false
 	print("capture done: %d frames" % _capture_count)

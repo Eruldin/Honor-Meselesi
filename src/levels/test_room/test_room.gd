@@ -3,6 +3,9 @@ extends Node2D
 ## Tum geometri kodla kurulur — placeholder asamasinda editor sahnesi
 ## yerine deterministik kurulum tercih edildi.
 
+## Debug: test odasinda tum formlar acik (DEVIN_PLAN M2).
+@export var debug_unlock_all_forms := true
+
 var samurai: Samurai
 var camera: ScreenShake
 var hud_label: Label
@@ -10,6 +13,9 @@ var _respawn_pending := false
 
 
 func _ready() -> void:
+	if debug_unlock_all_forms:
+		for fid in FormLibrary.all_ids():
+			GameState.unlock_form(fid)
 	_build_terrain()
 	_build_entities()
 	_build_fx()
@@ -23,6 +29,12 @@ func _build_terrain() -> void:
 	_add_ground(Vector2(60, 110), Vector2(70, 10))      # ust platform
 	_add_ground(Vector2(-6, 135), Vector2(12, 270))     # sol duvar
 	_add_ground(Vector2(486, 135), Vector2(12, 270))    # sag duvar
+	# Dar tunel: x 330..420, tavanin alti y=228 -> 14px gecit (sadece tavuk)
+	_add_ground(Vector2(375, 221), Vector2(90, 14))     # tunel tavani
+	# Catlak zemin: ana zeminin ustunde ince plaka (robot kirar)
+	var cracked := CrackedGround.new()
+	cracked.global_position = Vector2(160, 239)
+	add_child(cracked)
 
 
 func _add_ground(center: Vector2, size: Vector2) -> void:
@@ -77,6 +89,9 @@ func _build_fx() -> void:
 	fx.camera_path = camera.get_path()
 	add_child(fx)
 
+	add_child(PostFX.new())
+	add_child(SettingsMenu.new())
+
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
@@ -88,7 +103,7 @@ func _build_hud() -> void:
 	layer.add_child(hud_label)
 
 	var hint := Label.new()
-	hint.text = "A/D:hareket Space:zipla J:saldiri(alt+pogo) K:parry L:dash"
+	hint.text = "A/D:hareket Space:zipla J:saldiri(alt+pogo) K:parry L:dash Q/E:form Esc:ayar"
 	hint.position = Vector2(6, 256)
 	hint.add_theme_font_size_override("font_size", 7)
 	hint.add_theme_color_override("font_color", Color(0.6, 0.6, 0.65))
@@ -97,11 +112,12 @@ func _build_hud() -> void:
 
 func _process(_delta: float) -> void:
 	if samurai != null and hud_label != null:
-		hud_label.text = "durum: %s  can: %d/%d  kombo: %d" % [
+		hud_label.text = "durum: %s  can: %d/%d  kombo: %d  form: %s" % [
 			samurai.sm.current_name,
 			samurai.health.current,
 			samurai.health.max_health,
 			samurai.combo_index,
+			samurai.form.id if samurai.form != null else "?",
 		]
 
 

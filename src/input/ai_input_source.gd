@@ -64,6 +64,10 @@ func jump_just_released() -> bool:
 	return _active_jr.get(&"jump", false)
 
 
+func jump_held() -> bool:
+	return _held.get(&"jump", false)
+
+
 func attack_just_pressed() -> bool:
 	return _active_jp.get(&"attack", false)
 

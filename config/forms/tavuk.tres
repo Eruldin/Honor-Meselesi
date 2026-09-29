@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FormData" load_steps=2 format=3 uid="uid://cqformtavuk001"]
+
+[ext_resource type="Script" path="res://src/player/forms/form_data.gd" id="1_fd"]
+
+[resource]
+script = ExtResource("1_fd")
+id = &"tavuk"
+display_name = "Tavuk"
+sprite_color = Color(1, 0.9, 0.3, 1)
+body_size = Vector2(8, 10)
+run_speed_mult = 0.9
+jump_velocity_mult = 0.78
+can_glide = true
+glide_gravity_mult = 0.22
+glide_fall_speed = 42.0

@@ -20,12 +20,25 @@ class Rest:
 
 class Transform:
 	extends PlayerState
+	## Mavi "kod isimasi" gecisi; cikista bekleyen form uygulanir.
 
-	func physics_process(_delta: float) -> StringName:
+	func enter() -> void:
+		super.enter()
+		sam.sprite_flash(Color(0.2, 0.7, 1.0))
+		FX.shake(1.0, 0.15)
+
+	func physics_process(delta: float) -> StringName:
 		sam.velocity.x = 0.0
+		sam.apply_gravity(delta)
+		# Donusum sirasinda hafif buyume/kuculme puls'u
+		sam.sprite.scale = Vector2.ONE * (1.0 + 0.15 * sin(t * 25.0))
 		if t >= 0.4:
-			return Samurai.S_IDLE
+			return Samurai.S_FALL if not sam.is_on_floor() else Samurai.S_IDLE
 		return &""
+
+	func exit() -> void:
+		sam.sprite.scale = Vector2.ONE
+		sam.apply_pending_form()
 
 
 class Cutscene:
