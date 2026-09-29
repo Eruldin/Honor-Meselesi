@@ -46,7 +46,12 @@ func has_asset(logical_id: StringName) -> bool:
 		return false
 	var rel: String = entry.get("path", "")
 	if rel.is_empty():
-		return false
+		# cok dosyali animasyon: ilk dosya yeterli isaret
+		var fl: Variant = entry.get("files")
+		if fl is Array and not fl.is_empty():
+			rel = fl[0]
+		else:
+			return false
 	return FileAccess.file_exists(_resolve_external(rel))
 
 
@@ -55,11 +60,13 @@ func has_asset(logical_id: StringName) -> bool:
 ## globalize, 3) calistirilabilir yanindaki assets_external/ (export).
 func _resolve_external(rel: String) -> String:
 	var res := EXTERNAL_ROOT.path_join(rel)
-	if FileAccess.file_exists(res):
-		return res
+	# Mutlak yol tercih et: Image.load_from_file res:// uzerinden
+	# "will not work on export" hatasi basar (import'suz dis dosyalar).
 	var proj := ProjectSettings.globalize_path(res)
 	if FileAccess.file_exists(proj):
 		return proj
+	if FileAccess.file_exists(res):
+		return res
 	var beside_exe := OS.get_executable_path().get_base_dir().path_join(
 		"assets_external").path_join(rel)
 	if FileAccess.file_exists(beside_exe):
@@ -109,20 +116,27 @@ func frames(logical_id: StringName) -> SpriteFrames:
 	var sf := SpriteFrames.new()
 	if has_asset(logical_id):
 		var entry: Dictionary = _manifest[logical_id]
-		var sheet := _load_image_texture(entry["path"])
-		if sheet != null and entry.has("frame"):
-			var fw: int = entry["frame"][0]
-			var fh: int = entry["frame"][1]
-			var cols := int(sheet.get_width() / fw)
-			var rows := int(sheet.get_height() / fh)
-			sf.set_animation_speed(&"default", float(entry.get("fps", 8)))
-			sf.set_animation_loop(&"default", true)
-			for ry in rows:
-				for cx in cols:
-					var at := AtlasTexture.new()
-					at.atlas = sheet
-					at.region = Rect2(cx * fw, ry * fh, fw, fh)
-					sf.add_frame(&"default", at)
+		sf.set_animation_speed(&"default", float(entry.get("fps", 8)))
+		sf.set_animation_loop(&"default", true)
+		if entry.has("files"):
+			# cok dosyali animasyon: her dosya bir cerceve
+			for rel in entry["files"]:
+				var ftex := _load_image_texture(rel)
+				if ftex != null:
+					sf.add_frame(&"default", ftex)
+		elif entry.has("frame"):
+			var sheet := _load_image_texture(entry["path"])
+			if sheet != null:
+				var fw: int = entry["frame"][0]
+				var fh: int = entry["frame"][1]
+				var cols := int(sheet.get_width() / fw)
+				var rows := int(sheet.get_height() / fh)
+				for ry in rows:
+					for cx in cols:
+						var at := AtlasTexture.new()
+						at.atlas = sheet
+						at.region = Rect2(cx * fw, ry * fh, fw, fh)
+						sf.add_frame(&"default", at)
 	_cache[key] = sf
 	return sf
 
@@ -156,7 +170,9 @@ func tiled_texture(logical_id: StringName, size: Vector2i) -> Texture2D:
 ## Manifest'te tanimli ve animasyonlu sheet'i var mi?
 func has_frames(logical_id: StringName) -> bool:
 	var entry: Variant = _manifest.get(logical_id)
-	return entry is Dictionary and entry.has("frame") and has_asset(logical_id)
+	return (entry is Dictionary
+		and (entry.has("frame") or entry.has("files"))
+		and has_asset(logical_id))
 
 
 ## Ses/muzik akisi (ogg/mp3/wav dis dosyasi, import gerektirmez).

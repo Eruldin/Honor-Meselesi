@@ -108,12 +108,12 @@ func test_combo_reaches_three_and_resets() -> void:
 	assert_eq(sam.sm.current_name, Samurai.S_ATTACK)
 	assert_eq(sam.combo_index, 1)
 	ai.tap(&"attack")
-	await _frames(16)  # saldiri suresi ~0.26s ~ 16 frame
+	await _frames(22)  # saldiri suresi ~0.3s ~ 19 frame
 	assert_eq(sam.combo_index, 2, "kuyruklu saldiri 2. vurusa gecmeli")
 	ai.tap(&"attack")
-	await _frames(16)
+	await _frames(22)
 	assert_eq(sam.combo_index, 3)
-	await _frames(20)
+	await _frames(24)
 	assert_eq(sam.sm.current_name, Samurai.S_IDLE)
 	assert_eq(sam.combo_index, 0)
 

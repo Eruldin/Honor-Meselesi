@@ -55,6 +55,8 @@ var parry_timer: float = 0.0
 var parry_succeeded: bool = false
 var bleed_ticks: int = 0          ## vampir kanamasi (DoT)
 var bleed_interval: float = 1.2
+var _step_timer := 0.0            ## ayak sesi ritmi
+var _step_alt := false
 var _bleed_timer: float = 0.0
 
 var _flash_timer: float = 0.0
@@ -253,6 +255,17 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_sync_anim()
+	# Ayak sesi: yerde kosarken ritmik toprak adimi
+	if sm.current_name == S_RUN and is_on_floor() and absf(velocity.x) > 20.0:
+		_step_timer -= delta
+		if _step_timer <= 0.0:
+			_step_timer = 0.34
+			AudioManager.play_sfx(
+				&"sfx/footstep2" if _step_alt else &"sfx/footstep",
+				global_position, -10.0)
+			_step_alt = not _step_alt
+	else:
+		_step_timer = 0.05
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
@@ -341,6 +354,7 @@ func start_ground_attack() -> void:
 	combo_index = 1
 	combo_queued = false
 	AudioManager.play_sfx(&"sfx/attack", global_position)
+	_spawn_slash(combo_index >= 3)
 
 
 func start_air_attack() -> void:
@@ -440,6 +454,25 @@ func _on_parry_success(info: DamageInfo) -> void:
 
 func is_alive() -> bool:
 	return health.is_alive()
+
+
+## Katana savrulusu: gercek slash sheet'i, tek sefer oynat ve sil.
+func _spawn_slash(heavy := false) -> void:
+	var id := &"fx/slash_heavy" if heavy else &"fx/slash"
+	if not AssetLoader.has_frames(id):
+		return
+	var frames := AssetLoader.frames(id)
+	if frames == null or frames.get_frame_count(&"default") == 0:
+		return
+	var s := AnimatedSprite2D.new()
+	s.sprite_frames = frames
+	s.scale = Vector2(0.42, 0.42)   # 128px cel -> ~54px kesik
+	s.global_position = global_position + Vector2(facing * 20.0, -22.0)
+	s.flip_h = facing < 0
+	s.z_index = 40
+	get_parent().add_child(s)
+	s.animation_finished.connect(s.queue_free)
+	s.play(&"default")
 
 
 ## Vampir saldirisi kanama birakir (Bolum 3 DoT).

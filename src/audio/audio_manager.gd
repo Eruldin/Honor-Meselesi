@@ -55,7 +55,7 @@ func stop_music() -> void:
 
 
 ## Tek seferlik efekt; pos verilirse 2D konumlu calar.
-func play_sfx(logical_id: StringName, pos: Variant = null) -> void:
+func play_sfx(logical_id: StringName, pos: Variant = null, volume_db := 0.0) -> void:
 	var stream := AssetLoader.audio(logical_id)
 	if stream == null:
 		return
@@ -64,9 +64,11 @@ func play_sfx(logical_id: StringName, pos: Variant = null) -> void:
 		_sfx2d_idx = (_sfx2d_idx + 1) % _sfx_2d_pool.size()
 		p.global_position = pos
 		p.stream = stream
+		p.volume_db = volume_db
 		p.play()
 	else:
 		var p := _sfx_pool[_sfx_idx]
 		_sfx_idx = (_sfx_idx + 1) % _sfx_pool.size()
 		p.stream = stream
+		p.volume_db = volume_db
 		p.play()

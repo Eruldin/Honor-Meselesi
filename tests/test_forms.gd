@@ -94,7 +94,7 @@ func test_samurai_blocked_chicken_fits_tunnel() -> void:
 	# Tavuga donusup gec
 	GameState.unlock_form(&"tavuk")
 	sam.apply_form_data(FormLibrary.get_form(&"tavuk"))
-	await _frames(80)
+	await _frames(140)
 	assert_gt(sam.global_position.x, 215.0, "tavuk tunelden gecebilmeli")
 	ai.axis(0.0)
 

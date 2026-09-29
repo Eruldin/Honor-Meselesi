@@ -12,7 +12,8 @@ func _init() -> void:
 	max_hp = 2
 	body_size = Vector2(12, 16)
 	contact_damage = true
-	asset_key = &"villager"
+	# Uc koylu varyasyonundan biri — kalabalik gorunumu
+	asset_key = [&"villager", &"villager_b", &"villager_c"].pick_random()
 
 
 func _ready() -> void:

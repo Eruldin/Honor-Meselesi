@@ -16,9 +16,11 @@ var tuning: Tuning
 var health: Health
 var hurtbox: Hurtbox
 var sprite: Sprite2D
+var anims: AnimatedSprite2D          ## enemy/<key>/<durum> sheet'leri varsa
 var contact_hitbox: Hitbox
 var stagger_timer: float = 0.0
 var using_real_sprite := false
+var _anim_lock := 0.0                ## attack/hurt/die oynarken otomatik animi durdurur
 var _flash_timer: float = 0.0
 
 
@@ -44,6 +46,7 @@ func _ready() -> void:
 	else:
 		sprite.texture = AssetLoader.placeholder_texture("enemy/%s" % name, Vector2i(body_size))
 	add_child(sprite)
+	_build_anims()
 
 	health = Health.new()
 	health.max_health = max_hp
@@ -79,11 +82,66 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+## enemy/<key>/<idle|walk|attack|hurt|die> manifest girdilerinden
+## animasyon bankasi kurar; hicbiri yoksa statik sprite kalir.
+func _build_anims() -> void:
+	if asset_key == &"":
+		return
+	var bank := SpriteFrames.new()
+	var first_anim := StringName()
+	for anim in [&"idle", &"walk", &"attack", &"hurt", &"die"]:
+		var id := StringName("enemy/%s/%s" % [asset_key, anim])
+		if not AssetLoader.has_frames(id):
+			continue
+		var src := AssetLoader.frames(id)
+		if src == null or src.get_frame_count(&"default") == 0:
+			continue
+		bank.add_animation(anim)
+		bank.set_animation_speed(anim, src.get_animation_speed(&"default"))
+		bank.set_animation_loop(anim, anim == &"idle" or anim == &"walk")
+		for i in src.get_frame_count(&"default"):
+			bank.add_frame(anim, src.get_frame_texture(&"default", i))
+		if first_anim.is_empty():
+			first_anim = anim
+	if first_anim.is_empty():
+		return
+	if not bank.has_animation(&"idle"):
+		bank.add_animation(&"idle")
+		bank.add_frame(&"idle", bank.get_frame_texture(first_anim, 0))
+	anims = AnimatedSprite2D.new()
+	anims.sprite_frames = bank
+	var ftex := bank.get_frame_texture(first_anim, 0)
+	var fs := ftex.get_size()
+	if fs.x > 0.0 and fs.y > 0.0:
+		anims.scale = (body_size * 1.8) / fs
+	anims.position.y = -body_size.y * 0.4   # ayak hizasi
+	sprite.visible = false
+	using_real_sprite = true
+	add_child(anims)
+	anims.play(&"idle")
+
+
+## Tek seferlik animasyon (attack/hurt); otomatik idle/walk'i kilitler.
+func play_anim(anim: StringName, lock_sec := 0.4) -> void:
+	if anims == null or not anims.sprite_frames.has_animation(anim):
+		return
+	_anim_lock = lock_sec
+	anims.play(anim)
+
+
 func _process(delta: float) -> void:
+	_anim_lock = maxf(_anim_lock - delta, 0.0)
+	if anims != null and _anim_lock <= 0.0 and health != null and health.is_alive():
+		var want := &"walk" if absf(velocity.x) > 4.0 else &"idle"
+		if anims.sprite_frames.has_animation(want) and anims.animation != want:
+			anims.play(want)
+		anims.flip_h = sprite.flip_h
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
 			sprite.modulate = Color.WHITE
+			if anims != null:
+				anims.modulate = Color.WHITE
 
 
 func is_staggered() -> bool:
@@ -95,6 +153,9 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	sprite.modulate = Color(2.0, 2.0, 2.0)
+	if anims != null:
+		anims.modulate = Color(2.0, 2.0, 2.0)
+		play_anim(&"hurt", 0.25)
 	_flash_timer = 0.08
 	EventBus.damage_dealt.emit(self, info)
 
@@ -102,11 +163,24 @@ func take_damage(info: DamageInfo) -> void:
 func on_parried() -> void:
 	stagger_timer = tuning.parry_stagger
 	sprite.modulate = Color(1.0, 0.9, 0.3)
+	if anims != null:
+		anims.modulate = Color(1.0, 0.9, 0.3)
 	_flash_timer = stagger_timer
 
 
 func _on_died() -> void:
 	EventBus.actor_died.emit(self)
-	var tw := create_tween()
-	tw.tween_property(sprite, "modulate:a", 0.0, 0.3)
-	tw.finished.connect(queue_free)
+	if anims != null and anims.sprite_frames.has_animation(&"die"):
+		_anim_lock = 10.0
+		anims.play(&"die")
+		# animasyon bitsin sonra solar
+		var tw := create_tween()
+		tw.tween_interval(maxi(anims.sprite_frames.get_frame_count(&"die"), 1)
+			/ maxf(anims.sprite_frames.get_animation_speed(&"die"), 1.0))
+		tw.tween_property(anims, "modulate:a", 0.0, 0.3)
+		tw.finished.connect(queue_free)
+	else:
+		var tw := create_tween()
+		var target: CanvasItem = anims if anims != null else sprite
+		tw.tween_property(target, "modulate:a", 0.0, 0.3)
+		tw.finished.connect(queue_free)
