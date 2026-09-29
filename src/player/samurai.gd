@@ -272,7 +272,7 @@ func _process(delta: float) -> void:
 		_last_state = sm.current_name
 		
 	_sync_anim()
-	# Ayak sesi: yerde kosarken ritmik toprak adimi
+	# Ayak sesi + toz: yerde kosarken ritmik toprak adimi
 	if (sm.current_name == S_RUN or sm.current_name == S_DASH) and is_on_floor() and absf(velocity.x) > 20.0:
 		_step_timer -= delta
 		if _step_timer <= 0.0:
@@ -284,6 +284,7 @@ func _process(delta: float) -> void:
 				StringName(prefix + str(rand_idx)),
 				global_position, -14.0, randf_range(0.9, 1.1)
 			)
+			WeatherFx.puff(get_parent(), global_position + Vector2(0, -2))
 	else:
 		_step_timer = 0.05
 	if _flash_timer > 0.0:

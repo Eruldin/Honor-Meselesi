@@ -1529,6 +1529,29 @@
       ],
       "fps": 10,
       "pack": "GothicVania Cemetery"
+    },
+    "vfx/petal": {
+      "path": "generated/ai/fx_petal.png",
+      "pack": "AI Sheet"
+    },
+    "vfx/raindrop": {
+      "path": "generated/ai/fx_raindrop.png",
+      "pack": "Postapoc"
+    },
+    "vfx/dust": {
+      "path": "generated/ai/fx_dust.png",
+      "pack": "Brackeys"
+    },
+    "vfx/rainsplash": {
+      "files": [
+        "env/postapoc/Objects/Nature/Flowers_Mashrooms_Other-nature-stuff/Puddles-And-Water-Anim/Animations/PNG Frames/Rain-drop-splash_1/Rain-drop-splash_1_Small1.png",
+        "env/postapoc/Objects/Nature/Flowers_Mashrooms_Other-nature-stuff/Puddles-And-Water-Anim/Animations/PNG Frames/Rain-drop-splash_1/Rain-drop-splash_1_Small2.png",
+        "env/postapoc/Objects/Nature/Flowers_Mashrooms_Other-nature-stuff/Puddles-And-Water-Anim/Animations/PNG Frames/Rain-drop-splash_1/Rain-drop-splash_1_Small3.png",
+        "env/postapoc/Objects/Nature/Flowers_Mashrooms_Other-nature-stuff/Puddles-And-Water-Anim/Animations/PNG Frames/Rain-drop-splash_1/Rain-drop-splash_1_Small4.png",
+        "env/postapoc/Objects/Nature/Flowers_Mashrooms_Other-nature-stuff/Puddles-And-Water-Anim/Animations/PNG Frames/Rain-drop-splash_1/Rain-drop-splash_1_Small5.png"
+      ],
+      "fps": 14,
+      "pack": "Postapoc"
     }
   }
 }
