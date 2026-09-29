@@ -57,15 +57,15 @@ func _process(_delta: float) -> void:
 
 func _build_terrain() -> void:
 	var sky := ColorRect.new()
-	sky.color = Color(0.25, 0.09, 0.12)
+	sky.color = Color(0.62, 0.48, 0.4)
 	sky.size = Vector2(LEVEL_W, 270)
 	add_child(sky)
 	# Alacakaranlik orman parallax'i — gercek katmanlar, kizil ton
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/forest_sky", scroll = 0.0, modulate = Color(1.0, 0.5, 0.5)},
-		{id = &"bg/forest_far", scroll = 0.12, modulate = Color(1.0, 0.62, 0.6)},
-		{id = &"bg/forest_mid", scroll = 0.3, modulate = Color(0.95, 0.55, 0.55)},
-		{id = &"bg/forest_near", scroll = 0.55, modulate = Color(0.9, 0.5, 0.5)},
+		{id = &"bg/forest_sky", scroll = 0.0},
+		{id = &"bg/forest_far", scroll = 0.12, modulate = Color(1.0, 0.88, 0.85)},
+		{id = &"bg/forest_mid", scroll = 0.3, modulate = Color(0.96, 0.82, 0.8)},
+		{id = &"bg/forest_near", scroll = 0.55, modulate = Color(0.92, 0.78, 0.78)},
 	])
 
 	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
@@ -89,6 +89,14 @@ func _build_terrain() -> void:
 		roof.color = Color(0.1, 0.05, 0.07)
 		roof.position = house.position
 		add_child(roof)
+
+	# Pasif koylu NPC'ler — yaklasinca urkup kacar (atmosfer)
+	for i in 5:
+		var npc := AmbientNpc.new()
+		npc.npc_key = [&"peasant1", &"peasant2", &"peasant3",
+			&"monk", &"farmer"][i]
+		npc.position = Vector2(200.0 + i * 190.0, FLOOR_Y - 8)
+		add_child(npc)
 
 	# Arena duvarlari — boss tetiklenince etkinlesir
 	for wx in [ARENA_L - 14, ARENA_R + 8]:

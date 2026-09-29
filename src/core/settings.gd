@@ -52,7 +52,7 @@ func load_settings() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	if not data is Dictionary:
 		return
-	fx_intensity = float(data.get("fx_intensity", 1.0))
+	fx_intensity = float(data.get("fx_intensity", 0.0))
 	shake_scale = float(data.get("shake_scale", 1.0))
 	flash_scale = float(data.get("flash_scale", 1.0))
 	changed.emit()
