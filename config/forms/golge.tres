@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FormData" load_steps=2 format=3 uid="uid://samsara_form_golge"]
+
+[ext_resource type="Script" path="res://src/player/forms/form_data.gd" id="1_fd"]
+
+[resource]
+script = ExtResource("1_fd")
+id = &"golge"
+display_name = "Golge/Yarasa"
+sprite_color = Color(0.35, 0.2, 0.5, 1)
+body_size = Vector2(11, 14)
+dash_iframes = true
+run_speed_mult = 1.1
+jump_velocity_mult = 1.05

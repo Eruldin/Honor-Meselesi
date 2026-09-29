@@ -51,6 +51,9 @@ var dash_dir: int = 1
 var invuln_timer: float = 0.0
 var parry_timer: float = 0.0
 var parry_succeeded: bool = false
+var bleed_ticks: int = 0          ## vampir kanamasi (DoT)
+var bleed_interval: float = 1.2
+var _bleed_timer: float = 0.0
 
 var _flash_timer: float = 0.0
 
@@ -169,6 +172,18 @@ func _physics_process(delta: float) -> void:
 		jumps_used = 0
 	invuln_timer = maxf(invuln_timer - delta, 0.0)
 	dash_cooldown = maxf(dash_cooldown - delta, 0.0)
+
+	# Kanama DoT: i-frame'i asmaz ama state degistirmez.
+	if bleed_ticks > 0:
+		_bleed_timer -= delta
+		if _bleed_timer <= 0.0:
+			_bleed_timer = bleed_interval
+			bleed_ticks -= 1
+			health.take(1)
+			sprite_flash(Color(0.9, 0.2, 0.3))
+			if not health.is_alive():
+				sm.change_to(S_DEAD, true)
+				EventBus.actor_died.emit(self)
 
 	# Gecici form suresi: dolunca samuraya geri don ve kilidi kaldir.
 	if form != null and form.duration > 0.0:
@@ -343,6 +358,13 @@ func _on_parry_success(info: DamageInfo) -> void:
 
 func is_alive() -> bool:
 	return health.is_alive()
+
+
+## Vampir saldirisi kanama birakir (Bolum 3 DoT).
+func apply_bleed(ticks: int, interval: float) -> void:
+	bleed_ticks = ticks
+	bleed_interval = interval
+	_bleed_timer = interval
 
 
 # --- Form sistemi (M2) ---
