@@ -7,6 +7,8 @@ extends Resource
 @export var display_name: String = ""
 @export var sprite_color := Color.WHITE        ## placeholder tint
 @export var body_size := Vector2(12, 18)       ## collision + sprite
+@export var damage_mult := 1.0                 ## sovalye: agir kilic
+@export var duration := 0.0                    ## >0: gecici form (sn); dolunca samuraya doner
 
 @export_group("Hareket")
 @export var run_speed_mult := 1.0

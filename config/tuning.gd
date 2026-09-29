@@ -51,6 +51,30 @@ extends Resource
 @export var prolog_min_play_time: float = 7.0  ## glitch'ten onceki min oyun suresi
 @export var prolog_min_dodges: int = 3         ## glitch icin gerekli min atlatma
 
+@export_group("Bolum 1 — dusmanlar")
+@export var villager_speed: float = 42.0
+@export var villager_aggro_range: float = 130.0
+@export var guard_lunge_speed: float = 220.0
+@export var guard_lunge_time: float = 0.3
+@export var guard_telegraph: float = 0.4
+@export var knight_speed: float = 26.0
+@export var sovalye_duration: float = 25.0    ## gecici sovalye formu suresi
+
+@export_group("Bolum 1 — Lord Cluck")
+@export var cluck_speed: float = 30.0
+@export var cluck_p2_speed: float = 46.0
+@export var cluck_slam_rise: float = 240.0
+@export var cluck_slam_fall: float = 560.0
+@export var cluck_telegraph: float = 0.45
+@export var cluck_attack_gap: float = 0.9
+@export var cluck_attack_gap_p2: float = 0.5
+@export var egg_fuse: float = 2.4
+@export var egg_blast_radius: float = 30.0
+@export var egg_reflect_speed: float = 200.0
+@export var egg_reflect_damage: int = 2
+@export var shockwave_speed: float = 140.0
+@export var shockwave_range: float = 70.0
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12
