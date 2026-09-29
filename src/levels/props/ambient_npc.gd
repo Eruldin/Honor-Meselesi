@@ -33,10 +33,14 @@ func _process(delta: float) -> void:
 	if absf(dx) < scare_range:
 		if not _scared:
 			_scared = true
-			# Ilk urkme: piktogram goster (tek seferlik)
+			# Ilk urkme: piktogram + kisa homurtu (tek seferlik)
 			if not _picto_shown and picto_icon != &"":
 				_picto_shown = true
 				Pictogram.show_on(self, picto_icon, 1.8, Vector2(0, -18))
+			var grunts: Array[StringName] = [&"sfx/npc_blip",
+				&"sfx/npc_grunt_2", &"sfx/npc_grunt_3"]
+			AudioManager.play_sfx(grunts[randi() % grunts.size()],
+				global_position, -16.0, randf_range(0.85, 1.15))
 	else:
 		_scared = false
 	# urkmusse oyuncudan uzaklas, ama evinden 40px'den fazla kacmaz

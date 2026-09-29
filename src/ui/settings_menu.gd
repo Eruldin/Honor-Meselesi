@@ -50,11 +50,15 @@ func _build() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 
+	# Viewport oranli, her zaman ortali panel
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
 	_panel = PanelContainer.new()
-	_panel.set_anchors_preset(Control.PRESET_CENTER)
-	_panel.custom_minimum_size = Vector2(430, 244)  # ekranin ~%90'i
-	_panel.position = Vector2(240 - 215, 135 - 122)
-	add_child(_panel)
+	var vsz := get_viewport().get_visible_rect().size
+	_panel.custom_minimum_size = Vector2(
+		maxf(vsz.x * 0.92, 320.0), maxf(vsz.y * 0.9, 220.0))
+	center.add_child(_panel)
 
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 8)
@@ -83,7 +87,8 @@ func _build() -> void:
 
 	_content = VBoxContainer.new()
 	_content.add_theme_constant_override("separation", 8)
-	_content.custom_minimum_size = Vector2(390, 160)
+	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.add_child(_content)
 
 	var hint := Label.new()
@@ -163,7 +168,8 @@ func _tab_language() -> void:
 
 func _tab_controls() -> void:
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(390, 160)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_content.add_child(scroll)
 	var list := VBoxContainer.new()
