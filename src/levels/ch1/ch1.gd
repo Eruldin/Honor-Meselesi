@@ -46,9 +46,17 @@ func _ready() -> void:
 	EventBus.actor_died.connect(_on_actor_died)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if samurai != null and is_instance_valid(samurai):
 		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
+		# Dikey takip: yuzeyde sabit y=135; yeraltina inince kamera kayar
+		# (kuyu/kristal odasi gibi derin bolumler ekranda kalir).
+		var cam_y := 135.0
+		if samurai.global_position.y > FLOOR_Y + 24.0:
+			cam_y = minf(samurai.global_position.y - 90.0,
+				float(camera.limit_bottom) - 135.0)
+		camera.global_position.y = lerpf(camera.global_position.y, cam_y,
+			1.0 - exp(-8.0 * delta))
 		# Bolge muzigi — oyuncu sinirdan gecince bir kez degisir
 		while _music_zone < ZONE_MUSIC.size() \
 				and samurai.global_position.x >= ZONE_MUSIC[_music_zone].x:
@@ -635,7 +643,7 @@ func _build_fx() -> void:
 	camera.limit_left = 0
 	camera.limit_right = int(LEVEL_W)
 	camera.limit_top = 0
-	camera.limit_bottom = 270
+	camera.limit_bottom = int(FLOOR_Y + 190)  # yeralti odalari icin derinlik
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 6.0
 	add_child(camera)
