@@ -29,6 +29,9 @@ var _arena_walls: Array[StaticBody2D] = []
 var _boss_bar: Control
 var _boss_root: Control
 var _player_fill: Control
+var _hearts: Array[TextureRect] = []
+var _soul_bar: TextureRect
+var _soul := 0
 var _boss_started := false
 var _respawn_pending := false
 var _music_zone := 0
@@ -71,6 +74,24 @@ func _process(delta: float) -> void:
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
 	if samurai != null and _player_fill != null:
 		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
+	# maske kalpler: mevcut can kadari dolu, gerisi soluk
+	for i in _hearts.size():
+		_hearts[i].modulate = Color(1.25, 1.15, 1.1, 1.0) \
+			if samurai != null and i < samurai.health.current \
+			else Color(0.5, 0.42, 0.48, 0.55)
+	# ruh olceri solma: dolu ise parlak, bosarken soluk
+	if _soul_bar != null:
+		var f := float(_soul) / 12.0
+		_soul_bar.modulate = Color(1.0 + f * 0.6, 1.0 + f * 0.4,
+			1.0 + f * 0.2, 0.35 + f * 0.65)
+
+
+func _on_soul_gain(_t: Node, _i) -> void:
+	_gain_soul(1)
+
+
+func _gain_soul(n: int) -> void:
+	_soul = mini(_soul + n, 12)
 
 
 # --- Arazi kurulumu ---
@@ -161,6 +182,23 @@ func _add_platform(pos: Vector2, id: StringName, w: float) -> void:
 
 	body.global_position = pos
 	add_child(body)
+
+
+## Tek-sprite parallax katmani: tekil buyuk nesneler (ay, dag, selale)
+## icin — Parallax2D dosemesiz, tek Sprite2D tasiyici.
+func _add_para_sprite(id: StringName, scroll: float, pos: Vector2,
+		mod := Color.WHITE) -> void:
+	if not AssetLoader.has_asset(id):
+		return
+	var p := Parallax2D.new()
+	p.scroll_scale = Vector2(scroll, 1.0)
+	var s := Sprite2D.new()
+	s.texture = AssetLoader.texture(id)
+	s.centered = false
+	s.position = pos * scroll  # gorsel konum scroll carpaniyla telafi
+	s.modulate = mod
+	p.add_child(s)
+	add_child(p)
 
 
 func _add_deco(id: StringName, pos: Vector2, scale := 1.0,
@@ -256,23 +294,32 @@ func _build_terrain() -> void:
 	sky.z_index = -10
 	add_child(sky)
 	
-	# 1) Koy (0 - 1200)
+	# 1) Koy (0 - 1200) — japon koyu: ay + dag panoramasi + alacakaranlik
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/dusk_sky", scroll = 0.0, x0 = 0, x1 = 1200},
+		{id = &"bg/j_mountains", scroll = 0.06, x0 = 0, x1 = 1200,
+			modulate = Color(0.8, 0.7, 0.85)},
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
+	# Tek sprite parallax: buyuk ay — koy uzerinde yavas suruklenir
+	_add_para_sprite(&"bg/j_moon", 0.03, Vector2(320, 40),
+		Color(1.1, 0.95, 0.85))
 	
-	# 2) Orman (1200 - 2300)
+	# 2) Orman (1200 - 2300) — derin yesil katmanlar + japon agac bandi
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/forest_sky", scroll = 0.0, x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_far", scroll = 0.08, x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_mid", scroll = 0.18, x0 = 1200, x1 = 2300},
+		{id = &"bg/j_trees", scroll = 0.26, modulate = Color(0.7, 0.85, 0.75), x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_near", scroll = 0.35, x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_lights", scroll = 0.35, modulate = Color(1.0, 1.0, 1.0, 0.5), x0 = 1200, x1 = 2300},
 	])
+	# Selale ucurumu — ormanin arkasi, sabit dunya konumunda dekor
+	_add_deco_ground(&"bg/j_falls", 1260, FLOOR_Y + 30, 1.6,
+		Color(0.65, 0.75, 0.85), false, -3)
 	
 	# 3) Magara (2300 - 3350) - Parallax degil, sabit duvar
 	var cave_bg := ColorRect.new()
@@ -496,7 +543,10 @@ func _build_terrain() -> void:
 
 	# === KOY DEKORU ===
 	var house_mod := Color(0.75, 0.6, 0.62)
-	_add_deco_ground(&"prop/house_c", 150, FLOOR_Y, 0.52, house_mod)
+	# Samurayin evi — prolog evinin dis gorunumu, koy girisinde
+	_add_deco_ground(&"prop/house_main", 62, FLOOR_Y + 4, 0.62,
+		Color(0.85, 0.72, 0.7))
+	_add_deco_ground(&"prop/house_c", 190, FLOOR_Y, 0.52, house_mod)
 	_add_deco_ground(&"prop/house_a", 340, FLOOR_Y, 0.5, house_mod)
 	_add_deco_ground(&"prop/house_b", 570, FLOOR_Y, 0.45, house_mod)
 	_add_deco_ground(&"prop/house_a", 770, FLOOR_Y, 0.5, house_mod, true)
@@ -519,10 +569,16 @@ func _build_terrain() -> void:
 	# Ahir cevresine kisa tahta cit parcalari
 	for fx in [895.0, 920.0, 945.0]:
 		_add_deco_ground(&"prop/fence", fx, FLOOR_Y, 0.38, Color(0.55, 0.45, 0.38))
-	# Sokak lambalari (tas fener gorunumu)
-	for x in [205.0, 415.0, 650.0, 855.0]:
+	# Sokak lambalari — japon tas fener direkleri + kagit fenerler
+	for x in [205.0, 650.0]:
+		_add_deco_ground(&"prop/lamppost_j", x, FLOOR_Y, 0.9,
+			Color(1.05, 0.95, 0.8))
+	for x in [415.0, 855.0]:
 		_add_deco_ground(&"prop/deco_lantern", x, FLOOR_Y, 0.85,
 			Color(1.0, 0.9, 0.7))
+	# Kiraz agaci — koy meydaninin sag kenari, ormana gecis
+	_add_deco_ground(&"bg/j_cherry", 1062, FLOOR_Y + 4, 1.15,
+		Color(1.0, 0.85, 0.9))
 	# Pazar cevresi: kucuk cali/agac parcalari
 	_add_deco_ground(&"prop/bush_small", 1020, FLOOR_Y, 0.7, Color(0.5, 0.65, 0.45))
 	_add_deco_ground(&"prop/bush_small", 1035, FLOOR_Y, 0.55, Color(0.45, 0.6, 0.4))
@@ -803,18 +859,56 @@ func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 
-	# Oyuncu can cubugu — cerceveli bar
-	var pb := HudBars.make(110, 10, Color(0.8, 0.25, 0.3))
-	pb.root.position = Vector2(8, 6)
-	layer.add_child(pb.root)
-	_player_fill = pb.fill
-	if AssetLoader.has_asset(&"ui/bar_frame"):
-		var fr := TextureRect.new()
-		fr.texture = AssetLoader.texture(&"ui/bar_frame")
-		fr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		fr.stretch_mode = TextureRect.STRETCH_SCALE
-		fr.size = Vector2(110, 10)
-		pb.root.add_child(fr)
+	# === HK-vari HUD: portre + oni-maske kalpler + katana ruh olceri ===
+	var use_ref := AssetLoader.has_asset(&"ui/hud_heart")
+	if use_ref and AssetLoader.has_asset(&"ui/hud_portrait"):
+		var pr := TextureRect.new()
+		pr.texture = AssetLoader.texture(&"ui/hud_portrait")
+		pr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+		pr.position = Vector2(4, 4)
+		pr.size = Vector2(22, 22)
+		layer.add_child(pr)
+
+	if use_ref:
+		# her kalp = 1 can; dolu/dolu-disi soluk maske
+		var hx := 30.0
+		for i in samurai.health.max_health:
+			var h := TextureRect.new()
+			h.texture = AssetLoader.texture(&"ui/hud_heart")
+			h.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			h.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+			h.position = Vector2(hx, 6)
+			h.size = Vector2(11, 11)
+			layer.add_child(h)
+			_hearts.append(h)
+			hx += 13.0
+		# ruh olceri: katana bar, vurus/parry ile dolar
+		if AssetLoader.has_asset(&"ui/hud_katana"):
+			var kb := TextureRect.new()
+			kb.texture = AssetLoader.texture(&"ui/hud_katana")
+			kb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			kb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			kb.position = Vector2(30, 19)
+			kb.size = Vector2(64, 10)
+			kb.modulate = Color(1, 1, 1, 0.35)
+			layer.add_child(kb)
+			_soul_bar = kb
+		EventBus.damage_dealt.connect(_on_soul_gain)
+		EventBus.parry_succeeded.connect(func(_p) -> void: _gain_soul(2))
+	else:
+		# Fallback: eski cerceveli bar
+		var pb := HudBars.make(110, 10, Color(0.8, 0.25, 0.3))
+		pb.root.position = Vector2(8, 6)
+		layer.add_child(pb.root)
+		_player_fill = pb.fill
+		if AssetLoader.has_asset(&"ui/bar_frame"):
+			var fr := TextureRect.new()
+			fr.texture = AssetLoader.texture(&"ui/bar_frame")
+			fr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			fr.stretch_mode = TextureRect.STRETCH_SCALE
+			fr.size = Vector2(110, 10)
+			pb.root.add_child(fr)
 
 	var boss_bar := HudBars.make(170, 9, Color(0.9, 0.3, 0.35))
 	boss_bar.root.position = Vector2(155, 248)
@@ -829,6 +923,15 @@ func _build_hud() -> void:
 		bfr.stretch_mode = TextureRect.STRETCH_SCALE
 		bfr.size = Vector2(170, 9)
 		boss_bar.root.add_child(bfr)
+	# Boss adi etiketi — barin ustunde
+	var bn := Label.new()
+	bn.text = "LORD CLUCK"
+	bn.add_theme_font_size_override("font_size", 8)
+	bn.add_theme_color_override("font_color", Color(0.95, 0.85, 0.6))
+	bn.position = Vector2(0, -12)
+	bn.size = Vector2(170, 10)
+	bn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_bar.root.add_child(bn)
 	boss.health.damaged.connect(
 		func(_a: int, _r: int) -> void:
 			_boss_root.visible = true
