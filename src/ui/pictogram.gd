@@ -8,7 +8,7 @@ extends Node2D
 const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
-	&"jump",
+	&"jump", &"move", &"mouse", &"shield", &"down",
 ]
 
 var icon: StringName = &"alarm"
@@ -87,3 +87,27 @@ func _draw_icon() -> void:
 				Vector2(-4, -1), Vector2(0, -5), Vector2(4, -1)]), c, 1.8)
 			draw_polyline(PackedVector2Array([
 				Vector2(-4, 4), Vector2(0, 0), Vector2(4, 4)]), c, 1.8)
+		&"move":  # cift yonlu yatay ok (AD / ok tuslari)
+			draw_line(Vector2(-7, 0), Vector2(7, 0), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(-4, -3), Vector2(-7, 0), Vector2(-4, 3)]), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(4, -3), Vector2(7, 0), Vector2(4, 3)]), c, 1.8)
+		&"mouse":  # fare + sol tus vurgusu (saldiri)
+			draw_rect(Rect2(Vector2(-4, -6), Vector2(8, 12)), c, false, 1.6)
+			draw_line(Vector2(-4, -2), Vector2(4, -2), c, 1.4)
+			draw_line(Vector2(0, -6), Vector2(0, -2), c, 1.4)
+			draw_rect(Rect2(Vector2(-3, -5), Vector2(3, 3)), c)
+		&"shield":  # kalkan — parry
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(-5, -5), Vector2(5, -5), Vector2(5, 1),
+				Vector2(0, 6), Vector2(-5, 1)]), c)
+			draw_rect(Rect2(Vector2(-2.5, -3), Vector2(5, 4)),
+				Color(0.95, 0.95, 0.95))
+		&"down":  # asagi kilic + ok (pogo)
+			draw_line(Vector2(-3, -5), Vector2(-3, 2), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(-5.5, 0), Vector2(-3, 3), Vector2(-0.5, 0)]), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(1, 0), Vector2(4, 4), Vector2(7, 0)]), c, 1.8)
+			draw_line(Vector2(4, -4), Vector2(4, 4), c, 1.6)

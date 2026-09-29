@@ -1,926 +1,1218 @@
 {
-  "version": 2,
-  "comment": "Mantiksal asset id -> assets_external/ altindaki gercek dosya eslemesi. Alanlar: path (zorunlu), frame [w,h]+fps (spritesheet), region [x,y,w,h] (atlas). Dosya yoksa AssetLoader placeholder'a duser.",
-  "assets": {
-    "player/samurai/idle": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 8,
-      "pack": "FREE_Samurai 2D Pixel Art v1.2"
-    },
-    "player/samurai/run": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 14,
-      "pack": "FREE_Samurai 2D Pixel Art v1.2"
-    },
-    "player/samurai/attack": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 16,
-      "pack": "FREE_Samurai 2D Pixel Art v1.2"
-    },
-    "player/samurai/hurt": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 8,
-      "pack": "FREE_Samurai 2D Pixel Art v1.2"
-    },
-    "enemy/mushroom": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/sprites/mushroom1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/mushroom_mini": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/sprites/mushroom1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/slug": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/shell": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/stunt/sprites/stunt1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/flower": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/eagle": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/sprites/attack1.png",
-      "pack": "SunnyLand Add On"
-    },
-    "enemy/villager": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/guard": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        16,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/heavy_knight": {
-      "path": "sprites/rogues/32rogues/monsters.png",
-      "region": [
-        32,
-        320,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/cyber_ninja": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        48,
-        0,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/vampire": {
-      "path": "sprites/rogues/32rogues/monsters.png",
-      "region": [
-        160,
-        160,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/count_vlad": {
-      "path": "sprites/rogues/32rogues/monsters.png",
-      "region": [
-        160,
-        192,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/tyrant": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        128,
-        64,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/guardian": {
-      "path": "sprites/rogues/32rogues/monsters.png",
-      "region": [
-        0,
-        96,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/dummy": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        160,
-        32,
-        32
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/ghost": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
-      "pack": "GothicVania Cemetery"
-    },
-    "enemy/hellcat": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
-      "pack": "GothicVania"
-    },
-    "enemy/skeleton": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
-      "pack": "GothicVania Cemetery"
-    },
-    "enemy/drone": {
-      "path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
-      "pack": "Warped City"
-    },
-    "enemy/bot": {
-      "path": "sprites/bot/Bot Wheel/move without FX.png",
-      "frame": [
-        48,
-        48
-      ],
-      "fps": 10,
-      "pack": "Bot Wheel"
-    },
-    "enemy/turret": {
-      "path": "env/warped/warped city files/Assets/SPRITES/misc/turret/turret-1.png",
-      "pack": "Warped City"
-    },
-    "npc/prolog_hero": {
-      "path": "env/interiors/Modern tiles_Free/Characters_free/Adam_idle_anim_16x16.png",
-      "frame": [
-        16,
-        16
-      ],
-      "fps": 4,
-      "pack": "Modern Interiors"
-    },
-    "bg/forest": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
-      "pack": "Free Pixel Art Forest"
-    },
-    "bg/forest_mid": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0006_4.png",
-      "pack": "Free Pixel Art Forest"
-    },
-    "bg/city": {
-      "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
-      "pack": "Warped City"
-    },
-    "bg/city_sky": {
-      "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
-      "pack": "Warped City"
-    },
-    "bg/gothic": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/background.png",
-      "pack": "GothicVania Cemetery"
-    },
-    "bg/moon": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Phaser Demo/assets/environment/bg-moon.png",
-      "pack": "GothicVania Cemetery"
-    },
-    "ui/hp_bg": {
-      "path": "sprites/kasaya/Bars/1/hp background.png",
-      "pack": "Kasaya's Frames"
-    },
-    "ui/hp_fill": {
-      "path": "sprites/kasaya/Bars/1/HP.png",
-      "pack": "Kasaya's Frames"
-    },
-    "ui/bar_frame": {
-      "path": "sprites/kasaya/Bars/1/bars 1 frame.png",
-      "pack": "Kasaya's Frames"
-    },
-    "fx/slash": {
-      "path": "vfx/slashes/128x128/Slash 1/color1/sprite-sheet.png",
-      "frame": [
-        128,
-        128
-      ],
-      "fps": 30,
-      "pack": "Slash Animations"
-    },
-    "music/prolog": {
-      "path": "music/xdev_01_-_Falling_Apart_(Prologue).ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch1": {
-      "path": "music/xdev_03_-_Definitely_Our_Town.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch1_boss": {
-      "path": "music/xdev_05_-_Battle_1.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch2": {
-      "path": "music/rpg_Pixel_7.ogg",
-      "pack": "Pixel RPG Music Pack"
-    },
-    "music/ch2_boss": {
-      "path": "music/xdev_09_-_Battle_2.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch3": {
-      "path": "music/xdev_12_-_Frozen_Abyss.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch3_boss": {
-      "path": "music/xdev_13_-_Decisive_Battle_1_-_Don't_Be_Afraid.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch4": {
-      "path": "music/xdev_19_-_Where_The_Winds_Roam.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch4_boss": {
-      "path": "music/xdev_17_-_Decisive_Battle_2_-_The_Calamity.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/ch5": {
-      "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/05.From_The_Ashes.ogg",
-      "pack": "Dark Ambient"
-    },
-    "music/ch6": {
-      "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/06.There_In_Spirit.ogg",
-      "pack": "Dark Ambient"
-    },
-    "music/ch7": {
-      "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/04.Those_Who_Wait.ogg",
-      "pack": "Dark Ambient"
-    },
-    "music/final_boss": {
-      "path": "music/xdev_21_-_Final_Battle_-_For_Love.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/credits": {
-      "path": "music/xdev_22_-_The_Final_of_The_Fantasy.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/victory": {
-      "path": "music/xdev_06_-_Victory!.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "music/test_room": {
-      "path": "music/xdev_04_-_Silent_Forest.ogg",
-      "pack": "xDeviruchi 16-bit"
-    },
-    "sfx/attack": {
-      "path": "sfx/400/Weapons/sword_light.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/attack_heavy": {
-      "path": "sfx/400/Weapons/sword_slice.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/parry": {
-      "path": "sfx/400/Weapons/sword_clash.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/hit": {
-      "path": "sfx/400/Weapons/harsh_thud.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/hurt": {
-      "path": "sfx/400/Retro/hurt.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/jump": {
-      "path": "sfx/400/Retro/jump.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/dash": {
-      "path": "music/boss/ch_06_boss_battles/audio/dash.wav",
-      "pack": "ch_06_boss_battles"
-    },
-    "sfx/explosion": {
-      "path": "sfx/400/Retro/explosion_medium.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/ghost": {
-      "path": "sfx/400/Retro/ghost.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/checkpoint": {
-      "path": "sfx/400/Items/gem_collect.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/ui": {
-      "path": "sfx/400/UI/pop_1.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/door": {
-      "path": "sfx/400/Environment/creaky_door_short.wav",
-      "pack": "400 Sounds"
-    },
-    "sfx/gameover": {
-      "path": "sfx/400/Other/record_scratch.wav",
-      "pack": "400 Sounds"
-    },
-    "fx/portal": {
-      "path": "vfx/portal/sprite-sheet.png",
-      "frame": [
-        64,
-        64
-      ],
-      "fps": 10,
-      "pack": "Pixel Art Animated Portal"
-    },
-    "terrain/block": {
-      "path": "env/postapoc/Tiles/Brick-Wall_TileSet.png",
-      "region": [
-        32,
-        0,
-        16,
-        16
-      ],
-      "pack": "Pixel Art Post Apocalypse"
-    },
-    "deco/cloud": {
-      "path": "env/postapoc/Objects/Exhaust-pipe.png",
-      "pack": "Pixel Art Post Apocalypse",
-      "note": "yer tutucu — mad_cloud prosedurel kullanir"
-    },
-    "prop/hat": {
-      "path": "generated/hat.png",
-      "pack": "uretilmis (kasa)"
-    },
-    "bg/forest_sky": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0000_9.png",
-      "pack": "Free Pixel Art Forest"
-    },
-    "bg/forest_far": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
-      "pack": "Free Pixel Art Forest"
-    },
-    "bg/forest_near": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0009_2.png",
-      "pack": "Free Pixel Art Forest"
-    },
-    "bg/warped_sky": {
-      "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
-      "pack": "Warped City"
-    },
-    "bg/warped_far": {
-      "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/buildings-bg.png",
-      "pack": "Warped City"
-    },
-    "bg/warped_near": {
-      "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
-      "pack": "Warped City"
-    },
-    "bg/gothic_far": {
-      "path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/background.png",
-      "pack": "GothicVania Town"
-    },
-    "bg/gothic_mid": {
-      "path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/middleground.png",
-      "pack": "GothicVania Town"
-    },
-    "bg/winter_sky": {
-      "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/sky.png",
-      "pack": "SunnyLand Winter"
-    },
-    "bg/winter_far": {
-      "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mountains.png",
-      "pack": "SunnyLand Winter"
-    },
-    "bg/winter_mid": {
-      "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-a.png",
-      "pack": "SunnyLand Winter"
-    },
-    "bg/winter_near": {
-      "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-b.png",
-      "pack": "SunnyLand Winter"
-    },
-    "terrain/cabin_wall": {
-      "path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
-      "region": [
-        64,
-        176,
-        48,
-        32
-      ],
-      "pack": "Modern Interiors"
-    },
-    "terrain/cabin_floor": {
-      "path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
-      "region": [
-        128,
-        80,
-        48,
-        32
-      ],
-      "pack": "Modern Interiors"
-    },
-    "enemy/ghost/walk": {
-      "files": [
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-2.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-3.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-4.png"
-      ],
-      "fps": 6,
-      "pack": "GothicVania"
-    },
-    "enemy/hellcat/walk": {
-      "files": [
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-2.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-3.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-4.png"
-      ],
-      "fps": 8,
-      "pack": "GothicVania"
-    },
-    "enemy/mushroom/walk": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/spritesheet.png",
-      "frame": [
-        50,
-        50
-      ],
-      "fps": 7,
-      "pack": "SunnyLand"
-    },
-    "enemy/mushroom_mini/walk": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/spritesheet.png",
-      "frame": [
-        32,
-        39
-      ],
-      "fps": 9,
-      "pack": "SunnyLand"
-    },
-    "enemy/slug/walk": {
-      "files": [
-        "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt2.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt3.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt4.png"
-      ],
-      "fps": 5,
-      "pack": "SunnyLand"
-    },
-    "enemy/flower/attack": {
-      "files": [
-        "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot1.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot2.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot3.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot4.png"
-      ],
-      "fps": 10,
-      "pack": "SunnyLand"
-    },
-    "enemy/eagle/attack": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/spritesheet.png",
-      "frame": [
-        40,
-        41
-      ],
-      "fps": 10,
-      "pack": "SunnyLand"
-    },
-    "enemy/eagle/hurt": {
-      "files": [
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt1.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt2.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt3.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt4.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt5.png",
-        "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt6.png"
-      ],
-      "fps": 10,
-      "pack": "SunnyLand"
-    },
-    "enemy/tyrant/idle": {
-      "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Idle.png",
-      "frame": [
-        100,
-        100
-      ],
-      "fps": 7,
-      "pack": "TinyRPG"
-    },
-    "enemy/tyrant/walk": {
-      "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Walk.png",
-      "frame": [
-        100,
-        100
-      ],
-      "fps": 9,
-      "pack": "TinyRPG"
-    },
-    "enemy/tyrant/attack": {
-      "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack01.png",
-      "frame": [
-        100,
-        100
-      ],
-      "fps": 10,
-      "pack": "TinyRPG"
-    },
-    "enemy/tyrant/hurt": {
-      "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Hurt.png",
-      "frame": [
-        100,
-        100
-      ],
-      "fps": 10,
-      "pack": "TinyRPG"
-    },
-    "enemy/tyrant/die": {
-      "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Death.png",
-      "frame": [
-        100,
-        100
-      ],
-      "fps": 8,
-      "pack": "TinyRPG"
-    },
-    "enemy/villager_b": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        48,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "enemy/villager_c": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        32,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/peasant1": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/peasant2": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        48,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/peasant3": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        96,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/monk": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        32,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/mage": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        16,
-        64,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "npc/farmer": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        32,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
-    },
-    "fx/slash_heavy": {
-      "path": "vfx/slashfx_free/2. GameEndeavor/SlashFX SpriteSheet All 2A_1.png",
-      "frame": [
-        128,
-        128
-      ],
-      "fps": 30,
-      "pack": "SlashFX"
-    },
-    "fx/blood": {
-      "files": [
-        "vfx/blood/NEw pack blood/1/1_0.png",
-        "vfx/blood/NEw pack blood/1/1_1.png",
-        "vfx/blood/NEw pack blood/1/1_2.png",
-        "vfx/blood/NEw pack blood/1/1_3.png",
-        "vfx/blood/NEw pack blood/1/1_4.png",
-        "vfx/blood/NEw pack blood/1/1_5.png",
-        "vfx/blood/NEw pack blood/1/1_6.png",
-        "vfx/blood/NEw pack blood/1/1_7.png",
-        "vfx/blood/NEw pack blood/1/1_8.png",
-        "vfx/blood/NEw pack blood/1/1_9.png",
-        "vfx/blood/NEw pack blood/1/1_10.png",
-        "vfx/blood/NEw pack blood/1/1_11.png",
-        "vfx/blood/NEw pack blood/1/1_12.png",
-        "vfx/blood/NEw pack blood/1/1_13.png",
-        "vfx/blood/NEw pack blood/1/1_14.png",
-        "vfx/blood/NEw pack blood/1/1_15.png"
-      ],
-      "fps": 24,
-      "pack": "Blood Pack"
-    },
-    "fx/portal_loop": {
-      "path": "vfx/portal2/sprite-sheet.png",
-      "frame": [
-        64,
-        64
-      ],
-      "fps": 12,
-      "pack": "PortalVFX"
-    },
-    "sfx/footstep": {
-      "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 1.wav",
-      "pack": "NA Footsteps"
-    },
-    "sfx/footstep2": {
-      "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 3.wav",
-      "pack": "NA Footsteps"
-    },
-    "sfx/death_squish": {
-      "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 5.wav",
-      "pack": "misc"
-    },
-    "enemy/ash_husk": {
-      "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Walk-Sheet8.png",
-      "region": [
-        0,
-        0,
-        21,
-        19
-      ],
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_husk/idle": {
-      "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Idle-Sheet6.png",
-      "frame": [
-        22,
-        18
-      ],
-      "fps": 5,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_husk/walk": {
-      "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Walk-Sheet8.png",
-      "frame": [
-        21,
-        19
-      ],
-      "fps": 7,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_husk/attack": {
-      "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_First-Attack-Sheet7.png",
-      "frame": [
-        25,
-        19
-      ],
-      "fps": 10,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_husk/die": {
-      "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_First-Death-Sheet6.png",
-      "frame": [
-        27,
-        18
-      ],
-      "fps": 8,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_bat": {
-      "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
-      "region": [
-        0,
-        0,
-        16,
-        13
-      ],
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_bat/idle": {
-      "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
-      "frame": [
-        16,
-        13
-      ],
-      "fps": 8,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_bat/walk": {
-      "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
-      "frame": [
-        16,
-        13
-      ],
-      "fps": 8,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_bat/die": {
-      "path": "env/postapoc/Character/Bat/Bat_side_Death-Sheet6.png",
-      "frame": [
-        18,
-        13
-      ],
-      "fps": 8,
-      "pack": "PostApocalypse"
-    },
-    "enemy/ash_guardian": {
-      "path": "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f0.png",
-      "pack": "0x72 Dungeon"
-    },
-    "enemy/ash_guardian/idle": {
-      "files": [
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f0.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f1.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f2.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f3.png"
-      ],
-      "fps": 5,
-      "pack": "0x72 Dungeon"
-    },
-    "enemy/ash_guardian/walk": {
-      "files": [
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f0.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f1.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f2.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f3.png"
-      ],
-      "fps": 7,
-      "pack": "0x72 Dungeon"
-    },
-    "bg/ash_sky": {
-      "path": "sprites/final/Final/Background_0.png",
-      "pack": "Final"
-    },
-    "bg/ash_far": {
-      "path": "sprites/final/Final/Background_1.png",
-      "pack": "Final"
-    },
-    "terrain/ash_ground": {
-      "path": "env/postapoc/Tiles/Garbage_TileSet.png",
-      "region": [
-        0,
-        0,
-        64,
-        32
-      ],
-      "pack": "PostApocalypse"
-    },
-    "prop/barrel_rust": {
-      "path": "env/postapoc/Objects/Barrel_rust_red_1.png",
-      "pack": "PostApocalypse"
-    },
-    "prop/tires": {
-      "path": "env/postapoc/Objects/2-Tires_Grass_Bleak-Yellow.png",
-      "pack": "PostApocalypse"
-    },
-    "prop/bench": {
-      "path": "env/postapoc/Objects/Bench_3_side.png",
-      "pack": "PostApocalypse"
-    },
-    "sfx/slime_death": {
-      "path": "sprites/ch05_enemies/ch_05_enemies/slime/slime_death.wav",
-      "pack": "ch_05_enemies"
-    },
-    "music/ch5_boss": {
-      "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/03.Before_The_End.ogg",
-      "pack": "Dark Ambient"
-    },
-    "music/ch6_boss": {
-      "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/02.To_Grind_Out_Your_Soul.ogg",
-      "pack": "Dark Ambient"
-    },
-    "enemy/glitch_amalgam": {
-      "path": "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f0.png",
-      "pack": "0x72 Dungeon"
-    },
-    "enemy/glitch_amalgam/idle": {
-      "files": [
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f0.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f1.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f2.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f3.png"
-      ],
-      "fps": 5,
-      "pack": "0x72 Dungeon"
-    },
-    "enemy/glitch_amalgam/walk": {
-      "files": [
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f0.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f1.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f2.png",
-        "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f3.png"
-      ],
-      "fps": 8,
-      "pack": "0x72 Dungeon"
-    },
-    "enemy/final_samurai": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
-      "region": [
-        0,
-        0,
-        96,
-        96
-      ],
-      "pack": "FREE_Samurai"
-    },
-    "enemy/final_samurai/idle": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 8,
-      "pack": "FREE_Samurai"
-    },
-    "enemy/final_samurai/walk": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 10,
-      "pack": "FREE_Samurai"
-    },
-    "enemy/final_samurai/attack": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 14,
-      "pack": "FREE_Samurai"
-    },
-    "enemy/final_samurai/hurt": {
-      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
-      "frame": [
-        96,
-        96
-      ],
-      "fps": 8,
-      "pack": "FREE_Samurai"
-    }
+ "version": 2,
+ "comment": "Mantiksal asset id -> assets_external/ altindaki gercek dosya eslemesi. Alanlar: path (zorunlu), frame [w,h]+fps (spritesheet), region [x,y,w,h] (atlas). Dosya yoksa AssetLoader placeholder'a duser.",
+ "assets": {
+  "player/samurai/idle": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 8,
+   "pack": "FREE_Samurai 2D Pixel Art v1.2"
+  },
+  "player/samurai/run": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 14,
+   "pack": "FREE_Samurai 2D Pixel Art v1.2"
+  },
+  "player/samurai/attack": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 16,
+   "pack": "FREE_Samurai 2D Pixel Art v1.2"
+  },
+  "player/samurai/hurt": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 8,
+   "pack": "FREE_Samurai 2D Pixel Art v1.2"
+  },
+  "enemy/mushroom": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/sprites/mushroom1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/mushroom_mini": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/sprites/mushroom1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/slug": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/shell": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/stunt/sprites/stunt1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/flower": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/eagle": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/sprites/attack1.png",
+   "pack": "SunnyLand Add On"
+  },
+  "enemy/villager": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    0,
+    80,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/guard": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    0,
+    16,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/heavy_knight": {
+   "path": "sprites/rogues/32rogues/monsters.png",
+   "region": [
+    32,
+    320,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/cyber_ninja": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    48,
+    0,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/vampire": {
+   "path": "sprites/rogues/32rogues/monsters.png",
+   "region": [
+    160,
+    160,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/count_vlad": {
+   "path": "sprites/rogues/32rogues/monsters.png",
+   "region": [
+    160,
+    192,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/tyrant": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    128,
+    64,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/guardian": {
+   "path": "sprites/rogues/32rogues/monsters.png",
+   "region": [
+    0,
+    96,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/dummy": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    0,
+    160,
+    32,
+    32
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/ghost": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "enemy/hellcat": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
+   "pack": "GothicVania"
+  },
+  "enemy/skeleton": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "enemy/drone": {
+   "path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
+   "pack": "Warped City"
+  },
+  "enemy/bot": {
+   "path": "sprites/bot/Bot Wheel/move without FX.png",
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 10,
+   "pack": "Bot Wheel"
+  },
+  "enemy/turret": {
+   "path": "env/warped/warped city files/Assets/SPRITES/misc/turret/turret-1.png",
+   "pack": "Warped City"
+  },
+  "npc/prolog_hero": {
+   "path": "env/interiors/Modern tiles_Free/Characters_free/Adam_idle_anim_16x16.png",
+   "frame": [
+    16,
+    16
+   ],
+   "fps": 4,
+   "pack": "Modern Interiors"
+  },
+  "bg/forest": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/forest_mid": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0006_4.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/city": {
+   "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
+   "pack": "Warped City"
+  },
+  "bg/city_sky": {
+   "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
+   "pack": "Warped City"
+  },
+  "bg/gothic": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/background.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "bg/moon": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Phaser Demo/assets/environment/bg-moon.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "ui/hp_bg": {
+   "path": "sprites/kasaya/Bars/1/hp background.png",
+   "pack": "Kasaya's Frames"
+  },
+  "ui/hp_fill": {
+   "path": "sprites/kasaya/Bars/1/HP.png",
+   "pack": "Kasaya's Frames"
+  },
+  "ui/bar_frame": {
+   "path": "sprites/kasaya/Bars/1/bars 1 frame.png",
+   "pack": "Kasaya's Frames"
+  },
+  "fx/slash": {
+   "path": "vfx/slashes/128x128/Slash 1/color1/sprite-sheet.png",
+   "frame": [
+    128,
+    128
+   ],
+   "fps": 30,
+   "pack": "Slash Animations"
+  },
+  "music/prolog": {
+   "path": "music/xdev_01_-_Falling_Apart_(Prologue).ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch1": {
+   "path": "music/xdev_03_-_Definitely_Our_Town.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch1_boss": {
+   "path": "music/xdev_05_-_Battle_1.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch2": {
+   "path": "music/rpg_Pixel_7.ogg",
+   "pack": "Pixel RPG Music Pack"
+  },
+  "music/ch2_boss": {
+   "path": "music/xdev_09_-_Battle_2.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch3": {
+   "path": "music/xdev_12_-_Frozen_Abyss.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch3_boss": {
+   "path": "music/xdev_13_-_Decisive_Battle_1_-_Don't_Be_Afraid.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch4": {
+   "path": "music/xdev_19_-_Where_The_Winds_Roam.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch4_boss": {
+   "path": "music/xdev_17_-_Decisive_Battle_2_-_The_Calamity.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch5": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/05.From_The_Ashes.ogg",
+   "pack": "Dark Ambient"
+  },
+  "music/ch6": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/06.There_In_Spirit.ogg",
+   "pack": "Dark Ambient"
+  },
+  "music/ch7": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/04.Those_Who_Wait.ogg",
+   "pack": "Dark Ambient"
+  },
+  "music/final_boss": {
+   "path": "music/xdev_21_-_Final_Battle_-_For_Love.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/credits": {
+   "path": "music/xdev_22_-_The_Final_of_The_Fantasy.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/victory": {
+   "path": "music/xdev_06_-_Victory!.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/test_room": {
+   "path": "music/xdev_04_-_Silent_Forest.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "sfx/attack": {
+   "path": "sfx/400/Weapons/sword_light.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/attack_heavy": {
+   "path": "sfx/400/Weapons/sword_slice.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/parry": {
+   "path": "sfx/400/Weapons/sword_clash.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/hit": {
+   "path": "sfx/400/Weapons/harsh_thud.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/hurt": {
+   "path": "sfx/400/Retro/hurt.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/jump": {
+   "path": "sfx/400/Retro/jump.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/dash": {
+   "path": "music/boss/ch_06_boss_battles/audio/dash.wav",
+   "pack": "ch_06_boss_battles"
+  },
+  "sfx/explosion": {
+   "path": "sfx/400/Retro/explosion_medium.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/ghost": {
+   "path": "sfx/400/Retro/ghost.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/checkpoint": {
+   "path": "sfx/400/Items/gem_collect.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/ui": {
+   "path": "sfx/400/UI/pop_1.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/door": {
+   "path": "sfx/400/Environment/creaky_door_short.wav",
+   "pack": "400 Sounds"
+  },
+  "sfx/gameover": {
+   "path": "sfx/400/Other/record_scratch.wav",
+   "pack": "400 Sounds"
+  },
+  "fx/portal": {
+   "path": "vfx/portal/sprite-sheet.png",
+   "frame": [
+    64,
+    64
+   ],
+   "fps": 10,
+   "pack": "Pixel Art Animated Portal"
+  },
+  "terrain/block": {
+   "path": "env/postapoc/Tiles/Brick-Wall_TileSet.png",
+   "region": [
+    32,
+    0,
+    16,
+    16
+   ],
+   "pack": "Pixel Art Post Apocalypse"
+  },
+  "deco/cloud": {
+   "path": "env/postapoc/Objects/Exhaust-pipe.png",
+   "pack": "Pixel Art Post Apocalypse",
+   "note": "yer tutucu — mad_cloud prosedurel kullanir"
+  },
+  "prop/hat": {
+   "path": "generated/hat.png",
+   "pack": "uretilmis (kasa)"
+  },
+  "bg/forest_sky": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0000_9.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/forest_far": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/forest_near": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0009_2.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/warped_sky": {
+   "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
+   "pack": "Warped City"
+  },
+  "bg/warped_far": {
+   "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/buildings-bg.png",
+   "pack": "Warped City"
+  },
+  "bg/warped_near": {
+   "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
+   "pack": "Warped City"
+  },
+  "bg/gothic_far": {
+   "path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/background.png",
+   "pack": "GothicVania Town"
+  },
+  "bg/gothic_mid": {
+   "path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/middleground.png",
+   "pack": "GothicVania Town"
+  },
+  "bg/winter_sky": {
+   "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/sky.png",
+   "pack": "SunnyLand Winter"
+  },
+  "bg/winter_far": {
+   "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mountains.png",
+   "pack": "SunnyLand Winter"
+  },
+  "bg/winter_mid": {
+   "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-a.png",
+   "pack": "SunnyLand Winter"
+  },
+  "bg/winter_near": {
+   "path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-b.png",
+   "pack": "SunnyLand Winter"
+  },
+  "terrain/cabin_wall": {
+   "path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
+   "region": [
+    64,
+    176,
+    48,
+    32
+   ],
+   "pack": "Modern Interiors"
+  },
+  "terrain/cabin_floor": {
+   "path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
+   "region": [
+    128,
+    80,
+    48,
+    32
+   ],
+   "pack": "Modern Interiors"
+  },
+  "enemy/ghost/walk": {
+   "files": [
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-2.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-3.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-4.png"
+   ],
+   "fps": 6,
+   "pack": "GothicVania"
+  },
+  "enemy/hellcat/walk": {
+   "files": [
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-2.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-3.png",
+    "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-4.png"
+   ],
+   "fps": 8,
+   "pack": "GothicVania"
+  },
+  "enemy/mushroom/walk": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/spritesheet.png",
+   "frame": [
+    50,
+    50
+   ],
+   "fps": 7,
+   "pack": "SunnyLand"
+  },
+  "enemy/mushroom_mini/walk": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/spritesheet.png",
+   "frame": [
+    32,
+    39
+   ],
+   "fps": 9,
+   "pack": "SunnyLand"
+  },
+  "enemy/slug/walk": {
+   "files": [
+    "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt2.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt3.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt4.png"
+   ],
+   "fps": 5,
+   "pack": "SunnyLand"
+  },
+  "enemy/flower/attack": {
+   "files": [
+    "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot1.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot2.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot3.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot4.png"
+   ],
+   "fps": 10,
+   "pack": "SunnyLand"
+  },
+  "enemy/eagle/attack": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/spritesheet.png",
+   "frame": [
+    40,
+    41
+   ],
+   "fps": 10,
+   "pack": "SunnyLand"
+  },
+  "enemy/eagle/hurt": {
+   "files": [
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt1.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt2.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt3.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt4.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt5.png",
+    "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt6.png"
+   ],
+   "fps": 10,
+   "pack": "SunnyLand"
+  },
+  "enemy/tyrant/idle": {
+   "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Idle.png",
+   "frame": [
+    100,
+    100
+   ],
+   "fps": 7,
+   "pack": "TinyRPG"
+  },
+  "enemy/tyrant/walk": {
+   "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Walk.png",
+   "frame": [
+    100,
+    100
+   ],
+   "fps": 9,
+   "pack": "TinyRPG"
+  },
+  "enemy/tyrant/attack": {
+   "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack01.png",
+   "frame": [
+    100,
+    100
+   ],
+   "fps": 10,
+   "pack": "TinyRPG"
+  },
+  "enemy/tyrant/hurt": {
+   "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Hurt.png",
+   "frame": [
+    100,
+    100
+   ],
+   "fps": 10,
+   "pack": "TinyRPG"
+  },
+  "enemy/tyrant/die": {
+   "path": "sprites/demon/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Death.png",
+   "frame": [
+    100,
+    100
+   ],
+   "fps": 8,
+   "pack": "TinyRPG"
+  },
+  "enemy/villager_b": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    48,
+    80,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "enemy/villager_c": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    32,
+    96,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/peasant1": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    0,
+    80,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/peasant2": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    48,
+    80,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/peasant3": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    96,
+    96,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/monk": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    0,
+    32,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/mage": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    16,
+    64,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "npc/farmer": {
+   "path": "sprites/rogues/32rogues/rogues.png",
+   "region": [
+    32,
+    96,
+    16,
+    16
+   ],
+   "pack": "32rogues"
+  },
+  "fx/slash_heavy": {
+   "path": "vfx/slashfx_free/2. GameEndeavor/SlashFX SpriteSheet All 2A_1.png",
+   "frame": [
+    128,
+    128
+   ],
+   "fps": 30,
+   "pack": "SlashFX"
+  },
+  "fx/blood": {
+   "files": [
+    "vfx/blood/NEw pack blood/1/1_0.png",
+    "vfx/blood/NEw pack blood/1/1_1.png",
+    "vfx/blood/NEw pack blood/1/1_2.png",
+    "vfx/blood/NEw pack blood/1/1_3.png",
+    "vfx/blood/NEw pack blood/1/1_4.png",
+    "vfx/blood/NEw pack blood/1/1_5.png",
+    "vfx/blood/NEw pack blood/1/1_6.png",
+    "vfx/blood/NEw pack blood/1/1_7.png",
+    "vfx/blood/NEw pack blood/1/1_8.png",
+    "vfx/blood/NEw pack blood/1/1_9.png",
+    "vfx/blood/NEw pack blood/1/1_10.png",
+    "vfx/blood/NEw pack blood/1/1_11.png",
+    "vfx/blood/NEw pack blood/1/1_12.png",
+    "vfx/blood/NEw pack blood/1/1_13.png",
+    "vfx/blood/NEw pack blood/1/1_14.png",
+    "vfx/blood/NEw pack blood/1/1_15.png"
+   ],
+   "fps": 24,
+   "pack": "Blood Pack"
+  },
+  "fx/portal_loop": {
+   "path": "vfx/portal2/sprite-sheet.png",
+   "frame": [
+    64,
+    64
+   ],
+   "fps": 12,
+   "pack": "PortalVFX"
+  },
+  "sfx/footstep": {
+   "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 1.wav",
+   "pack": "NA Footsteps"
+  },
+  "sfx/footstep2": {
+   "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 3.wav",
+   "pack": "NA Footsteps"
+  },
+  "sfx/death_squish": {
+   "path": "sfx/footsteps/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 5.wav",
+   "pack": "misc"
+  },
+  "enemy/ash_husk": {
+   "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Walk-Sheet8.png",
+   "region": [
+    0,
+    0,
+    21,
+    19
+   ],
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_husk/idle": {
+   "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Idle-Sheet6.png",
+   "frame": [
+    22,
+    18
+   ],
+   "fps": 5,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_husk/walk": {
+   "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_Walk-Sheet8.png",
+   "frame": [
+    21,
+    19
+   ],
+   "fps": 7,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_husk/attack": {
+   "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_First-Attack-Sheet7.png",
+   "frame": [
+    25,
+    19
+   ],
+   "fps": 10,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_husk/die": {
+   "path": "env/postapoc/Enemies/Zombie_Axe/Zombie_Axe_Side_First-Death-Sheet6.png",
+   "frame": [
+    27,
+    18
+   ],
+   "fps": 8,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_bat": {
+   "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
+   "region": [
+    0,
+    0,
+    16,
+    13
+   ],
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_bat/idle": {
+   "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
+   "frame": [
+    16,
+    13
+   ],
+   "fps": 8,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_bat/walk": {
+   "path": "env/postapoc/Character/Bat/Bat_side_idle-and-run-Sheet6.png",
+   "frame": [
+    16,
+    13
+   ],
+   "fps": 8,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_bat/die": {
+   "path": "env/postapoc/Character/Bat/Bat_side_Death-Sheet6.png",
+   "frame": [
+    18,
+    13
+   ],
+   "fps": 8,
+   "pack": "PostApocalypse"
+  },
+  "enemy/ash_guardian": {
+   "path": "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f0.png",
+   "pack": "0x72 Dungeon"
+  },
+  "enemy/ash_guardian/idle": {
+   "files": [
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f0.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f1.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f2.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_idle_anim_f3.png"
+   ],
+   "fps": 5,
+   "pack": "0x72 Dungeon"
+  },
+  "enemy/ash_guardian/walk": {
+   "files": [
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f0.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f1.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f2.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_demon_run_anim_f3.png"
+   ],
+   "fps": 7,
+   "pack": "0x72 Dungeon"
+  },
+  "bg/ash_sky": {
+   "path": "sprites/final/Final/Background_0.png",
+   "pack": "Final"
+  },
+  "bg/ash_far": {
+   "path": "sprites/final/Final/Background_1.png",
+   "pack": "Final"
+  },
+  "terrain/ash_ground": {
+   "path": "env/postapoc/Tiles/Garbage_TileSet.png",
+   "region": [
+    0,
+    0,
+    64,
+    32
+   ],
+   "pack": "PostApocalypse"
+  },
+  "prop/barrel_rust": {
+   "path": "env/postapoc/Objects/Barrel_rust_red_1.png",
+   "pack": "PostApocalypse"
+  },
+  "prop/tires": {
+   "path": "env/postapoc/Objects/2-Tires_Grass_Bleak-Yellow.png",
+   "pack": "PostApocalypse"
+  },
+  "prop/bench": {
+   "path": "env/postapoc/Objects/Bench_3_side.png",
+   "pack": "PostApocalypse"
+  },
+  "sfx/slime_death": {
+   "path": "sprites/ch05_enemies/ch_05_enemies/slime/slime_death.wav",
+   "pack": "ch_05_enemies"
+  },
+  "music/ch5_boss": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/03.Before_The_End.ogg",
+   "pack": "Dark Ambient"
+  },
+  "music/ch6_boss": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/02.To_Grind_Out_Your_Soul.ogg",
+   "pack": "Dark Ambient"
+  },
+  "enemy/glitch_amalgam": {
+   "path": "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f0.png",
+   "pack": "0x72 Dungeon"
+  },
+  "enemy/glitch_amalgam/idle": {
+   "files": [
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f0.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f1.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f2.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_idle_anim_f3.png"
+   ],
+   "fps": 5,
+   "pack": "0x72 Dungeon"
+  },
+  "enemy/glitch_amalgam/walk": {
+   "files": [
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f0.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f1.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f2.png",
+    "env/dungeon/0x72_DungeonTilesetII_v1.7/frames/big_zombie_run_anim_f3.png"
+   ],
+   "fps": 8,
+   "pack": "0x72 Dungeon"
+  },
+  "enemy/final_samurai": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+   "region": [
+    0,
+    0,
+    96,
+    96
+   ],
+   "pack": "FREE_Samurai"
+  },
+  "enemy/final_samurai/idle": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 8,
+   "pack": "FREE_Samurai"
+  },
+  "enemy/final_samurai/walk": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 10,
+   "pack": "FREE_Samurai"
+  },
+  "enemy/final_samurai/attack": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 14,
+   "pack": "FREE_Samurai"
+  },
+  "enemy/final_samurai/hurt": {
+   "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
+   "frame": [
+    96,
+    96
+   ],
+   "fps": 8,
+   "pack": "FREE_Samurai"
+  },
+  "terrain/pf_ledge": {
+   "path": "generated/pf_ledge.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_plateau": {
+   "path": "generated/pf_plateau.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_slab": {
+   "path": "generated/pf_slab.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_corner": {
+   "path": "generated/pf_corner.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_block": {
+   "path": "generated/pf_block.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_grass_wide": {
+   "path": "generated/pf_grass_wide.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_dirt_slab": {
+   "path": "generated/pf_dirt_slab.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_moss": {
+   "path": "generated/pf_moss.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_rock_l": {
+   "path": "generated/pf_rock_l.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_rock_r": {
+   "path": "generated/pf_rock_r.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_dirt_l": {
+   "path": "generated/pf_dirt_l.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/pf_dirt_r": {
+   "path": "generated/pf_dirt_r.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_gate": {
+   "path": "generated/deco_gate.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_pillar": {
+   "path": "generated/deco_pillar.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_pillar2": {
+   "path": "generated/deco_pillar2.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_lantern": {
+   "path": "generated/deco_lantern.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_pedestal": {
+   "path": "generated/deco_pedestal.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_crate": {
+   "path": "generated/deco_crate.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_bridge": {
+   "path": "generated/deco_bridge.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_bridge_sm": {
+   "path": "generated/deco_bridge_sm.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_wall": {
+   "path": "generated/deco_wall.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/deco_tower": {
+   "path": "generated/deco_tower.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/moss": {
+   "path": "generated/pf_moss.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/cave_bricks": {
+   "path": "generated/cave_bricks.png",
+   "pack": "tilemap(gen)"
+  },
+  "terrain/cave_crystal": {
+   "path": "generated/cave_crystal.png",
+   "pack": "tilemap(gen)"
+  },
+  "terrain/cave_rock": {
+   "path": "generated/cave_rock.png",
+   "pack": "tilemap(gen)"
+  },
+  "terrain/cave_shroom": {
+   "path": "generated/cave_shroom.png",
+   "pack": "tilemap(gen)"
+  },
+  "prop/house_a": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/house-a.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/house_b": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/house-b.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/house_c": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/house-c.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/sign": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/sign.png",
+   "pack": "GothicVania Town"
+  },
+  "enemy/rooster": {
+   "path": "generated/rooster.png",
+   "pack": "32rogues(gen)"
+  },
+  "npc/chicken": {
+   "path": "generated/chicken.png",
+   "pack": "32rogues(gen)"
+  },
+  "npc/goose": {
+   "path": "generated/goose.png",
+   "pack": "32rogues(gen)"
+  },
+  "npc/duck": {
+   "path": "generated/duck.png",
+   "pack": "32rogues(gen)"
+  },
+  "bg/dusk_sky": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/sky.png",
+   "pack": "Mountain Dusk"
+  },
+  "bg/dusk_far": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/far-mountains.png",
+   "pack": "Mountain Dusk"
+  },
+  "bg/dusk_mid": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/mountains.png",
+   "pack": "Mountain Dusk"
+  },
+  "bg/dusk_trees": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/trees.png",
+   "pack": "Mountain Dusk"
+  },
+  "bg/dusk_clouds": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/far-clouds.png",
+   "pack": "Mountain Dusk"
+  },
+  "bg/dusk_nearclouds": {
+   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/near-clouds.png",
+   "pack": "Mountain Dusk"
+  },
+  "music/title": {
+   "path": "music/xdev_02_-_Title_Theme.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch1_forest": {
+   "path": "music/xdev_04_-_Silent_Forest.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/ch1_cave": {
+   "path": "music/dark_ambient/Dark Ambient Soundscape/OGG/01.Misery_Loves_Company.ogg",
+   "pack": "Dark Ambient"
+  },
+  "music/ch1_gate": {
+   "path": "music/xdev_16_-_The_Calm_Before_The_Storm.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "prop/furn_bed": {
+   "path": "generated/furn_bed.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_rug": {
+   "path": "generated/furn_rug.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_shelf": {
+   "path": "generated/furn_shelf.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_table": {
+   "path": "generated/furn_table.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_lamp": {
+   "path": "generated/furn_lamp.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_books": {
+   "path": "generated/furn_books.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "prop/furn_stool": {
+   "path": "generated/furn_stool.png",
+   "pack": "Modern Interiors(gen)"
+  },
+  "terrain/edge_grass": {
+   "path": "generated/edge_grass.png",
+   "pack": "DarkForest(gen)"
+  },
+  "terrain/edge_dirt": {
+   "path": "generated/edge_dirt.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/statue": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/statue.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/grave_1": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-1.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/grave_2": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-2.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/grave_3": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-3.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/deadtree_1": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-1.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/deadtree_2": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-2.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/deadtree_3": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-3.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/bush_large": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/bush-large.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "prop/street_lamp": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/street-lamp.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/well": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/well.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/wagon": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/wagon.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/crate": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/crate.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/crate_stack": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/crate-stack.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/barrel": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/barrel.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/deco_barrier": {
+   "path": "generated/deco_barrier.png",
+   "pack": "GothicVania Town(gen)"
+  },
+  "npc/peacock": {
+   "path": "generated/peacock.png",
+   "pack": "32rogues(gen)"
+  },
+  "terrain/ground_face": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground.png",
+   "pack": "GothicVania Town"
+  },
+  "terrain/ground_face_b": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground-b.png",
+   "pack": "GothicVania Town"
+  },
+  "terrain/wall_tile": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground-wall.png",
+   "pack": "GothicVania Town"
   }
+ }
 }

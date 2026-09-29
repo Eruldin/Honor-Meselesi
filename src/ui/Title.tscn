@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://samsara_title"]
+[gd_scene format=3 uid="uid://bl4i205h3aq37"]
 
-[ext_resource type="Script" path="res://src/ui/title.gd" id="1_title"]
+[ext_resource type="Script" uid="uid://cayue4q5c1xym" path="res://src/ui/title.gd" id="1_title"]
 
-[node name="Title" type="Node2D"]
+[node name="Title" type="Node2D" unique_id=280302015]
 script = ExtResource("1_title")

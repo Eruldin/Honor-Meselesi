@@ -19,13 +19,18 @@ func _init() -> void:
 	max_hp = 14
 	body_size = Vector2(26, 30)
 	contact_damage = true
-	asset_key = &"eagle"
+	asset_key = &"rooster"
 	phase_thresholds = [0.5]
 
 
 func _ready() -> void:
 	super._ready()
-	if not using_real_sprite:
+	if using_real_sprite:
+		# Dev kasuari-horoz — boss olcegi; ayaklari tam govde dibinde
+		sprite.scale *= 2.0
+		var vis_h := sprite.texture.get_size().y * sprite.scale.y
+		sprite.position.y = body_size.y * 0.5 - vis_h * 0.5
+	else:
 		sprite.modulate = Color(0.95, 0.85, 0.5)
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 

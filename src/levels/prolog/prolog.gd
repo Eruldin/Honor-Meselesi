@@ -102,17 +102,46 @@ func _build_room() -> void:
 	body.position = Vector2(240, FLOOR_Y + 15)
 	add_child(body)
 
-	# TV sehpasi + CRT govde
+	# TV sehpasi + CRT govde — gercek mobilya dokulari
 	var table := ColorRect.new()
 	table.color = Color(0.28, 0.2, 0.12)
 	table.position = Vector2(108, 210)
 	table.size = Vector2(56, 26)
 	add_child(table)
+	if AssetLoader.has_asset(&"prop/furn_table"):
+		var ttex := TextureRect.new()
+		ttex.texture = AssetLoader.tiled_texture(
+			&"prop/furn_table", Vector2i(56, 26))
+		ttex.position = table.position
+		ttex.size = table.size
+		ttex.modulate = Color(0.75, 0.6, 0.55)
+		add_child(ttex)
 	var tv := ColorRect.new()
 	tv.color = Color(0.2, 0.2, 0.22)
 	tv.position = Vector2(110, 172)
 	tv.size = Vector2(52, 40)
 	add_child(tv)
+
+	# Mobilyalar: futon yatak, kitaplik, raf, hali, lamba, tabure
+	var furn_specs := [
+		{ id = &"prop/furn_bed", pos = Vector2(24, FLOOR_Y - 19), mod = Color(0.7, 0.55, 0.5) },
+		{ id = &"prop/furn_books", pos = Vector2(392, FLOOR_Y - 20), mod = Color(0.75, 0.6, 0.55) },
+		{ id = &"prop/furn_shelf", pos = Vector2(436, FLOOR_Y - 32), mod = Color(0.75, 0.6, 0.55) },
+		{ id = &"prop/furn_rug", pos = Vector2(170, FLOOR_Y - 3), mod = Color(0.8, 0.55, 0.5) },
+		{ id = &"prop/furn_lamp", pos = Vector2(460, FLOOR_Y - 20), mod = Color(1.0, 0.85, 0.6) },
+		{ id = &"prop/furn_stool", pos = Vector2(330, FLOOR_Y - 17), mod = Color(0.75, 0.6, 0.55) },
+	]
+	for f in furn_specs:
+		if not AssetLoader.has_asset(f.id):
+			continue
+		var fs := Sprite2D.new()
+		fs.texture = AssetLoader.texture(f.id)
+		var ts := fs.texture.get_size()
+		# Ayak hizasi: sprite'in alti zemine oturur
+		fs.offset = Vector2(-ts.x / 2.0, -ts.y)
+		fs.position = f.pos
+		fs.modulate = f.mod
+		add_child(fs)
 
 	# CRT ekrani: SubViewport icinde mini oyun
 	crt_vp = SubViewport.new()

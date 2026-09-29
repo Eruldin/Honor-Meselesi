@@ -1,6 +1,6 @@
 extends "res://src/levels/ch1/ch1.gd"
-## M4 PR kaydi: AIInputSource ile senaryolu Bolum 1 turu —
-## saga kos, dusmanlari kes, dinlenme noktasi, sovalye formu, arena, boss.
+## Ch1 kayit turu: koy -> orman -> magara -> gecit -> torii -> arena.
+## AIInputSource ile senaryolu; takilirsa ileri teleport eder.
 ## build/capture_c1/ altina PNG yazar.
 
 var _ai: AIInputSource
@@ -22,62 +22,102 @@ func _wait(sec: float) -> void:
 	await get_tree().create_timer(sec).timeout
 
 
-func _fight() -> void:
-	# Yakindaki bir seye dogru kombo — basit spam
-	_ai.tap(&"attack")
-	await _wait(0.35)
-	_ai.tap(&"attack")
-	await _wait(0.35)
+func _fight(n := 2) -> void:
+	for i in n:
+		_ai.tap(&"attack")
+		await _wait(0.4)
 
 
-func _walk_to(x: float, timeout := 8.0) -> void:
+func _walk_to(x: float, timeout := 10.0) -> void:
 	var t := 0.0
+	var last_x := -999.0
+	var stuck := 0.0
 	while samurai.global_position.x < x and t < timeout:
 		if not is_instance_valid(samurai):
 			return
 		_ai.axis(1.0)
+		# Takildiysa ziplayarak kurtulmaya calis
+		if absf(samurai.global_position.x - last_x) < 2.0:
+			stuck += 0.1
+			if stuck > 0.4:
+				_ai.tap(&"jump")
+				stuck = 0.0
+		else:
+			stuck = 0.0
+		last_x = samurai.global_position.x
 		await get_tree().create_timer(0.1).timeout
 		t += 0.1
 	_ai.axis(0.0)
+	if t >= timeout:
+		samurai.global_position.x = x  # kayit icin ileri atla
 
 
 func _run_script() -> void:
 	await _wait(0.8)
 	_capturing = true
 
-	await _walk_to(330)
-	await _fight()          # koylu 1
-	await _wait(0.3)
-	await _fight()
-	await _walk_to(490)
-	await _fight()          # koylu 2
-	await _fight()
+	# A: koy — tabela, kukla, koyluler
+	await _walk_to(160)
+	await _wait(0.6)        # move tabelasi
+	await _walk_to(430)
+	await _fight(3)         # kukla + sword tabelasi
+	await _walk_to(640)
+	await _fight(3)
+	await _walk_to(860)
+	await _fight(3)
+	await _walk_to(1010)
+	await _wait(0.8)        # rest: fener + save
 
-	await _walk_to(660)
-	await _fight()          # muhafiz — kalkan bloklari gorunur
-	await _fight()
-	_ai.tap(&"jump")        # arkaya atlamak icin ziplayip
+	# B: orman — bariyer tirmanisi
+	await _walk_to(1200)
+	await _fight(2)         # mantarlar
+	await _walk_to(1360)
+	_ai.tap(&"jump"); await _wait(0.4)
+	_ai.axis(1.0); _ai.tap(&"jump"); await _wait(0.35)
+	_ai.tap(&"jump"); await _wait(0.5)
+	_ai.axis(0.0)
+	await _walk_to(1600, 6.0)
+	await _fight(2)         # kaplumbaga
+	await _walk_to(1950)
+	await _fight(3)
+	await _walk_to(2250)
+	await _wait(0.8)        # rest
+
+	# C: magara — dikenler, hayalet
+	await _walk_to(2450)
+	await _fight(2)
+	await _walk_to(2600)
+	_ai.tap(&"jump"); await _wait(0.4)
+	_ai.axis(1.0); _ai.tap(&"jump"); await _wait(0.4)
+	_ai.tap(&"jump"); await _wait(0.5)
+	_ai.axis(0.0)
+	await _walk_to(2950, 6.0)
+	await _fight(2)         # hayalet (parry/spark'ta gorunur)
+	await _walk_to(3250)
+	await _fight(2)         # gizli duvar kirilsin
+
+	# D: gecit — muhafizlar, sovalye, kapi
+	await _walk_to(3700)
+	await _fight(3)
+	_ai.tap(&"parry")
 	await _wait(0.4)
-	await _fight()
-
-	await _walk_to(820)     # dinlenme noktasi (save + heal + pikto)
+	await _fight(2)
+	await _walk_to(3940)
+	await _fight(3)
+	await _walk_to(4060)
+	await _wait(0.8)        # rest
+	await _walk_to(4230)
+	await _fight(5)         # sovalye -> kapi acilir
 	await _wait(1.0)
 
-	await _walk_to(975)
-	await _fight()          # agir sovalye -> Sovalye formu duser
-	await _fight()
-	await _fight()
-	await _wait(1.2)        # donusum animasyonu gorunsun
-
-	await _walk_to(1200)    # arena tetigi — duvarlar + boss aktif
-	await _wait(0.8)
-	await _fight()          # boss'a ilk vuruslar
-	await _fight()
+	# E: torii -> arena -> boss
+	await _walk_to(4590)
+	await _wait(1.0)        # duvarlar yukselir
+	await _fight(3)
 	_ai.tap(&"jump")
 	await _wait(0.5)
-	await _fight()
-	await _wait(2.5)        # boss slam + yumurtalar gorunsun
-	await _fight()
+	await _fight(3)
+	await _wait(2.0)        # boss slam + yumurta
 
 	_capturing = false
 	print("capture done: %d frames" % _capture_count)
