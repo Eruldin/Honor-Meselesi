@@ -94,6 +94,25 @@ extends Resource
 @export var missile_speed: float = 130.0
 @export var missile_turn: float = 2.2           ## rad/s hedefe donus
 
+@export_group("Bolum 3 — dusmanlar")
+@export var ghost_speed: float = 22.0
+@export var ghost_reveal_time: float = 3.0    ## kivilcimla gorunur kalma
+@export var ghost_reveal_radius: float = 70.0
+@export var vampire_blink_cd: float = 2.0
+@export var vampire_bleed_ticks: int = 3      ## DoT
+@export var vampire_bleed_interval: float = 1.2
+@export var werewolf_jump_speed: float = 260.0
+@export var werewolf_telegraph: float = 0.5   ## kirmizi goz uyarisi
+
+@export_group("Bolum 3 — Kont Vlad")
+@export var vlad_speed: float = 38.0
+@export var vlad_p2_speed: float = 56.0
+@export var vlad_telegraph: float = 0.45
+@export var vlad_attack_gap: float = 0.9
+@export var vlad_attack_gap_p2: float = 0.55
+@export var vlad_lunge_speed: float = 320.0
+@export var blood_spike_delay: float = 0.7    ## zeminde belirme uyarisi
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12
