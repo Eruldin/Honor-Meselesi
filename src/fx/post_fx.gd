@@ -26,13 +26,17 @@ func _ready() -> void:
 
 
 ## Glitch kanalini gecici olarak yukseltip geri indirir (cutscene darbesi).
+## master ayari da kisa sureligine yukselir — shader etkileri master'a bagli.
 func glitch_pulse(strength: float, duration: float = 0.6) -> void:
 	if material == null:
 		return
 	var tw := create_tween()
 	tw.set_ignore_time_scale(true)
+	material.set_shader_parameter("master", 1.0)
 	material.set_shader_parameter("glitch", strength)
-	tw.tween_property(material, "shader_parameter/glitch", 0.12, duration)
+	tw.parallel().tween_property(material, "shader_parameter/glitch", 0.12, duration)
+	tw.parallel().tween_property(material, "shader_parameter/master",
+		Settings.fx_intensity, duration)
 
 
 func apply_intensity(v: float) -> void:

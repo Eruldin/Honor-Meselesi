@@ -175,8 +175,8 @@ func _build_anims() -> void:
 	if bank.get_animation_names().is_empty():
 		return
 	_anims.sprite_frames = bank
-	_anims.scale = Vector2.ONE * 0.55     # 96px cel -> ~52px gorunum
-	_anims.position = Vector2(0, -14)    # ayaklar govdenin tabanina
+	_anims.scale = Vector2.ONE            # 96px cel, ~34px govde — tam detay
+	_anims.position = Vector2(1, -29)     # cel ayak bbox'i (~81) tabana hizali
 	sprite.visible = false
 	add_child(_anims)
 	_anims.play(&"idle")

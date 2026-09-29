@@ -195,8 +195,8 @@
 			"pack": "Free Pixel Art Forest"
 		},
 		"bg/forest_mid": {
-			"path": "env/parallax/parallax_forest_pack web/v1/layers/parallax-forest-middle-trees.png",
-			"pack": "Parallax Forest"
+			"path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0006_4.png",
+			"pack": "Free Pixel Art Forest"
 		},
 		"bg/city": {
 			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
@@ -374,6 +374,78 @@
 			"path": "env/postapoc/Objects/Exhaust-pipe.png",
 			"pack": "Pixel Art Post Apocalypse",
 			"note": "yer tutucu — mad_cloud prosedurel kullanir"
+		},
+		"prop/hat": {
+			"path": "generated/hat.png",
+			"pack": "uretilmis (kasa)"
+		},
+		"bg/forest_sky": {
+			"path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0000_9.png",
+			"pack": "Free Pixel Art Forest"
+		},
+		"bg/forest_far": {
+			"path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
+			"pack": "Free Pixel Art Forest"
+		},
+		"bg/forest_near": {
+			"path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0009_2.png",
+			"pack": "Free Pixel Art Forest"
+		},
+		"bg/warped_sky": {
+			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
+			"pack": "Warped City"
+		},
+		"bg/warped_far": {
+			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/buildings-bg.png",
+			"pack": "Warped City"
+		},
+		"bg/warped_near": {
+			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
+			"pack": "Warped City"
+		},
+		"bg/gothic_far": {
+			"path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/background.png",
+			"pack": "GothicVania Town"
+		},
+		"bg/gothic_mid": {
+			"path": "env/gothic_town/GothicVania-town-files/code/phaser-code/assets/environment/middleground.png",
+			"pack": "GothicVania Town"
+		},
+		"bg/winter_sky": {
+			"path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/sky.png",
+			"pack": "SunnyLand Winter"
+		},
+		"bg/winter_far": {
+			"path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mountains.png",
+			"pack": "SunnyLand Winter"
+		},
+		"bg/winter_mid": {
+			"path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-a.png",
+			"pack": "SunnyLand Winter"
+		},
+		"bg/winter_near": {
+			"path": "env/sunnyland_winter/sunnyland winter forest files/ENVIRONMENT/mid-layer-b.png",
+			"pack": "SunnyLand Winter"
+		},
+		"terrain/cabin_wall": {
+			"path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
+			"region": [
+				64,
+				176,
+				48,
+				32
+			],
+			"pack": "Modern Interiors"
+		},
+		"terrain/cabin_floor": {
+			"path": "env/interiors/Modern tiles_Free/Interiors_free/16x16/Room_Builder_free_16x16.png",
+			"region": [
+				128,
+				80,
+				48,
+				32
+			],
+			"pack": "Modern Interiors"
 		}
 	}
 }

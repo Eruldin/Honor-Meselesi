@@ -6,7 +6,7 @@ signal changed
 
 const PATH := "user://settings.json"
 
-var fx_intensity: float = 1.0      ## CRT/glitch/RGB katmani
+var fx_intensity: float = 0.0      ## CRT/glitch — sadece senaryo anlarinda (glitch_pulse)
 var shake_scale: float = 1.0       ## ekran sarsintisi carpani
 var flash_scale: float = 1.0       ## flas/kivilcim parlakligi carpani
 

@@ -127,6 +127,32 @@ func frames(logical_id: StringName) -> SpriteFrames:
 	return sf
 
 
+## Kaynak dokuyu (region dahil) yatayda döşeyerek istenen boyutta
+## tek ImageTexture üretir — geniş zemin/parallax katmanları için.
+func tiled_texture(logical_id: StringName, size: Vector2i) -> Texture2D:
+	var key := "tile_%s_%dx%d" % [logical_id, size.x, size.y]
+	if _cache.has(key):
+		return _cache[key]
+	var src: Texture2D = texture(logical_id, size)
+	if src == null:
+		return null
+	var t := src.get_image()
+	if t == null or t.get_width() <= 0 or t.get_height() <= 0:
+		return src
+	if t.get_format() != Image.FORMAT_RGBA8:
+		t.convert(Image.FORMAT_RGBA8)
+	var img := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+	img.fill(Color.TRANSPARENT)
+	var tw := t.get_width()
+	var th := t.get_height()
+	for y in range(0, size.y, th):
+		for x in range(0, size.x, tw):
+			img.blit_rect(t, Rect2i(0, 0, tw, th), Vector2i(x, y))
+	var out := ImageTexture.create_from_image(img)
+	_cache[key] = out
+	return out
+
+
 ## Manifest'te tanimli ve animasyonlu sheet'i var mi?
 func has_frames(logical_id: StringName) -> bool:
 	var entry: Variant = _manifest.get(logical_id)

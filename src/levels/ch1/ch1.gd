@@ -60,15 +60,13 @@ func _build_terrain() -> void:
 	sky.color = Color(0.25, 0.09, 0.12)
 	sky.size = Vector2(LEVEL_W, 270)
 	add_child(sky)
-	if AssetLoader.has_asset(&"bg/forest"):
-		var bg := Sprite2D.new()
-		bg.texture = AssetLoader.texture(&"bg/forest")
-		bg.centered = false
-		var ts := bg.texture.get_size()
-		bg.scale = Vector2(LEVEL_W, 270) / ts
-		bg.modulate = Color(1.0, 0.6, 0.6)  # alacakaranlik tonuna karistir
-		bg.position = Vector2.ZERO
-		add_child(bg)
+	# Alacakaranlik orman parallax'i — gercek katmanlar, kizil ton
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/forest_sky", scroll = 0.0, modulate = Color(1.0, 0.5, 0.5)},
+		{id = &"bg/forest_far", scroll = 0.12, modulate = Color(1.0, 0.62, 0.6)},
+		{id = &"bg/forest_mid", scroll = 0.3, modulate = Color(0.95, 0.55, 0.55)},
+		{id = &"bg/forest_near", scroll = 0.55, modulate = Color(0.9, 0.5, 0.5)},
+	])
 
 	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
 	_add_ground(Vector2(140, 195), Vector2(70, 8))

@@ -56,14 +56,11 @@ func _build_terrain() -> void:
 	bg.color = Color(0.07, 0.04, 0.12)
 	bg.size = Vector2(LEVEL_W, 270)
 	add_child(bg)
-	if AssetLoader.has_asset(&"bg/gothic"):
-		var spr := Sprite2D.new()
-		spr.texture = AssetLoader.texture(&"bg/gothic")
-		spr.centered = false
-		var ts := spr.texture.get_size()
-		spr.scale = Vector2(LEVEL_W, 270) / ts
-		spr.modulate = Color(0.8, 0.7, 0.9)
-		add_child(spr)
+	# Gotik kasaba parallax'i — mor ton
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/gothic_far", scroll = 0.0, modulate = Color(0.8, 0.7, 0.95)},
+		{id = &"bg/gothic_mid", scroll = 0.25, modulate = Color(0.75, 0.65, 0.9)},
+	])
 	if AssetLoader.has_asset(&"bg/moon"):
 		var moon := Sprite2D.new()
 		moon.texture = AssetLoader.texture(&"bg/moon")
