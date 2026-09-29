@@ -801,11 +801,20 @@ func _build_entities() -> void:
 	var upper_guard := Guard.new()
 	upper_guard.global_position = Vector2(3760, 120 - 12)
 	add_child(upper_guard)
+
+	# Mezarlik cehennem kedisi — yuzeyde hizli devriye
+	var cat := Hellcat.new()
+	cat.global_position = Vector2(3550, FLOOR_Y - 10)
+	add_child(cat)
 	
-	# Alt Mahzen Hayaleti
+	# Alt Mahzen: hayalet + gomulu iskeletler (mezarlik pusu)
 	var crypt_ghost := Ghost.new()
 	crypt_ghost.global_position = Vector2(3800, FLOOR_Y + 160.0 - 12)
 	add_child(crypt_ghost)
+	for x in [3690.0, 3890.0]:
+		var sk := CryptSkeleton.new()
+		sk.global_position = Vector2(x, FLOOR_Y + 160.0 - 12)
+		add_child(sk)
 
 	_add_rest(4050, &"ch1_gate")
 	knight = HeavyKnight.new()

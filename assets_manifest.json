@@ -152,7 +152,7 @@
     },
     "enemy/hellcat": {
       "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
-      "pack": "GothicVania"
+      "pack": "GothicVania Cemetery"
     },
     "enemy/skeleton": {
       "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
@@ -1503,6 +1503,32 @@
     "ui/hud_katana": {
       "pack": "AI Sheet",
       "path": "generated/ai/hud_katana.png"
+    },
+    "enemy/skeleton/walk": {
+      "files": [
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-2.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-3.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-4.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-5.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-6.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-7.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-8.png"
+      ],
+      "fps": 10,
+      "pack": "GothicVania Cemetery"
+    },
+    "enemy/skeleton/rise": {
+      "files": [
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-1.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-2.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-3.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-4.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-5.png",
+        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-6.png"
+      ],
+      "fps": 10,
+      "pack": "GothicVania Cemetery"
     }
   }
 }
