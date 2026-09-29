@@ -1,15 +1,21 @@
 extends Node2D
-## M4 — Bolum 1: Ofkeli Koy + Lord Cluck (dikey dilim).
-## Koy sokagi: koyluler -> kalkanli muhafiz -> dinlenme noktasi ->
-## agir sovalye (gecici Sovalye formu dusurur) -> arena -> Lord Cluck ->
-## Glitch Yaratik gecis sinematigi -> Bolum 2.
+## Bolum 1 — Koyden Arena'ya (~1 saatlik ilk dilim).
+## Bes bolge: Köy Şafagi -> Orman Yolu -> Magara Inisi -> Kale Gecidi
+## (muhafiz+sovalye kapisi) -> Torii Arena + Lord Cluck.
+## Ogretici tamamen cevresel: tabela-piktogramlar, guvenli deneme alanlari.
 
 const CH2_PATH := "res://src/levels/ch2/Ch2.tscn"
 const FLOOR_Y := 250.0
-const LEVEL_W := 1500.0
-const ARENA_X := 1180.0   ## boss tetik cizgisi
-const ARENA_L := 1190.0
-const ARENA_R := 1480.0
+const LEVEL_W := 5000.0
+const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
+	{x = 1050.0, id = &"music/ch1_forest"},
+	{x = 2300.0, id = &"music/ch1_cave"},
+	{x = 3350.0, id = &"music/ch1_gate"},
+]
+const GATE_X := 4400.0       ## torii kapi cizgisi
+const ARENA_L := 4520.0      ## arena sol duvari
+const ARENA_R := 4900.0      ## arena sag duvari
+const ARENA_TRIGGER := 4580.0  ## oyuncu tamamen icerideyken tetiklenir
 
 ## Testlerde gercek sahne gecisini kapatmak icin.
 @export var auto_advance := true
@@ -17,13 +23,16 @@ const ARENA_R := 1480.0
 var samurai: Samurai
 var camera: ScreenShake
 var boss: LordCluck
-var _walls: Array[StaticBody2D] = []
+var knight: HeavyKnight
+var _arena_walls: Array[StaticBody2D] = []
 var _boss_bar: Control
 var _boss_root: Control
 var _player_fill: Control
-var _hud_label: Label
 var _boss_started := false
 var _respawn_pending := false
+var _music_zone := 0
+var _gate_body: StaticBody2D
+var _gate_sprite: Sprite2D
 
 
 func _ready() -> void:
@@ -34,96 +43,29 @@ func _ready() -> void:
 	_build_fx()
 	_build_hud()
 	EventBus.actor_died.connect(_on_actor_died)
-	EventBus.checkpoint_reached.connect(func(_id: StringName) -> void: pass)
 
 
 func _process(_delta: float) -> void:
-	# Kamera oyuncuyu takip eder
 	if samurai != null and is_instance_valid(samurai):
 		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
+		# Bolge muzigi — oyuncu sinirdan gecince bir kez degisir
+		while _music_zone < ZONE_MUSIC.size() \
+				and samurai.global_position.x >= ZONE_MUSIC[_music_zone].x:
+			AudioManager.play_music(ZONE_MUSIC[_music_zone].id)
+			_music_zone += 1
 	if boss != null and is_instance_valid(boss) and boss.active:
+		_boss_root.visible = true
 		_boss_bar.visible = true
-		var frac := float(boss.health.current) / maxf(boss.health.max_health, 1)
-		_boss_bar.size.x = 160.0 * frac
+		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
 	if samurai != null and _player_fill != null:
 		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
-	if samurai != null and _hud_label != null:
-		_hud_label.text = "can %d/%d  form %s" % [
-			samurai.health.current, samurai.health.max_health,
-			samurai.form.id if samurai.form != null else "?"]
 
 
-# --- Kurulum ---
+# --- Arazi kurulumu ---
 
-func _build_terrain() -> void:
-	var sky := ColorRect.new()
-	sky.color = Color(0.62, 0.48, 0.4)
-	sky.size = Vector2(LEVEL_W, 270)
-	add_child(sky)
-	# Alacakaranlik orman parallax'i — gercek katmanlar, kizil ton
-	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/forest_sky", scroll = 0.0},
-		{id = &"bg/forest_far", scroll = 0.12, modulate = Color(1.0, 0.88, 0.85)},
-		{id = &"bg/forest_mid", scroll = 0.3, modulate = Color(0.96, 0.82, 0.8)},
-		{id = &"bg/forest_near", scroll = 0.55, modulate = Color(0.92, 0.78, 0.78)},
-	])
-
-	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
-	_add_ground(Vector2(140, 195), Vector2(70, 8))
-	_add_ground(Vector2(430, 190), Vector2(70, 8))
-	_add_ground(Vector2(-6, 135), Vector2(12, 270))
-
-	# Koy evleri + catilar (siluet)
-	for i in 8:
-		var hx := 60.0 + i * 180.0
-		if hx > ARENA_L:
-			break
-		var house := ColorRect.new()
-		house.color = Color(0.14, 0.08, 0.1).lightened((i % 3) * 0.04)
-		house.position = Vector2(hx, 175 - (i % 2) * 16)
-		house.size = Vector2(52, 75)
-		add_child(house)
-		var roof := Polygon2D.new()
-		roof.polygon = PackedVector2Array([
-			Vector2(-6, 0), Vector2(26, -22), Vector2(58, 0)])
-		roof.color = Color(0.1, 0.05, 0.07)
-		roof.position = house.position
-		add_child(roof)
-
-	# Pasif koylu NPC'ler — yaklasinca urkup kacar (atmosfer)
-	for i in 5:
-		var npc := AmbientNpc.new()
-		npc.npc_key = [&"peasant1", &"peasant2", &"peasant3",
-			&"monk", &"farmer"][i]
-		npc.position = Vector2(200.0 + i * 190.0, FLOOR_Y - 8)
-		add_child(npc)
-
-	# Arena duvarlari — boss tetiklenince etkinlesir
-	for wx in [ARENA_L - 14, ARENA_R + 8]:
-		var wall := _make_wall(Vector2(wx, 135))
-		wall.set_deferred("collision_layer", 0)
-		wall.visible = false
-		_walls.append(wall)
-		add_child(wall)
-
-
-func _make_wall(center: Vector2) -> StaticBody2D:
-	var body := StaticBody2D.new()
-	body.collision_layer = 1
-	var col := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(16, 270)
-	col.shape = rect
-	body.add_child(col)
-	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("terrain/arena_wall", Vector2i(16, 270))
-	sprite.modulate = Color(0.3, 0.15, 0.2)
-	body.add_child(sprite)
-	body.global_position = center
-	return body
-
-
-func _add_ground(center: Vector2, size: Vector2) -> void:
+func _add_ground(center: Vector2, size: Vector2,
+		top_id: StringName = &"terrain/edge_grass",
+		face_id: StringName = &"terrain/ground_face") -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 1
 	var col := CollisionShape2D.new()
@@ -131,60 +73,423 @@ func _add_ground(center: Vector2, size: Vector2) -> void:
 	rect.size = size
 	col.shape = rect
 	body.add_child(col)
-	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("terrain/ch1_ground", Vector2i(size))
-	sprite.modulate = Color(0.4, 0.25, 0.3)
-	body.add_child(sprite)
 	body.global_position = center
 	add_child(body)
+	# Govde: collision'dan 24px asagi tasan toprak dolgu — saglam kutle
+	var skirt := 24.0
+	var fill := ColorRect.new()
+	fill.color = Color(0.13, 0.09, 0.10)
+	fill.position = Vector2(-size.x / 2.0, -size.y / 2.0)
+	fill.size = Vector2(size.x, size.y + skirt)
+	body.add_child(fill)
+	# Yuz: doseme zemin dokusu — kutu gorunumunu kirir, saglam kutle hissi
+	if AssetLoader.has_asset(face_id):
+		var ftex := AssetLoader.tiled_texture(face_id,
+			Vector2i(int(size.x), int(size.y + skirt)))
+		var fs := Sprite2D.new()
+		fs.texture = ftex
+		fs.centered = false
+		fs.position = Vector2(-size.x / 2.0, -size.y / 2.0)
+		body.add_child(fs)
+	# Kenar seridi: ust kenara yapisik, hafif bindirmeli kesintisiz dosemе
+	if AssetLoader.has_asset(top_id):
+		var ttex := AssetLoader.texture(top_id)
+		var th := float(ttex.get_height())
+		var seg_w := float(ttex.get_width())
+		var overlap := 10.0 if top_id == &"terrain/edge_grass" else 6.0
+		var x := -size.x / 2.0 - 2.0
+		while x < size.x / 2.0:
+			var s := Sprite2D.new()
+			s.texture = ttex
+			s.centered = false
+			s.position = Vector2(x, -size.y / 2.0 - th + 3.0)
+			body.add_child(s)
+			x += seg_w - overlap
+
+
+func _add_platform(pos: Vector2, id: StringName, w: float) -> void:
+	## Organik zemin parcasi — sprite gercek parca, collision boyuna gore.
+	var tex := AssetLoader.texture(id)
+	if tex == null:
+		return
+	var body := StaticBody2D.new()
+	body.collision_layer = 1
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(w, 8)
+	col.shape = rect
+	body.add_child(col)
+	var s := Sprite2D.new()
+	s.texture = tex
+	var sc := w / tex.get_width()
+	s.scale = Vector2(sc, sc)
+	s.position = Vector2(-w / 2.0, -tex.get_height() * sc * 0.62)
+	body.add_child(s)
+	body.global_position = pos
+	add_child(body)
+
+
+func _add_deco(id: StringName, pos: Vector2, scale := 1.0,
+		modulate := Color.WHITE, flip := false, z := 0) -> Sprite2D:
+	if not AssetLoader.has_asset(id):
+		return null
+	var s := Sprite2D.new()
+	s.texture = AssetLoader.texture(id)
+	s.scale = Vector2(-scale if flip else scale, scale)
+	s.position = pos
+	s.modulate = modulate
+	s.z_index = z
+	add_child(s)
+	return s
+
+
+func _add_deco_ground(id: StringName, x: float, floor_y := FLOOR_Y,
+		scale := 1.0, modulate := Color.WHITE, flip := false,
+		z := 0) -> Sprite2D:
+	## Alt kenari tam zemine oturan dekor — hicbir sey havada durmaz.
+	var s := _add_deco(id, Vector2(x, floor_y), scale, modulate, flip, z)
+	if s != null:
+		s.position.y = floor_y - s.texture.get_height() * scale * 0.5
+	return s
+
+
+func _add_sign(pos: Vector2, icon: StringName) -> void:
+	## Ogretici tabela: oyuncu yaklasinca balonla ikon gosterir.
+	var sign := _add_deco_ground(&"prop/sign", pos.x, pos.y, 0.5,
+		Color(0.9, 0.8, 0.7))
+	if sign == null:
+		sign = Sprite2D.new()
+		sign.texture = AssetLoader.placeholder_texture(
+			"prop/sign", Vector2i(10, 14))
+		sign.position = pos + Vector2(0, -8)
+		add_child(sign)
+	var trig := Area2D.new()
+	trig.collision_layer = 0
+	trig.collision_mask = 4
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(70, 90)
+	col.shape = rect
+	trig.add_child(col)
+	trig.position = pos
+	var node := self
+	var shown := [false]
+	trig.area_entered.connect(func(_a: Area2D) -> void:
+		if shown[0] or samurai == null:
+			return
+		shown[0] = true
+		Pictogram.show_on(samurai, icon, 2.0, Vector2(0, -34))
+		if node.has_method("_sign_sfx"):
+			node._sign_sfx())
+	add_child(trig)
+
+
+func _sign_sfx() -> void:
+	AudioManager.play_sfx(&"sfx/ui", samurai.global_position if samurai else Vector2.ZERO, -6.0)
+
+
+func _add_spikes(x0: float, x1: float, y: float) -> void:
+	var x := x0
+	while x < x1:
+		var sp := Spike.new()
+		sp.size = Vector2(24, 10)
+		sp.global_position = Vector2(x + 12, y)
+		add_child(sp)
+		x += 24.0
+
+
+func _add_rest(x: float, id: StringName) -> void:
+	var rest := RestPoint.new()
+	rest.checkpoint_id = id
+	rest.global_position = Vector2(x, FLOOR_Y - 4)
+	add_child(rest)
+	# Tas fener gorunumu
+	if AssetLoader.has_asset(&"prop/deco_lantern"):
+		var sp := rest.get_node_or_null("sprite")
+		if sp != null:
+			sp.texture = AssetLoader.texture(&"prop/deco_lantern")
+			sp.scale = Vector2(0.55, 0.55)
+			sp.position.y = -11
+			sp.modulate = Color(1.0, 0.85, 0.6)
+
+
+func _build_terrain() -> void:
+	# Gokyuzu — alacakaranlik dag silsilesi (tum bolume yayili)
+	var sky := ColorRect.new()
+	sky.color = Color(0.35, 0.2, 0.28)
+	sky.size = Vector2(LEVEL_W, 270)
+	add_child(sky)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/dusk_sky", scroll = 0.0},
+		{id = &"bg/dusk_far", scroll = 0.10},
+		{id = &"bg/dusk_mid", scroll = 0.22},
+		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8)},
+	])
+
+	# === ZEMINLER ===
+	# A: koy duzlugu
+	_add_ground(Vector2(520, FLOOR_Y + 10), Vector2(1040, 26))
+	# B: orman — kaya bariyerini platformlarla as (ust rota gizli)
+	_add_ground(Vector2(1560, FLOOR_Y + 10), Vector2(1000, 26))
+	_add_ground(Vector2(2200, FLOOR_Y + 10), Vector2(280, 26))
+	# Kaya bariyer: 1380-1530 — ustunden platformla gecilir
+	var barrier := StaticBody2D.new()
+	barrier.collision_layer = 1
+	var bc := CollisionShape2D.new()
+	var br := RectangleShape2D.new()
+	br.size = Vector2(150, 52)
+	bc.shape = br
+	barrier.add_child(bc)
+	barrier.global_position = Vector2(1455, FLOOR_Y - 26)
+	add_child(barrier)
+	var bar_fill := ColorRect.new()
+	bar_fill.color = Color(0.14, 0.1, 0.09)
+	bar_fill.position = Vector2(-75, -26)
+	bar_fill.size = Vector2(150, 52)
+	barrier.add_child(bar_fill)
+	# Bariyer yuzu: doseme kaya dokusu + ustte cim kenari (havada durmaz)
+	if AssetLoader.has_asset(&"terrain/edge_dirt"):
+		var face := Sprite2D.new()
+		face.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(150, 52))
+		face.centered = false
+		face.position = Vector2(-75, -26)
+		face.modulate = Color(0.55, 0.48, 0.45)
+		barrier.add_child(face)
+	if AssetLoader.has_asset(&"terrain/edge_grass"):
+		var gcap := Sprite2D.new()
+		gcap.texture = AssetLoader.tiled_texture(&"terrain/edge_grass", Vector2i(150, 14))
+		gcap.centered = false
+		gcap.position = Vector2(-75, -26 - 12)
+		barrier.add_child(gcap)
+	# Bariyeri asan uc basamak + ust gizli rota
+	_add_platform(Vector2(1390, 205), &"terrain/pf_ledge", 75)
+	_add_platform(Vector2(1455, 178), &"terrain/pf_grass_wide", 80)
+	_add_platform(Vector2(1525, 205), &"terrain/pf_ledge", 75)
+	# B ust rota (gizli odul): yuksek seritler
+	_add_platform(Vector2(1640, 140), &"terrain/pf_ledge", 90)
+	_add_platform(Vector2(1760, 160), &"terrain/pf_slab", 85)
+	# C: magara — daha alcak tavan hissi
+	_add_ground(Vector2(2820, FLOOR_Y + 10), Vector2(1020, 26),
+		&"terrain/edge_dirt", &"terrain/cave_rock")
+	# magara cukuru: diken + pogo platformlari
+	_add_platform(Vector2(2540, 210), &"terrain/pf_block", 44)
+	_add_platform(Vector2(2640, 195), &"terrain/pf_block", 44)
+	_add_platform(Vector2(2740, 210), &"terrain/pf_block", 44)
+	# D: gecit — tirmanis + duzluk
+	_add_platform(Vector2(3400, 205), &"terrain/pf_corner", 70)
+	_add_platform(Vector2(3500, 175), &"terrain/pf_plateau", 100)
+	_add_ground(Vector2(3950, FLOOR_Y + 10), Vector2(920, 26), &"terrain/edge_dirt")
+	# E: arena zemini
+	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
+
+
+	# Magara tavani: koyu bant + tugla doku
+	var ceil := ColorRect.new()
+	ceil.color = Color(0.05, 0.04, 0.08)
+	ceil.position = Vector2(2300, 0)
+	ceil.size = Vector2(1050, 60)
+	add_child(ceil)
+	if AssetLoader.has_asset(&"terrain/cave_bricks"):
+		var btex := AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(1050, 48))
+		var bs := TextureRect.new()
+		bs.texture = btex
+		bs.position = Vector2(2300, 52)
+		bs.size = Vector2(1050, 48)
+		bs.modulate = Color(0.35, 0.3, 0.5)
+		add_child(bs)
+	# Magarayi karartan ortu
+	var dark := ColorRect.new()
+	dark.color = Color(0.04, 0.03, 0.1, 0.45)
+	dark.position = Vector2(2300, 0)
+	dark.size = Vector2(1050, 270)
+	dark.z_index = 20
+	add_child(dark)
+
+	# === KOY DEKORU ===
+	var house_mod := Color(0.75, 0.6, 0.62)
+	_add_deco_ground(&"prop/house_c", 150, FLOOR_Y, 0.52, house_mod)
+	_add_deco_ground(&"prop/house_a", 340, FLOOR_Y, 0.5, house_mod)
+	_add_deco_ground(&"prop/house_b", 570, FLOOR_Y, 0.45, house_mod)
+	_add_deco_ground(&"prop/house_a", 770, FLOOR_Y, 0.5, house_mod, true)
+	_add_deco_ground(&"prop/house_c", 930, FLOOR_Y, 0.5, house_mod)
+	# Koy meydani: kuyu, araba, kasalar, varil — hepsi zemine oturur
+	_add_deco_ground(&"prop/well", 480, FLOOR_Y, 0.8, house_mod)
+	_add_deco_ground(&"prop/wagon", 230, FLOOR_Y, 0.75, house_mod)
+	_add_deco_ground(&"prop/crate_stack", 700, FLOOR_Y, 0.7, house_mod)
+	_add_deco_ground(&"prop/crate", 745, FLOOR_Y, 0.8, house_mod)
+	_add_deco_ground(&"prop/barrel", 960, FLOOR_Y, 0.85, house_mod)
+	# Sokak lambalari (tas fener gorunumu)
+	for x in [205.0, 415.0, 650.0, 855.0]:
+		_add_deco_ground(&"prop/deco_lantern", x, FLOOR_Y, 0.85,
+			Color(1.0, 0.9, 0.7))
+	# Kumes hayvanlari + pasif koylu
+	for i in 4:
+		var npc := AmbientNpc.new()
+		npc.npc_key = [&"peasant1", &"peasant3", &"monk", &"farmer"][i]
+		npc.position = Vector2(260.0 + i * 190.0, FLOOR_Y - 8)
+		add_child(npc)
+	_add_deco_ground(&"npc/chicken", 310, FLOOR_Y, 0.9, Color.WHITE, false, 2)
+	_add_deco_ground(&"npc/goose", 680, FLOOR_Y, 0.9, Color.WHITE, true, 2)
+	_add_deco_ground(&"npc/duck", 880, FLOOR_Y, 0.8, Color.WHITE, false, 2)
+
+	# === OGRETICI TABELALAR ===
+	_add_sign(Vector2(150, FLOOR_Y), &"move")      # A/D oku
+	_add_sign(Vector2(430, FLOOR_Y), &"sword")     # saldiri (mouse/klavye)
+	_add_sign(Vector2(1180, FLOOR_Y), &"jump")     # cukur oncesi
+	_add_sign(Vector2(2490, FLOOR_Y), &"down")     # pogo (asagi+saldiri)
+	_add_sign(Vector2(3660, FLOOR_Y), &"shield")   # parry — muhafizdan once
+
+	# === ORMAN DEKORU ===
+	# Yosunlar yuksek platformlarin altindan sarkar (havada durmaz)
+	for spec in [[Vector2(1640, 152)], [Vector2(1760, 172)], [Vector2(1455, 190)]]:
+		_add_deco(&"prop/moss", spec[0] + Vector2(0, 4), 0.7,
+			Color(0.55, 0.7, 0.5))
+
+	# === MAGARA DEKORU ===
+	for x in [2350.0, 2520.0, 2900.0, 3150.0]:
+		_add_deco_ground(&"terrain/cave_crystal", x, FLOOR_Y, 0.9,
+			Color(0.8, 0.7, 1.0))
+	_add_deco_ground(&"terrain/cave_shroom", 2420, FLOOR_Y, 0.9,
+		Color(0.8, 0.6, 0.9))
+	_add_deco_ground(&"terrain/cave_shroom", 3080, FLOOR_Y, 0.7,
+		Color(0.7, 0.55, 0.85))
+	# gizli oda: kirilabilir blok ardinda dinlenme + parilti
+	var bw := BreakableBlock.new()
+	bw.size = Vector2(16, 46)
+	bw.global_position = Vector2(3170, FLOOR_Y - 12)
+	add_child(bw)
+	_add_rest(3230, &"ch1_cave_secret")
+
+	# === GECIT DEKORU — harabe mezarlik yolu ===
+	# Oluler diyari hissi: mezar taslari, kuru agaclar, kapi nobetcisi heykelleri
+	_add_deco_ground(&"prop/deadtree_1", 3380, FLOOR_Y, 0.55,
+		Color(0.5, 0.42, 0.48))
+	_add_deco_ground(&"prop/deadtree_3", 3900, FLOOR_Y, 0.5,
+		Color(0.45, 0.38, 0.44))
+	_add_deco_ground(&"prop/deadtree_2", 4300, FLOOR_Y, 0.5,
+		Color(0.5, 0.4, 0.45), true)
+	for spec in [[3520.0, &"prop/grave_1"], [3630.0, &"prop/grave_2"],
+			[3980.0, &"prop/grave_3"], [4150.0, &"prop/grave_2"],
+			[4340.0, &"prop/grave_1"]]:
+		_add_deco_ground(spec[1], spec[0], FLOOR_Y, 0.85,
+			Color(0.7, 0.62, 0.6))
+	# Torii kapi — sovalye olmeden kapali (kapi cercevesi zemine oturur)
+	var torii := _add_deco_ground(&"prop/deco_gate", GATE_X, FLOOR_Y, 1.0,
+		Color(1.15, 0.62, 0.5))
+	if torii != null:
+		_gate_sprite = torii
+	# Kapiyi koruyan nobetci heykeller
+	_add_deco_ground(&"prop/statue", GATE_X - 95, FLOOR_Y, 0.62,
+		Color(0.75, 0.65, 0.7))
+	_add_deco_ground(&"prop/statue", GATE_X + 95, FLOOR_Y, 0.62,
+		Color(0.75, 0.65, 0.7), true)
+	_gate_body = StaticBody2D.new()
+	_gate_body.collision_layer = 1
+	var gc := CollisionShape2D.new()
+	var gr := RectangleShape2D.new()
+	gr.size = Vector2(30, 120)
+	gc.shape = gr
+	_gate_body.add_child(gc)
+	_gate_body.global_position = Vector2(GATE_X, FLOOR_Y - 62)
+	add_child(_gate_body)
+	# Kapali kapinin gorunur engeli — tugla surgu torii icinde
+	if AssetLoader.has_asset(&"prop/deco_barrier"):
+		var door := Sprite2D.new()
+		var btex := AssetLoader.tiled_texture(&"prop/deco_barrier", Vector2i(30, 120))
+		door.texture = btex
+		door.modulate = Color(0.55, 0.4, 0.42)
+		_gate_body.add_child(door)
+
+	# Arena girisi: nobetci heykeller + ic duvarlar
+	_add_deco_ground(&"prop/statue", ARENA_L - 34, FLOOR_Y, 0.7,
+		Color(0.7, 0.5, 0.55))
+	_add_deco_ground(&"prop/statue", ARENA_R + 34, FLOOR_Y, 0.7,
+		Color(0.7, 0.5, 0.55), true)
+	for wx in [ARENA_L, ARENA_R]:
+		var wall := StaticBody2D.new()
+		wall.collision_layer = 0  # tetikten once kapali
+		var col := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = Vector2(18, 160)
+		col.shape = rect
+		wall.add_child(col)
+		wall.global_position = Vector2(wx, FLOOR_Y - 80)
+		_arena_walls.append(wall)
+		add_child(wall)
 
 
 func _build_entities() -> void:
 	samurai = Samurai.new()
-	var spawn := Vector2(60, FLOOR_Y - 20)
+	var spawn := Vector2(80, FLOOR_Y - 20)
 	var cp: Variant = GameState.get_flag(&"respawn_pos", false)
 	if cp is Vector2:
 		spawn = cp + Vector2(0, -14)
 	samurai.global_position = spawn
 	add_child(samurai)
 
-	var v1 := Villager.new()
-	v1.global_position = Vector2(360, FLOOR_Y - 12)
-	add_child(v1)
-	var v2 := Villager.new()
-	v2.global_position = Vector2(520, FLOOR_Y - 12)
-	add_child(v2)
+	# A — koy: kukla (güvenli saldiri denemesi) + uc koylu dalgasi
+	var dummy := DummyEnemy.new()
+	dummy.global_position = Vector2(452, FLOOR_Y - 12)
+	add_child(dummy)
+	for x in [620.0, 800.0, 900.0]:
+		var v := Villager.new()
+		v.global_position = Vector2(x, FLOOR_Y - 12)
+		add_child(v)
 
-	var g := Guard.new()
-	g.global_position = Vector2(700, FLOOR_Y - 12)
-	add_child(g)
+	# B — orman: mantarlar + kaplumbaga + ikinci koylu dalgasi
+	for x in [1120.0, 1290.0]:
+		var m := SplitMushroom.new()
+		m.global_position = Vector2(x, FLOOR_Y - 12)
+		add_child(m)
+	var t1 := Turtle.new()
+	t1.global_position = Vector2(1750, FLOOR_Y - 12)
+	add_child(t1)
+	for x in [1900.0, 2080.0]:
+		var v := Villager.new()
+		v.global_position = Vector2(x, FLOOR_Y - 12)
+		add_child(v)
+	_add_rest(2250, &"ch1_forest")
 
-	var rest := RestPoint.new()
-	rest.checkpoint_id = &"ch1_shrine"
-	rest.global_position = Vector2(830, FLOOR_Y - 12)
-	add_child(rest)
+	# C — magara: diken tarlasi + hayalet + kaplumbaga
+	_add_spikes(2590, 2810, FLOOR_Y - 2)
+	var t2 := Turtle.new()
+	t2.global_position = Vector2(2660, 190)
+	add_child(t2)
+	for x in [2400.0, 2960.0]:
+		var g := Ghost.new()
+		g.global_position = Vector2(x, FLOOR_Y - 40)
+		add_child(g)
 
-	var knight := HeavyKnight.new()
+	# D — gecit: ikili muhafiz + agir sovalye (kapi kilidi)
+	for x in [3720.0, 3920.0]:
+		var gd := Guard.new()
+		gd.global_position = Vector2(x, FLOOR_Y - 12)
+		add_child(gd)
+	_add_rest(4050, &"ch1_gate")
+	knight = HeavyKnight.new()
 	knight.grants_form = &"sovalye"
-	knight.global_position = Vector2(1010, FLOOR_Y - 14)
+	knight.global_position = Vector2(4230, FLOOR_Y - 14)
 	add_child(knight)
+	knight.health.died.connect(_open_gate, CONNECT_ONE_SHOT)
 
+	# E — arena + boss (uyurken tetik bekler)
 	boss = LordCluck.new()
 	boss.name = "LordCluck"
 	boss.arena_root = self
-	boss.global_position = Vector2(1420, FLOOR_Y - 16)
+	boss.global_position = Vector2(4780, FLOOR_Y - 16)
 	add_child(boss)
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 
+	# Arena tetigi duvarin ICINDE — oyuncu tamamen girince kapanir
 	var trigger := Area2D.new()
 	trigger.collision_layer = 0
 	trigger.collision_mask = 4
 	var tc := CollisionShape2D.new()
 	var tr := RectangleShape2D.new()
-	tr.size = Vector2(10, 200)
+	tr.size = Vector2(10, 160)
 	tc.shape = tr
 	trigger.add_child(tc)
-	trigger.global_position = Vector2(ARENA_X, 170)
+	trigger.global_position = Vector2(ARENA_TRIGGER, FLOOR_Y - 60)
 	trigger.area_entered.connect(_on_arena_entered)
 	add_child(trigger)
 
@@ -211,33 +516,50 @@ func _build_fx() -> void:
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	_hud_label = Label.new()
-	_hud_label.position = Vector2(6, 4)
-	_hud_label.add_theme_font_size_override("font_size", 8)
-	_hud_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	layer.add_child(_hud_label)
 
-	# Oyuncu can cubugu (Kasaya bar dokulari)
-	var pb := HudBars.make(90, 7, Color(0.8, 0.25, 0.3))
-	pb.root.position = Vector2(6, 16)
+	# Oyuncu can cubugu — cerceveli bar
+	var pb := HudBars.make(110, 10, Color(0.8, 0.25, 0.3))
+	pb.root.position = Vector2(8, 6)
 	layer.add_child(pb.root)
 	_player_fill = pb.fill
+	if AssetLoader.has_asset(&"ui/bar_frame"):
+		var fr := TextureRect.new()
+		fr.texture = AssetLoader.texture(&"ui/bar_frame")
+		fr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		fr.stretch_mode = TextureRect.STRETCH_SCALE
+		fr.size = Vector2(110, 10)
+		pb.root.add_child(fr)
 
-	# Boss can cubugu — metinsiz kural, sadece bar
-	var boss_bar := HudBars.make(160, 6, Color(0.9, 0.3, 0.35))
-	boss_bar.root.position = Vector2(160, 250)
+	var boss_bar := HudBars.make(170, 9, Color(0.9, 0.3, 0.35))
+	boss_bar.root.position = Vector2(155, 248)
 	layer.add_child(boss_bar.root)
 	_boss_root = boss_bar.root
 	_boss_root.visible = false
 	_boss_bar = boss_bar.fill
-	_boss_bar.visible = false
+	if AssetLoader.has_asset(&"ui/bar_frame"):
+		var bfr := TextureRect.new()
+		bfr.texture = AssetLoader.texture(&"ui/bar_frame")
+		bfr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bfr.stretch_mode = TextureRect.STRETCH_SCALE
+		bfr.size = Vector2(170, 9)
+		boss_bar.root.add_child(bfr)
 	boss.health.damaged.connect(
 		func(_a: int, _r: int) -> void:
 			_boss_root.visible = true
 			_boss_bar.visible = true)
 
 
-# --- Boss akisi ---
+# --- Boss / kapi akisi ---
+
+func _open_gate() -> void:
+	GameState.set_flag(&"ch1_knight_dead")
+	if _gate_body != null:
+		_gate_body.set_deferred("collision_layer", 0)
+		var tw := _gate_body.create_tween()
+		tw.tween_property(_gate_body, "modulate:a", 0.0, 0.4)
+	Pictogram.show_on(samurai, &"dots", 1.2, Vector2(0, -30))
+	AudioManager.play_sfx(&"sfx/door", Vector2(GATE_X, FLOOR_Y - 40))
+
 
 func _on_arena_entered(area: Area2D) -> void:
 	var p := area.get_parent()
@@ -246,9 +568,18 @@ func _on_arena_entered(area: Area2D) -> void:
 	if p == null or _boss_started:
 		return
 	_boss_started = true
-	for w in _walls:
+	for w in _arena_walls:
 		w.set_deferred("collision_layer", 1)
-		w.visible = true
+		var ws := Sprite2D.new()
+		if AssetLoader.has_asset(&"prop/deco_barrier"):
+			ws.texture = AssetLoader.texture(&"prop/deco_barrier")
+		else:
+			ws.texture = AssetLoader.texture(&"terrain/cave_bricks", Vector2i(18, 160))
+		ws.modulate = Color(0.8, 0.5, 0.45)
+		w.add_child(ws)
+		ws.scale = Vector2(1.0, 0.0)
+		ws.create_tween().set_trans(Tween.TRANS_BACK) \
+			.tween_property(ws, "scale", Vector2.ONE, 0.3)
 	FX.glitch(0.7, 0.7)
 	FX.shake(2.0, 0.3)
 	AudioManager.play_music(&"music/ch1_boss")
@@ -258,7 +589,6 @@ func _on_arena_entered(area: Area2D) -> void:
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"tavuk")
 	GameState.set_flag(&"ch1_boss_dead")
-	# Glitch Yaratik gecis sinematigi (metinsiz)
 	var creature := Node2D.new()
 	creature.global_position = boss.global_position + Vector2(0, -30)
 	add_child(creature)
@@ -310,7 +640,7 @@ func _on_actor_died(actor: Node) -> void:
 		return
 	_respawn_pending = true
 	await get_tree().create_timer(1.4, true).timeout
-	var cp: Variant = GameState.get_flag(&"respawn_pos", Vector2(60, FLOOR_Y - 20))
+	var cp: Variant = GameState.get_flag(&"respawn_pos", Vector2(80, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)
 	samurai.velocity = Vector2.ZERO
 	samurai.health.reset()
