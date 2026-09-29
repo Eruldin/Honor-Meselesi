@@ -202,7 +202,10 @@ func _update_facing() -> void:
 # --- Durum yardimcilari (state'ler cagirir) ---
 
 func apply_gravity(delta: float) -> void:
-	velocity.y = minf(velocity.y + tuning.gravity * form.gravity_mult * delta,
+	var g_mult := form.gravity_mult
+	if velocity.y > 0.0:
+		g_mult *= form.hover_gravity_mult  # drone: yumusak dusus
+	velocity.y = minf(velocity.y + tuning.gravity * g_mult * delta,
 		tuning.max_fall_speed)
 
 

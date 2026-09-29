@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://samsara_ch3stub"]
+
+[ext_resource type="Script" path="res://src/levels/ch3/ch3.gd" id="1_ch3"]
+
+[node name="Ch3" type="Node2D"]
+script = ExtResource("1_ch3")

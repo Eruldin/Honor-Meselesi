@@ -75,6 +75,25 @@ extends Resource
 @export var shockwave_speed: float = 140.0
 @export var shockwave_range: float = 70.0
 
+@export_group("Bolum 2 — dusmanlar")
+@export var ninja_speed: float = 90.0
+@export var ninja_blink_dist: float = 46.0
+@export var drone_hover_h: float = 46.0       ## zeminden yukseklik
+@export var drone_fire_interval: float = 2.2
+@export var guardian_speed: float = 18.0
+@export var terminal_hack_time: float = 1.2   ## drone hack suresi
+
+@export_group("Bolum 2 — Unit-0")
+@export var unit0_hp_p1_speed: float = 34.0
+@export var unit0_p2_speed: float = 50.0
+@export var unit0_punch_speed: float = 380.0
+@export var unit0_telegraph: float = 0.5
+@export var unit0_attack_gap: float = 1.0
+@export var unit0_attack_gap_p2: float = 0.6
+@export var unit0_armor_break_time: float = 3.0  ## parry sonrasi acik pencere
+@export var missile_speed: float = 130.0
+@export var missile_turn: float = 2.2           ## rad/s hedefe donus
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12

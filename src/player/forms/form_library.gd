@@ -14,4 +14,4 @@ static func get_form(id: StringName) -> FormData:
 
 
 static func all_ids() -> Array[StringName]:
-	return [&"samurai", &"tavuk", &"robot", &"sovalye"]
+	return [&"samurai", &"tavuk", &"robot", &"sovalye", &"drone"]

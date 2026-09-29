@@ -25,3 +25,7 @@ extends Resource
 @export_group("Robot")
 @export var can_break_ground := false          ## catlak zemin kirma
 @export var knockback_resist := 0.0            ## 0..1
+
+@export_group("Drone")
+@export var can_hack := false                  ## guvenlik terminali hackleme
+@export var hover_gravity_mult := 1.0          ## <1: yumusak dusus
