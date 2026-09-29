@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://samsara_recch4"]
+
+[ext_resource type="Script" path="res://tools/record_ch4.gd" id="1_rec"]
+
+[node name="RecordCh4" type="Node2D"]
+script = ExtResource("1_rec")

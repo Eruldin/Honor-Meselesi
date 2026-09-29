@@ -18,7 +18,9 @@ var samurai: Samurai
 var camera: ScreenShake
 var boss: CountVlad
 var _walls: Array[StaticBody2D] = []
-var _boss_bar: ColorRect
+var _boss_bar: Control
+var _boss_root: Control
+var _player_fill: Control
 var _hud_label: Label
 var _boss_started := false
 var _respawn_pending := false
@@ -26,6 +28,7 @@ var _respawn_pending := false
 
 func _ready() -> void:
 	GameState.current_chapter = &"ch3"
+	AudioManager.play_music(&"music/ch3")
 	_build_terrain()
 	_build_entities()
 	_build_fx()
@@ -37,8 +40,11 @@ func _process(_delta: float) -> void:
 	if samurai != null and is_instance_valid(samurai):
 		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
 	if boss != null and is_instance_valid(boss) and boss.active:
+		_boss_root.visible = true
 		_boss_bar.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+	if samurai != null and _player_fill != null:
+		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
 	if samurai != null and _hud_label != null:
 		_hud_label.text = "can %d/%d  form %s" % [
 			samurai.health.current, samurai.health.max_health,
@@ -50,6 +56,22 @@ func _build_terrain() -> void:
 	bg.color = Color(0.07, 0.04, 0.12)
 	bg.size = Vector2(LEVEL_W, 270)
 	add_child(bg)
+	if AssetLoader.has_asset(&"bg/gothic"):
+		var spr := Sprite2D.new()
+		spr.texture = AssetLoader.texture(&"bg/gothic")
+		spr.centered = false
+		var ts := spr.texture.get_size()
+		spr.scale = Vector2(LEVEL_W, 270) / ts
+		spr.modulate = Color(0.8, 0.7, 0.9)
+		add_child(spr)
+	if AssetLoader.has_asset(&"bg/moon"):
+		var moon := Sprite2D.new()
+		moon.texture = AssetLoader.texture(&"bg/moon")
+		moon.centered = false
+		var ms := moon.texture.get_size()
+		moon.scale = Vector2(480, 270) / ms
+		moon.modulate = Color(0.9, 0.8, 1.0, 0.9)
+		add_child(moon)
 
 	# Sutunlar + gotik pencere siluetleri
 	for i in 10:
@@ -190,17 +212,17 @@ func _build_hud() -> void:
 	_hud_label.position = Vector2(6, 4)
 	_hud_label.add_theme_font_size_override("font_size", 8)
 	layer.add_child(_hud_label)
-	var bar_bg := ColorRect.new()
-	bar_bg.color = Color(0.08, 0.05, 0.12)
-	bar_bg.position = Vector2(160, 250)
-	bar_bg.size = Vector2(162, 6)
-	layer.add_child(bar_bg)
-	_boss_bar = ColorRect.new()
-	_boss_bar.color = Color(0.8, 0.3, 0.9)
-	_boss_bar.position = Vector2(161, 251)
-	_boss_bar.size = Vector2(160, 4)
+	var pb := HudBars.make(90, 7, Color(0.8, 0.3, 0.9))
+	pb.root.position = Vector2(6, 16)
+	layer.add_child(pb.root)
+	_player_fill = pb.fill
+	var boss_bar := HudBars.make(160, 6, Color(0.8, 0.3, 0.9))
+	boss_bar.root.position = Vector2(160, 250)
+	layer.add_child(boss_bar.root)
+	_boss_root = boss_bar.root
+	_boss_root.visible = false
+	_boss_bar = boss_bar.fill
 	_boss_bar.visible = false
-	layer.add_child(_boss_bar)
 
 
 func _on_arena_entered(area: Area2D) -> void:
@@ -214,6 +236,7 @@ func _on_arena_entered(area: Area2D) -> void:
 		w.set_deferred("collision_layer", 1)
 		w.visible = true
 	FX.glitch(0.7, 0.7)
+	AudioManager.play_music(&"music/ch3_boss")
 	boss.activate()
 
 
@@ -222,14 +245,10 @@ func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch3_boss_dead")
 	if boss.darkness != null:
 		boss.darkness.create_tween().tween_property(boss.darkness, "modulate:a", 0.0, 0.8)
-	var portal := Node2D.new()
+	var portal := PortalFx.make()
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
-	var ring := ColorRect.new()
-	ring.size = Vector2(20, 34)
-	ring.position = -ring.size / 2.0
-	ring.color = Color(0.6, 0.4, 1.0, 0.6)
-	portal.add_child(ring)
+	AudioManager.play_music(&"music/victory")
 
 	samurai.sm.change_to(Samurai.S_CUTSCENE, true)
 	var cutscene := CutscenePlayer.new()

@@ -34,6 +34,8 @@ var hurtbox: Hurtbox
 var attack_hitbox: Hitbox
 var down_hitbox: Hitbox
 var sprite: Sprite2D
+var _anims: AnimatedSprite2D      ## gercek sheet asset'i varsa gorunur budur
+var _anim_name := &""
 var col: CollisionShape2D
 var form: FormData
 var pending_form: StringName = &""
@@ -56,6 +58,7 @@ var bleed_interval: float = 1.2
 var _bleed_timer: float = 0.0
 
 var _flash_timer: float = 0.0
+var gravity_flipped := false  ## Kizil Tulumlu Tiran arena mekanigi (M7)
 
 
 func _ready() -> void:
@@ -105,6 +108,7 @@ func _build_nodes() -> void:
 	sprite = Sprite2D.new()
 	sprite.texture = AssetLoader.texture(&"player/samurai/idle", Vector2i(12, 20))
 	add_child(sprite)
+	_build_anims()
 
 	health = Health.new()
 	health.max_health = tuning.max_health
@@ -147,6 +151,54 @@ func _build_nodes() -> void:
 	down_hitbox.position = Vector2(0, 12)
 	down_hitbox.struck.connect(_on_down_struck)
 	add_child(down_hitbox)
+
+
+## Gercek samuray spritesheet'leri varsa AnimatedSprite2D kurar
+## (placeholder sprite yedek kalir — samurai disi formlar onu kullanir).
+func _build_anims() -> void:
+	if not AssetLoader.has_frames(&"player/samurai/idle"):
+		return
+	_anims = AnimatedSprite2D.new()
+	var bank := SpriteFrames.new()
+	for anim in [&"idle", &"run", &"attack", &"hurt"]:
+		var id := StringName("player/samurai/" + String(anim))
+		var src := AssetLoader.frames(id)
+		if src == null or src.get_frame_count(&"default") == 0:
+			src = AssetLoader.frames(&"player/samurai/idle")
+		if src == null or src.get_frame_count(&"default") == 0:
+			continue
+		bank.add_animation(anim)
+		bank.set_animation_speed(anim, src.get_animation_speed(&"default"))
+		bank.set_animation_loop(anim, anim != &"attack" and anim != &"hurt")
+		for i in src.get_frame_count(&"default"):
+			bank.add_frame(anim, src.get_frame_texture(&"default", i))
+	if bank.get_animation_names().is_empty():
+		return
+	_anims.sprite_frames = bank
+	_anims.scale = Vector2.ONE * 0.55     # 96px cel -> ~52px gorunum
+	_anims.position = Vector2(0, -14)    # ayaklar govdenin tabanina
+	sprite.visible = false
+	add_child(_anims)
+	_anims.play(&"idle")
+
+
+func _sync_anim() -> void:
+	if _anims == null or (form != null and form.id != &"samurai"):
+		return
+	var want := &"idle"
+	match sm.current_name:
+		S_RUN, S_DASH:
+			want = &"run"
+		S_JUMP, S_FALL:
+			want = &"run"
+		S_ATTACK, S_AIR_ATTACK, S_DOWN_ATTACK, S_PARRY:
+			want = &"attack"
+		S_HURT, S_DEAD:
+			want = &"hurt"
+	if want != _anim_name:
+		_anim_name = want
+		_anims.speed_scale = 1.7 if sm.current_name == S_DASH else 1.0
+		_anims.play(want)
 
 
 func set_input_source(src: InputSource) -> void:
@@ -200,10 +252,14 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	_sync_anim()
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
-			sprite.modulate = form.sprite_color if form != null else Color.WHITE
+			var c := form.sprite_color if form != null else Color.WHITE
+			sprite.modulate = c
+			if _anims != null:
+				_anims.modulate = c
 
 
 func _update_facing() -> void:
@@ -211,6 +267,8 @@ func _update_facing() -> void:
 	if absf(dir) > 0.1 and sm.current_name in [S_IDLE, S_RUN, S_JUMP, S_FALL]:
 		facing = 1 if dir > 0.0 else -1
 	sprite.flip_h = facing < 0
+	if _anims != null:
+		_anims.flip_h = facing < 0
 	attack_hitbox.position.x = 12.0 * facing
 
 
@@ -218,10 +276,22 @@ func _update_facing() -> void:
 
 func apply_gravity(delta: float) -> void:
 	var g_mult := form.gravity_mult
-	if velocity.y > 0.0:
-		g_mult *= form.hover_gravity_mult  # drone: yumusak dusus
-	velocity.y = minf(velocity.y + tuning.gravity * g_mult * delta,
-		tuning.max_fall_speed)
+	if (velocity.y > 0.0) != gravity_flipped:  # dusus yonunde drone yumusatmasi
+		g_mult *= form.hover_gravity_mult
+	var g := tuning.gravity * g_mult * delta
+	if gravity_flipped:
+		velocity.y = maxf(velocity.y - g, -tuning.max_fall_speed)
+	else:
+		velocity.y = minf(velocity.y + g, tuning.max_fall_speed)
+
+
+## Tiran'in arena mekanigi: yercekimi yonu terse cevrilir.
+func set_gravity_flipped(v: bool) -> void:
+	gravity_flipped = v
+	up_direction = Vector2.DOWN if v else Vector2.UP
+	sprite.flip_v = v
+	if _anims != null:
+		_anims.flip_v = v
 
 
 func apply_run(delta: float, dir: float) -> void:
@@ -236,22 +306,27 @@ func apply_run(delta: float, dir: float) -> void:
 func try_jump() -> bool:
 	if jump_buffer_timer <= 0.0:
 		return false
+	var jump_dir := 1.0 if gravity_flipped else -1.0
 	if coyote_timer > 0.0:
-		velocity.y = -tuning.jump_velocity * form.jump_velocity_mult
+		velocity.y = jump_dir * tuning.jump_velocity * form.jump_velocity_mult
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
+		AudioManager.play_sfx(&"sfx/jump", global_position)
 		return true
-	# Havadayken ekstra ziplama (piksel sicramasi gibi form yetenegi).
-	if jumps_used < form.max_air_jumps:
+	# Havadayken ekstra ziplama (piksel sicramasi: kalici +1 hava ziplamasi).
+	var air_jumps := form.max_air_jumps + (1 if GameState.get_flag(&"piksel_sicramasi") else 0)
+	if jumps_used < air_jumps:
 		jumps_used += 1
-		velocity.y = -tuning.jump_velocity * form.jump_velocity_mult
+		velocity.y = jump_dir * tuning.jump_velocity * form.jump_velocity_mult
 		jump_buffer_timer = 0.0
+		AudioManager.play_sfx(&"sfx/jump", global_position)
 		return true
 	return false
 
 
 func cut_jump() -> void:
-	if velocity.y < 0.0:
+	# Yukselirken (yer cekiminin tersi yonde) erken birakmada kes.
+	if (velocity.y < 0.0) != gravity_flipped and velocity.y != 0.0:
 		velocity.y *= tuning.jump_cut_multiplier
 
 
@@ -259,11 +334,13 @@ func start_dash() -> void:
 	var dir := input.move_axis()
 	dash_dir = int(signf(dir)) if absf(dir) > 0.1 else facing
 	facing = dash_dir
+	AudioManager.play_sfx(&"sfx/dash", global_position)
 
 
 func start_ground_attack() -> void:
 	combo_index = 1
 	combo_queued = false
+	AudioManager.play_sfx(&"sfx/attack", global_position)
 
 
 func start_air_attack() -> void:
@@ -294,6 +371,8 @@ func ensure_down_hitbox() -> void:
 
 func sprite_flash(color: Color) -> void:
 	sprite.modulate = color
+	if _anims != null:
+		_anims.modulate = color
 	_flash_timer = 0.09
 
 
@@ -302,6 +381,7 @@ func sprite_flash(color: Color) -> void:
 func _on_attack_struck(_hurtbox: Hurtbox) -> void:
 	FX.hitstop(tuning.hitstop_normal)
 	FX.shake(tuning.shake_light, tuning.shake_duration)
+	AudioManager.play_sfx(&"sfx/hit", global_position)
 
 
 func _on_down_struck(hb: Hurtbox) -> void:
@@ -327,6 +407,7 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	invuln_timer = tuning.hurt_invuln_time
+	AudioManager.play_sfx(&"sfx/hurt", global_position)
 	var kb_scale := 1.0 - form.knockback_resist
 	var dir := 1.0
 	if info.source != null:
@@ -351,6 +432,7 @@ func _on_parry_success(info: DamageInfo) -> void:
 	FX.spark(spark_pos)
 	FX.hitstop(tuning.hitstop_parry)
 	FX.shake(tuning.shake_light, tuning.shake_duration)
+	AudioManager.play_sfx(&"sfx/parry", global_position)
 	EventBus.parry_succeeded.emit(spark_pos)
 	if info.source != null and info.source.has_method("on_parried"):
 		info.source.on_parried()
@@ -412,7 +494,18 @@ func apply_form_data(f: FormData) -> void:
 	cap.height = form.body_size.y
 	var hb := hurtbox.get_child(0).shape as RectangleShape2D
 	hb.size = form.body_size + Vector2(2, 2)
-	sprite.texture = AssetLoader.texture(
-		&"player/%s/idle" % form.id, Vector2i(form.body_size))
+	if _anims != null:
+		# Gercek animasyonlar sadece samurai formunda; diger formlar
+		# renkli placeholder sprite ile gosterilir.
+		var real := form.id == &"samurai"
+		_anims.visible = real
+		sprite.visible = not real
+		if real:
+			_anim_name = &""
+	else:
+		sprite.texture = AssetLoader.texture(
+			&"player/%s/idle" % form.id, Vector2i(form.body_size))
 	sprite.modulate = form.sprite_color
+	if _anims != null:
+		_anims.modulate = form.sprite_color
 	GameState.set_form(form.id)

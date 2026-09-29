@@ -15,11 +15,13 @@ var facing := -1
 func _init() -> void:
 	max_hp = 3
 	body_size = Vector2(14, 20)
+	asset_key = &"guard"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.5, 0.6, 0.9)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.5, 0.6, 0.9)
 	# Kalkan hitbox — temas hasari yok ama oyuncuyu iter
 	contact_hitbox = Hitbox.new()
 	contact_hitbox.collision_layer = 32

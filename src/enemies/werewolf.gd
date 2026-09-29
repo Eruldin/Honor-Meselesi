@@ -15,11 +15,13 @@ var leap_hitbox: Hitbox
 func _init() -> void:
 	max_hp = 3
 	body_size = Vector2(16, 18)
+	asset_key = &"hellcat"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.5, 0.35, 0.3)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.5, 0.35, 0.3)
 	leap_hitbox = Hitbox.new()
 	leap_hitbox.collision_layer = 32
 	leap_hitbox.collision_mask = 4

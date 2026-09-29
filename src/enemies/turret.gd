@@ -12,6 +12,7 @@ var _fire_timer: float = 0.0
 func _init() -> void:
 	max_hp = 4
 	body_size = Vector2(14, 20)
+	asset_key = &"turret"
 
 
 func _physics_process(delta: float) -> void:

@@ -22,6 +22,7 @@ var arena_root: Node2D
 func _init() -> void:
 	max_hp = 18
 	body_size = Vector2(28, 36)
+	asset_key = &"bot"
 	contact_damage = true
 	phase_thresholds = [0.5]
 

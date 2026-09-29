@@ -12,11 +12,13 @@ func _init() -> void:
 	max_hp = 2
 	body_size = Vector2(12, 16)
 	contact_damage = true
+	asset_key = &"villager"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.85, 0.55, 0.4)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.85, 0.55, 0.4)
 
 
 func _physics_process(delta: float) -> void:

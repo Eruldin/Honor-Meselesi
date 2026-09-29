@@ -11,6 +11,7 @@ var _player: Node2D
 func _init() -> void:
 	max_hp = 2
 	body_size = Vector2(14, 18)
+	asset_key = &"ghost"
 	contact_damage = true
 
 

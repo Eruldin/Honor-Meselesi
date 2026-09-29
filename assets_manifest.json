@@ -1,22 +1,379 @@
 {
-	"version": 1,
-	"comment": "Mantiksal asset id -> assets_external/ altindaki gercek dosya eslemesi. Kullanici gercek paketleri actikca bu dosyayi doldurur; AssetLoader dosya yoksa placeholder'a duser.",
+	"version": 2,
+	"comment": "Mantiksal asset id -> assets_external/ altindaki gercek dosya eslemesi. Alanlar: path (zorunlu), frame [w,h]+fps (spritesheet), region [x,y,w,h] (atlas). Dosya yoksa AssetLoader placeholder'a duser.",
 	"assets": {
-		"player/samurai/idle": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/run": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/jump": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/attack1": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/attack2": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/attack3": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/parry": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/dash": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/hurt": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"player/samurai/dead": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
-		"fx/slash": { "path": "", "pack": "Pixel Art Animations - Slashes", "license": "TBD" },
-		"fx/spark_parry": { "path": "", "pack": "TBD", "license": "TBD" },
-		"fx/portal": { "path": "", "pack": "Pixel Art Animated Portal / PortalVFX", "license": "TBD" },
-		"ui/pictograms": { "path": "", "pack": "Pixel UI pack 3", "license": "TBD" },
-		"tileset/hut_interior": { "path": "", "pack": "Modern_Interiors_Free_v2.2", "license": "TBD" },
-		"music/ambient_prolog": { "path": "", "pack": "JDSherbert - Ambiences Music Pack [FREE]", "license": "LICENSE.pdf - kredi zorunlu" }
+		"player/samurai/idle": {
+			"path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+			"frame": [
+				96,
+				96
+			],
+			"fps": 8,
+			"pack": "FREE_Samurai 2D Pixel Art v1.2"
+		},
+		"player/samurai/run": {
+			"path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
+			"frame": [
+				96,
+				96
+			],
+			"fps": 14,
+			"pack": "FREE_Samurai 2D Pixel Art v1.2"
+		},
+		"player/samurai/attack": {
+			"path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
+			"frame": [
+				96,
+				96
+			],
+			"fps": 16,
+			"pack": "FREE_Samurai 2D Pixel Art v1.2"
+		},
+		"player/samurai/hurt": {
+			"path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
+			"frame": [
+				96,
+				96
+			],
+			"fps": 8,
+			"pack": "FREE_Samurai 2D Pixel Art v1.2"
+		},
+		"enemy/mushroom": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/sprites/mushroom1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/mushroom_mini": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/sprites/mushroom1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/slug": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/shell": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/stunt/sprites/stunt1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/flower": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/piranha/shooting/sprites/piranha-plant-shoot1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/eagle": {
+			"path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/sprites/attack1.png",
+			"pack": "SunnyLand Add On"
+		},
+		"enemy/villager": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				0,
+				192,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/guard": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				64,
+				32,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/heavy_knight": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				96,
+				32,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/cyber_ninja": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				64,
+				0,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/vampire": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				160,
+				64,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/count_vlad": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				192,
+				64,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/tyrant": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				128,
+				64,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/guardian": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				128,
+				32,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/dummy": {
+			"path": "sprites/rogues/32rogues/rogues.png",
+			"region": [
+				0,
+				160,
+				32,
+				32
+			],
+			"pack": "32rogues"
+		},
+		"enemy/ghost": {
+			"path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
+			"pack": "GothicVania Cemetery"
+		},
+		"enemy/hellcat": {
+			"path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
+			"pack": "GothicVania Cemetery"
+		},
+		"enemy/skeleton": {
+			"path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
+			"pack": "GothicVania Cemetery"
+		},
+		"enemy/drone": {
+			"path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
+			"pack": "Warped City"
+		},
+		"enemy/bot": {
+			"path": "sprites/bot/Bot Wheel/move without FX.png",
+			"frame": [
+				48,
+				48
+			],
+			"fps": 10,
+			"pack": "Bot Wheel"
+		},
+		"enemy/turret": {
+			"path": "env/warped/warped city files/Assets/SPRITES/misc/turret/turret-1.png",
+			"pack": "Warped City"
+		},
+		"npc/prolog_hero": {
+			"path": "env/interiors/Modern tiles_Free/Characters_free/Adam_idle_anim_16x16.png",
+			"frame": [
+				16,
+				16
+			],
+			"fps": 4,
+			"pack": "Modern Interiors"
+		},
+		"bg/forest": {
+			"path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
+			"pack": "Free Pixel Art Forest"
+		},
+		"bg/forest_mid": {
+			"path": "env/parallax/parallax_forest_pack web/v1/layers/parallax-forest-middle-trees.png",
+			"pack": "Parallax Forest"
+		},
+		"bg/city": {
+			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
+			"pack": "Warped City"
+		},
+		"bg/city_sky": {
+			"path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
+			"pack": "Warped City"
+		},
+		"bg/gothic": {
+			"path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/background.png",
+			"pack": "GothicVania Cemetery"
+		},
+		"bg/moon": {
+			"path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Phaser Demo/assets/environment/bg-moon.png",
+			"pack": "GothicVania Cemetery"
+		},
+		"ui/hp_bg": {
+			"path": "sprites/kasaya/Bars/1/hp background.png",
+			"pack": "Kasaya's Frames"
+		},
+		"ui/hp_fill": {
+			"path": "sprites/kasaya/Bars/1/HP.png",
+			"pack": "Kasaya's Frames"
+		},
+		"ui/bar_frame": {
+			"path": "sprites/kasaya/Bars/1/bars 1 frame.png",
+			"pack": "Kasaya's Frames"
+		},
+		"fx/slash": {
+			"path": "vfx/slashes/128x128/Slash 1/color1/sprite-sheet.png",
+			"frame": [
+				128,
+				64
+			],
+			"fps": 20,
+			"pack": "Pixel Art Animations - Slashes"
+		},
+		"music/prolog": {
+			"path": "music/xdev_01_-_Falling_Apart_(Prologue).ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch1": {
+			"path": "music/xdev_03_-_Definitely_Our_Town.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch1_boss": {
+			"path": "music/xdev_05_-_Battle_1.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch2": {
+			"path": "music/rpg_Pixel_7.ogg",
+			"pack": "Pixel RPG Music Pack"
+		},
+		"music/ch2_boss": {
+			"path": "music/xdev_09_-_Battle_2.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch3": {
+			"path": "music/xdev_12_-_Frozen_Abyss.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch3_boss": {
+			"path": "music/xdev_13_-_Decisive_Battle_1_-_Don't_Be_Afraid.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch4": {
+			"path": "music/xdev_19_-_Where_The_Winds_Roam.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch4_boss": {
+			"path": "music/xdev_17_-_Decisive_Battle_2_-_The_Calamity.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch5": {
+			"path": "music/loops/Loops ogg/5. Dread March (Loop).ogg",
+			"pack": "Lost In Misery"
+		},
+		"music/ch6": {
+			"path": "music/xdev_20_-_The_Journey.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/ch7": {
+			"path": "music/xdev_16_-_The_Calm_Before_The_Storm.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/final_boss": {
+			"path": "music/xdev_21_-_Final_Battle_-_For_Love.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/credits": {
+			"path": "music/xdev_22_-_The_Final_of_The_Fantasy.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/victory": {
+			"path": "music/xdev_06_-_Victory!.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"music/test_room": {
+			"path": "music/xdev_04_-_Silent_Forest.ogg",
+			"pack": "xDeviruchi 16-bit"
+		},
+		"sfx/attack": {
+			"path": "sfx/400/Weapons/sword_light.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/attack_heavy": {
+			"path": "sfx/400/Weapons/sword_slice.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/parry": {
+			"path": "sfx/400/Weapons/sword_clash.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/hit": {
+			"path": "sfx/400/Weapons/harsh_thud.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/hurt": {
+			"path": "sfx/400/Retro/hurt.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/jump": {
+			"path": "sfx/400/Retro/jump.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/dash": {
+			"path": "music/boss/ch_06_boss_battles/audio/dash.wav",
+			"pack": "ch_06_boss_battles"
+		},
+		"sfx/explosion": {
+			"path": "sfx/400/Retro/explosion_medium.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/ghost": {
+			"path": "sfx/400/Retro/ghost.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/checkpoint": {
+			"path": "sfx/400/Items/gem_collect.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/ui": {
+			"path": "sfx/400/UI/pop_1.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/door": {
+			"path": "sfx/400/Environment/creaky_door_short.wav",
+			"pack": "400 Sounds"
+		},
+		"sfx/gameover": {
+			"path": "sfx/400/Other/record_scratch.wav",
+			"pack": "400 Sounds"
+		},
+		"fx/portal": {
+			"path": "vfx/portal/sprite-sheet.png",
+			"frame": [
+				64,
+				64
+			],
+			"fps": 10,
+			"pack": "Pixel Art Animated Portal"
+		},
+		"terrain/block": {
+			"path": "env/postapoc/Tiles/Brick-Wall_TileSet.png",
+			"region": [
+				32,
+				0,
+				16,
+				16
+			],
+			"pack": "Pixel Art Post Apocalypse"
+		},
+		"deco/cloud": {
+			"path": "env/postapoc/Objects/Exhaust-pipe.png",
+			"pack": "Pixel Art Post Apocalypse",
+			"note": "yer tutucu — mad_cloud prosedurel kullanir"
+		}
 	}
 }

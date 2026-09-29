@@ -22,12 +22,14 @@ func _init() -> void:
 	max_hp = 16
 	body_size = Vector2(16, 26)
 	contact_damage = true
+	asset_key = &"count_vlad"
 	phase_thresholds = [0.5]
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.6, 0.3, 0.6)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.6, 0.3, 0.6)
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 	# Karanlikta gorunen gozler
 	eyes = Node2D.new()
