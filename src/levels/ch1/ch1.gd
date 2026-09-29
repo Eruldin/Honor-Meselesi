@@ -133,7 +133,28 @@ func _add_platform(pos: Vector2, id: StringName, w: float) -> void:
 	var sc := w / tex.get_width()
 	s.scale = Vector2(sc, sc)
 	s.position = Vector2(-w / 2.0, -tex.get_height() * sc * 0.62)
+	s.z_index = 2
 	body.add_child(s)
+	
+	# Platform havada ucmamasi icin altina destek (wall) ekle
+	var support_y := FLOOR_Y
+	if pos.y >= FLOOR_Y:
+		if pos.x > 3600:
+			support_y = FLOOR_Y + 160.0 # Gecit mahzeni
+		elif pos.x > 3000:
+			support_y = FLOOR_Y + 140.0 # Magara kristal odasi
+	
+	var support_h := support_y - pos.y
+	if support_h > 0 and AssetLoader.has_asset(&"terrain/wall_tile"):
+		var wtex := AssetLoader.tiled_texture(&"terrain/wall_tile", Vector2i(int(w), int(support_h)))
+		var ws := Sprite2D.new()
+		ws.texture = wtex
+		ws.centered = false
+		ws.position = Vector2(-w / 2.0, 0)
+		ws.modulate = Color(0.3, 0.28, 0.35) # Koyu destek
+		ws.z_index = -2 # Zemin arkasinda kalsin
+		body.add_child(ws)
+
 	body.global_position = pos
 	add_child(body)
 
@@ -265,6 +286,8 @@ func _build_terrain() -> void:
 		face.position = Vector2(-75, -26)
 		face.modulate = Color(0.55, 0.48, 0.45)
 		barrier.add_child(face)
+	# Havada durmamasi icin taban kenari ekle
+	_add_deco_ground(&"terrain/cave_rock", 1455, FLOOR_Y, 1.0, Color(0.3, 0.25, 0.2))
 	if AssetLoader.has_asset(&"terrain/edge_grass"):
 		var gcap := Sprite2D.new()
 		gcap.texture = AssetLoader.tiled_texture(&"terrain/edge_grass", Vector2i(150, 14))
