@@ -8,6 +8,9 @@ extends CharacterBody2D
 @export var body_size: Vector2 = Vector2(14, 16)
 ## Devamli temas hasari veriyorsa true (diken haric; diken kendi sinif).
 @export var contact_damage: bool = false
+## Manifest'te "enemy/<asset_key>" olan gercek sprite kullanilir; yoksa
+## renkli placeholder'a dusulur.
+var asset_key: StringName = &""
 
 var tuning: Tuning
 var health: Health
@@ -15,6 +18,7 @@ var hurtbox: Hurtbox
 var sprite: Sprite2D
 var contact_hitbox: Hitbox
 var stagger_timer: float = 0.0
+var using_real_sprite := false
 var _flash_timer: float = 0.0
 
 
@@ -30,7 +34,15 @@ func _ready() -> void:
 	add_child(col)
 
 	sprite = Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("enemy/%s" % name, Vector2i(body_size))
+	if asset_key != &"" and AssetLoader.has_asset(&"enemy/" + String(asset_key)):
+		sprite.texture = AssetLoader.texture(&"enemy/" + String(asset_key))
+		using_real_sprite = true
+		# Sprite'i govde boyutuna gore kucult (atlasmaz destekli).
+		var ts := sprite.texture.get_size()
+		if ts.x > 0.0 and ts.y > 0.0:
+			sprite.scale = (body_size * 1.6) / ts
+	else:
+		sprite.texture = AssetLoader.placeholder_texture("enemy/%s" % name, Vector2i(body_size))
 	add_child(sprite)
 
 	health = Health.new()

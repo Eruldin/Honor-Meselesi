@@ -32,6 +32,7 @@ var _play_time := 0.0
 func _ready() -> void:
 	tuning = load("res://config/tuning.tres")
 	GameState.current_chapter = &"prolog"
+	AudioManager.play_music(&"music/prolog")
 	_build_room()
 	_build_actors()
 	_build_fx()

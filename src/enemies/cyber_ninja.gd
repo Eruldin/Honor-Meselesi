@@ -11,12 +11,14 @@ var _blink_cd := 0.0
 func _init() -> void:
 	max_hp = 3
 	body_size = Vector2(12, 16)
+	asset_key = &"cyber_ninja"
 	contact_damage = true
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.3, 0.9, 1.0)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.3, 0.9, 1.0)
 
 
 func _physics_process(delta: float) -> void:

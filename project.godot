@@ -19,6 +19,7 @@ SaveSystem="*res://src/core/save_system.gd"
 Settings="*res://src/core/settings.gd"
 SceneRouter="*res://src/core/scene_router.gd"
 AssetLoader="*res://src/core/asset_loader.gd"
+AudioManager="*res://src/audio/audio_manager.gd"
 
 [editor_plugins]
 

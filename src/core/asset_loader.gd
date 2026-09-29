@@ -38,6 +38,8 @@ func reload_manifest() -> void:
 
 
 ## Manifest'te tanimli ve dis dosyasi mevcut mu?
+## Dis dosyalar EditorFileSystem import'una guvenmez — diskte varsa sayilir
+## (res:// editor'da proje kokune, export'ta exe yanina cozulur).
 func has_asset(logical_id: StringName) -> bool:
 	var entry: Variant = _manifest.get(logical_id)
 	if not entry is Dictionary:
@@ -45,17 +47,148 @@ func has_asset(logical_id: StringName) -> bool:
 	var rel: String = entry.get("path", "")
 	if rel.is_empty():
 		return false
-	return ResourceLoader.exists(EXTERNAL_ROOT.path_join(rel))
+	return FileAccess.file_exists(_resolve_external(rel))
+
+
+## res://assets_external/<rel> icin okunabilir gercek yol dondurur.
+## Sirayla: 1) res:// dogrudan (editor/import edilmis), 2) proje kok
+## globalize, 3) calistirilabilir yanindaki assets_external/ (export).
+func _resolve_external(rel: String) -> String:
+	var res := EXTERNAL_ROOT.path_join(rel)
+	if FileAccess.file_exists(res):
+		return res
+	var proj := ProjectSettings.globalize_path(res)
+	if FileAccess.file_exists(proj):
+		return proj
+	var beside_exe := OS.get_executable_path().get_base_dir().path_join(
+		"assets_external").path_join(rel)
+	if FileAccess.file_exists(beside_exe):
+		return beside_exe
+	return res  # en iyi tahmin — cagiran FileAccess hatasini gorur
+
+
+## Dis PNG'yi diskten yukler (import gerektirmez).
+func _load_image_texture(rel: String) -> Texture2D:
+	var img := Image.load_from_file(_resolve_external(rel))
+	if img == null:
+		return null
+	return ImageTexture.create_from_image(img)
 
 
 ## Mantiksal asset icin texture dondurur; yoksa placeholder uretir.
+## Manifest "region": [x,y,w,h] varsa atlas bolgesi (AtlasTexture) doner.
 func texture(logical_id: StringName, size := Vector2i(16, 16)) -> Texture2D:
+	var key := "tex_" + String(logical_id)
+	if _cache.has(key):
+		return _cache[key]
 	if has_asset(logical_id):
-		return load(EXTERNAL_ROOT.path_join(_manifest[logical_id]["path"]))
+		var entry: Dictionary = _manifest[logical_id]
+		var full := _load_image_texture(entry["path"])
+		if full != null:
+			if entry.has("region"):
+				var r: Array = entry["region"]
+				var at := AtlasTexture.new()
+				at.atlas = full
+				at.region = Rect2(r[0], r[1], r[2], r[3])
+				_cache[key] = at
+				return at
+			_cache[key] = full
+			return full
 	var local_path: String = PLACEHOLDER_ROOT.path_join(String(logical_id).replace("/", "_") + ".png")
 	if ResourceLoader.exists(local_path):
 		return load(local_path)
 	return placeholder_texture(String(logical_id), size)
+
+
+## Spritesheet'ten SpriteFrames uretir: manifest "frame": [w,h], "fps": n.
+## Manifest yoksa veya sheet okunamiyorsa bos SpriteFrames doner.
+func frames(logical_id: StringName) -> SpriteFrames:
+	var key := "anim_" + String(logical_id)
+	if _cache.has(key):
+		return _cache[key]
+	var sf := SpriteFrames.new()
+	if has_asset(logical_id):
+		var entry: Dictionary = _manifest[logical_id]
+		var sheet := _load_image_texture(entry["path"])
+		if sheet != null and entry.has("frame"):
+			var fw: int = entry["frame"][0]
+			var fh: int = entry["frame"][1]
+			var cols := int(sheet.get_width() / fw)
+			var rows := int(sheet.get_height() / fh)
+			sf.set_animation_speed(&"default", float(entry.get("fps", 8)))
+			sf.set_animation_loop(&"default", true)
+			for ry in rows:
+				for cx in cols:
+					var at := AtlasTexture.new()
+					at.atlas = sheet
+					at.region = Rect2(cx * fw, ry * fh, fw, fh)
+					sf.add_frame(&"default", at)
+	_cache[key] = sf
+	return sf
+
+
+## Manifest'te tanimli ve animasyonlu sheet'i var mi?
+func has_frames(logical_id: StringName) -> bool:
+	var entry: Variant = _manifest.get(logical_id)
+	return entry is Dictionary and entry.has("frame") and has_asset(logical_id)
+
+
+## Ses/muzik akisi (ogg/mp3/wav dis dosyasi, import gerektirmez).
+func audio(logical_id: StringName) -> AudioStream:
+	var key := "snd_" + String(logical_id)
+	if _cache.has(key):
+		return _cache[key]
+	if not has_asset(logical_id):
+		return null
+	var path := _resolve_external(_manifest[logical_id]["path"])
+	var ext := path.get_extension().to_lower()
+	var s: AudioStream = null
+	match ext:
+		"ogg":
+			s = AudioStreamOggVorbis.load_from_file(path)
+		"mp3":
+			s = AudioStreamMP3.load_from_file(path)
+		"wav":
+			s = _load_wav(path)
+	_cache[key] = s
+	return s
+
+
+## Minimal WAV okuyucu (PCM 8/16-bit mono/stereo) — AudioStreamWAV.
+func _load_wav(path: String) -> AudioStream:
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return null
+	var riff := f.get_buffer(12)
+	if riff.size() < 12 or riff.get_string_from_ascii().substr(0, 4) != "RIFF":
+		return null
+	var channels := 1
+	var rate := 44100
+	var bits := 16
+	var data := PackedByteArray()
+	while not f.eof_reached():
+		var cid := f.get_buffer(4).get_string_from_ascii()
+		var csize := f.get_32()
+		if cid == "fmt ":
+			f.get_16()  # audio format
+			channels = f.get_16()
+			rate = f.get_32()
+			f.get_32()  # byte rate
+			f.get_16()  # block align
+			bits = f.get_16()
+			f.get_buffer(maxi(csize - 16, 0))
+		elif cid == "data":
+			data = f.get_buffer(csize)
+		else:
+			f.get_buffer(csize)
+	if data.is_empty():
+		return null
+	var s := AudioStreamWAV.new()
+	s.format = AudioStreamWAV.FORMAT_16_BITS if bits == 16 else AudioStreamWAV.FORMAT_8_BITS
+	s.mix_rate = rate
+	s.stereo = channels > 1
+	s.data = data
+	return s
 
 
 func placeholder_texture(tag: String, size := Vector2i(16, 16)) -> ImageTexture:

@@ -13,6 +13,7 @@ var _respawn_pending := false
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"music/test_room")
 	if debug_unlock_all_forms:
 		for fid in FormLibrary.all_ids():
 			GameState.unlock_form(fid)

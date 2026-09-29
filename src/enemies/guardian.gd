@@ -10,12 +10,14 @@ var battery: WeakBattery
 func _init() -> void:
 	max_hp = 8
 	body_size = Vector2(24, 34)
+	asset_key = &"guardian"
 	contact_damage = true
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.4, 0.5, 0.7)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.4, 0.5, 0.7)
 	contact_hitbox.activate(DamageInfo.make(2, self, Vector2.ZERO, true, true))
 	battery = WeakBattery.new(self)
 	add_child(battery)

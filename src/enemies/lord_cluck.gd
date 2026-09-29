@@ -19,12 +19,14 @@ func _init() -> void:
 	max_hp = 14
 	body_size = Vector2(26, 30)
 	contact_damage = true
+	asset_key = &"eagle"
 	phase_thresholds = [0.5]
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.95, 0.85, 0.5)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.95, 0.85, 0.5)
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 
 

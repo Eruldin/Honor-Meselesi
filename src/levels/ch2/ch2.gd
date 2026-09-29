@@ -20,7 +20,9 @@ var samurai: Samurai
 var camera: ScreenShake
 var boss: Unit0
 var _walls: Array[StaticBody2D] = []
-var _boss_bar: ColorRect
+var _boss_bar: Control
+var _boss_root: Control
+var _player_fill: Control
 var _hud_label: Label
 var _boss_started := false
 var _respawn_pending := false
@@ -28,6 +30,7 @@ var _respawn_pending := false
 
 func _ready() -> void:
 	GameState.current_chapter = &"ch2"
+	AudioManager.play_music(&"music/ch2")
 	if grant_drone_to_player:
 		GameState.unlock_form(&"drone")
 	_build_terrain()
@@ -41,8 +44,11 @@ func _process(_delta: float) -> void:
 	if samurai != null and is_instance_valid(samurai):
 		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
 	if boss != null and is_instance_valid(boss) and boss.active:
+		_boss_root.visible = true
 		_boss_bar.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+	if samurai != null and _player_fill != null:
+		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
 	if samurai != null and _hud_label != null:
 		_hud_label.text = "can %d/%d  form %s" % [
 			samurai.health.current, samurai.health.max_health,
@@ -54,6 +60,14 @@ func _build_terrain() -> void:
 	sky.color = Color(0.03, 0.09, 0.14)
 	sky.size = Vector2(LEVEL_W, 270)
 	add_child(sky)
+	if AssetLoader.has_asset(&"bg/city"):
+		var bg := Sprite2D.new()
+		bg.texture = AssetLoader.texture(&"bg/city")
+		bg.centered = false
+		var ts := bg.texture.get_size()
+		bg.scale = Vector2(LEVEL_W, 230) / ts
+		bg.modulate = Color(0.8, 0.8, 1.0)
+		add_child(bg)
 
 	# Neon tabela siluetleri
 	for i in 9:
@@ -192,17 +206,17 @@ func _build_hud() -> void:
 	_hud_label.position = Vector2(6, 4)
 	_hud_label.add_theme_font_size_override("font_size", 8)
 	layer.add_child(_hud_label)
-	var bar_bg := ColorRect.new()
-	bar_bg.color = Color(0.08, 0.1, 0.14)
-	bar_bg.position = Vector2(160, 250)
-	bar_bg.size = Vector2(162, 6)
-	layer.add_child(bar_bg)
-	_boss_bar = ColorRect.new()
-	_boss_bar.color = Color(0.4, 0.8, 1.0)
-	_boss_bar.position = Vector2(161, 251)
-	_boss_bar.size = Vector2(160, 4)
+	var pb := HudBars.make(90, 7, Color(0.4, 0.8, 1.0))
+	pb.root.position = Vector2(6, 16)
+	layer.add_child(pb.root)
+	_player_fill = pb.fill
+	var boss_bar := HudBars.make(160, 6, Color(0.4, 0.8, 1.0))
+	boss_bar.root.position = Vector2(160, 250)
+	layer.add_child(boss_bar.root)
+	_boss_root = boss_bar.root
+	_boss_root.visible = false
+	_boss_bar = boss_bar.fill
 	_boss_bar.visible = false
-	layer.add_child(_boss_bar)
 
 
 func _on_arena_entered(area: Area2D) -> void:
@@ -216,20 +230,17 @@ func _on_arena_entered(area: Area2D) -> void:
 		w.set_deferred("collision_layer", 1)
 		w.visible = true
 	FX.glitch(0.7, 0.7)
+	AudioManager.play_music(&"music/ch2_boss")
 	boss.activate()
 
 
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"robot")
 	GameState.set_flag(&"ch2_boss_dead")
-	var portal := Node2D.new()
+	var portal := PortalFx.make()
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
-	var ring := ColorRect.new()
-	ring.size = Vector2(20, 34)
-	ring.position = -ring.size / 2.0
-	ring.color = Color(0.4, 0.8, 1.0, 0.6)
-	portal.add_child(ring)
+	AudioManager.play_music(&"music/victory")
 
 	samurai.sm.change_to(Samurai.S_CUTSCENE, true)
 	var cutscene := CutscenePlayer.new()

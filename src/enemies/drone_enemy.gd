@@ -12,11 +12,13 @@ var _base_y := 0.0
 func _init() -> void:
 	max_hp = 1
 	body_size = Vector2(14, 10)
+	asset_key = &"drone"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.9, 0.5, 0.95)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.9, 0.5, 0.95)
 	_base_y = position.y
 
 

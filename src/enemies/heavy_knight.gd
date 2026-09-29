@@ -15,11 +15,13 @@ func _init() -> void:
 	max_hp = 6
 	body_size = Vector2(18, 24)
 	contact_damage = true
+	asset_key = &"heavy_knight"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.6, 0.6, 0.75)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.6, 0.6, 0.75)
 	# Agir temas = 2 hasar
 	contact_hitbox.activate(DamageInfo.make(2, self, Vector2.ZERO, true, true))
 

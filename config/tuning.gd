@@ -113,6 +113,23 @@ extends Resource
 @export var vlad_lunge_speed: float = 320.0
 @export var blood_spike_delay: float = 0.7    ## zeminde belirme uyarisi
 
+@export_group("Bolum 4 — dusmanlar/dekor")
+@export var mushroom_speed: float = 30.0
+@export var shell_speed: float = 240.0
+@export var shell_life: float = 6.0
+@export var flower_interval: float = 2.4
+@export var cloud_tip_interval: float = 5.0
+
+@export_group("Bolum 4 — Kizil Tulumlu Tiran")
+@export var tyrant_speed: float = 42.0
+@export var tyrant_p2_speed: float = 60.0
+@export var tyrant_telegraph: float = 0.5
+@export var tyrant_attack_gap: float = 1.0
+@export var tyrant_attack_gap_p2: float = 0.6
+@export var tyrant_pound_rise: float = 300.0
+@export var pixel_rain_interval: float = 0.5
+@export var gravity_flip_time: float = 4.0    ## yer cekimi ters kalma suresi
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12

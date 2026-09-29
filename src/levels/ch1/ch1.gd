@@ -18,7 +18,9 @@ var samurai: Samurai
 var camera: ScreenShake
 var boss: LordCluck
 var _walls: Array[StaticBody2D] = []
-var _boss_bar: ColorRect
+var _boss_bar: Control
+var _boss_root: Control
+var _player_fill: Control
 var _hud_label: Label
 var _boss_started := false
 var _respawn_pending := false
@@ -26,6 +28,7 @@ var _respawn_pending := false
 
 func _ready() -> void:
 	GameState.current_chapter = &"ch1"
+	AudioManager.play_music(&"music/ch1")
 	_build_terrain()
 	_build_entities()
 	_build_fx()
@@ -42,6 +45,8 @@ func _process(_delta: float) -> void:
 		_boss_bar.visible = true
 		var frac := float(boss.health.current) / maxf(boss.health.max_health, 1)
 		_boss_bar.size.x = 160.0 * frac
+	if samurai != null and _player_fill != null:
+		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
 	if samurai != null and _hud_label != null:
 		_hud_label.text = "can %d/%d  form %s" % [
 			samurai.health.current, samurai.health.max_health,
@@ -55,6 +60,15 @@ func _build_terrain() -> void:
 	sky.color = Color(0.25, 0.09, 0.12)
 	sky.size = Vector2(LEVEL_W, 270)
 	add_child(sky)
+	if AssetLoader.has_asset(&"bg/forest"):
+		var bg := Sprite2D.new()
+		bg.texture = AssetLoader.texture(&"bg/forest")
+		bg.centered = false
+		var ts := bg.texture.get_size()
+		bg.scale = Vector2(LEVEL_W, 270) / ts
+		bg.modulate = Color(1.0, 0.6, 0.6)  # alacakaranlik tonuna karistir
+		bg.position = Vector2.ZERO
+		add_child(bg)
 
 	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
 	_add_ground(Vector2(140, 195), Vector2(70, 8))
@@ -197,21 +211,24 @@ func _build_hud() -> void:
 	_hud_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	layer.add_child(_hud_label)
 
+	# Oyuncu can cubugu (Kasaya bar dokulari)
+	var pb := HudBars.make(90, 7, Color(0.8, 0.25, 0.3))
+	pb.root.position = Vector2(6, 16)
+	layer.add_child(pb.root)
+	_player_fill = pb.fill
+
 	# Boss can cubugu — metinsiz kural, sadece bar
-	var bar_bg := ColorRect.new()
-	bar_bg.color = Color(0.1, 0.05, 0.08)
-	bar_bg.position = Vector2(160, 250)
-	bar_bg.size = Vector2(162, 6)
-	bar_bg.visible = false
-	layer.add_child(bar_bg)
-	_boss_bar = ColorRect.new()
-	_boss_bar.color = Color(0.9, 0.3, 0.35)
-	_boss_bar.position = Vector2(161, 251)
-	_boss_bar.size = Vector2(160, 4)
+	var boss_bar := HudBars.make(160, 6, Color(0.9, 0.3, 0.35))
+	boss_bar.root.position = Vector2(160, 250)
+	layer.add_child(boss_bar.root)
+	_boss_root = boss_bar.root
+	_boss_root.visible = false
+	_boss_bar = boss_bar.fill
 	_boss_bar.visible = false
-	layer.add_child(_boss_bar)
 	boss.health.damaged.connect(
-		func(_a: int, _r: int) -> void: bar_bg.visible = true)
+		func(_a: int, _r: int) -> void:
+			_boss_root.visible = true
+			_boss_bar.visible = true)
 
 
 # --- Boss akisi ---
@@ -228,6 +245,7 @@ func _on_arena_entered(area: Area2D) -> void:
 		w.visible = true
 	FX.glitch(0.7, 0.7)
 	FX.shake(2.0, 0.3)
+	AudioManager.play_music(&"music/ch1_boss")
 	boss.activate()
 
 
@@ -248,14 +266,10 @@ func _on_boss_defeated() -> void:
 		eye.position = Vector2(dx - 1, -4)
 		eye.color = Color(0.4, 1.0, 0.9)
 		creature.add_child(eye)
-	var portal := Node2D.new()
+	var portal := PortalFx.make()
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
-	var ring := ColorRect.new()
-	ring.size = Vector2(20, 34)
-	ring.position = -ring.size / 2.0
-	ring.color = Color(0.4, 0.8, 1.0, 0.6)
-	portal.add_child(ring)
+	AudioManager.play_music(&"music/victory")
 
 	samurai.sm.change_to(Samurai.S_CUTSCENE, true)
 	var cutscene := CutscenePlayer.new()

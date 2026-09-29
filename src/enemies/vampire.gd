@@ -13,11 +13,13 @@ var _player: Node2D
 func _init() -> void:
 	max_hp = 3
 	body_size = Vector2(13, 18)
+	asset_key = &"vampire"
 
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.7, 0.3, 0.5)
+	if not using_real_sprite:
+		sprite.modulate = Color(0.7, 0.3, 0.5)
 	_t = tuning.vampire_blink_cd * 0.5
 
 
