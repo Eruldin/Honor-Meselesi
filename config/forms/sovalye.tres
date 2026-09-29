@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FormData" load_steps=2 format=3 uid="uid://samsara_form_sovalye"]
+
+[ext_resource type="Script" path="res://src/player/forms/form_data.gd" id="1_fd"]
+
+[resource]
+script = ExtResource("1_fd")
+id = &"sovalye"
+display_name = "Sovalye (gecici)"
+sprite_color = Color(0.7, 0.7, 0.85, 1)
+body_size = Vector2(14, 20)
+damage_mult = 2.0
+duration = 25.0
+run_speed_mult = 0.9

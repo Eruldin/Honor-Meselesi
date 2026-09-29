@@ -37,6 +37,7 @@ var sprite: Sprite2D
 var col: CollisionShape2D
 var form: FormData
 var pending_form: StringName = &""
+var form_time_left: float = 0.0  ## gecici formlar icin geri sayim
 var jumps_used: int = 0
 
 var facing: int = 1
@@ -169,6 +170,15 @@ func _physics_process(delta: float) -> void:
 	invuln_timer = maxf(invuln_timer - delta, 0.0)
 	dash_cooldown = maxf(dash_cooldown - delta, 0.0)
 
+	# Gecici form suresi: dolunca samuraya geri don ve kilidi kaldir.
+	if form != null and form.duration > 0.0:
+		form_time_left -= delta
+		if form_time_left <= 0.0 and sm.current_name != S_TRANSFORM:
+			var expired := form.id
+			pending_form = &"samurai"
+			sm.change_to(S_TRANSFORM, true)
+			GameState.unlocked_forms.erase(expired)
+
 	sm.physics_process(delta)
 	move_and_slide()
 	_update_facing()
@@ -254,7 +264,8 @@ func ensure_attack_hitbox() -> void:
 	if attack_hitbox.monitoring:
 		return
 	var kb := Vector2(facing * tuning.attack_knockback, -30.0)
-	attack_hitbox.activate(DamageInfo.make(tuning.player_damage, self, kb, false, false))
+	var dmg := int(round(tuning.player_damage * form.damage_mult))
+	attack_hitbox.activate(DamageInfo.make(dmg, self, kb, false, false))
 
 
 func ensure_down_hitbox() -> void:
@@ -348,6 +359,16 @@ func cycle_form(step: int) -> bool:
 	return true
 
 
+## Disaridan form tak (boss odulu, gecici form): unlocked ise donusum baslar.
+func equip_form(id: StringName) -> bool:
+	if not GameState.unlocked_forms.has(id) or form.id == id:
+		return false
+	pending_form = id
+	if sm.current_name not in [S_TRANSFORM, S_CUTSCENE, S_DEAD]:
+		sm.change_to(S_TRANSFORM, true)
+	return true
+
+
 ## TRANSFORM durumu cikisinda cagrilir: bekleyen formu uygular.
 func apply_pending_form() -> void:
 	if pending_form == &"":
@@ -360,6 +381,7 @@ func apply_pending_form() -> void:
 
 func apply_form_data(f: FormData) -> void:
 	form = f
+	form_time_left = f.duration
 	var cap := col.shape as CapsuleShape2D
 	cap.radius = form.body_size.x / 2.0
 	cap.height = form.body_size.y
