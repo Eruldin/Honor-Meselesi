@@ -1,0 +1,6 @@
+# Asset arsivleri yerel tutuluyor; repoda sadece dokumanlar ve manifest var.
+# Buyuk paketler GitHub'in 100MB limitini astigi icin ASSETS.md'de listeleniyor.
+*.zip
+*.rar
+*.7z
+*.yymp
