@@ -370,8 +370,8 @@
       "note": "yer tutucu â€” mad_cloud prosedurel kullanir"
     },
     "prop/hat": {
-      "path": "generated/hat.png",
-      "pack": "uretilmis (kasa)"
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_hat.png"
     },
     "bg/forest_sky": {
       "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0000_9.png",
@@ -1311,70 +1311,198 @@
       "fps": 12
     },
     "enemy/glitch/hat": {
+      "pack": "AI Sheet",
       "files": [
         "generated/ai/glitch_7.png"
-      ],
-      "pack": "AI Sheet"
+      ]
+    },
+    "amb/village": {
+      "path": "music/jdsherbert/JDSherbert - Ambiences Music Pack [FREE]/Stereo/ogg/JDSherbert - Ambiences Music Pack - The Blackpenny Pub.ogg",
+      "pack": "JDSherbert"
+    },
+    "amb/forest": {
+      "path": "music/jdsherbert/JDSherbert - Ambiences Music Pack [FREE]/Stereo/ogg/JDSherbert - Ambiences Music Pack - Dark Dark Woods.ogg",
+      "pack": "JDSherbert"
+    },
+    "amb/wind": {
+      "path": "music/jdsherbert/JDSherbert - Ambiences Music Pack [FREE]/Stereo/ogg/JDSherbert - Ambiences Music Pack - Desert Sirocco.ogg",
+      "pack": "JDSherbert"
+    },
+    "amb/cave": {
+      "path": "music/jdsherbert/JDSherbert - Ambiences Music Pack [FREE]/Stereo/ogg/JDSherbert - Ambiences Music Pack - Bloodrat Sewers.ogg",
+      "pack": "JDSherbert"
+    },
+    "sfx/step_dirt_1": {
+      "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 1.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/run_dirt_1": {
+      "path": "sfx/footsteps/Run/Dirt/DIRT - Run 1.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/step_dirt_2": {
+      "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk  2.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/run_dirt_2": {
+      "path": "sfx/footsteps/Run/Dirt/DIRT - Run 2.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/step_dirt_3": {
+      "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 3.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/run_dirt_3": {
+      "path": "sfx/footsteps/Run/Dirt/DIRT - Run 3.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/step_dirt_4": {
+      "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 4.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/run_dirt_4": {
+      "path": "sfx/footsteps/Run/Dirt/DIRT - Run 4.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/jump_dirt": {
+      "path": "sfx/footsteps/Jump/Dirt/Pre Jump 1.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/land_dirt": {
+      "path": "sfx/footsteps/Jump/Dirt/Post Jump 1.wav",
+      "pack": "Footsteps"
+    },
+    "sfx/npc_blip": {
+      "path": "sfx/dialogue/Super Dialogue Audio Pack v1/Step 2 - Audio Files/9 - Grunting/Male/Alex Brodie/grunting_1_alex.wav",
+      "pack": "Super Dialogue"
+    },
+    "sfx/npc_grunt_2": {
+      "path": "sfx/dialogue/Super Dialogue Audio Pack v1/Step 2 - Audio Files/9 - Grunting/Male/Alex Brodie/grunting_2_alex.wav",
+      "pack": "SuperDialogue"
+    },
+    "sfx/npc_grunt_3": {
+      "path": "sfx/dialogue/Super Dialogue Audio Pack v1/Step 2 - Audio Files/9 - Grunting/Male/Alex Brodie/grunting_3_alex.wav",
+      "pack": "SuperDialogue"
+    },
+    "prop/katana_rack": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_katana.png"
+    },
+    "prop/crt_tv": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_tv.png"
+    },
+    "prop/lantern": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_lantern2.png"
+    },
+    "prop/scroll_a": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_scroll_a.png"
+    },
+    "prop/scroll_b": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_scroll_b.png"
+    },
+    "prop/shelf": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_shelf.png"
+    },
+    "prop/banner": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_banner.png"
+    },
+    "prop/rift": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_rift.png"
+    },
+    "prop/player_sit": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_sit.png"
+    },
+    "prop/house_main": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_house_main.png"
+    },
+    "prop/lamppost_j": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_lamppost.png"
+    },
+    "tex/j_wall": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_wall.png"
+    },
+    "tex/j_floor": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/j_floor.png"
+    },
+    "tile/j_grass_0": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_grass_0.png"
+    },
+    "tile/j_grass_1": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_grass_1.png"
+    },
+    "tile/j_grass_2": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_grass_2.png"
+    },
+    "tile/j_grass_3": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_grass_3.png"
+    },
+    "tile/j_grass_4": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_grass_4.png"
+    },
+    "tile/j_stone_0": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_stone_0.png"
+    },
+    "tile/j_stone_1": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_stone_1.png"
+    },
+    "tile/j_wood_0": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/tile_wood_0.png"
+    },
+    "bg/j_moon": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/bg_moon.png"
+    },
+    "bg/j_mountains": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/bg_mountains.png"
+    },
+    "bg/j_cherry": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/bg_cherry.png"
+    },
+    "bg/j_falls": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/bg_falls.png"
+    },
+    "bg/j_trees": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/bg_trees.png"
+    },
+    "ui/hud_portrait": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/hud_portrait.png"
+    },
+    "ui/hud_heart": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/hud_heart.png"
+    },
+    "ui/hud_heart_row": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/hud_heart_row.png"
+    },
+    "ui/hud_katana": {
+      "pack": "AI Sheet",
+      "path": "generated/ai/hud_katana.png"
     }
-  },
-  "amb/village": {
-    "path": "sfx/amb/village.ogg",
-    "pack": "JDSherbert"
-  },
-  "amb/forest": {
-    "path": "sfx/amb/forest.ogg",
-    "pack": "JDSherbert"
-  },
-  "amb/wind": {
-    "path": "sfx/amb/wind.ogg",
-    "pack": "JDSherbert"
-  },
-  "amb/cave": {
-    "path": "sfx/amb/cave.ogg",
-    "pack": "JDSherbert"
-  },
-  "sfx/step_dirt_1": {
-    "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 1.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/run_dirt_1": {
-    "path": "sfx/footsteps/Run/Dirt/DIRT - Run 1.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/step_dirt_2": {
-    "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 2.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/run_dirt_2": {
-    "path": "sfx/footsteps/Run/Dirt/DIRT - Run 2.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/step_dirt_3": {
-    "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 3.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/run_dirt_3": {
-    "path": "sfx/footsteps/Run/Dirt/DIRT - Run 3.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/step_dirt_4": {
-    "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 4.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/run_dirt_4": {
-    "path": "sfx/footsteps/Run/Dirt/DIRT - Run 4.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/jump_dirt": {
-    "path": "sfx/footsteps/Jump/DIRT - Jump 1.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/land_dirt": {
-    "path": "sfx/footsteps/Jump/DIRT - Jump Land 1.wav",
-    "pack": "Footsteps"
-  },
-  "sfx/npc_blip": {
-    "path": "sfx/npc/Gibberish/Gibberish_2.wav",
-    "pack": "Super Dialogue"
   }
 }

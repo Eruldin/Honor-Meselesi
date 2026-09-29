@@ -22,12 +22,12 @@ OUT = os.path.join(ROOT, "assets_external", "generated", "ai")
 BG_THR = 42      # bu esigin alti + kenara bagli = arka plan
 
 
-def cut_bg(img: Image.Image) -> Image.Image:
+def cut_bg(img: Image.Image, thr: int = BG_THR) -> Image.Image:
     """Koyu zemini flood-fill ile temizler, alpha kanali uretir."""
     rgba = np.array(img.convert("RGBA"))
     lum = rgba[:, :, :3].max(axis=2)
     h, w = lum.shape
-    dark = lum < BG_THR
+    dark = lum < thr
     bg = np.zeros((h, w), dtype=bool)
     q = deque()
     for x in range(w):
@@ -65,9 +65,10 @@ def normalize_cell(img: Image.Image, cell: int = 64) -> Image.Image:
 
 
 def slice_spec(sheet: str, name: str, box: tuple, scale: float = 1.0,
-               grid: tuple = None, cell: int = 0) -> list:
+               grid: tuple = None, cell: int = 0, thr: int = BG_THR) -> list:
     """tek kare veya esit gridli seri kirpar. grid=(kolon,satir).
-    cell>0 ise her kareyi cellxcell tuvele ayak-hizali normalize eder."""
+    cell>0 ise her kareyi cellxcell tuvele ayak-hizali normalize eder.
+    thr: bg esigi (koyu sprite'lar icin dusur)."""
     im = Image.open(os.path.join(SRC, sheet))
     region = im.crop(box)
     saved = []
@@ -79,7 +80,7 @@ def slice_spec(sheet: str, name: str, box: tuple, scale: float = 1.0,
     else:
         cells = [region]
     for i, cel_img in enumerate(cells):
-        cleaned = cut_bg(cel_img)
+        cleaned = cut_bg(cel_img, thr)
         if cleaned.width < 3 or cleaned.height < 3:
             print("  ! bos kare atlandi:", name, i)
             continue
@@ -131,6 +132,50 @@ def main() -> None:
             (420, 530), (575, 625), (665, 720), (840, 955)]):
         slice_spec("interior.png", "glitch_%d" % i, (x0, GL[0], x1, GL[1]),
                    cell=64)
+
+    # === IC MEKAN OBJELERI (interior.png — oda sahnesi) ===
+    for name, box in [
+        ("j_lantern",   (105, 225, 200, 310)),   # asili fener + isilti
+        ("j_scroll_a",  (515, 155, 575, 240)),   # dag manzara parsomen
+        ("j_scroll_b",  (580, 155, 645, 240)),   # kaligrafi parsomen
+        ("j_shelf",     (655, 140, 790, 265)),   # kavanoz raf
+        ("j_banner",    (1195, 165, 1310, 335)), # kirmizi armali bayrak
+        ("j_lantern2",  (1265, 225, 1340, 340)), # sag fener
+        ("j_tv",        (355, 305, 500, 400)),   # TV + sehpa
+        ("j_sit",       (275, 315, 350, 405)),   # oturan samuray
+        ("j_katana",    (315, 225, 465, 275)),   # duvar katana rafi
+        ("j_rift",      (1290, 150, 1535, 345)), # mor glitch yarik + sapka
+        ("j_wall",      (230, 120, 330, 230)),   # temiz tahta duvar
+        ("j_floor",     (150, 392, 420, 448)),   # tahta doseme seridi
+    ]:
+        slice_spec("interior.png", name, box)
+
+    # === KOY / SAHNE (buildings.png) ===
+    # zemin tilelari: satir1 cim-toprak, satir2 tas-yosun, satir3 tahta
+    for i in range(5):
+        slice_spec("buildings.png", "tile_grass_%d" % i,
+                   (22 + i * 63, 556, 84 + i * 63, 615))
+        slice_spec("buildings.png", "tile_stone_%d" % i,
+                   (22 + i * 63, 617, 84 + i * 63, 662))
+        slice_spec("buildings.png", "tile_wood_%d" % i,
+                   (22 + i * 63, 664, 84 + i * 63, 708))
+    # buyuk iki katli ev (oyuncunun evi)
+    slice_spec("buildings.png", "j_house_main", (340, 527, 545, 700))
+    # arka plan: ay, dag silsilesi, kiraz agaci, selale ucurumu
+    slice_spec("buildings.png", "bg_moon",      (955, 530, 1040, 615))
+    slice_spec("buildings.png", "bg_mountains", (1040, 545, 1300, 645))
+    slice_spec("buildings.png", "bg_cherry",    (1380, 535, 1565, 665))
+    slice_spec("buildings.png", "bg_falls",     (1575, 535, 1665, 705))
+    slice_spec("buildings.png", "bg_trees",     (1140, 615, 1400, 705))
+    # torii + fener direkleri (sahne tilesi bolumunde ahshap parcalar)
+    slice_spec("buildings.png", "j_lamppost",   (280, 645, 330, 700))
+    # HUD: samuray portresi + oni maske kalp + katana bar (panorama sol ust)
+    slice_spec("buildings.png", "hud_portrait", (5, 45, 95, 110))
+    slice_spec("buildings.png", "hud_heart",    (112, 32, 148, 70), thr=28)
+    slice_spec("buildings.png", "hud_heart_row",(108, 30, 300, 72), thr=28)
+    slice_spec("buildings.png", "hud_katana",   (95, 70, 295, 95))
+    # samuray sapkasi (sapka bolumu — sapka sprite'lari)
+    slice_spec("buildings.png", "j_hat",        (1120, 830, 1175, 885))
 
     print("bitti ->", OUT)
 
