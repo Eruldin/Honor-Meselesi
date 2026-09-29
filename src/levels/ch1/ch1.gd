@@ -199,10 +199,10 @@ func _add_spikes(x0: float, x1: float, y: float) -> void:
 		x += 24.0
 
 
-func _add_rest(x: float, id: StringName) -> void:
+func _add_rest(x: float, id: StringName, y: float = FLOOR_Y - 4) -> void:
 	var rest := RestPoint.new()
 	rest.checkpoint_id = id
-	rest.global_position = Vector2(x, FLOOR_Y - 4)
+	rest.global_position = Vector2(x, y)
 	add_child(rest)
 	# Tas fener gorunumu
 	if AssetLoader.has_asset(&"prop/deco_lantern"):
@@ -270,6 +270,32 @@ func _build_terrain() -> void:
 	# B ust rota (gizli odul): yuksek seritler
 	_add_platform(Vector2(1640, 140), &"terrain/pf_ledge", 90)
 	_add_platform(Vector2(1760, 160), &"terrain/pf_slab", 85)
+	# FlickerPlatform sekansi (yanilip sonen platformlar)
+	var fp1 := FlickerPlatform.new()
+	fp1.size = Vector2(40, 10)
+	fp1.tex_id = &"terrain/pf_ledge"
+	fp1.global_position = Vector2(1840, 150)
+	fp1.phase_offset = 0.0
+	add_child(fp1)
+
+	var fp2 := FlickerPlatform.new()
+	fp2.size = Vector2(40, 10)
+	fp2.tex_id = &"terrain/pf_ledge"
+	fp2.global_position = Vector2(1915, 135)
+	fp2.phase_offset = 1.0
+	add_child(fp2)
+
+	# Gizli tapinak avlusu (BreakableBlock ardinda RestPoint)
+	_add_ground(Vector2(2045, 135), Vector2(160, 26), &"terrain/edge_dirt")
+	var bb_forest := BreakableBlock.new()
+	bb_forest.size = Vector2(16, 60)
+	bb_forest.global_position = Vector2(1975, 135 - 13 - 30)
+	add_child(bb_forest)
+	_add_rest(2035, &"ch1_forest_secret", 135 - 13 - 4)
+	_add_deco_ground(&"prop/statue", 2085, 135 - 13, 0.7, Color(0.6, 0.7, 0.6))
+	
+	# Gizli odadan asagi donus yolu (dusup hasar almamasi icin platform)
+	_add_platform(Vector2(2150, 190), &"terrain/pf_block", 44)
 	# C: magara — daha alcak tavan hissi
 	_add_ground(Vector2(2820, FLOOR_Y + 10), Vector2(1020, 26),
 		&"terrain/edge_dirt", &"terrain/cave_rock")
@@ -504,12 +530,21 @@ func _build_entities() -> void:
 		m.global_position = Vector2(x, FLOOR_Y - 12)
 		add_child(m)
 	var t1 := Turtle.new()
-	t1.global_position = Vector2(1750, FLOOR_Y - 12)
+	t1.global_position = Vector2(1650, FLOOR_Y - 12)
 	add_child(t1)
-	for x in [1900.0, 2080.0]:
+	var t_forest2 := Turtle.new()
+	t_forest2.global_position = Vector2(1780, FLOOR_Y - 12)
+	add_child(t_forest2)
+	for x in [1900.0, 2200.0]:
 		var v := Villager.new()
 		v.global_position = Vector2(x, FLOOR_Y - 12)
 		add_child(v)
+	
+	# Orman Ust Rota (Gizli Tapinak): Muhafiz hayalet
+	var ghost := Ghost.new()
+	ghost.global_position = Vector2(2000, 135 - 12)
+	add_child(ghost)
+
 	_add_rest(2250, &"ch1_forest")
 
 	# C — magara: diken tarlasi + hayalet + kaplumbaga
