@@ -253,17 +253,29 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 
 
+var _last_state := &""
+
 func _process(delta: float) -> void:
+	if sm.current_name != _last_state:
+		if sm.current_name == S_JUMP:
+			AudioManager.play_sfx(&"sfx/jump_dirt", global_position, -10.0, randf_range(0.9, 1.1))
+		elif _last_state == S_FALL and is_on_floor():
+			AudioManager.play_sfx(&"sfx/land_dirt", global_position, -8.0, randf_range(0.9, 1.1))
+		_last_state = sm.current_name
+		
 	_sync_anim()
 	# Ayak sesi: yerde kosarken ritmik toprak adimi
-	if sm.current_name == S_RUN and is_on_floor() and absf(velocity.x) > 20.0:
+	if (sm.current_name == S_RUN or sm.current_name == S_DASH) and is_on_floor() and absf(velocity.x) > 20.0:
 		_step_timer -= delta
 		if _step_timer <= 0.0:
-			_step_timer = 0.34
+			_step_timer = 0.28
+			var is_dash = sm.current_name == S_DASH
+			var prefix = "sfx/run_dirt_" if is_dash else "sfx/step_dirt_"
+			var rand_idx = randi() % 4 + 1
 			AudioManager.play_sfx(
-				&"sfx/footstep2" if _step_alt else &"sfx/footstep",
-				global_position, -10.0)
-			_step_alt = not _step_alt
+				StringName(prefix + str(rand_idx)),
+				global_position, -14.0, randf_range(0.9, 1.1)
+			)
 	else:
 		_step_timer = 0.05
 	if _flash_timer > 0.0:

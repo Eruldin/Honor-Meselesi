@@ -195,7 +195,7 @@
    "pack": "Free Pixel Art Forest"
   },
   "bg/forest_mid": {
-   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0006_4.png",
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
    "pack": "Free Pixel Art Forest"
   },
   "bg/city": {
@@ -373,7 +373,7 @@
   "deco/cloud": {
    "path": "env/postapoc/Objects/Exhaust-pipe.png",
    "pack": "Pixel Art Post Apocalypse",
-   "note": "yer tutucu — mad_cloud prosedurel kullanir"
+   "note": "yer tutucu \u00e2\u20ac\u201d mad_cloud prosedurel kullanir"
   },
   "prop/hat": {
    "path": "generated/hat.png",
@@ -385,10 +385,6 @@
   },
   "bg/forest_far": {
    "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0001_8.png",
-   "pack": "Free Pixel Art Forest"
-  },
-  "bg/forest_mid": {
-   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
    "pack": "Free Pixel Art Forest"
   },
   "bg/forest_near": {
@@ -1241,7 +1237,7 @@
   "music/rest_point": {
    "path": "music/xdev_04_-_Silent_Forest.ogg",
    "pack": "xDeviruchi 16-bit",
-   "note": "dinlenme noktasi ambians — Silent Forest yeniden kullanildi"
+   "note": "dinlenme noktasi ambians \u00e2\u20ac\u201d Silent Forest yeniden kullanildi"
   },
   "prop/market_stall": {
    "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/sign.png",
@@ -1259,5 +1255,65 @@
    "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/bush-large.png",
    "pack": "GothicVania Cemetery"
   }
+ },
+ "amb/village": {
+  "path": "sfx/amb/village.ogg",
+  "pack": "JDSherbert"
+ },
+ "amb/forest": {
+  "path": "sfx/amb/forest.ogg",
+  "pack": "JDSherbert"
+ },
+ "amb/wind": {
+  "path": "sfx/amb/wind.ogg",
+  "pack": "JDSherbert"
+ },
+ "amb/cave": {
+  "path": "sfx/amb/cave.ogg",
+  "pack": "JDSherbert"
+ },
+ "sfx/step_dirt_1": {
+  "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 1.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/run_dirt_1": {
+  "path": "sfx/footsteps/Run/Dirt/DIRT - Run 1.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/step_dirt_2": {
+  "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 2.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/run_dirt_2": {
+  "path": "sfx/footsteps/Run/Dirt/DIRT - Run 2.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/step_dirt_3": {
+  "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 3.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/run_dirt_3": {
+  "path": "sfx/footsteps/Run/Dirt/DIRT - Run 3.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/step_dirt_4": {
+  "path": "sfx/footsteps/Walk/Dirt/DIRT - Walk 4.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/run_dirt_4": {
+  "path": "sfx/footsteps/Run/Dirt/DIRT - Run 4.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/jump_dirt": {
+  "path": "sfx/footsteps/Jump/DIRT - Jump 1.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/land_dirt": {
+  "path": "sfx/footsteps/Jump/DIRT - Jump Land 1.wav",
+  "pack": "Footsteps"
+ },
+ "sfx/npc_blip": {
+  "path": "sfx/npc/Gibberish/Gibberish_2.wav",
+  "pack": "Super Dialogue"
  }
 }

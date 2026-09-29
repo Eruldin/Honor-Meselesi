@@ -9,6 +9,12 @@ extends Node
 const SFX_POOL := 8
 
 var _music: AudioStreamPlayer
+var _amb1: AudioStreamPlayer
+var _amb2: AudioStreamPlayer
+var _active_amb: int = 1
+var _current_amb: StringName = &""
+var _amb_fade := 0.0
+
 var _sfx_pool: Array[AudioStreamPlayer] = []
 var _sfx_2d_pool: Array[AudioStreamPlayer2D] = []
 var _sfx_idx := 0
@@ -20,6 +26,12 @@ func _ready() -> void:
 	_music = AudioStreamPlayer.new()
 	_music.bus = &"Music"
 	add_child(_music)
+	_amb1 = AudioStreamPlayer.new()
+	_amb1.bus = &"Music"
+	add_child(_amb1)
+	_amb2 = AudioStreamPlayer.new()
+	_amb2.bus = &"Music"
+	add_child(_amb2)
 	for i in SFX_POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = &"SFX"
@@ -53,9 +65,43 @@ func stop_music() -> void:
 	_current_music = &""
 	_music.stop()
 
+func play_ambience(logical_id: StringName) -> void:
+	if logical_id == _current_amb:
+		return
+	_current_amb = logical_id
+	var stream := AssetLoader.audio(logical_id)
+	
+	_active_amb = 2 if _active_amb == 1 else 1
+	var next_p := _amb1 if _active_amb == 1 else _amb2
+	
+	if stream == null:
+		next_p.stop()
+	else:
+		if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
+			stream.loop = true
+		next_p.stream = stream
+		next_p.volume_db = -80.0
+		next_p.play()
+	_amb_fade = 1.0
+
+func _process(delta: float) -> void:
+	if _amb_fade > 0.0:
+		_amb_fade = maxf(0.0, _amb_fade - delta) # 1 saniye crossfade
+		var t := 1.0 - _amb_fade
+		var p_active := _amb1 if _active_amb == 1 else _amb2
+		var p_old := _amb2 if _active_amb == 1 else _amb1
+		
+		# -80 dB ile -18 dB arasi linear2db crossfade
+		if p_active.playing:
+			p_active.volume_db = linear_to_db(lerpf(0.0, db_to_linear(-18.0), t))
+		if p_old.playing:
+			p_old.volume_db = linear_to_db(lerpf(db_to_linear(-18.0), 0.0, t))
+			if _amb_fade == 0.0:
+				p_old.stop()
+
 
 ## Tek seferlik efekt; pos verilirse 2D konumlu calar.
-func play_sfx(logical_id: StringName, pos: Variant = null, volume_db := 0.0) -> void:
+func play_sfx(logical_id: StringName, pos: Variant = null, volume_db := 0.0, pitch_scale := 1.0) -> void:
 	var stream := AssetLoader.audio(logical_id)
 	if stream == null:
 		return
@@ -65,10 +111,12 @@ func play_sfx(logical_id: StringName, pos: Variant = null, volume_db := 0.0) -> 
 		p.global_position = pos
 		p.stream = stream
 		p.volume_db = volume_db
+		p.pitch_scale = pitch_scale
 		p.play()
 	else:
 		var p := _sfx_pool[_sfx_idx]
 		_sfx_idx = (_sfx_idx + 1) % _sfx_pool.size()
 		p.stream = stream
 		p.volume_db = volume_db
+		p.pitch_scale = pitch_scale
 		p.play()

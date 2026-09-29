@@ -8,10 +8,10 @@ const CH2_PATH := "res://src/levels/ch2/Ch2.tscn"
 const FLOOR_Y := 250.0
 const LEVEL_W := 5000.0
 const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
-	{x = 700.0,  id = &"music/ch1_village"},  # pazar alani — sicak koy havasi
-	{x = 1050.0, id = &"music/ch1_forest"},
-	{x = 2300.0, id = &"music/ch1_cave"},
-	{x = 3350.0, id = &"music/ch1_gate"},
+	{x = 700.0,  id = &"music/ch1_village", amb = &"amb/village"},  # pazar alani — sicak koy havasi
+	{x = 1050.0, id = &"music/ch1_forest",  amb = &"amb/forest"},
+	{x = 2300.0, id = &"music/ch1_cave",    amb = &"amb/cave"},
+	{x = 3350.0, id = &"music/ch1_gate",    amb = &"amb/wind"},
 ]
 const GATE_X := 4400.0       ## torii kapi cizgisi
 const ARENA_L := 4520.0      ## arena sol duvari
@@ -39,6 +39,7 @@ var _gate_sprite: Sprite2D
 func _ready() -> void:
 	GameState.current_chapter = &"ch1"
 	AudioManager.play_music(&"music/ch1")
+	AudioManager.play_ambience(&"amb/village")
 	_build_terrain()
 	_build_entities()
 	_build_fx()
@@ -61,6 +62,8 @@ func _process(delta: float) -> void:
 		while _music_zone < ZONE_MUSIC.size() \
 				and samurai.global_position.x >= ZONE_MUSIC[_music_zone].x:
 			AudioManager.play_music(ZONE_MUSIC[_music_zone].id)
+			if ZONE_MUSIC[_music_zone].has("amb"):
+				AudioManager.play_ambience(ZONE_MUSIC[_music_zone].amb)
 			_music_zone += 1
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
@@ -215,7 +218,7 @@ func _add_sign(pos: Vector2, icon: StringName) -> void:
 
 
 func _sign_sfx() -> void:
-	AudioManager.play_sfx(&"sfx/ui", samurai.global_position if samurai else Vector2.ZERO, -6.0)
+	AudioManager.play_sfx(&"sfx/npc_blip", samurai.global_position if samurai else Vector2.ZERO, -8.0)
 
 
 func _add_spikes(x0: float, x1: float, y: float) -> void:
@@ -306,6 +309,24 @@ func _build_terrain() -> void:
 	# A: koy duzlugu — kuyu girisi icin x=458-502 arasi bosluklu iki parca
 	_add_ground(Vector2(230, FLOOR_Y + 10), Vector2(460, 26))   # 0-460
 	_add_ground(Vector2(772, FLOOR_Y + 10), Vector2(540, 26))   # 504-1044
+	
+	# Cukur gorunumu: arkaya siyah perde ve kenarlara cikinti
+	var well_bg := ColorRect.new()
+	well_bg.color = Color(0.04, 0.03, 0.05)
+	well_bg.position = Vector2(456, FLOOR_Y)
+	well_bg.size = Vector2(50, 180)
+	well_bg.z_index = -6 # Gokyuzunun onunde, kuyu propunun arkasinda
+	add_child(well_bg)
+	if AssetLoader.has_asset(&"terrain/edge_dirt"):
+		var lip_l := Sprite2D.new()
+		lip_l.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(12, 26))
+		lip_l.position = Vector2(454, FLOOR_Y + 10)
+		add_child(lip_l)
+		var lip_r := Sprite2D.new()
+		lip_r.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(12, 26))
+		lip_r.position = Vector2(508, FLOOR_Y + 10)
+		lip_r.flip_h = true
+		add_child(lip_r)
 	# B: orman — kaya bariyerini platformlarla as (ust rota gizli)
 	_add_ground(Vector2(1560, FLOOR_Y + 10), Vector2(1000, 26))
 	_add_ground(Vector2(2200, FLOOR_Y + 10), Vector2(280, 26))
@@ -446,8 +467,20 @@ func _build_terrain() -> void:
 
 	# Gecit Ust Rota (Harabe Surlar)
 	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3760, 120), &"terrain/pf_ledge", 70)
-	_add_platform(Vector2(3860, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3730, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3810, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3890, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3970, 140), &"terrain/pf_slab", 85)
+	
+	var bb_sur := BreakableBlock.new()
+	bb_sur.size = Vector2(16, 50)
+	bb_sur.global_position = Vector2(3930, 140 - 13 - 25)
+	add_child(bb_sur)
+	
+	_add_deco_ground(&"prop/statue", 3970, 140 - 13, 0.7, Color(0.4, 0.45, 0.5))
+	
+	_add_platform(Vector2(4040, 160), &"terrain/pf_ledge", 40)
+	_add_platform(Vector2(4080, 190), &"terrain/pf_ledge", 40)
 
 	# E: arena zemini
 	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
@@ -471,7 +504,7 @@ func _build_terrain() -> void:
 	# Pazar alani evleri (sag kanat — x=700-1040)
 	_add_deco_ground(&"prop/house_b", 1000, FLOOR_Y, 0.48, house_mod, true)
 	# Koy meydani: kuyu, araba, kasalar, varil — hepsi zemine oturur
-	_add_deco_ground(&"prop/well", 480, FLOOR_Y, 0.8, house_mod)
+	_add_deco_ground(&"prop/well", 480, FLOOR_Y, 0.95, house_mod)
 	_add_deco_ground(&"prop/wagon", 230, FLOOR_Y, 0.75, house_mod)
 	_add_deco_ground(&"prop/crate_stack", 700, FLOOR_Y, 0.7, house_mod)
 	_add_deco_ground(&"prop/crate", 745, FLOOR_Y, 0.8, house_mod)
