@@ -48,13 +48,20 @@ func reset() -> void:
 
 
 func to_dict() -> Dictionary:
+	var ser_flags := {}
+	for k in flags:
+		var v: Variant = flags[k]
+		if v is Vector2:
+			ser_flags[k] = {"__v2": [v.x, v.y]}
+		else:
+			ser_flags[k] = v
 	return {
 		"version": SAVE_VERSION,
 		"chapter": String(current_chapter),
 		"current_form": String(current_form),
 		"unlocked_forms": unlocked_forms.map(func(f: StringName) -> String: return String(f)),
 		"checkpoint": String(checkpoint_id),
-		"flags": flags.duplicate(),
+		"flags": ser_flags,
 		"play_time": play_time,
 	}
 
@@ -64,7 +71,13 @@ func from_dict(data: Dictionary) -> void:
 	current_form = StringName(data.get("current_form", "samurai"))
 	checkpoint_id = StringName(data.get("checkpoint", ""))
 	play_time = float(data.get("play_time", 0.0))
-	flags = data.get("flags", {}).duplicate()
+	flags.clear()
+	for k in data.get("flags", {}):
+		var v: Variant = data["flags"][k]
+		if v is Dictionary and v.has("__v2"):
+			var arr: Array = v["__v2"]
+			v = Vector2(float(arr[0]), float(arr[1]))
+		flags[k] = v
 	unlocked_forms.clear()
 	for f in data.get("unlocked_forms", ["samurai"]):
 		unlocked_forms.append(StringName(f))
