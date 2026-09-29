@@ -130,6 +130,20 @@ extends Resource
 @export var pixel_rain_interval: float = 0.85
 @export var gravity_flip_time: float = 4.0    ## yer cekimi ters kalma suresi
 
+@export_group("Bolum 5 — Kul Diyari")
+@export var husk_speed: float = 20.0
+@export var husk_attack_range: float = 22.0
+@export var husk_telegraph: float = 0.5
+@export var ash_bat_speed: float = 26.0
+@export var ash_bat_dive_speed: float = 95.0
+@export var ash_geyser_delay: float = 0.9
+@export_group("Bolum 5 — Kul Muhafizi")
+@export var guardian5_speed: float = 16.0
+@export var guardian5_p2_speed: float = 24.0
+@export var guardian5_telegraph: float = 0.6
+@export var guardian5_attack_gap: float = 1.4
+@export var guardian5_attack_gap_p2: float = 0.9
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12
