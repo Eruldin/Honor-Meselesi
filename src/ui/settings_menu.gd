@@ -52,18 +52,18 @@ func _build() -> void:
 
 	_panel = PanelContainer.new()
 	_panel.set_anchors_preset(Control.PRESET_CENTER)
-	_panel.custom_minimum_size = Vector2(340, 210)
-	_panel.position = Vector2(240 - 170, 135 - 105)
+	_panel.custom_minimum_size = Vector2(430, 244)  # ekranin ~%90'i
+	_panel.position = Vector2(240 - 215, 135 - 122)
 	add_child(_panel)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 6)
+	vbox.add_theme_constant_override("separation", 8)
 	_panel.add_child(vbox)
 
 	var title := Label.new()
 	title.text = tr_ui("title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_font_size_override("font_size", 16)
 	vbox.add_child(title)
 
 	# Sekme dugmeleri
@@ -74,7 +74,7 @@ func _build() -> void:
 	for t in TABS:
 		var b := Button.new()
 		b.text = tr_ui(t)
-		b.add_theme_font_size_override("font_size", 9)
+		b.add_theme_font_size_override("font_size", 11)
 		b.pressed.connect(func() -> void:
 			_tab = t
 			_rebuild_tab())
@@ -82,8 +82,8 @@ func _build() -> void:
 		_tab_buttons[t] = b
 
 	_content = VBoxContainer.new()
-	_content.add_theme_constant_override("separation", 5)
-	_content.custom_minimum_size = Vector2(300, 120)
+	_content.add_theme_constant_override("separation", 8)
+	_content.custom_minimum_size = Vector2(390, 160)
 	vbox.add_child(_content)
 
 	var hint := Label.new()
@@ -163,7 +163,7 @@ func _tab_language() -> void:
 
 func _tab_controls() -> void:
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(300, 118)
+	scroll.custom_minimum_size = Vector2(390, 160)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_content.add_child(scroll)
 	var list := VBoxContainer.new()
@@ -174,12 +174,12 @@ func _tab_controls() -> void:
 		var row := HBoxContainer.new()
 		var lbl := Label.new()
 		lbl.text = ACTION_NAMES.get(action, action)
-		lbl.custom_minimum_size = Vector2(90, 0)
-		lbl.add_theme_font_size_override("font_size", 8)
+		lbl.custom_minimum_size = Vector2(110, 0)
+		lbl.add_theme_font_size_override("font_size", 10)
 		row.add_child(lbl)
 		var b := Button.new()
 		b.text = _binding_text(action) if _rebinding != action else "...?"
-		b.add_theme_font_size_override("font_size", 8)
+		b.add_theme_font_size_override("font_size", 10)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.pressed.connect(func() -> void:
 			_rebinding = action
@@ -204,15 +204,15 @@ func _slider_row(label_text: String, initial: float, setter: Callable) -> HBoxCo
 	var row := HBoxContainer.new()
 	var label := Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(90, 0)
-	label.add_theme_font_size_override("font_size", 9)
+	label.custom_minimum_size = Vector2(110, 0)
+	label.add_theme_font_size_override("font_size", 10)
 	row.add_child(label)
 	var slider := HSlider.new()
 	slider.min_value = 0.0
 	slider.max_value = 1.0
 	slider.step = 0.05
 	slider.value = initial
-	slider.custom_minimum_size = Vector2(160, 0)
+	slider.custom_minimum_size = Vector2(200, 0)
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slider.value_changed.connect(setter)
 	row.add_child(slider)

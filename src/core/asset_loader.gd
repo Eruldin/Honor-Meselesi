@@ -90,7 +90,9 @@ func texture(logical_id: StringName, size := Vector2i(16, 16)) -> Texture2D:
 		return _cache[key]
 	if has_asset(logical_id):
 		var entry: Dictionary = _manifest[logical_id]
-		var full := _load_image_texture(entry["path"])
+		# cok-kareli girdide tek texture istenirse ilk kareyi ver
+		var rel: String = entry["files"][0] if entry.has("files") else entry.get("path", "")
+		var full := _load_image_texture(rel)
 		if full != null:
 			if entry.has("region"):
 				var r: Array = entry["region"]

@@ -162,7 +162,8 @@ func _build_anims() -> void:
 		return
 	_anims = AnimatedSprite2D.new()
 	var bank := SpriteFrames.new()
-	for anim in [&"idle", &"run", &"attack", &"hurt"]:
+	for anim in [&"idle", &"run", &"attack", &"hurt", &"jump", &"dead",
+			&"air_attack", &"interact"]:
 		var id := StringName("player/samurai/" + String(anim))
 		var src := AssetLoader.frames(id)
 		if src == null or src.get_frame_count(&"default") == 0:
@@ -171,14 +172,15 @@ func _build_anims() -> void:
 			continue
 		bank.add_animation(anim)
 		bank.set_animation_speed(anim, src.get_animation_speed(&"default"))
-		bank.set_animation_loop(anim, anim != &"attack" and anim != &"hurt")
+		bank.set_animation_loop(anim,
+			anim in [&"idle", &"run"])
 		for i in src.get_frame_count(&"default"):
 			bank.add_frame(anim, src.get_frame_texture(&"default", i))
 	if bank.get_animation_names().is_empty():
 		return
 	_anims.sprite_frames = bank
-	_anims.scale = Vector2.ONE            # 96px cel, ~34px govde — tam detay
-	_anims.position = Vector2(1, -23)     # cel ayaklari (~y80) govde tabanina hizali
+	_anims.scale = Vector2(0.62, 0.62)    # 64px cel -> ~34px govde
+	_anims.position = Vector2(1, -11)     # ayak-hizali cel tabani govde dibine
 	sprite.visible = false
 	add_child(_anims)
 	_anims.play(&"idle")
@@ -192,11 +194,17 @@ func _sync_anim() -> void:
 		S_RUN, S_DASH:
 			want = &"run"
 		S_JUMP, S_FALL:
-			want = &"run"
-		S_ATTACK, S_AIR_ATTACK, S_DOWN_ATTACK, S_PARRY:
+			want = &"jump"
+		S_AIR_ATTACK:
+			want = &"air_attack"
+		S_ATTACK, S_DOWN_ATTACK, S_PARRY:
 			want = &"attack"
-		S_HURT, S_DEAD:
+		S_HURT:
 			want = &"hurt"
+		S_DEAD:
+			want = &"dead"
+		S_REST:
+			want = &"interact"
 	if want != _anim_name:
 		_anim_name = want
 		_anims.speed_scale = 1.7 if sm.current_name == S_DASH else 1.0
@@ -284,7 +292,8 @@ func _process(delta: float) -> void:
 			var c := form.sprite_color if form != null else Color.WHITE
 			sprite.modulate = c
 			if _anims != null:
-				_anims.modulate = c
+				_anims.modulate = Color.WHITE if form != null and \
+					form.id == &"samurai" else c
 
 
 func _update_facing() -> void:
@@ -556,5 +565,6 @@ func apply_form_data(f: FormData) -> void:
 			&"player/%s/idle" % form.id, Vector2i(form.body_size))
 	sprite.modulate = form.sprite_color
 	if _anims != null:
-		_anims.modulate = form.sprite_color
+		# Gercek sprite kendi renklerini tasir; tint sadece placeholder'a.
+		_anims.modulate = Color.WHITE if form.id == &"samurai" else form.sprite_color
 	GameState.set_form(form.id)
