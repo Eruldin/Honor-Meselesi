@@ -67,12 +67,29 @@ func _build_room() -> void:
 	wall.position = Vector2(40, 60)
 	wall.size = Vector2(400, FLOOR_Y - 60)
 	add_child(wall)
+	# Gercek ahşap doku — Modern Interiors oda kurucu tileset
+	if AssetLoader.has_asset(&"terrain/cabin_wall"):
+		var wtex := TextureRect.new()
+		wtex.texture = AssetLoader.tiled_texture(
+			&"terrain/cabin_wall", Vector2i(400, FLOOR_Y - 60))
+		wtex.position = wall.position
+		wtex.size = wall.size
+		wtex.modulate = Color(0.5, 0.4, 0.42)  # gece kulube tonu
+		add_child(wtex)
 
 	var floor_rect := ColorRect.new()
 	floor_rect.color = Color(0.22, 0.16, 0.11)
 	floor_rect.position = Vector2(0, FLOOR_Y)
 	floor_rect.size = Vector2(480, 270 - FLOOR_Y)
 	add_child(floor_rect)
+	if AssetLoader.has_asset(&"terrain/cabin_floor"):
+		var ftex := TextureRect.new()
+		ftex.texture = AssetLoader.tiled_texture(
+			&"terrain/cabin_floor", Vector2i(480, 270 - FLOOR_Y))
+		ftex.position = floor_rect.position
+		ftex.size = floor_rect.size
+		ftex.modulate = Color(0.55, 0.4, 0.35)
+		add_child(ftex)
 
 	# Fizik zemini
 	var body := StaticBody2D.new()
@@ -132,13 +149,14 @@ func _build_actors() -> void:
 	samurai.sprite.flip_h = true
 	# Oturma goruntusu: sprite hafif yassiltilir
 	samurai.sprite.scale = Vector2(1.15, 0.7)
+	if samurai._anims != null:
+		samurai._anims.scale = Vector2(1.05, 0.82)
 	samurai.sm.change_to(Samurai.S_CUTSCENE, true)
 
 	# Sapka — samurayin basinda duran ayri node (calinacak)
 	hat = Sprite2D.new()
-	hat.texture = AssetLoader.placeholder_texture("prop/hat", Vector2i(14, 6))
-	hat.modulate = Color(0.75, 0.55, 0.25)
-	hat.position = Vector2(0, -11)
+	hat.texture = AssetLoader.texture(&"prop/hat", Vector2i(22, 10))
+	hat.position = Vector2(2, -26)   # kasa, bas ustunde
 	samurai.add_child(hat)
 
 	# Glitch Yaratik — CRT'den cikacak

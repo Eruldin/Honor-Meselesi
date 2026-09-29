@@ -56,19 +56,19 @@ func _build_terrain() -> void:
 	bg.color = Color(0.45, 0.62, 0.9)  # nostaljik acik gokyuzu
 	bg.size = Vector2(LEVEL_W, 270)
 	add_child(bg)
+	# SunnyLand Winter parallax'i — retro platforum derinligi
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/winter_sky", scroll = 0.0},
+		{id = &"bg/winter_far", scroll = 0.12},
+		{id = &"bg/winter_mid", scroll = 0.3},
+		{id = &"bg/winter_near", scroll = 0.55},
+	])
 
 	# Bozuk dekor: gozlu bulutlar (bir iki tanesi ara ara devrilir)
 	for i in 7:
 		var c := MadCloud.new()
 		c.global_position = Vector2(120.0 + i * 190.0, 40.0 + (i % 3) * 22.0)
 		add_child(c)
-	# Uzak tepe siluetleri
-	for i in 5:
-		var hill := ColorRect.new()
-		hill.color = Color(0.4, 0.7, 0.4, 0.5)
-		hill.position = Vector2(200.0 + i * 300.0, FLOOR_Y - 26)
-		hill.size = Vector2(120, 26)
-		add_child(hill)
 
 	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
 	_add_ground(Vector2(-6, 135), Vector2(12, 270))

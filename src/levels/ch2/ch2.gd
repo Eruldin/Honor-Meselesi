@@ -60,14 +60,12 @@ func _build_terrain() -> void:
 	sky.color = Color(0.03, 0.09, 0.14)
 	sky.size = Vector2(LEVEL_W, 270)
 	add_child(sky)
-	if AssetLoader.has_asset(&"bg/city"):
-		var bg := Sprite2D.new()
-		bg.texture = AssetLoader.texture(&"bg/city")
-		bg.centered = false
-		var ts := bg.texture.get_size()
-		bg.scale = Vector2(LEVEL_W, 230) / ts
-		bg.modulate = Color(0.8, 0.8, 1.0)
-		add_child(bg)
+	# Warped City parallax'i — neon gece
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/warped_sky", scroll = 0.0},
+		{id = &"bg/warped_far", scroll = 0.18, modulate = Color(0.75, 0.8, 1.0)},
+		{id = &"bg/warped_near", scroll = 0.4, modulate = Color(0.7, 0.75, 1.0)},
+	])
 
 	# Neon tabela siluetleri
 	for i in 9:
