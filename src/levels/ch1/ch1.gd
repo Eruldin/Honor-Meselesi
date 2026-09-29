@@ -342,10 +342,44 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(3120, cry_floor_y - 30), &"terrain/pf_block", 32)
 	_add_platform(Vector2(3170, cry_floor_y - 65), &"terrain/pf_block", 32)
 	_add_platform(Vector2(3130, cry_floor_y - 105), &"terrain/pf_ledge", 36)
-	# D: gecit — tirmanis + duzluk
+	# D: gecit — tirmanis + duzluk + alt crypt (Mezarlik Mahzeni)
 	_add_platform(Vector2(3400, 205), &"terrain/pf_corner", 70)
 	_add_platform(Vector2(3500, 175), &"terrain/pf_plateau", 100)
-	_add_ground(Vector2(3950, FLOOR_Y + 10), Vector2(920, 26), &"terrain/edge_dirt")
+	
+	# Zemin iki parca: 3490-3750 ve 3810-4410. Arada 60px mahzen inis boslugu.
+	_add_ground(Vector2(3620, FLOOR_Y + 10), Vector2(260, 26), &"terrain/edge_dirt")
+	_add_ground(Vector2(4110, FLOOR_Y + 10), Vector2(600, 26), &"terrain/edge_dirt")
+	
+	# Mahzen Inisi (Kırılabilir Zemin)
+	var bb_crypt := BreakableBlock.new()
+	bb_crypt.size = Vector2(60, 20)
+	bb_crypt.global_position = Vector2(3780, FLOOR_Y + 10)
+	add_child(bb_crypt)
+
+	# Alt Mahzen Zemini ve Duvarlari
+	var crypt_y := FLOOR_Y + 160.0
+	_add_ground(Vector2(3780, crypt_y + 13), Vector2(300, 26), &"terrain/edge_dirt")
+	for wx in [3630.0, 3930.0]:
+		var cw := StaticBody2D.new()
+		cw.collision_layer = 1
+		var cc := CollisionShape2D.new()
+		var cr := RectangleShape2D.new()
+		cr.size = Vector2(16, 160)
+		cc.shape = cr
+		cw.add_child(cc)
+		cw.global_position = Vector2(wx, crypt_y - 80)
+		add_child(cw)
+
+	# Mahzen Cikis Platformlari
+	_add_platform(Vector2(3730, crypt_y - 35), &"terrain/pf_block", 32)
+	_add_platform(Vector2(3810, crypt_y - 75), &"terrain/pf_block", 32)
+	_add_platform(Vector2(3750, crypt_y - 115), &"terrain/pf_ledge", 36)
+
+	# Gecit Ust Rota (Harabe Surlar)
+	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3760, 120), &"terrain/pf_ledge", 70)
+	_add_platform(Vector2(3860, 140), &"terrain/pf_slab", 85)
+
 	# E: arena zemini
 	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
 
@@ -496,6 +530,16 @@ func _build_terrain() -> void:
 			[4340.0, &"prop/grave_1"]]:
 		_add_deco_ground(spec[1], spec[0], FLOOR_Y, 0.85,
 			Color(0.7, 0.62, 0.6))
+	
+	# Mahzen Ici Dekoru
+	var decor_crypt_y := FLOOR_Y + 160.0
+	_add_deco_ground(&"prop/statue", 3870, decor_crypt_y, 0.7, Color(0.4, 0.4, 0.5))
+	_add_deco_ground(&"prop/grave_3", 3670, decor_crypt_y, 0.85, Color(0.6, 0.5, 0.5))
+	_add_rest(3900, &"ch1_gate_secret", decor_crypt_y - 4)
+
+	# Ust Rota Dekoru (yosun, heykel kiriklari vb)
+	_add_deco(&"prop/moss", Vector2(3650, 148), 0.7, Color(0.5, 0.45, 0.4))
+	_add_deco(&"prop/moss", Vector2(3860, 148), 0.7, Color(0.5, 0.45, 0.4))
 	# Torii kapi — sovalye olmeden kapali (kapi cercevesi zemine oturur)
 	var torii := _add_deco_ground(&"prop/deco_gate", GATE_X, FLOOR_Y, 1.0,
 		Color(1.15, 0.62, 0.5))
@@ -608,6 +652,17 @@ func _build_entities() -> void:
 		var gd := Guard.new()
 		gd.global_position = Vector2(x, FLOOR_Y - 12)
 		add_child(gd)
+		
+	# Ust Rota Muhafizi
+	var upper_guard := Guard.new()
+	upper_guard.global_position = Vector2(3760, 120 - 12)
+	add_child(upper_guard)
+	
+	# Alt Mahzen Hayaleti
+	var crypt_ghost := Ghost.new()
+	crypt_ghost.global_position = Vector2(3800, FLOOR_Y + 160.0 - 12)
+	add_child(crypt_ghost)
+
 	_add_rest(4050, &"ch1_gate")
 	knight = HeavyKnight.new()
 	knight.grants_form = &"sovalye"
