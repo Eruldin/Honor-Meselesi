@@ -22,7 +22,8 @@ func _ready() -> void:
 
 func _go(spot: String) -> void:
 	await get_tree().create_timer(0.6).timeout
-	var spots := {"village": 300.0, "gate": 4200.0, "arena": 4640.0}
+	var spots := {"village": 300.0, "gate": 4200.0, "arena": 4640.0,
+		"forest": 1900.0, "cave": 2700.0, "well": 480.0}
 	var x: float = spots.get(spot, 300.0)
 	samurai.global_position = Vector2(x, FLOOR_Y - 10)
 	await get_tree().create_timer(0.4).timeout

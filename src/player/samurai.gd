@@ -178,7 +178,7 @@ func _build_anims() -> void:
 		return
 	_anims.sprite_frames = bank
 	_anims.scale = Vector2.ONE            # 96px cel, ~34px govde — tam detay
-	_anims.position = Vector2(1, -29)     # cel ayak bbox'i (~81) tabana hizali
+	_anims.position = Vector2(1, -23)     # cel ayaklari (~y80) govde tabanina hizali
 	sprite.visible = false
 	add_child(_anims)
 	_anims.play(&"idle")
