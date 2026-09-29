@@ -14,3 +14,8 @@ static func shake(strength: float, duration: float = 0.2) -> void:
 
 static func spark(at_position: Vector2) -> void:
 	EventBus.spark_emitted.emit(at_position)
+
+
+## PostFX glitch kanalini gecici olarak acar (prolog sinematikleri, boss girisleri).
+static func glitch(strength: float, duration: float = 0.6) -> void:
+	EventBus.glitch_requested.emit(strength, duration)

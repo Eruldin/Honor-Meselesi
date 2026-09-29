@@ -22,6 +22,17 @@ func _ready() -> void:
 	add_child(rect)
 	apply_intensity(Settings.fx_intensity)
 	Settings.changed.connect(func() -> void: apply_intensity(Settings.fx_intensity))
+	EventBus.glitch_requested.connect(glitch_pulse)
+
+
+## Glitch kanalini gecici olarak yukseltip geri indirir (cutscene darbesi).
+func glitch_pulse(strength: float, duration: float = 0.6) -> void:
+	if material == null:
+		return
+	var tw := create_tween()
+	tw.set_ignore_time_scale(true)
+	material.set_shader_parameter("glitch", strength)
+	tw.tween_property(material, "shader_parameter/glitch", 0.12, duration)
 
 
 func apply_intensity(v: float) -> void:
