@@ -297,12 +297,43 @@ func _build_terrain() -> void:
 	# Gizli odadan asagi donus yolu (dusup hasar almamasi icin platform)
 	_add_platform(Vector2(2150, 190), &"terrain/pf_block", 44)
 	# C: magara — daha alcak tavan hissi
-	_add_ground(Vector2(2820, FLOOR_Y + 10), Vector2(1020, 26),
+	# Zemin iki parca: 2310-3130 ve 3190-3330 (60px bosluk kirilabilir zemin olacak)
+	_add_ground(Vector2(2720, FLOOR_Y + 10), Vector2(820, 26),
 		&"terrain/edge_dirt", &"terrain/cave_rock")
-	# magara cukuru: diken + pogo platformlari
+	_add_ground(Vector2(3260, FLOOR_Y + 10), Vector2(140, 26),
+		&"terrain/edge_dirt", &"terrain/cave_rock")
+	
+	# Magara cukuru: diken + pogo platformlari
 	_add_platform(Vector2(2540, 210), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2640, 195), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2740, 210), &"terrain/pf_block", 44)
+
+	# Kirilabilir zemin ve altındaki Kristal Odası
+	var bb_cave := BreakableBlock.new()
+	bb_cave.size = Vector2(60, 20)
+	bb_cave.global_position = Vector2(3160, FLOOR_Y + 10)
+	add_child(bb_cave)
+	
+	# Kristal odasi (sub-basement) zemin ve duvarlari
+	var cry_floor_y := FLOOR_Y + 140.0
+	_add_ground(Vector2(3160, cry_floor_y + 13), Vector2(240, 26),
+		&"terrain/edge_dirt", &"terrain/cave_rock")
+	
+	for wx in [3040.0, 3280.0]:
+		var cw := StaticBody2D.new()
+		cw.collision_layer = 1
+		var cc := CollisionShape2D.new()
+		var cr := RectangleShape2D.new()
+		cr.size = Vector2(16, 140)
+		cc.shape = cr
+		cw.add_child(cc)
+		cw.global_position = Vector2(wx, cry_floor_y - 70)
+		add_child(cw)
+
+	# Geri donus platformlari (asagidan yukari ziplamak icin)
+	_add_platform(Vector2(3120, cry_floor_y - 30), &"terrain/pf_block", 32)
+	_add_platform(Vector2(3170, cry_floor_y - 65), &"terrain/pf_block", 32)
+	_add_platform(Vector2(3130, cry_floor_y - 105), &"terrain/pf_ledge", 36)
 	# D: gecit — tirmanis + duzluk
 	_add_platform(Vector2(3400, 205), &"terrain/pf_corner", 70)
 	_add_platform(Vector2(3500, 175), &"terrain/pf_plateau", 100)
@@ -436,12 +467,13 @@ func _build_terrain() -> void:
 		Color(0.8, 0.6, 0.9))
 	_add_deco_ground(&"terrain/cave_shroom", 3080, FLOOR_Y, 0.7,
 		Color(0.7, 0.55, 0.85))
-	# gizli oda: kirilabilir blok ardinda dinlenme + parilti
-	var bw := BreakableBlock.new()
-	bw.size = Vector2(16, 46)
-	bw.global_position = Vector2(3170, FLOOR_Y - 12)
-	add_child(bw)
-	_add_rest(3230, &"ch1_cave_secret")
+	# Alt Kristal Odasi (Sub-basement) Dekoru
+	for x in [3060.0, 3110.0, 3210.0, 3250.0]:
+		_add_deco_ground(&"terrain/cave_crystal", x, FLOOR_Y + 140.0, 0.9,
+			Color(0.8, 0.5, 1.0))
+	_add_deco_ground(&"terrain/cave_shroom", 3140.0, FLOOR_Y + 140.0, 0.8,
+		Color(0.8, 0.4, 0.9))
+	_add_rest(3170.0, &"ch1_cave_secret", FLOOR_Y + 140.0 - 4)
 
 	# === GECIT DEKORU — harabe mezarlik yolu ===
 	# Oluler diyari hissi: mezar taslari, kuru agaclar, kapi nobetcisi heykelleri
@@ -556,6 +588,12 @@ func _build_entities() -> void:
 		var g := Ghost.new()
 		g.global_position = Vector2(x, FLOOR_Y - 40)
 		add_child(g)
+	
+	# Kristal odasi muhafizlari
+	for x in [3100.0, 3230.0]:
+		var m := SplitMushroom.new()
+		m.global_position = Vector2(x, FLOOR_Y + 140.0 - 12)
+		add_child(m)
 
 	# D — gecit: ikili muhafiz + agir sovalye (kapi kilidi)
 	for x in [3720.0, 3920.0]:
