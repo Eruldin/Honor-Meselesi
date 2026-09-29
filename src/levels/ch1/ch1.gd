@@ -244,16 +244,62 @@ func _add_rest(x: float, id: StringName, y: float = FLOOR_Y - 4) -> void:
 
 
 func _build_terrain() -> void:
-	# Gokyuzu — alacakaranlik dag silsilesi (tum bolume yayili)
+	# Gokyuzu zemin rengi (Tum bolume yayili, yeralti bosluklarini kapatir)
 	var sky := ColorRect.new()
-	sky.color = Color(0.35, 0.2, 0.28)
-	sky.size = Vector2(LEVEL_W, 270)
+	sky.color = Color(0.12, 0.1, 0.15)
+	sky.position = Vector2(0, -200)
+	sky.size = Vector2(LEVEL_W, 800)
+	sky.z_index = -10
 	add_child(sky)
+	
+	# 1) Koy (0 - 1200)
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/dusk_sky", scroll = 0.0},
-		{id = &"bg/dusk_far", scroll = 0.10},
-		{id = &"bg/dusk_mid", scroll = 0.22},
-		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8)},
+		{id = &"bg/dusk_sky", scroll = 0.0, x0 = 0, x1 = 1200},
+		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
+		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
+		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
+		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
+	])
+	
+	# 2) Orman (1200 - 2300)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/forest_sky", scroll = 0.0, x0 = 1200, x1 = 2300},
+		{id = &"bg/forest_far", scroll = 0.08, x0 = 1200, x1 = 2300},
+		{id = &"bg/forest_mid", scroll = 0.18, x0 = 1200, x1 = 2300},
+		{id = &"bg/forest_near", scroll = 0.35, x0 = 1200, x1 = 2300},
+		{id = &"bg/forest_lights", scroll = 0.35, modulate = Color(1.0, 1.0, 1.0, 0.5), x0 = 1200, x1 = 2300},
+	])
+	
+	# 3) Magara (2300 - 3350) - Parallax degil, sabit duvar
+	var cave_bg := ColorRect.new()
+	cave_bg.color = Color(0.04, 0.03, 0.06)
+	cave_bg.position = Vector2(2300, -100)
+	cave_bg.size = Vector2(1050, 700)
+	cave_bg.z_index = -5
+	add_child(cave_bg)
+	if AssetLoader.has_asset(&"terrain/wall_tile"):
+		var cw := Sprite2D.new()
+		cw.texture = AssetLoader.tiled_texture(&"terrain/wall_tile", Vector2i(1050, 700))
+		cw.centered = false
+		cw.position = Vector2(2300, -100)
+		cw.modulate = Color(0.2, 0.15, 0.22)
+		cw.z_index = -4
+		add_child(cw)
+		
+	# 4) Gecit (3350 - 4500)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/cemetery_sky", scroll = 0.0, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_far", scroll = 0.15, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500},
+	])
+	
+	# 5) Arena (4500 - LEVEL_W)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/dusk_sky", scroll = 0.0, x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_far", scroll = 0.10, x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 4500, x1 = LEVEL_W},
 	])
 
 	# === ZEMINLER ===
@@ -407,25 +453,11 @@ func _build_terrain() -> void:
 	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
 
 
-	# Magara tavani: koyu bant + tugla doku
-	var ceil := ColorRect.new()
-	ceil.color = Color(0.05, 0.04, 0.08)
-	ceil.position = Vector2(2300, 0)
-	ceil.size = Vector2(1050, 60)
-	add_child(ceil)
-	if AssetLoader.has_asset(&"terrain/cave_bricks"):
-		var btex := AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(1050, 48))
-		var bs := TextureRect.new()
-		bs.texture = btex
-		bs.position = Vector2(2300, 52)
-		bs.size = Vector2(1050, 48)
-		bs.modulate = Color(0.35, 0.3, 0.5)
-		add_child(bs)
 	# Magarayi karartan ortu
 	var dark := ColorRect.new()
 	dark.color = Color(0.04, 0.03, 0.1, 0.45)
-	dark.position = Vector2(2300, 0)
-	dark.size = Vector2(1050, 270)
+	dark.position = Vector2(2300, -200)
+	dark.size = Vector2(1050, 1000)
 	dark.z_index = 20
 	add_child(dark)
 

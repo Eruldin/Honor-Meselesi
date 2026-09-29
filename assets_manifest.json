@@ -384,12 +384,32 @@
    "pack": "Free Pixel Art Forest"
   },
   "bg/forest_far": {
-   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0001_8.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/forest_mid": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
    "pack": "Free Pixel Art Forest"
   },
   "bg/forest_near": {
-   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0009_2.png",
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
    "pack": "Free Pixel Art Forest"
+  },
+  "bg/forest_lights": {
+   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0004_Lights.png",
+   "pack": "Free Pixel Art Forest"
+  },
+  "bg/cemetery_sky": {
+   "path": "bg/cemetery/background.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "bg/cemetery_far": {
+   "path": "bg/cemetery/mountains.png",
+   "pack": "GothicVania Cemetery"
+  },
+  "bg/cemetery_near": {
+   "path": "bg/cemetery/graveyard.png",
+   "pack": "GothicVania Cemetery"
   },
   "bg/warped_sky": {
    "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
