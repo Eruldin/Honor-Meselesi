@@ -19,6 +19,9 @@ func down_held() -> bool:
 func jump_just_pressed() -> bool:
 	return false
 
+func jump_held() -> bool:
+	return false
+
 func jump_just_released() -> bool:
 	return false
 

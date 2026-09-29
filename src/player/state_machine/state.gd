@@ -41,4 +41,8 @@ func _shared(delta: float) -> StringName:
 	if sam.input.dash_just_pressed() and sam.dash_cooldown <= 0.0:
 		sam.start_dash()
 		return Samurai.S_DASH
+	if sam.input.form_next_just_pressed() and sam.cycle_form(1):
+		return Samurai.S_TRANSFORM
+	if sam.input.form_prev_just_pressed() and sam.cycle_form(-1):
+		return Samurai.S_TRANSFORM
 	return &""

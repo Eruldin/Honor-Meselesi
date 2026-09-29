@@ -62,7 +62,13 @@ class Fall:
 		if next != &"":
 			return next
 		sam.apply_run(delta, sam.input.move_axis())
-		sam.apply_gravity(delta)
+		# Tavuk suzulusu: zipla tusuna basili tutunca yavas dusme.
+		if sam.form.can_glide and sam.input.jump_held() and sam.velocity.y > 0.0:
+			sam.velocity.y = minf(
+				sam.velocity.y + sam.tuning.gravity * sam.form.glide_gravity_mult * delta,
+				sam.form.glide_fall_speed)
+		else:
+			sam.apply_gravity(delta)
 		# try_jump hem coyote'yi (havada) hem de buffer'i (inince) kapsar.
 		if sam.try_jump():
 			return Samurai.S_JUMP

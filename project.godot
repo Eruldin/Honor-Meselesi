@@ -16,6 +16,7 @@ boot_splash/bg_color=Color(0.05, 0.02, 0.08, 1)
 EventBus="*res://src/core/event_bus.gd"
 GameState="*res://src/core/game_state.gd"
 SaveSystem="*res://src/core/save_system.gd"
+Settings="*res://src/core/settings.gd"
 SceneRouter="*res://src/core/scene_router.gd"
 AssetLoader="*res://src/core/asset_loader.gd"
 

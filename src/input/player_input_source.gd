@@ -19,6 +19,10 @@ func jump_just_released() -> bool:
 	return Input.is_action_just_released(&"jump")
 
 
+func jump_held() -> bool:
+	return Input.is_action_pressed(&"jump")
+
+
 func attack_just_pressed() -> bool:
 	return Input.is_action_just_pressed(&"attack")
 

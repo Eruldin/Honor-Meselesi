@@ -35,6 +35,9 @@ var attack_hitbox: Hitbox
 var down_hitbox: Hitbox
 var sprite: Sprite2D
 var col: CollisionShape2D
+var form: FormData
+var pending_form: StringName = &""
+var jumps_used: int = 0
 
 var facing: int = 1
 var combo_index: int = 0
@@ -76,6 +79,10 @@ func _ready() -> void:
 	sm.register_state(S_REST, Meta.Rest.new(self))
 	sm.register_state(S_TRANSFORM, Meta.Transform.new(self))
 	sm.register_state(S_CUTSCENE, Meta.Cutscene.new(self))
+	var initial_form := FormLibrary.get_form(GameState.current_form)
+	if initial_form == null:
+		initial_form = FormLibrary.get_form(&"samurai")
+	apply_form_data(initial_form)
 	sm.change_to(S_IDLE)
 	add_to_group(&"player")
 
@@ -157,6 +164,8 @@ func _physics_process(delta: float) -> void:
 		jump_buffer_timer = maxf(jump_buffer_timer - delta, 0.0)
 
 	coyote_timer = tuning.coyote_time if is_on_floor() else maxf(coyote_timer - delta, 0.0)
+	if is_on_floor():
+		jumps_used = 0
 	invuln_timer = maxf(invuln_timer - delta, 0.0)
 	dash_cooldown = maxf(dash_cooldown - delta, 0.0)
 
@@ -169,7 +178,7 @@ func _process(delta: float) -> void:
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
-			sprite.modulate = Color.WHITE
+			sprite.modulate = form.sprite_color if form != null else Color.WHITE
 
 
 func _update_facing() -> void:
@@ -183,22 +192,32 @@ func _update_facing() -> void:
 # --- Durum yardimcilari (state'ler cagirir) ---
 
 func apply_gravity(delta: float) -> void:
-	velocity.y = minf(velocity.y + tuning.gravity * delta, tuning.max_fall_speed)
+	velocity.y = minf(velocity.y + tuning.gravity * form.gravity_mult * delta,
+		tuning.max_fall_speed)
 
 
 func apply_run(delta: float, dir: float) -> void:
 	if absf(dir) > 0.1:
 		var accel := tuning.ground_accel if is_on_floor() else tuning.air_accel
-		velocity.x = move_toward(velocity.x, dir * tuning.run_speed, accel * delta)
+		velocity.x = move_toward(velocity.x, dir * tuning.run_speed * form.run_speed_mult,
+			accel * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, tuning.ground_decel * delta)
 
 
 func try_jump() -> bool:
-	if jump_buffer_timer > 0.0 and coyote_timer > 0.0:
-		velocity.y = -tuning.jump_velocity
+	if jump_buffer_timer <= 0.0:
+		return false
+	if coyote_timer > 0.0:
+		velocity.y = -tuning.jump_velocity * form.jump_velocity_mult
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
+		return true
+	# Havadayken ekstra ziplama (piksel sicramasi gibi form yetenegi).
+	if jumps_used < form.max_air_jumps:
+		jumps_used += 1
+		velocity.y = -tuning.jump_velocity * form.jump_velocity_mult
+		jump_buffer_timer = 0.0
 		return true
 	return false
 
@@ -275,16 +294,18 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	if invuln_timer > 0.0:
 		return
-	if sm.current_name == S_DASH and tuning.dash_iframes:
+	if sm.current_name == S_DASH and form.dash_iframes:
 		return
 	health.take(info.damage)
 	invuln_timer = tuning.hurt_invuln_time
+	var kb_scale := 1.0 - form.knockback_resist
 	var dir := 1.0
 	if info.source != null:
 		dir = signf(global_position.x - info.source.global_position.x)
 		if dir == 0.0:
 			dir = -facing
-	velocity = Vector2(dir * tuning.hurt_knockback, -tuning.hurt_knockback * 0.5)
+	velocity = Vector2(dir * tuning.hurt_knockback * kb_scale,
+		-tuning.hurt_knockback * 0.5 * kb_scale)
 	EventBus.damage_dealt.emit(self, info)
 	FX.hitstop(tuning.hitstop_normal)
 	FX.shake(tuning.shake_heavy, tuning.shake_duration)
@@ -308,3 +329,43 @@ func _on_parry_success(info: DamageInfo) -> void:
 
 func is_alive() -> bool:
 	return health.is_alive()
+
+
+# --- Form sistemi (M2) ---
+
+## Sonraki/onceki acik forma gecis istegi; TRANSFORM durumu uygular.
+func cycle_form(step: int) -> bool:
+	var ids := GameState.unlocked_forms
+	if ids.size() < 2:
+		return false
+	var idx := ids.find(form.id)
+	if idx < 0:
+		idx = 0
+	var next_id: StringName = ids[(idx + step) % ids.size()]
+	if next_id == form.id:
+		return false
+	pending_form = next_id
+	return true
+
+
+## TRANSFORM durumu cikisinda cagrilir: bekleyen formu uygular.
+func apply_pending_form() -> void:
+	if pending_form == &"":
+		return
+	var f := FormLibrary.get_form(pending_form)
+	pending_form = &""
+	if f != null:
+		apply_form_data(f)
+
+
+func apply_form_data(f: FormData) -> void:
+	form = f
+	var cap := col.shape as CapsuleShape2D
+	cap.radius = form.body_size.x / 2.0
+	cap.height = form.body_size.y
+	var hb := hurtbox.get_child(0).shape as RectangleShape2D
+	hb.size = form.body_size + Vector2(2, 2)
+	sprite.texture = AssetLoader.texture(
+		&"player/%s/idle" % form.id, Vector2i(form.body_size))
+	sprite.modulate = form.sprite_color
+	GameState.set_form(form.id)
