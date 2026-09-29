@@ -875,6 +875,52 @@
       ],
       "fps": 8,
       "pack": "0x72 Dungeon"
+    },
+    "enemy/final_samurai": {
+      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+      "region": [
+        0,
+        0,
+        96,
+        96
+      ],
+      "pack": "FREE_Samurai"
+    },
+    "enemy/final_samurai/idle": {
+      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/IDLE.png",
+      "frame": [
+        96,
+        96
+      ],
+      "fps": 8,
+      "pack": "FREE_Samurai"
+    },
+    "enemy/final_samurai/walk": {
+      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/RUN.png",
+      "frame": [
+        96,
+        96
+      ],
+      "fps": 10,
+      "pack": "FREE_Samurai"
+    },
+    "enemy/final_samurai/attack": {
+      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/ATTACK 1.png",
+      "frame": [
+        96,
+        96
+      ],
+      "fps": 14,
+      "pack": "FREE_Samurai"
+    },
+    "enemy/final_samurai/hurt": {
+      "path": "sprites/samurai/FREE_Samurai 2D Pixel Art v1.2/Sprites/HURT.png",
+      "frame": [
+        96,
+        96
+      ],
+      "fps": 8,
+      "pack": "FREE_Samurai"
     }
   }
 }

@@ -1,0 +1,46 @@
+class_name GlitchBolt
+extends Area2D
+## Glitch Yaratik'in menzilli saldirisi — cyan glitch tanesi.
+## Dusman katmanina (16) vurur, 1 hasar, duvara/fayiz mesafede silinir.
+
+var vel := Vector2(150, 0)
+var dmg := 1
+var src: Node
+var _life := 1.2
+
+
+func _ready() -> void:
+	collision_layer = 8
+	collision_mask = 16
+	var bc := CollisionShape2D.new()
+	var br := RectangleShape2D.new()
+	br.size = Vector2(6, 4)
+	bc.shape = br
+	add_child(bc)
+	var bs := Sprite2D.new()
+	bs.texture = AssetLoader.placeholder_texture("fx/bolt", Vector2i(6, 4))
+	bs.modulate = Color(0.4, 1.0, 0.9)
+	add_child(bs)
+	area_entered.connect(_on_hit)
+
+
+func _physics_process(delta: float) -> void:
+	position += vel * delta
+	# titresim — glitch dokusu
+	modulate.a = 0.7 + 0.3 * absf(sin(Time.get_ticks_msec() * 0.02))
+	_life -= delta
+	if _life <= 0.0:
+		queue_free()
+
+
+func _on_hit(area: Area2D) -> void:
+	var hb := area as Hurtbox
+	if hb == null:
+		return
+	var owner := hb.get_parent()
+	if owner != null and owner.has_method("take_damage"):
+		var s: Node = src if is_instance_valid(src) else null
+		owner.take_damage(DamageInfo.make(
+			dmg, s, Vector2(signf(vel.x) * 60.0, -20.0), false, false))
+	FX.hitstop(0.04)
+	queue_free()
