@@ -1213,6 +1213,31 @@
   "terrain/wall_tile": {
    "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground-wall.png",
    "pack": "GothicVania Town"
+  },
+  "music/ch1_village": {
+   "path": "music/xdev_14_-_Tales_of_Firelight_Town.ogg",
+   "pack": "xDeviruchi 16-bit"
+  },
+  "music/rest_point": {
+   "path": "music/xdev_04_-_Silent_Forest.ogg",
+   "pack": "xDeviruchi 16-bit",
+   "note": "dinlenme noktasi ambians — Silent Forest yeniden kullanildi"
+  },
+  "prop/market_stall": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/sign.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/sack": {
+   "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/barrel.png",
+   "pack": "GothicVania Town"
+  },
+  "prop/fence": {
+   "path": "generated/pf_ledge.png",
+   "pack": "DarkForest(gen)"
+  },
+  "prop/bush_small": {
+   "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/bush-large.png",
+   "pack": "GothicVania Cemetery"
   }
  }
 }

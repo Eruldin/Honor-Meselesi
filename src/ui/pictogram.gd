@@ -8,7 +8,7 @@ extends Node2D
 const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
-	&"jump", &"move", &"mouse", &"shield", &"down",
+	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right",
 ]
 
 var icon: StringName = &"alarm"
@@ -104,6 +104,10 @@ func _draw_icon() -> void:
 				Vector2(0, 6), Vector2(-5, 1)]), c)
 			draw_rect(Rect2(Vector2(-2.5, -3), Vector2(5, 4)),
 				Color(0.95, 0.95, 0.95))
+		&"arrow_right":  # saga ok — yon gosterme
+			draw_line(Vector2(-6, 0), Vector2(5, 0), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(1, -4), Vector2(6, 0), Vector2(1, 4)]), c, 1.8)
 		&"down":  # asagi kilic + ok (pogo)
 			draw_line(Vector2(-3, -5), Vector2(-3, 2), c, 1.8)
 			draw_polyline(PackedVector2Array([

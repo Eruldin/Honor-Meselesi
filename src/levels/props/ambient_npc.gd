@@ -7,11 +7,14 @@ extends Node2D
 @export var npc_key: StringName = &"peasant1"
 @export var flee_speed: float = 26.0
 @export var scare_range: float = 34.0
+## Piktogram ikonu: ilk urktugunde bir kez gosterilir. Bos = sessiz.
+@export var picto_icon: StringName = &""
 
 var _sprite: Sprite2D
 var _scared := false
 var _player: Node2D
 var _home_x: float
+var _picto_shown := false
 
 
 func _ready() -> void:
@@ -28,7 +31,12 @@ func _process(delta: float) -> void:
 	var dx: float = global_position.x - _player.global_position.x
 	_sprite.flip_h = dx < 0.0   # oyuncuya donuk dur
 	if absf(dx) < scare_range:
-		_scared = true
+		if not _scared:
+			_scared = true
+			# Ilk urkme: piktogram goster (tek seferlik)
+			if not _picto_shown and picto_icon != &"":
+				_picto_shown = true
+				Pictogram.show_on(self, picto_icon, 1.8, Vector2(0, -18))
 	else:
 		_scared = false
 	# urkmusse oyuncudan uzaklas, ama evinden 40px'den fazla kacmaz

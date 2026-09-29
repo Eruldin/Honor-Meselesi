@@ -8,6 +8,7 @@ const CH2_PATH := "res://src/levels/ch2/Ch2.tscn"
 const FLOOR_Y := 250.0
 const LEVEL_W := 5000.0
 const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
+	{x = 700.0,  id = &"music/ch1_village"},  # pazar alani — sicak koy havasi
 	{x = 1050.0, id = &"music/ch1_forest"},
 	{x = 2300.0, id = &"music/ch1_cave"},
 	{x = 3350.0, id = &"music/ch1_gate"},
@@ -227,8 +228,9 @@ func _build_terrain() -> void:
 	])
 
 	# === ZEMINLER ===
-	# A: koy duzlugu
-	_add_ground(Vector2(520, FLOOR_Y + 10), Vector2(1040, 26))
+	# A: koy duzlugu — kuyu girisi icin x=458-502 arasi bosluklu iki parca
+	_add_ground(Vector2(230, FLOOR_Y + 10), Vector2(460, 26))   # 0-460
+	_add_ground(Vector2(772, FLOOR_Y + 10), Vector2(540, 26))   # 504-1044
 	# B: orman — kaya bariyerini platformlarla as (ust rota gizli)
 	_add_ground(Vector2(1560, FLOOR_Y + 10), Vector2(1000, 26))
 	_add_ground(Vector2(2200, FLOOR_Y + 10), Vector2(280, 26))
@@ -312,25 +314,79 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"prop/house_b", 570, FLOOR_Y, 0.45, house_mod)
 	_add_deco_ground(&"prop/house_a", 770, FLOOR_Y, 0.5, house_mod, true)
 	_add_deco_ground(&"prop/house_c", 930, FLOOR_Y, 0.5, house_mod)
+	# Pazar alani evleri (sag kanat — x=700-1040)
+	_add_deco_ground(&"prop/house_b", 1000, FLOOR_Y, 0.48, house_mod, true)
 	# Koy meydani: kuyu, araba, kasalar, varil — hepsi zemine oturur
 	_add_deco_ground(&"prop/well", 480, FLOOR_Y, 0.8, house_mod)
 	_add_deco_ground(&"prop/wagon", 230, FLOOR_Y, 0.75, house_mod)
 	_add_deco_ground(&"prop/crate_stack", 700, FLOOR_Y, 0.7, house_mod)
 	_add_deco_ground(&"prop/crate", 745, FLOOR_Y, 0.8, house_mod)
 	_add_deco_ground(&"prop/barrel", 960, FLOOR_Y, 0.85, house_mod)
+	# === PAZAR ALANI (x=700-1040) ===
+	# Tezgahlar — sign sprite pazar tezgahi olarak kullaniliyor
+	_add_deco_ground(&"prop/market_stall", 740, FLOOR_Y, 0.55, Color(0.9, 0.8, 0.6))
+	_add_deco_ground(&"prop/market_stall", 840, FLOOR_Y, 0.55, Color(0.85, 0.75, 0.55), true)
+	# Cuvallar ve tahil kasalari tezgah yaninda
+	_add_deco_ground(&"prop/sack", 780, FLOOR_Y, 0.5, Color(0.7, 0.62, 0.5))
+	_add_deco_ground(&"prop/crate", 860, FLOOR_Y, 0.6, Color(0.65, 0.55, 0.48))
+	# Ahir cevresine kisa tahta cit parcalari
+	for fx in [895.0, 920.0, 945.0]:
+		_add_deco_ground(&"prop/fence", fx, FLOOR_Y, 0.38, Color(0.55, 0.45, 0.38))
 	# Sokak lambalari (tas fener gorunumu)
 	for x in [205.0, 415.0, 650.0, 855.0]:
 		_add_deco_ground(&"prop/deco_lantern", x, FLOOR_Y, 0.85,
 			Color(1.0, 0.9, 0.7))
+	# Pazar cevresi: kucuk cali/agac parcalari
+	_add_deco_ground(&"prop/bush_small", 1020, FLOOR_Y, 0.7, Color(0.5, 0.65, 0.45))
+	_add_deco_ground(&"prop/bush_small", 1035, FLOOR_Y, 0.55, Color(0.45, 0.6, 0.4))
 	# Kumes hayvanlari + pasif koylu
 	for i in 4:
 		var npc := AmbientNpc.new()
 		npc.npc_key = [&"peasant1", &"peasant3", &"monk", &"farmer"][i]
+		# Piktogram atamalari: hikayeyi sessiz anlatan ikonlar
+		npc.picto_icon = [&"alarm", &"alarm", &"dots", &"arrow_right"][i]
 		npc.position = Vector2(260.0 + i * 190.0, FLOOR_Y - 8)
 		add_child(npc)
 	_add_deco_ground(&"npc/chicken", 310, FLOOR_Y, 0.9, Color.WHITE, false, 2)
 	_add_deco_ground(&"npc/goose", 680, FLOOR_Y, 0.9, Color.WHITE, true, 2)
 	_add_deco_ground(&"npc/duck", 880, FLOOR_Y, 0.8, Color.WHITE, false, 2)
+	# Pazar pazarcisi (pasif NPC — pazar tarafinda)
+	var merchant := AmbientNpc.new()
+	merchant.npc_key = &"mage"
+	merchant.picto_icon = &"dots"
+	merchant.position = Vector2(800.0, FLOOR_Y - 8)
+	add_child(merchant)
+	# === GİZLİ KUYU ODASI ===
+	# Kuyu altinda platform merdiveni — asagi iner, gizli oda, geri donus yolu var
+	# Cukur giris: x=460-500 boslugu (zemin A iki parca). Oda tabani FLOOR_Y+86.
+	var pit_x := 480.0
+	var pit_floor := FLOOR_Y + 86.0  # gizli oda zemini
+	# Oda yan duvarlari — oyuncu zeminin altina kacamaz
+	for wx in [pit_x - 64.0, pit_x + 64.0]:
+		var pw := StaticBody2D.new()
+		pw.collision_layer = 1
+		var pc := CollisionShape2D.new()
+		var pr := RectangleShape2D.new()
+		pr.size = Vector2(8, 110)
+		pc.shape = pr
+		pw.add_child(pc)
+		pw.global_position = Vector2(wx, pit_floor - 40)
+		add_child(pw)
+	# Cukur tabanı — gizli oda zemini
+	_add_ground(Vector2(pit_x, pit_floor + 13), Vector2(128, 26),
+		&"terrain/edge_dirt", &"terrain/cave_rock")
+	# Inis/cikis platformlari (merdiven — her basamak <44px; ziplama ~56px)
+	_add_platform(Vector2(pit_x - 20, FLOOR_Y + 40), &"terrain/pf_ledge", 36)
+	_add_platform(Vector2(pit_x + 26, FLOOR_Y + 62), &"terrain/pf_block", 32)
+	_add_platform(Vector2(pit_x - 26, pit_floor - 30), &"terrain/pf_block", 28)
+	_add_platform(Vector2(pit_x - 28, pit_floor - 72), &"terrain/pf_ledge", 30)
+	# Gizli oda kristal dekor (magara hissi)
+	_add_deco_ground(&"terrain/cave_crystal", pit_x - 14, pit_floor,
+		0.8, Color(0.8, 0.7, 1.0))
+	_add_deco_ground(&"terrain/cave_crystal", pit_x + 18, pit_floor,
+		0.7, Color(0.7, 0.8, 1.0))
+	# Gizli rest point — kuyu gizli odasinin dibinde
+	_add_rest(pit_x + 4, &"ch1_well_secret")
 
 	# === OGRETICI TABELALAR ===
 	_add_sign(Vector2(150, FLOOR_Y), &"move")      # A/D oku
@@ -338,6 +394,7 @@ func _build_terrain() -> void:
 	_add_sign(Vector2(1180, FLOOR_Y), &"jump")     # cukur oncesi
 	_add_sign(Vector2(2490, FLOOR_Y), &"down")     # pogo (asagi+saldiri)
 	_add_sign(Vector2(3660, FLOOR_Y), &"shield")   # parry — muhafizdan once
+
 
 	# === ORMAN DEKORU ===
 	# Yosunlar yuksek platformlarin altindan sarkar (havada durmaz)
@@ -435,6 +492,11 @@ func _build_entities() -> void:
 		var v := Villager.new()
 		v.global_position = Vector2(x, FLOOR_Y - 12)
 		add_child(v)
+	# Koy cikisi mini-encounter: pazar sonu muhafiz (ilk parry dersi)
+	# Guard oyuncudan korkan koylulerden farkli davranir — onden gelmeli
+	var market_guard := Guard.new()
+	market_guard.global_position = Vector2(980.0, FLOOR_Y - 12)
+	add_child(market_guard)
 
 	# B — orman: mantarlar + kaplumbaga + ikinci koylu dalgasi
 	for x in [1120.0, 1290.0]:
