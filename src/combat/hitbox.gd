@@ -22,8 +22,14 @@ func activate(info: DamageInfo) -> void:
 	damage_info = info
 	_hit_targets.clear()
 	monitoring = true
-	# Ayakta duran hurtbox'lari da yakala (overlap zaten varsa).
-	call_deferred("_check_overlaps")
+	# Overlap listesi ancak bir sonraki fizik adiminda dolar — ayni
+	# frame'de sormak bos dondurur, o yuzden bir fizik frame beklenir.
+	_late_overlap_check.call_deferred()
+
+
+func _late_overlap_check() -> void:
+	await get_tree().physics_frame
+	_check_overlaps()
 
 
 func deactivate() -> void:

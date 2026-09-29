@@ -476,6 +476,9 @@ func _spawn_slash(heavy := false) -> void:
 	var frames := AssetLoader.frames(id)
 	if frames == null or frames.get_frame_count(&"default") == 0:
 		return
+	# Loader tum sheet'leri loop=true veriyor; slash tek sefer oynamali
+	# yoksa animation_finished hic gelmez ve sprite dunyada kalir.
+	frames.set_animation_loop(&"default", false)
 	var s := AnimatedSprite2D.new()
 	s.sprite_frames = frames
 	s.scale = Vector2(0.42, 0.42)   # 128px cel -> ~54px kesik
@@ -484,6 +487,7 @@ func _spawn_slash(heavy := false) -> void:
 	s.z_index = 40
 	get_parent().add_child(s)
 	s.animation_finished.connect(s.queue_free)
+	s.animation_looped.connect(s.queue_free)   # guvenlik
 	s.play(&"default")
 
 
