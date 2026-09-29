@@ -149,11 +149,12 @@ func _add_platform(pos: Vector2, id: StringName, w: float) -> void:
 	
 	var support_h := support_y - pos.y
 	if support_h > 0 and AssetLoader.has_asset(&"terrain/wall_tile"):
-		var wtex := AssetLoader.tiled_texture(&"terrain/wall_tile", Vector2i(int(w), int(support_h)))
+		var col_w := mini(16, int(w))
+		var wtex := AssetLoader.tiled_texture(&"terrain/wall_tile", Vector2i(col_w, int(support_h)))
 		var ws := Sprite2D.new()
 		ws.texture = wtex
 		ws.centered = false
-		ws.position = Vector2(-w / 2.0, 0)
+		ws.position = Vector2(-col_w / 2.0, 0)
 		ws.modulate = Color(0.3, 0.28, 0.35) # Koyu destek
 		ws.z_index = -2 # Zemin arkasinda kalsin
 		body.add_child(ws)
@@ -312,19 +313,19 @@ func _build_terrain() -> void:
 	
 	# Cukur gorunumu: arkaya siyah perde ve kenarlara cikinti
 	var well_bg := ColorRect.new()
-	well_bg.color = Color(0.04, 0.03, 0.05)
-	well_bg.position = Vector2(456, FLOOR_Y)
-	well_bg.size = Vector2(50, 180)
+	well_bg.color = Color(0.02, 0.01, 0.03)
+	well_bg.position = Vector2(450, FLOOR_Y - 26)
+	well_bg.size = Vector2(60, 200)
 	well_bg.z_index = -6 # Gokyuzunun onunde, kuyu propunun arkasinda
 	add_child(well_bg)
 	if AssetLoader.has_asset(&"terrain/edge_dirt"):
 		var lip_l := Sprite2D.new()
-		lip_l.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(12, 26))
-		lip_l.position = Vector2(454, FLOOR_Y + 10)
+		lip_l.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(16, 26))
+		lip_l.position = Vector2(452, FLOOR_Y - 3)
 		add_child(lip_l)
 		var lip_r := Sprite2D.new()
-		lip_r.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(12, 26))
-		lip_r.position = Vector2(508, FLOOR_Y + 10)
+		lip_r.texture = AssetLoader.tiled_texture(&"terrain/edge_dirt", Vector2i(16, 26))
+		lip_r.position = Vector2(510, FLOOR_Y - 3)
 		lip_r.flip_h = true
 		add_child(lip_r)
 	# B: orman — kaya bariyerini platformlarla as (ust rota gizli)
@@ -467,20 +468,19 @@ func _build_terrain() -> void:
 
 	# Gecit Ust Rota (Harabe Surlar)
 	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3730, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3810, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3890, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3970, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3765, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3880, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3995, 140), &"terrain/pf_slab", 85)
 	
 	var bb_sur := BreakableBlock.new()
 	bb_sur.size = Vector2(16, 50)
-	bb_sur.global_position = Vector2(3930, 140 - 13 - 25)
+	bb_sur.global_position = Vector2(3935, 140 - 13 - 25)
 	add_child(bb_sur)
 	
-	_add_deco_ground(&"prop/statue", 3970, 140 - 13, 0.7, Color(0.4, 0.45, 0.5))
+	_add_deco_ground(&"prop/statue", 3995, 140 - 13, 0.7, Color(0.4, 0.45, 0.5))
 	
-	_add_platform(Vector2(4040, 160), &"terrain/pf_ledge", 40)
-	_add_platform(Vector2(4080, 190), &"terrain/pf_ledge", 40)
+	_add_platform(Vector2(4070, 160), &"terrain/pf_ledge", 40)
+	_add_platform(Vector2(4120, 190), &"terrain/pf_ledge", 40)
 
 	# E: arena zemini
 	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
@@ -504,7 +504,7 @@ func _build_terrain() -> void:
 	# Pazar alani evleri (sag kanat — x=700-1040)
 	_add_deco_ground(&"prop/house_b", 1000, FLOOR_Y, 0.48, house_mod, true)
 	# Koy meydani: kuyu, araba, kasalar, varil — hepsi zemine oturur
-	_add_deco_ground(&"prop/well", 480, FLOOR_Y, 0.95, house_mod)
+	_add_deco_ground(&"prop/well", 480, FLOOR_Y + 18, 1.0, house_mod)
 	_add_deco_ground(&"prop/wagon", 230, FLOOR_Y, 0.75, house_mod)
 	_add_deco_ground(&"prop/crate_stack", 700, FLOOR_Y, 0.7, house_mod)
 	_add_deco_ground(&"prop/crate", 745, FLOOR_Y, 0.8, house_mod)
