@@ -2,9 +2,11 @@ class_name Projectile
 extends Node2D
 ## Parry'lenebilir mermi. Parry basarili olursa yon terslenir ve
 ## artik dusman hurtbox'larina vurur (kaynak degisir).
+## vertical=true: dikey iner (drone); parry'de yukari geri doner.
 
 @export var speed: float = 110.0
 @export var max_range: float = 400.0
+@export var vertical := false
 
 var direction: int = -1
 var reflected: bool = false
@@ -27,12 +29,16 @@ func _ready() -> void:
 	col.shape = circle
 	hitbox.add_child(col)
 	add_child(hitbox)
-	hitbox.activate(DamageInfo.make(1, self, Vector2(direction * 60, 0), true, false))
+	hitbox.activate(DamageInfo.make(1, self,
+		Vector2(0, 60) if vertical else Vector2(direction * 60, 0), true, false))
 
 
 func _physics_process(delta: float) -> void:
 	var step := speed * delta
-	position.x += direction * step
+	if vertical:
+		position.y += (-step if reflected else step)
+	else:
+		position.x += (direction if not reflected else -direction) * step
 	_travelled += step
 	if _travelled >= max_range:
 		queue_free()
@@ -40,9 +46,10 @@ func _physics_process(delta: float) -> void:
 
 ## Samurai._on_parry_success cagirir: mermi geri doner.
 func on_parried() -> void:
-	direction = -direction
 	reflected = true
 	_travelled = 0.0
+	if not vertical:
+		direction = -direction
 	hitbox.collision_mask = 16  # artik dusman hurtbox'lari
 	modulate_self()
 

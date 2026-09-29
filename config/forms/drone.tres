@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FormData" load_steps=2 format=3 uid="uid://samsara_form_drone"]
+
+[ext_resource type="Script" path="res://src/player/forms/form_data.gd" id="1_fd"]
+
+[resource]
+script = ExtResource("1_fd")
+id = &"drone"
+display_name = "Drone"
+sprite_color = Color(0.3, 0.9, 1.0, 1)
+body_size = Vector2(12, 10)
+can_hack = true
+hover_gravity_mult = 0.55
+run_speed_mult = 1.15
+jump_velocity_mult = 0.85
