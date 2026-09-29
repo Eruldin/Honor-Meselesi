@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"comment": "Mantiksal asset id -> assets_external/ altindaki gercek dosya eslemesi. Kullanici gercek paketleri actikca bu dosyayi doldurur; AssetLoader dosya yoksa placeholder'a duser.",
+	"assets": {
+		"player/samurai/idle": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/run": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/jump": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/attack1": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/attack2": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/attack3": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/parry": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/dash": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/hurt": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"player/samurai/dead": { "path": "", "pack": "FREE_Samurai 2D Pixel Art v1.2", "license": "TBD" },
+		"fx/slash": { "path": "", "pack": "Pixel Art Animations - Slashes", "license": "TBD" },
+		"fx/spark_parry": { "path": "", "pack": "TBD", "license": "TBD" },
+		"fx/portal": { "path": "", "pack": "Pixel Art Animated Portal / PortalVFX", "license": "TBD" },
+		"ui/pictograms": { "path": "", "pack": "Pixel UI pack 3", "license": "TBD" },
+		"tileset/hut_interior": { "path": "", "pack": "Modern_Interiors_Free_v2.2", "license": "TBD" },
+		"music/ambient_prolog": { "path": "", "pack": "JDSherbert - Ambiences Music Pack [FREE]", "license": "LICENSE.pdf - kredi zorunlu" }
+	}
+}

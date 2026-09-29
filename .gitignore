@@ -1,6 +1,25 @@
-# Asset arsivleri yerel tutuluyor; repoda sadece dokumanlar ve manifest var.
-# Buyuk paketler GitHub'in 100MB limitini astigi icin ASSETS.md'de listeleniyor.
+# --- Godot 4 ---
+.godot/
+.import/
+export.cfg
+.mono/
+data_*/
+*.translation
+
+# --- Build cikti ---
+build/
+
+# --- Gercek asset'ler (lisans nedeniyle repoya girmez, bkz. docs/DEVIN_PLAN.md B3) ---
+assets_external/
+
+# --- Kaynak asset arsivleri: yerel, ~8GB, GitHub 100MB limiti ---
 *.zip
 *.rar
 *.7z
 *.yymp
+
+# --- Editor / OS ---
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
