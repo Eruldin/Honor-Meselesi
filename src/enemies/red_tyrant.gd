@@ -34,7 +34,8 @@ func _ready() -> void:
 		sprite.modulate = Color(0.85, 0.2, 0.2)
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 	_rain = PixelRain.new()
-	get_parent().call_deferred("add_child", _rain)
+	if get_parent() != null:
+		get_parent().add_child(_rain)
 
 
 func _exit_tree() -> void:

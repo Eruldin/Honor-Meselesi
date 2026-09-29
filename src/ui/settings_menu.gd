@@ -34,6 +34,8 @@ func _build() -> void:
 	vbox.add_child(_slider_row("Efekt", Settings.fx_intensity, Settings.set_fx_intensity))
 	vbox.add_child(_slider_row("Sarsinti", Settings.shake_scale, Settings.set_shake_scale))
 	vbox.add_child(_slider_row("Flas", Settings.flash_scale, Settings.set_flash_scale))
+	vbox.add_child(_slider_row("Muzik", Settings.music_volume, Settings.set_music_volume))
+	vbox.add_child(_slider_row("Ses", Settings.sfx_volume, Settings.set_sfx_volume))
 
 	var hint := Label.new()
 	hint.text = "Esc: kapat"

@@ -45,12 +45,13 @@ func _process(_delta: float) -> void:
 
 func _build_terrain() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color(0.01, 0.01, 0.04)  # bosluk siyahi
+	bg.color = Color(0.05, 0.04, 0.11)  # bosluk siyahi-moru (okunabilir)
 	bg.size = Vector2(480, 270)
 	add_child(bg)
-	# Cok hafif uzak katman — kirik bellek artiklari
+	# Uzak katman — kirik bellek artiklari, soluk mor parilti
 	ParallaxBg.add(self, 480, [
-		{id = &"bg/ash_far", scroll = 0.05, modulate = Color(0.25, 0.2, 0.45, 0.5)},
+		{id = &"bg/ash_far", scroll = 0.05, modulate = Color(0.6, 0.5, 0.9, 0.7)},
+		{id = &"bg/ash_sky", scroll = 0.12, modulate = Color(0.5, 0.5, 0.85, 0.5)},
 	])
 	# Tek genis platform — boslukta asili
 	var body := StaticBody2D.new()
@@ -64,7 +65,7 @@ func _build_terrain() -> void:
 	add_child(body)
 	var sp := Sprite2D.new()
 	sp.texture = AssetLoader.tiled_texture(&"terrain/ash_ground", Vector2i(360, 20))
-	sp.modulate = Color(0.35, 0.3, 0.6)
+	sp.modulate = Color(0.6, 0.55, 0.9)
 	sp.global_position = body.global_position
 	add_child(sp)
 	# Karaltma perdesi (cutscene fade icin)

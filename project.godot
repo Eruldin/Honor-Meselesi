@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Samsara Glitch"
 config/description="2D aksiyon-platform / meta-anlati. CRT-glitch estetigi, Morfik Yanki form sistemi."
-run/main_scene="res://src/levels/prolog/Prolog.tscn"
+run/main_scene="res://src/ui/Title.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0.05, 0.02, 0.08, 1)
 
