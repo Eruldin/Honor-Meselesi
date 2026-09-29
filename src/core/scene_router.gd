@@ -7,6 +7,10 @@ signal scene_loaded(path: String)
 var _is_transitioning := false
 
 
+func _ready() -> void:
+	EventBus.scene_change_requested.connect(change_scene)
+
+
 func change_scene(path: String) -> void:
 	if _is_transitioning:
 		return

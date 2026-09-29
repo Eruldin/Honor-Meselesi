@@ -43,6 +43,14 @@ extends Resource
 @export var hurt_knockback: float = 140.0
 @export var hurt_stun_time: float = 0.3
 
+@export_group("Prolog / CRT mini-oyun")
+@export var crt_obstacle_speed: float = 60.0   ## engel kayma hizi px/s (viewport ici)
+@export var crt_jump_velocity: float = 105.0
+@export var crt_gravity: float = 380.0
+@export var crt_spawn_interval: float = 1.5    ## engel uretim araligi
+@export var prolog_min_play_time: float = 7.0  ## glitch'ten onceki min oyun suresi
+@export var prolog_min_dodges: int = 3         ## glitch icin gerekli min atlatma
+
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
 @export var hitstop_parry: float = 0.12

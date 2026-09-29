@@ -5,6 +5,7 @@ extends Node
 signal hitstop_requested(duration: float)
 signal screenshake_requested(strength: float, duration: float)
 signal spark_emitted(position: Vector2)
+signal glitch_requested(strength: float, duration: float)
 
 signal damage_dealt(target: Node, info)
 signal actor_died(actor: Node)
