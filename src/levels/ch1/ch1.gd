@@ -973,15 +973,14 @@ func _build_hud() -> void:
 		bfr.stretch_mode = TextureRect.STRETCH_SCALE
 		bfr.size = Vector2(170, 9)
 		boss_bar.root.add_child(bfr)
-	# Boss adi etiketi — barin ustunde
-	var bn := Label.new()
-	bn.text = "LORD CLUCK"
-	bn.add_theme_font_size_override("font_size", 8)
-	bn.add_theme_color_override("font_color", Color(0.95, 0.85, 0.6))
-	bn.position = Vector2(0, -12)
-	bn.size = Vector2(170, 10)
-	bn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	boss_bar.root.add_child(bn)
+	# Boss isareti — metin yerine boss yuzu piktogrami (kelimesiz anlatim)
+	var face := TextureRect.new()
+	face.texture = AssetLoader.texture(&"enemy/rooster", Vector2i(14, 14))
+	face.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	face.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	face.size = Vector2(16, 16)
+	face.position = Vector2(77, -19)
+	boss_bar.root.add_child(face)
 	boss.health.damaged.connect(
 		func(_a: int, _r: int) -> void:
 			_boss_root.visible = true
