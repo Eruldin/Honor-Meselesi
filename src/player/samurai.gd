@@ -440,7 +440,8 @@ func ensure_attack_hitbox() -> void:
 func ensure_down_hitbox() -> void:
 	if down_hitbox.monitoring:
 		return
-	down_hitbox.activate(DamageInfo.make(tuning.player_damage, self, Vector2(0, 60), false, false))
+	var dmg := int(round(tuning.player_damage * form.damage_mult))
+	down_hitbox.activate(DamageInfo.make(dmg, self, Vector2(0, 60), false, false))
 
 
 func ensure_up_hitbox() -> void:
