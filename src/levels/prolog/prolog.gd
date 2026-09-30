@@ -378,6 +378,7 @@ func _steps() -> Array:
 		# Sapka kapisi! Yaratic ziplayip sapkayi alir
 		{op = "hop_to", node = "creature", to = samurai.global_position + Vector2(0, -16), dur = 0.45, arc = 40.0},
 		{op = "call", fn = _steal_hat},
+		{op = "glitch", strength = 0.6, dur = 0.25},
 		{op = "hop_to", node = "creature", to = Vector2(300, 150), dur = 0.5, arc = 50.0},
 		{op = "picto", node = "samurai", icon = &"question", t = 0.9, wait = true},
 		# Kovalamaca — slapstick: samuray kayip duser
@@ -416,6 +417,7 @@ func _steal_hat() -> void:
 	hat.global_position = wp
 	var tw := hat.create_tween()
 	tw.tween_property(hat, "position", Vector2(0, -12), 0.2)
+	AudioManager.play_sfx(&"sfx/ghost", creature.global_position, -6.0, 1.1)
 	GameState.set_flag(&"hat_stolen")
 
 
