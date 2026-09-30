@@ -15,6 +15,10 @@ var active := false
 var phase := 0
 
 
+func _init() -> void:
+	knockback_resist = 1.0   # boss'lar vurus itkisiyle kaymaz
+
+
 func activate() -> void:
 	active = true
 	on_activated()
