@@ -252,11 +252,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventKey and event.pressed and not event.echo:
 			InputMap.action_erase_events(_rebinding)
 			InputMap.action_add_event(_rebinding, event)
+			Settings.set_binding(_rebinding)
 			_rebinding = &""
 			_rebuild_tab()
 			get_viewport().set_input_as_handled()
 		elif event is InputEventMouseButton and event.pressed:
 			InputMap.action_add_event(_rebinding, event)
+			Settings.set_binding(_rebinding)
 			_rebinding = &""
 			_rebuild_tab()
 			get_viewport().set_input_as_handled()
