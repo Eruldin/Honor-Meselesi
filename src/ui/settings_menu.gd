@@ -15,11 +15,14 @@ const LABELS := {
 		"title": "SETTINGS", "close": "Esc: close"},
 }
 const ACTION_NAMES := {
-	&"move_left": "Sola", &"move_right": "Saga", &"move_up": "Yukari",
-	&"move_down": "Asagi", &"jump": "Zipla", &"attack": "Saldir",
-	&"parry": "Parry", &"dash": "Dash", &"focus": "Odak/Iyilesme",
-	&"form_prev": "Onceki Form",
-	&"form_next": "Sonraki Form",
+	"tr": {&"move_left": "Sola", &"move_right": "Saga", &"move_up": "Yukari",
+		&"move_down": "Asagi", &"jump": "Zipla", &"attack": "Saldir",
+		&"parry": "Parry", &"dash": "Dash", &"focus": "Odak/Iyilesme",
+		&"form_prev": "Onceki Form", &"form_next": "Sonraki Form"},
+	"en": {&"move_left": "Left", &"move_right": "Right", &"move_up": "Up",
+		&"move_down": "Down", &"jump": "Jump", &"attack": "Attack",
+		&"parry": "Parry", &"dash": "Dash", &"focus": "Focus/Heal",
+		&"form_prev": "Prev Form", &"form_next": "Next Form"},
 }
 
 var _panel: PanelContainer
@@ -192,7 +195,8 @@ func _tab_controls() -> void:
 	for action in REBINDABLE:
 		var row := HBoxContainer.new()
 		var lbl := Label.new()
-		lbl.text = ACTION_NAMES.get(action, action)
+		lbl.text = ACTION_NAMES.get(Settings.language,
+			ACTION_NAMES["tr"]).get(action, action)
 		lbl.custom_minimum_size = Vector2(110, 0)
 		lbl.add_theme_font_size_override("font_size", 10)
 		row.add_child(lbl)
