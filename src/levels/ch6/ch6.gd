@@ -20,6 +20,7 @@ var _look_x := 0.0
 var boss: GlitchAmalgam
 var _walls: Array[StaticBody2D] = []
 var _boss_bar: Control
+var _boss_bars: Dictionary
 var _boss_root: Control
 var _boss_started := false
 var _boss_home := Vector2.ZERO
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 			samurai.global_position.x + _look_x, 240, LEVEL_W - 240)
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
-		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+		HudBars.drain(_boss_bars, float(boss.health.current) / maxf(boss.health.max_health, 1), 160.0, delta)
 	# Ortam glitch'i: ara ara hafif dalgalanma (bu bolume ozel)
 	_glitch_t -= delta
 	if _glitch_t <= 0.0:
@@ -273,11 +274,12 @@ func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	layer.add_child(HudPlayer.make(samurai))
-	var boss_bar := HudBars.make(160, 6, Color(0.4, 0.9, 1.0))
+	var boss_bar := HudBars.make(160, 6, Color(0.4, 0.9, 1.0), true)
 	boss_bar.root.position = Vector2(160, 250)
 	layer.add_child(boss_bar.root)
 	_boss_root = boss_bar.root
 	_boss_root.visible = false
+	_boss_bars = boss_bar
 	_boss_bar = boss_bar.fill
 
 

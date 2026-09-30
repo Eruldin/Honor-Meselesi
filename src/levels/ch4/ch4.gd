@@ -20,6 +20,7 @@ var _look_x := 0.0
 var boss: RedTyrant
 var _walls: Array[StaticBody2D] = []
 var _boss_bar: Control
+var _boss_bars: Dictionary
 var _boss_root: Control
 var _boss_started := false
 var _boss_home := Vector2.ZERO
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 			samurai.global_position.x + _look_x, 240, LEVEL_W - 240)
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
-		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+		HudBars.drain(_boss_bars, float(boss.health.current) / maxf(boss.health.max_health, 1), 160.0, delta)
 
 	# Bosluk dususu: asama disina dusen 1 can kaybedip checkpoint'e doner
 	if samurai != null and not _respawn_pending 			and (samurai.global_position.y > 430.0 				or samurai.global_position.y < -80.0):
@@ -251,11 +252,12 @@ func _build_hud() -> void:
 	add_child(layer)
 	layer.add_child(HudPlayer.make(samurai))
 	# Boss can cubugu
-	var boss_bar := HudBars.make(160, 6, Color(0.95, 0.3, 0.2))
+	var boss_bar := HudBars.make(160, 6, Color(0.95, 0.3, 0.2), true)
 	boss_bar.root.position = Vector2(160, 250)
 	layer.add_child(boss_bar.root)
 	_boss_root = boss_bar.root
 	_boss_root.visible = false
+	_boss_bars = boss_bar
 	_boss_bar = boss_bar.fill
 
 	# "GAME OVER" — Tiran duserken gorunen retro yazi (siyah bantta).
