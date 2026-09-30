@@ -8,7 +8,10 @@ extends Node
 
 const SFX_POOL := 8
 
-var _music: AudioStreamPlayer
+var _music_a: AudioStreamPlayer
+var _music_b: AudioStreamPlayer
+var _active_music: int = 1
+var _music_fade := 0.0
 var _amb1: AudioStreamPlayer
 var _amb2: AudioStreamPlayer
 var _active_amb: int = 1
@@ -23,9 +26,12 @@ var _current_music: StringName = &""
 
 
 func _ready() -> void:
-	_music = AudioStreamPlayer.new()
-	_music.bus = &"Music"
-	add_child(_music)
+	_music_a = AudioStreamPlayer.new()
+	_music_a.bus = &"Music"
+	add_child(_music_a)
+	_music_b = AudioStreamPlayer.new()
+	_music_b.bus = &"Music"
+	add_child(_music_b)
 	_amb1 = AudioStreamPlayer.new()
 	_amb1.bus = &"Music"
 	add_child(_amb1)
@@ -45,6 +51,7 @@ func _ready() -> void:
 
 
 ## Seviye muzigi. Ayni parca tekrar istenirse dokunmaz.
+## Degisim 1s crossfade ile olur — dinlenme/boss gecisleri yumusak.
 func play_music(logical_id: StringName) -> void:
 	if logical_id == _current_music:
 		return
@@ -54,16 +61,19 @@ func play_music(logical_id: StringName) -> void:
 		return
 	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
 		stream.loop = true
-	_music.stream = stream
-	if not _music.playing:
-		_music.play()
-	else:
-		_music.play()  # yeniden baslat
+	_active_music = 2 if _active_music == 1 else 1
+	var next_p := _music_a if _active_music == 1 else _music_b
+	next_p.stream = stream
+	next_p.volume_db = -80.0
+	next_p.play()
+	_music_fade = 1.0
 
 
 func stop_music() -> void:
 	_current_music = &""
-	_music.stop()
+	_music_a.stop()
+	_music_b.stop()
+	_music_fade = 0.0
 
 func play_ambience(logical_id: StringName) -> void:
 	if logical_id == _current_amb:
@@ -85,6 +95,17 @@ func play_ambience(logical_id: StringName) -> void:
 	_amb_fade = 1.0
 
 func _process(delta: float) -> void:
+	if _music_fade > 0.0:
+		_music_fade = maxf(0.0, _music_fade - delta)  # 1s crossfade
+		var mt := 1.0 - _music_fade
+		var m_act := _music_a if _active_music == 1 else _music_b
+		var m_old := _music_b if _active_music == 1 else _music_a
+		if m_act.playing:
+			m_act.volume_db = linear_to_db(lerpf(0.0, 1.0, mt))
+		if m_old.playing:
+			m_old.volume_db = linear_to_db(lerpf(1.0, 0.0, mt))
+			if _music_fade == 0.0:
+				m_old.stop()
 	if _amb_fade > 0.0:
 		_amb_fade = maxf(0.0, _amb_fade - delta) # 1 saniye crossfade
 		var t := 1.0 - _amb_fade
