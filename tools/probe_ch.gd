@@ -47,6 +47,17 @@ func _shoot(ch: String, spot: float) -> void:
 	if sam != null:
 		sam.global_position = Vector2(lerpf(200.0, lw - 200.0, spot), fy - 20)
 	await get_tree().create_timer(1.2).timeout
-	get_viewport().get_texture().get_image().save_png(
-		"res://.probe_out/%s_%.0f.png" % [ch, spot * 100])
+	var img: Image = null
+	for i in 10:
+		await RenderingServer.frame_post_draw
+		var tex := get_viewport().get_texture()
+		if tex != null:
+			img = tex.get_image()
+		if img != null:
+			break
+	if img == null:
+		push_error("probe: no frame rendered")
+		get_tree().quit(1)
+		return
+	img.save_png("res://.probe_out/%s_%.0f.png" % [ch, spot * 100])
 	get_tree().quit()
