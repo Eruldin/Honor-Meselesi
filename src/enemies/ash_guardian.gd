@@ -44,6 +44,19 @@ func on_activated() -> void:
 	Pictogram.show_on(self, &"alarm", 1.0, Vector2(0, -34))
 
 
+func on_reset() -> void:
+	bstate = GState.SLEEP
+	_t = 0.0
+	_player = null
+	_atk_idx = 0
+	if using_real_sprite:
+		sprite.modulate = Color(0.75, 0.6, 0.55)
+		if anims != null:
+			anims.modulate = Color(0.75, 0.6, 0.55)
+	else:
+		sprite.modulate = Color(0.6, 0.45, 0.4)
+
+
 func on_phase_changed(_p: int) -> void:
 	if anims != null:
 		anims.modulate = Color(0.9, 0.55, 0.4)
@@ -130,6 +143,7 @@ func _land_slam() -> void:
 		var w := Shockwave.new()
 		w.direction = d
 		w.global_position = global_position + Vector2(d * 12, 8)
+		w.add_to_group(&"boss_spawn")
 		_root().add_child(w)
 
 
@@ -144,6 +158,7 @@ func _cast_geysers() -> void:
 				arena_left + 12.0, arena_right - 12.0),
 			floor_y)
 		sp.telegraph = tuning.ash_geyser_delay
+		sp.add_to_group(&"boss_spawn")
 		_root().add_child(sp)
 		# Kul rengi: uyari ve sivri kule boyanir (_ready cocuklari hazir)
 		sp.get_node("warn").color = Color(0.7, 0.6, 0.45, 0.55)

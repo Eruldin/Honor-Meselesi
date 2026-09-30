@@ -71,6 +71,19 @@ func _spawn_darkness() -> void:
 	eyes.z_index = 10
 
 
+func on_reset() -> void:
+	bstate = State.SLEEP
+	_t = 0.0
+	_player = null
+	_atk_idx = 0
+	if not using_real_sprite:
+		sprite.modulate = Color(0.6, 0.3, 0.6)
+	if darkness != null:
+		darkness.get_parent().queue_free()
+		darkness = null
+	eyes.z_index = 0
+
+
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if not active or not health.is_alive():
@@ -137,6 +150,7 @@ func _spawn_spikes() -> void:
 	for off in [-30.0, 0.0, 30.0]:
 		var s := BloodSpike.new()
 		s.global_position = Vector2(_player.global_position.x + off, _player.global_position.y + 10)
+		s.add_to_group(&"boss_spawn")
 		_root().add_child(s)
 
 

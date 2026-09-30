@@ -23,6 +23,7 @@ var _boss_root: Control
 var _player_fill: Control
 var _hud_label: Label
 var _boss_started := false
+var _boss_home := Vector2.ZERO
 var _respawn_pending := false
 var _gameover: Label
 
@@ -172,6 +173,7 @@ func _build_entities() -> void:
 	boss.arena_right = ARENA_R
 	boss.global_position = Vector2(1420, FLOOR_Y - 14)
 	add_child(boss)
+	_boss_home = boss.global_position
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 
 	var trigger := Area2D.new()
@@ -306,3 +308,18 @@ func _on_actor_died(actor: Node) -> void:
 	samurai.modulate.a = 1.0
 	samurai.sm.change_to(Samurai.S_IDLE, true)
 	_respawn_pending = false
+	_reset_boss_fight()
+
+## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere
+## doner, tetik yeniden ateslenebilir (yeniden deneme).
+func _reset_boss_fight() -> void:
+	if not _boss_started or not is_instance_valid(boss) 			or not boss.health.is_alive():
+		return
+	_boss_started = false
+	for w in _walls:
+		w.set_deferred("collision_layer", 0)
+		w.visible = false
+	_boss_root.visible = false
+	boss.reset_fight(_boss_home)
+	AudioManager.play_music(&"music/ch4")
+

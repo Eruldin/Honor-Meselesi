@@ -53,6 +53,18 @@ func on_activated() -> void:
 	FX.glitch(1.0, 0.8)
 
 
+func on_reset() -> void:
+	bstate = AState.SLEEP
+	_t = 0.0
+	_player = null
+	_atk_idx = 0
+	sprite.modulate = Color(0.6, 1.1, 1.2)
+	if anims != null:
+		anims.modulate = Color(0.6, 1.1, 1.2)
+	if _rain != null and is_instance_valid(_rain):
+		_rain.active = false
+
+
 func on_phase_changed(_p: int) -> void:
 	var c := Color(1.1, 0.6, 1.3)
 	sprite.modulate = c
@@ -144,6 +156,7 @@ func _land() -> void:
 		var w := Shockwave.new()
 		w.direction = d
 		w.global_position = global_position + Vector2(d * 12, 8)
+		w.add_to_group(&"boss_spawn")
 		_root().add_child(w)
 
 
@@ -155,6 +168,7 @@ func _cast_spikes() -> void:
 			clampf(_player.global_position.x + (i - n / 2) * 30.0,
 				arena_left + 12.0, arena_right - 12.0),
 			floor_y)
+		sp.add_to_group(&"boss_spawn")
 		_root().add_child(sp)
 		sp.get_node("warn").color = Color(0.4, 1.0, 1.0, 0.5)
 		sp.get_node("spike").modulate = Color(0.5, 0.9, 1.1)
@@ -165,6 +179,7 @@ func _cast_volley() -> void:
 	for i in 3:
 		var m := HomingMissile.new()
 		m.global_position = global_position + Vector2(0, -30 - i * 16)
+		m.add_to_group(&"boss_spawn")
 		_root().add_child(m)
 	FX.glitch(0.4, 0.3)
 

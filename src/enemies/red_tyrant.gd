@@ -58,6 +58,17 @@ func on_phase_changed(_p: int) -> void:
 	FX.shake(3.0, 0.4)
 
 
+func on_reset() -> void:
+	_restore_gravity()   # _player hala gecerliyken yercekimini duzelt
+	bstate = State.SLEEP
+	_t = 0.0
+	_player = null
+	_atk_idx = 0
+	_flip_timer = 0.0
+	if not using_real_sprite:
+		sprite.modulate = Color(0.85, 0.2, 0.2)
+
+
 func _restore_gravity() -> void:
 	if _player != null and is_instance_valid(_player) \
 			and _player.has_method("set_gravity_flipped"):
@@ -148,6 +159,7 @@ func _land_pound() -> void:
 		var w := Shockwave.new()
 		w.direction = d
 		w.global_position = global_position + Vector2(d * 10, 8)
+		w.add_to_group(&"boss_spawn")
 		_root().add_child(w)
 
 
