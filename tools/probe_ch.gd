@@ -8,11 +8,14 @@ var _scene
 func _ready() -> void:
 	var ch := "ch3"
 	var spot := 0.5
+	var death := false
 	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():
 		if a.begins_with("--probe="):
 			ch = a.get_slice("=", 1)
 		if a.begins_with("--spot="):
 			spot = float(a.get_slice("=", 1))
+		if a == "--death":
+			death = true
 	var scn := load("res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)])
 	if scn == null:
 		push_error("no scene for " + ch)
@@ -21,6 +24,13 @@ func _ready() -> void:
 	_scene = scn.instantiate()
 	if "auto_advance" in _scene:
 		_scene.auto_advance = false
+	if death:
+		var lw: float = _scene.get("LEVEL_W") if _scene.get("LEVEL_W") != null else 1600.0
+		var fy: float = _scene.get("FLOOR_Y") if _scene.get("FLOOR_Y") != null else 250.0
+		GameState.set_flag(&"death_mark_ch", StringName(ch))
+		GameState.set_flag(&"death_mark_pos",
+			Vector2(lerpf(200.0, lw - 200.0, spot), fy - 14))
+		GameState.set_flag(&"death_mark_soul", 8)
 	add_child(_scene)
 	get_tree().create_timer(6.0).timeout.connect(get_tree().quit)
 	call_deferred("_shoot", ch, spot)
