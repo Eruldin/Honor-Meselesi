@@ -346,7 +346,8 @@ func _build_terrain() -> void:
 	# grubunun ilk katmanidir (ustte).
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 4500, x1 = LEVEL_W},
-		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 4500, x1 = LEVEL_W},
+		# ufukta gotik kale — Elden Ring tarzi uzak siluet; yaklastikca buyur
+		{id = &"bg/gothic_castle", scroll = 0.35, x0 = 4500, x1 = LEVEL_W},
 		# tek ince agac bandi — boss savasi icin temiz fon; yogun momiji yok
 		{id = &"bg/dusk_trees", scroll = 0.5, modulate = Color(0.5, 0.4, 0.45, 0.55), x0 = 4500, x1 = LEVEL_W},
 	])
@@ -861,7 +862,11 @@ func _build_entities() -> void:
 	sword.global_position = Vector2(3260, FLOOR_Y - 90)
 	add_child(sword)
 
-	# Gecit yaklasimi: balta demonu + veba kargasi eliti
+	# Gecit yaklasimi: mezara gomulu iskeletler (yaklasinca yukselir)
+	for x in [3450.0, 3630.0, 3900.0, 4320.0]:
+		var gsk := CryptSkeleton.new()
+		gsk.global_position = Vector2(x, FLOOR_Y - 10)
+		add_child(gsk)
 	var demon := DemonAxe.new()
 	demon.global_position = Vector2(3980, FLOOR_Y - 12)
 	add_child(demon)
