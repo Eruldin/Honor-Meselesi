@@ -22,7 +22,7 @@ func _ready() -> void:
 	var hurtbox := Hurtbox.new()
 	hurtbox.collision_layer = 16
 	hurtbox.collision_mask = 8
-	hurtbox.pogoable = false
+	hurtbox.pogoable = true   # asagi kesikle kir + sek (HK pogo)
 	var hb := CollisionShape2D.new()
 	var hr := RectangleShape2D.new()
 	hr.size = size
