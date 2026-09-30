@@ -66,6 +66,7 @@ func _physics_process(delta: float) -> void:
 				sprite.modulate = Color(0.5, 0.6, 0.9)
 				contact_hitbox.activate(
 					DamageInfo.make(1, self, Vector2(facing * 160, -40), true, false))
+				AudioManager.play_sfx(&"sfx/swipe", global_position, -8.0)
 		GState.LUNGE:
 			velocity.x = facing * tuning.guard_lunge_speed
 			if _t <= 0.0:
@@ -89,6 +90,7 @@ func take_damage(info: DamageInfo) -> void:
 	if shield_up and src_front:
 		FX.spark(hurtbox.global_position + Vector2(facing * 6, -4))
 		FX.hitstop(0.04)
+		AudioManager.play_sfx(&"sfx/clang", global_position, -6.0)
 		EventBus.parry_succeeded.emit(hurtbox.global_position)
 		return
 	super.take_damage(info)

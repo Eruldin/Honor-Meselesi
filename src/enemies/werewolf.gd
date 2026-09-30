@@ -65,6 +65,7 @@ func _physics_process(delta: float) -> void:
 				velocity = dir * tuning.werewolf_jump_speed
 				leap_hitbox.activate(DamageInfo.make(1, self,
 					Vector2(dir.x * 160, -40), false, false))
+				AudioManager.play_sfx(&"sfx/swipe", global_position, -6.0, 0.9)
 		WState.LEAP:
 			if is_on_floor() or is_on_wall():
 				leap_hitbox.deactivate()

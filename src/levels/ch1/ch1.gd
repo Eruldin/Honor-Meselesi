@@ -526,6 +526,10 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(3810, crypt_y - 75), &"terrain/pf_block", 32)
 	_add_platform(Vector2(3750, crypt_y - 115), &"terrain/pf_ledge", 36)
 
+	var drip := AmbientDrip.new()
+	drip.global_position = Vector2(3780, crypt_y - 60)
+	add_child(drip)
+
 	# Gecit Ust Rota (Harabe Surlar)
 	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
 	_add_platform(Vector2(3765, 140), &"terrain/pf_slab", 85)

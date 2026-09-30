@@ -53,5 +53,5 @@ func _on_area_entered(area: Area2D) -> void:
 	SaveSystem.save_game()
 	Pictogram.show_on(actor, &"heart", 1.4, Vector2(0, -28))
 	FX.spark(global_position + Vector2(0, -8))
-	AudioManager.play_sfx(&"sfx/checkpoint", global_position, -2.0)
+	AudioManager.play_sfx(&"sfx/powerup", global_position, -2.0)
 	queue_free()

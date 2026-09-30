@@ -102,6 +102,12 @@ func _build_terrain() -> void:
 		_walls.append(wall)
 		add_child(wall)
 
+	# Bosluk yankisi — iki damla kaynagi magara hissini derinlestirir
+	for dx in [700.0, 1050.0]:
+		var drip := AmbientDrip.new()
+		drip.global_position = Vector2(dx, 180)
+		add_child(drip)
+
 
 func _make_wall(center: Vector2) -> StaticBody2D:
 	var body := StaticBody2D.new()
