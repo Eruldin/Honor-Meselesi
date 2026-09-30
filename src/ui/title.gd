@@ -15,6 +15,7 @@ const CHAPTER_SCENES := {
 
 var _settings: SettingsMenu
 var _petals: Array[Sprite2D] = []
+var _new_game_armed := false
 
 
 func _ready() -> void:
@@ -143,7 +144,16 @@ func _build_menu() -> void:
 	add_child(vbox)
 	if SaveSystem.has_save():
 		vbox.add_child(_btn("DEVAM ET", _on_continue))
-	vbox.add_child(_btn("YENI OYUN", _on_new_game))
+	var ng: Button
+	ng = _btn("YENI OYUN", func() -> void:
+		# Kayit varsa tek tikla silinmesin — ikinci tik onaylar
+		if _new_game_armed or not SaveSystem.has_save():
+			_on_new_game()
+			return
+		_new_game_armed = true
+		ng.text = "EMIN MISIN?" if Settings.language == "tr" else "SURE?"
+		ng.modulate = Color(1.0, 0.5, 0.5))
+	vbox.add_child(ng)
 	vbox.add_child(_btn("AYARLAR", _on_settings))
 	if not OS.has_feature("web"):
 		vbox.add_child(_btn("CIKIS", func() -> void: get_tree().quit()))
