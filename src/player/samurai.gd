@@ -432,7 +432,7 @@ func ensure_attack_hitbox() -> void:
 	var kb := Vector2(facing * tuning.attack_knockback, -30.0)
 	var dmg := int(round(tuning.player_damage * form.damage_mult))
 	if combo_index >= 3:
-		dmg = int(round(dmg * 1.4))  # finisher: zinciri tamamlayan vurus
+		dmg = int(ceil(dmg * 1.4))  # finisher: zinciri tamamlayan vurus
 		kb.x *= 1.5
 	attack_hitbox.activate(DamageInfo.make(dmg, self, kb, false, false))
 
