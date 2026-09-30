@@ -60,18 +60,22 @@ func _on_area_entered(area: Area2D) -> void:
 
 
 func rest(player) -> void:
-	_used = true
 	GameState.checkpoint_id = checkpoint_id
 	GameState.set_flag(&"respawn_pos", global_position)
 	GameState.set_flag(&"respawn_ch", GameState.current_chapter)
-	player.sm.change_to(Samurai.S_REST, true)
 	player.health.reset()
 	GameState.soul = GameState.SOUL_MAX
 	SaveSystem.save_game()
 	EventBus.checkpoint_reached.emit(checkpoint_id)
-	Pictogram.show_on(player, &"sleep", 1.2, Vector2(0, -26))
 	FX.spark(global_position + Vector2(0, -10))
 	AudioManager.play_sfx(&"sfx/checkpoint", global_position)
+	if _used:
+		# Tekrar gecis (boss deneme kosusu vb.): can/ruh taze + kayit yeterli —
+		# oturma durumu ve muzik degisimi oyuncuyu her seferinde kesmez.
+		return
+	_used = true
+	player.sm.change_to(Samurai.S_REST, true)
+	Pictogram.show_on(player, &"sleep", 1.2, Vector2(0, -26))
 	# Bench temasi: dinlenme aninda sakin parca, uzaklasinca eski muzik.
 	# Tema hala caliyorsa onceki parcayi ezme; bu nokta sahipligi devralir.
 	if AudioManager._current_music != &"music/rest_point":
