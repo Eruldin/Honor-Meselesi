@@ -86,6 +86,12 @@ DEFAULT_PACKS = [
     'https://jasontomlee.itch.io/beast-man',
     'https://penzilla.itch.io/top-down-retro-interior',
     'https://codemanu.itch.io/vfx-free-pack',
+    # Ses paketleri — muzik/ambiyans/sfx manifest girdileri bunlara isaret eder
+    'https://xdeviruchi.itch.io/16-bit-fantasy-adventure-music-pack',
+    'https://jdsherbert.itch.io/ambiences-music-pack',
+    'https://ci.itch.io/400-sounds-pack',
+    'https://nebula-audio.itch.io/character-footsteps-rock-grass-pack-1',
+    'https://dillonbecker.itch.io/sdap',
 ]
 
 
