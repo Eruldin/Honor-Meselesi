@@ -144,12 +144,13 @@ func _build_entities() -> void:
 	var echoes: Array = [
 		[Villager.new(), 300], [CyberNinja.new(), 540],
 		[Villager.new(), 830], [AshHusk.new(), 1050],
-		[Turtle.new(), 1190],
+		[FlyingSword.new(), 1100, -40], [Turtle.new(), 1190],
 	]
 	for e in echoes:
 		var en: EnemyBase = e[0]
 		en.modulate = Color(0.6, 0.95, 1.1, 0.85)
-		en.global_position = Vector2(e[1], FLOOR_Y - 12)
+		var yo: float = e[2] if e.size() > 2 else 0.0
+		en.global_position = Vector2(e[1], FLOOR_Y - 12 + yo)
 		add_child(en)
 
 	var rest := RestPoint.new()
