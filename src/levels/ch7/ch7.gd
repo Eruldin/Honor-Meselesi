@@ -101,6 +101,7 @@ func _spawn_fight() -> void:
 	add_child(boss)
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 	boss.activate()
+	AudioManager.play_music(&"music/final_boss")
 
 
 func _run_intro() -> void:

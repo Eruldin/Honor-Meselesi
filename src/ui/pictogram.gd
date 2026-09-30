@@ -82,6 +82,12 @@ func _draw_icon() -> void:
 		&"dots":  # dusunce
 			for i in 3:
 				draw_circle(Vector2(-5 + i * 5, 0), 1.4, c)
+		&"heart":  # can — iyilesme/odul anlari
+			var hc := Color(0.85, 0.25, 0.35)
+			draw_circle(Vector2(-1.6, -1.5), 1.8, hc)
+			draw_circle(Vector2(1.6, -1.5), 1.8, hc)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(-3.4, -0.8), Vector2(3.4, -0.8), Vector2(0, 4.2)]), hc)
 		&"jump":  # cift ok yukari (piksel sicramasi)
 			draw_polyline(PackedVector2Array([
 				Vector2(-4, -1), Vector2(0, -5), Vector2(4, -1)]), c, 1.8)
