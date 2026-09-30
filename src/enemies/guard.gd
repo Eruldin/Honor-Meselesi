@@ -91,6 +91,5 @@ func take_damage(info: DamageInfo) -> void:
 		FX.spark(hurtbox.global_position + Vector2(facing * 6, -4))
 		FX.hitstop(0.04)
 		AudioManager.play_sfx(&"sfx/clang", global_position, -6.0)
-		EventBus.parry_succeeded.emit(hurtbox.global_position)
 		return
 	super.take_damage(info)
