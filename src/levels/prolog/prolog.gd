@@ -33,6 +33,7 @@ func _ready() -> void:
 	tuning = load("res://config/tuning.tres")
 	GameState.current_chapter = &"prolog"
 	AudioManager.play_music(&"music/prolog")
+	AudioManager.play_ambience(&"amb/village")  # sabah koyu — kuslar, huzur
 	_build_room()
 	_build_actors()
 	_build_fx()
