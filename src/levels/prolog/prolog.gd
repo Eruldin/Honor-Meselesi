@@ -214,8 +214,7 @@ func _build_room() -> void:
 		katana.scale = Vector2(26.0 / katana.texture.get_size().x,
 			26.0 / katana.texture.get_size().x)
 	else:
-		katana.texture = AssetLoader.placeholder_texture(
-			"prop/katana", Vector2i(3, 26))
+		katana.texture = AssetLoader.texture(&"prop/katana", Vector2i(3, 26))
 	katana.modulate = Color(0.9, 0.92, 1.0)
 	katana.rotation = -0.12
 	katana.global_position = Vector2(352, 146)
@@ -272,8 +271,7 @@ func _build_actors() -> void:
 		creature_sprite = ganims
 	else:
 		creature_sprite = Sprite2D.new()
-		creature_sprite.texture = AssetLoader.placeholder_texture(
-			"enemy/glitch_creature", Vector2i(16, 14))
+		creature_sprite.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(16, 14))
 		creature_sprite.modulate = Color(0.3, 0.1, 0.5)
 		creature.add_child(creature_sprite)
 

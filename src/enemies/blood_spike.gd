@@ -27,7 +27,7 @@ func _tuning_ready() -> void:
 
 	var spike := Sprite2D.new()
 	spike.name = "spike"
-	spike.texture = AssetLoader.placeholder_texture("enemy/blood_spike", Vector2i(10, 22))
+	spike.texture = AssetLoader.texture(&"enemy/blood_spike", Vector2i(10, 22))
 	spike.modulate = Color(0.8, 0.15, 0.3)
 	spike.position = Vector2(0, -11)
 	spike.visible = false

@@ -53,7 +53,7 @@ class WeakBattery:
 
 	func _ready() -> void:
 		var spr := Sprite2D.new()
-		spr.texture = AssetLoader.placeholder_texture("enemy/battery", Vector2i(8, 10))
+		spr.texture = AssetLoader.texture(&"enemy/battery", Vector2i(8, 10))
 		spr.modulate = Color(1.0, 0.8, 0.2)
 		add_child(spr)
 		hurtbox = Hurtbox.new()

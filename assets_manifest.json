@@ -19,12 +19,11 @@
     },
     "player/samurai/attack": {
       "files": [
-        "generated/ai/player_attack.png",
-        "generated/ai/player_attack2.png",
-        "generated/ai/player_attack3.png"
+        "generated/ai/player_atk1.png",
+        "generated/ai/player_atk2.png"
       ],
       "pack": "AI Sheet",
-      "fps": 14
+      "fps": 12
     },
     "player/samurai/hurt": {
       "files": [
@@ -33,16 +32,16 @@
       "pack": "AI Sheet"
     },
     "enemy/mushroom": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/big version/sprites/mushroom1.png",
-      "pack": "SunnyLand Add On"
+      "path": "generated/ai/v2dc2_12.png",
+      "pack": "AI Sheet"
     },
     "enemy/mushroom_mini": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/mushroom-spring/small version/sprites/mushroom1.png",
-      "pack": "SunnyLand Add On"
+      "path": "generated/ai/v2nb_6.png",
+      "pack": "AI Sheet"
     },
     "enemy/slug": {
-      "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/hurt/sprites/hurt1.png",
-      "pack": "SunnyLand Add On"
+      "path": "generated/ai/glitch_small.png",
+      "pack": "AI Sheet"
     },
     "enemy/shell": {
       "path": "env/sunnyland/Sunny land Add On Files/Assets/Slug/stunt/sprites/stunt1.png",
@@ -57,34 +56,16 @@
       "pack": "SunnyLand Add On"
     },
     "enemy/villager": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/villager_peasant.png",
+      "pack": "AI Sheet"
     },
     "enemy/guard": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        16,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en3_6.png",
+      "pack": "AI Sheet"
     },
     "enemy/heavy_knight": {
-      "path": "sprites/rogues/32rogues/monsters.png",
-      "region": [
-        32,
-        320,
-        32,
-        32
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/villager_guard.png",
+      "pack": "AI Sheet"
     },
     "enemy/cyber_ninja": {
       "path": "sprites/rogues/32rogues/rogues.png",
@@ -137,26 +118,20 @@
       "pack": "32rogues"
     },
     "enemy/dummy": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        160,
-        32,
-        32
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/villager_scarecrow.png",
+      "pack": "AI Sheet"
     },
     "enemy/ghost": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/ghost/Sprites/ghost-1.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2en3_8.png",
+      "pack": "AI Sheet"
     },
     "enemy/hellcat": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2en2_5.png",
+      "pack": "AI Sheet"
     },
     "enemy/skeleton": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2en3_10.png",
+      "pack": "AI Sheet"
     },
     "enemy/drone": {
       "path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
@@ -176,21 +151,16 @@
       "pack": "Warped City"
     },
     "npc/prolog_hero": {
-      "path": "env/interiors/Modern tiles_Free/Characters_free/Adam_idle_anim_16x16.png",
-      "frame": [
-        16,
-        16
-      ],
-      "fps": 4,
-      "pack": "Modern Interiors"
+      "path": "generated/ai/player_idle.png",
+      "pack": "AI Sheet"
     },
     "bg/forest": {
       "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
       "pack": "Free Pixel Art Forest"
     },
     "bg/forest_mid": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
-      "pack": "Free Pixel Art Forest"
+      "path": "generated/ai/bg_layer_mid.png",
+      "pack": "AI Sheet"
     },
     "bg/city": {
       "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/near-buildings-bg.png",
@@ -217,17 +187,17 @@
       "pack": "Kasaya's Frames"
     },
     "ui/bar_frame": {
-      "path": "sprites/kasaya/Bars/1/bars 1 frame.png",
-      "pack": "Kasaya's Frames"
+      "path": "generated/ai/bar_frame.png",
+      "pack": "AI Sheet"
     },
     "fx/slash": {
-      "path": "vfx/slashes/128x128/Slash 1/color1/sprite-sheet.png",
-      "frame": [
-        128,
-        128
+      "files": [
+        "generated/ai/fx_slash_0.png",
+        "generated/ai/fx_slash_1.png",
+        "generated/ai/fx_slash_2.png"
       ],
-      "fps": 30,
-      "pack": "Slash Animations"
+      "pack": "AI Sheet",
+      "fps": 24
     },
     "music/prolog": {
       "path": "music/xdev_01_-_Falling_Apart_(Prologue).ogg",
@@ -355,14 +325,8 @@
       "pack": "Pixel Art Animated Portal"
     },
     "terrain/block": {
-      "path": "env/postapoc/Tiles/Brick-Wall_TileSet.png",
-      "region": [
-        32,
-        0,
-        16,
-        16
-      ],
-      "pack": "Pixel Art Post Apocalypse"
+      "path": "generated/pf_block.png",
+      "pack": "AI Sheet"
     },
     "deco/cloud": {
       "path": "env/postapoc/Objects/Exhaust-pipe.png",
@@ -374,32 +338,32 @@
       "path": "generated/ai/j_hat.png"
     },
     "bg/forest_sky": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0000_9.png",
-      "pack": "Free Pixel Art Forest"
+      "path": "generated/ai/bg_sky.png",
+      "pack": "AI Sheet"
     },
     "bg/forest_far": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0001_8.png",
-      "pack": "Free Pixel Art Forest"
+      "path": "generated/ai/bg_layer_far.png",
+      "pack": "AI Sheet"
     },
     "bg/forest_near": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0003_6.png",
-      "pack": "Free Pixel Art Forest"
+      "path": "generated/ai/bg_layer_trees.png",
+      "pack": "AI Sheet"
     },
     "bg/forest_lights": {
-      "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0004_Lights.png",
-      "pack": "Free Pixel Art Forest"
+      "path": "generated/ai/bg_layer_glow.png",
+      "pack": "AI Sheet"
     },
     "bg/cemetery_sky": {
-      "path": "bg/cemetery/background.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/bg_sky.png",
+      "pack": "AI Sheet"
     },
     "bg/cemetery_far": {
-      "path": "bg/cemetery/mountains.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/bg_layer_far.png",
+      "pack": "AI Sheet"
     },
     "bg/cemetery_near": {
-      "path": "bg/cemetery/graveyard.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/bg_layer_cave.png",
+      "pack": "AI Sheet"
     },
     "bg/warped_sky": {
       "path": "env/warped/warped city files/Assets/ENVIRONMENT/background/skyline-a.png",
@@ -582,93 +546,45 @@
       "pack": "TinyRPG"
     },
     "enemy/villager_b": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        48,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en3_1.png",
+      "pack": "AI Sheet"
     },
     "enemy/villager_c": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        32,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en2_0.png",
+      "pack": "AI Sheet"
     },
     "npc/peasant1": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/villager_peasant.png",
+      "pack": "AI Sheet"
     },
     "npc/peasant2": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        48,
-        80,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en3_1.png",
+      "pack": "AI Sheet"
     },
     "npc/peasant3": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        96,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/villager_guard.png",
+      "pack": "AI Sheet"
     },
     "npc/monk": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        0,
-        32,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en3_6.png",
+      "pack": "AI Sheet"
     },
     "npc/mage": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        16,
-        64,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en3_10.png",
+      "pack": "AI Sheet"
     },
     "npc/farmer": {
-      "path": "sprites/rogues/32rogues/rogues.png",
-      "region": [
-        32,
-        96,
-        16,
-        16
-      ],
-      "pack": "32rogues"
+      "path": "generated/ai/v2en2_2.png",
+      "pack": "AI Sheet"
     },
     "fx/slash_heavy": {
-      "path": "vfx/slashfx_free/2. GameEndeavor/SlashFX SpriteSheet All 2A_1.png",
-      "frame": [
-        128,
-        128
+      "files": [
+        "generated/ai/fx_slash_0.png",
+        "generated/ai/fx_slash_1.png",
+        "generated/ai/fx_slash_2.png"
       ],
-      "fps": 30,
-      "pack": "SlashFX"
+      "pack": "AI Sheet",
+      "fps": 24
     },
     "fx/blood": {
       "files": [
@@ -1025,8 +941,8 @@
       "pack": "DarkForest(gen)"
     },
     "terrain/cave_bricks": {
-      "path": "generated/cave_bricks.png",
-      "pack": "tilemap(gen)"
+      "path": "generated/cave_wall.png",
+      "pack": "AI Sheet"
     },
     "terrain/cave_crystal": {
       "path": "generated/cave_crystal.png",
@@ -1053,8 +969,8 @@
       "pack": "GothicVania Town"
     },
     "prop/sign": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/sign.png",
-      "pack": "GothicVania Town"
+      "path": "generated/sign.png",
+      "pack": "AI Sheet"
     },
     "enemy/rooster": {
       "path": "generated/rooster.png",
@@ -1062,31 +978,31 @@
     },
     "npc/chicken": {
       "path": "generated/chicken.png",
-      "pack": "32rogues(gen)"
+      "pack": "AI Sheet"
     },
     "npc/goose": {
       "path": "generated/goose.png",
-      "pack": "32rogues(gen)"
+      "pack": "AI Sheet"
     },
     "npc/duck": {
       "path": "generated/duck.png",
-      "pack": "32rogues(gen)"
+      "pack": "AI Sheet"
     },
     "bg/dusk_sky": {
-      "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/sky.png",
-      "pack": "Mountain Dusk"
+      "path": "generated/ai/bg_sky.png",
+      "pack": "AI Sheet"
     },
     "bg/dusk_far": {
-      "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/far-mountains.png",
-      "pack": "Mountain Dusk"
+      "path": "generated/ai/bg_layer_far.png",
+      "pack": "AI Sheet"
     },
     "bg/dusk_mid": {
-      "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/mountains.png",
-      "pack": "Mountain Dusk"
+      "path": "generated/ai/bg_layer_mid.png",
+      "pack": "AI Sheet"
     },
     "bg/dusk_trees": {
-      "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/trees.png",
-      "pack": "Mountain Dusk"
+      "path": "generated/ai/bg_layer_trees.png",
+      "pack": "AI Sheet"
     },
     "bg/dusk_clouds": {
       "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/far-clouds.png",
@@ -1149,32 +1065,32 @@
       "pack": "DarkForest(gen)"
     },
     "prop/statue": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/statue.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/statue.png",
+      "pack": "AI Sheet"
     },
     "prop/grave_1": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-1.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2dc2_7.png",
+      "pack": "AI Sheet"
     },
     "prop/grave_2": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-2.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2dc2_9.png",
+      "pack": "AI Sheet"
     },
     "prop/grave_3": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/stone-3.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/ai/v2wb_4.png",
+      "pack": "AI Sheet"
     },
     "prop/deadtree_1": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-1.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/deadtree_1.png",
+      "pack": "AI Sheet"
     },
     "prop/deadtree_2": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-2.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/deadtree_2.png",
+      "pack": "AI Sheet"
     },
     "prop/deadtree_3": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/tree-3.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/deadtree_3.png",
+      "pack": "AI Sheet"
     },
     "prop/bush_large": {
       "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/bush-large.png",
@@ -1185,24 +1101,24 @@
       "pack": "GothicVania Town"
     },
     "prop/well": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/well.png",
-      "pack": "GothicVania Town"
+      "path": "generated/well.png",
+      "pack": "AI Sheet"
     },
     "prop/wagon": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/wagon.png",
-      "pack": "GothicVania Town"
+      "path": "generated/wagon.png",
+      "pack": "AI Sheet"
     },
     "prop/crate": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/crate.png",
-      "pack": "GothicVania Town"
+      "path": "generated/crate.png",
+      "pack": "AI Sheet"
     },
     "prop/crate_stack": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/crate-stack.png",
-      "pack": "GothicVania Town"
+      "path": "generated/crate_stack.png",
+      "pack": "AI Sheet"
     },
     "prop/barrel": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/barrel.png",
-      "pack": "GothicVania Town"
+      "path": "generated/barrel.png",
+      "pack": "AI Sheet"
     },
     "prop/deco_barrier": {
       "path": "generated/deco_barrier.png",
@@ -1210,19 +1126,19 @@
     },
     "npc/peacock": {
       "path": "generated/peacock.png",
-      "pack": "32rogues(gen)"
+      "pack": "AI Sheet"
     },
     "terrain/ground_face": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground.png",
-      "pack": "GothicVania Town"
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
     },
     "terrain/ground_face_b": {
       "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground-b.png",
       "pack": "GothicVania Town"
     },
     "terrain/wall_tile": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/layers/sliced-tileset/ground-wall.png",
-      "pack": "GothicVania Town"
+      "path": "generated/wall_tile.png",
+      "pack": "AI Sheet"
     },
     "music/ch1_village": {
       "path": "music/xdev_14_-_Tales_of_Firelight_Town.ogg",
@@ -1234,20 +1150,20 @@
       "note": "dinlenme noktasi ambians â€” Silent Forest yeniden kullanildi"
     },
     "prop/market_stall": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/sign.png",
-      "pack": "GothicVania Town"
+      "path": "generated/market_stall.png",
+      "pack": "AI Sheet"
     },
     "prop/sack": {
-      "path": "env/gothic_town/GothicVania-town-files/PNG/environment/props-sliced/barrel.png",
-      "pack": "GothicVania Town"
+      "path": "generated/sack.png",
+      "pack": "AI Sheet"
     },
     "prop/fence": {
       "path": "generated/pf_ledge.png",
       "pack": "DarkForest(gen)"
     },
     "prop/bush_small": {
-      "path": "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Environment/sliced-objects/bush-large.png",
-      "pack": "GothicVania Cemetery"
+      "path": "generated/bush_small.png",
+      "pack": "AI Sheet"
     },
     "player/samurai/walk": {
       "files": [
@@ -1473,8 +1389,8 @@
       "path": "generated/ai/bg_moon.png"
     },
     "bg/j_mountains": {
-      "pack": "AI Sheet",
-      "path": "generated/ai/bg_mountains.png"
+      "path": "generated/ai/bg_layer_far.png",
+      "pack": "AI Sheet"
     },
     "bg/j_cherry": {
       "pack": "AI Sheet",
@@ -1485,8 +1401,8 @@
       "path": "generated/ai/bg_falls.png"
     },
     "bg/j_trees": {
-      "pack": "AI Sheet",
-      "path": "generated/ai/bg_trees.png"
+      "path": "generated/ai/bg_layer_trees.png",
+      "pack": "AI Sheet"
     },
     "ui/hud_portrait": {
       "pack": "AI Sheet",
@@ -1665,6 +1581,184 @@
         "generated/ai/glitchb_3.png"
       ],
       "fps": 5,
+      "pack": "AI Sheet"
+    },
+    "player/samurai/fall": {
+      "files": [
+        "generated/ai/player_fall.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "enemy/rooster/idle": {
+      "files": [
+        "generated/ai/boss_cluck_move_0.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "enemy/rooster/walk": {
+      "files": [
+        "generated/ai/boss_cluck_move_1.png",
+        "generated/ai/boss_cluck_move_2.png",
+        "generated/ai/boss_cluck_move_3.png",
+        "generated/ai/boss_cluck_move_4.png"
+      ],
+      "pack": "AI Sheet",
+      "fps": 10
+    },
+    "enemy/rooster/attack": {
+      "files": [
+        "generated/ai/boss_cluck_attack_0.png",
+        "generated/ai/boss_cluck_attack_1.png",
+        "generated/ai/boss_cluck_attack_2.png",
+        "generated/ai/boss_cluck_attack_3.png"
+      ],
+      "pack": "AI Sheet",
+      "fps": 12
+    },
+    "enemy/rooster/hurt": {
+      "files": [
+        "generated/ai/boss_cluck_move_2.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "enemy/rooster/die": {
+      "files": [
+        "generated/ai/boss_cluck_attack_8.png",
+        "generated/ai/boss_cluck_attack_9.png",
+        "generated/ai/boss_cluck_attack_10.png",
+        "generated/ai/boss_cluck_attack_11.png"
+      ],
+      "pack": "AI Sheet",
+      "fps": 8
+    },
+    "enemy/glitch_creature": {
+      "path": "generated/ai/glitch_creature.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/glitch_small": {
+      "path": "generated/ai/glitch_small.png",
+      "pack": "AI Sheet"
+    },
+    "npc/villager": {
+      "path": "generated/ai/villager_peasant.png",
+      "pack": "AI Sheet"
+    },
+    "fx/impact": {
+      "files": [
+        "generated/ai/fx_impact.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "fx/petal": {
+      "files": [
+        "generated/ai/fx_petal.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "fx/ember": {
+      "files": [
+        "generated/ai/fx_ember.png"
+      ],
+      "pack": "AI Sheet"
+    },
+    "prop/straw_hat": {
+      "path": "generated/ai/straw_hat.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/turtle": {
+      "path": "generated/ai/glitch_small.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/split_mushroom": {
+      "path": "generated/ai/v2dc2_12.png",
+      "pack": "AI Sheet"
+    },
+    "hazard/spike": {
+      "path": "generated/ai/hazard_spike.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/chain": {
+      "path": "generated/ai/chain.png",
+      "pack": "AI Sheet"
+    },
+    "prop/rest_point": {
+      "path": "generated/ai/j_stone_lamp.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/egg": {
+      "path": "generated/ai/v2pt_6.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/blood_spike": {
+      "path": "generated/ai/hazard_spike.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/battery": {
+      "path": "generated/ai/v2pt_2.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/missile": {
+      "path": "generated/ai/v2vfx1_9.png",
+      "pack": "AI Sheet"
+    },
+    "enemy/projectile": {
+      "path": "generated/ai/v2pt_2.png",
+      "pack": "AI Sheet"
+    },
+    "fx/pixel": {
+      "path": "generated/ai/v2pt_2.png",
+      "pack": "AI Sheet"
+    },
+    "fx/shockwave": {
+      "path": "generated/ai/fx_arc.png",
+      "pack": "AI Sheet"
+    },
+    "fx/spark": {
+      "path": "generated/ai/v2lt2_6.png",
+      "pack": "AI Sheet"
+    },
+    "fx/bolt": {
+      "path": "generated/ai/v2vfx1_19.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/ch2_ground": {
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/ch3_ground": {
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/ch4_ground": {
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/ch5_ground": {
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/pipe": {
+      "path": "generated/cave_rock.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/cracked": {
+      "path": "generated/edge_dirt.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/flicker": {
+      "path": "generated/pf_slab.png",
+      "pack": "AI Sheet"
+    },
+    "terrain/ground": {
+      "path": "generated/ground_face.png",
+      "pack": "AI Sheet"
+    },
+    "prop/katana": {
+      "path": "generated/ai/hud_katana.png",
+      "pack": "AI Sheet"
+    },
+    "bg/cave_back": {
+      "path": "generated/ai/bg_cavewall.png",
       "pack": "AI Sheet"
     }
   }

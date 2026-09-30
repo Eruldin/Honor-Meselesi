@@ -11,7 +11,7 @@ var _travelled := 0.0
 
 func _ready() -> void:
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("fx/shockwave", Vector2i(8, 6))
+	sprite.texture = AssetLoader.texture(&"fx/shockwave", Vector2i(8, 6))
 	sprite.modulate = Color(0.9, 0.7, 0.3)
 	add_child(sprite)
 

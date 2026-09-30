@@ -33,7 +33,7 @@ class PixelDrop:
 		col.shape = r
 		add_child(col)
 		var spr := Sprite2D.new()
-		spr.texture = AssetLoader.placeholder_texture("fx/pixel", Vector2i(4, 4))
+		spr.texture = AssetLoader.texture(&"fx/pixel", Vector2i(4, 4))
 		spr.modulate = Color(0.9, 0.9, 0.2)
 		add_child(spr)
 		area_entered.connect(_on_hit)

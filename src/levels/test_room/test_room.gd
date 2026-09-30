@@ -48,7 +48,7 @@ func _add_ground(center: Vector2, size: Vector2) -> void:
 	col.shape = rect
 	body.add_child(col)
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("terrain/ground", Vector2i(size))
+	sprite.texture = AssetLoader.texture(&"terrain/ground", Vector2i(size))
 	sprite.modulate = Color(0.35, 0.3, 0.45)
 	body.add_child(sprite)
 	body.global_position = center

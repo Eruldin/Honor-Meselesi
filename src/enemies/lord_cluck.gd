@@ -13,6 +13,7 @@ var facing := -1
 var _laid_count := 0
 
 var arena_root: Node2D  ## yumurtalar/sok dalgalari buraya eklenir
+var _base_scale := Vector2.ONE  ## telegraph kabarmasi buna gore carpilir
 
 
 func _init() -> void:
@@ -25,8 +26,13 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	if using_real_sprite:
+	if anims != null:
 		# Dev kasuari-horoz — boss olcegi; ayaklari tam govde dibinde
+		anims.scale *= 2.4
+		_base_scale = anims.scale
+		var fs := anims.sprite_frames.get_frame_texture(anims.animation, 0).get_size()
+		anims.position.y = body_size.y * 0.5 - fs.y * anims.scale.y
+	elif using_real_sprite:
 		sprite.scale *= 2.0
 		var vis_h := sprite.texture.get_size().y * sprite.scale.y
 		sprite.position.y = body_size.y * 0.5 - vis_h * 0.5
@@ -42,6 +48,8 @@ func on_activated() -> void:
 
 func on_phase_changed(_p: int) -> void:
 	sprite.modulate = Color(1.0, 0.5, 0.4)
+	if anims != null:
+		anims.modulate = Color(1.0, 0.5, 0.4)
 	Pictogram.show_on(self, &"anger", 1.0, Vector2(0, -26))
 	FX.shake(3.0, 0.4)
 	FX.glitch(0.6, 0.5)
@@ -70,10 +78,10 @@ func _physics_process(delta: float) -> void:
 					_t = 0.6
 		State.TELEGRAPH:
 			velocity.x = 0.0
-			sprite.scale = Vector2(1.15, 0.85)  # kabarma = telegraph
+			_puff_scale(Vector2(1.15, 0.85))  # kabarma = telegraph
 			if _t <= 0.0:
 				bstate = State.SLAM_AIR
-				sprite.scale = Vector2.ONE
+				_puff_scale(Vector2.ONE)
 				velocity.y = -tuning.cluck_slam_rise
 		State.SLAM_AIR:
 			if velocity.y > 0.0:
@@ -129,3 +137,10 @@ func _lay_egg() -> void:
 
 func _parent_for(n: Node) -> Node:
 	return arena_root if arena_root != null else get_parent()
+
+
+func _puff_scale(s: Vector2) -> void:
+	if anims != null:
+		anims.scale = _base_scale * s
+	else:
+		sprite.scale = s

@@ -91,8 +91,7 @@ func _build_scenery() -> void:
 	# Ucusan yapraklar (atmosfer)
 	for i in 7:
 		var petal := Sprite2D.new()
-		petal.texture = AssetLoader.placeholder_texture(
-			"fx/petal", Vector2i(3, 2))
+		petal.texture = AssetLoader.texture(&"fx/petal", Vector2i(3, 2))
 		petal.modulate = Color(0.9, 0.45, 0.4, 0.8)
 		petal.position = Vector2(randf() * 480.0, randf() * 200.0)
 		petal.z_index = 6

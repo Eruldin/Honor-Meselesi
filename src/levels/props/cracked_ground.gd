@@ -22,7 +22,7 @@ func _ready() -> void:
 	add_child(_col)
 
 	_sprite = Sprite2D.new()
-	_sprite.texture = AssetLoader.placeholder_texture("terrain/cracked", Vector2i(size))
+	_sprite.texture = AssetLoader.texture(&"terrain/cracked", Vector2i(size))
 	_sprite.modulate = Color(0.5, 0.42, 0.35)
 	add_child(_sprite)
 

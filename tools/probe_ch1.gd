@@ -23,14 +23,14 @@ func _ready() -> void:
 func _go(spot: String) -> void:
 	await get_tree().create_timer(0.6).timeout
 	var spots := {"village": 300.0, "gate": 4200.0, "arena": 4640.0,
-		"forest": 1900.0, "cave": 2700.0, "well": 480.0}
+		"forest": 1900.0, "cave": 2700.0, "well": 480.0, "boss": 4700.0}
 	var x: float = spots.get(spot, 300.0)
 	samurai.global_position = Vector2(x, FLOOR_Y - 10)
 	await get_tree().create_timer(0.4).timeout
 	if spot == "gate":
 		# sovalye olmemis gibi kapi kapali gorunsun; ayrica acik hali icin:
 		pass
-	if spot == "arena":
+	if spot == "arena" or spot == "boss":
 		_on_arena_entered(samurai.hurtbox)
 		await get_tree().create_timer(1.5).timeout
 	get_viewport().get_texture().get_image().save_png(
