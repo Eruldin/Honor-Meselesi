@@ -902,6 +902,20 @@ func _build_entities() -> void:
 	trigger.area_entered.connect(_on_arena_entered)
 	add_child(trigger)
 
+	# Sapka hirsizi cameo'su: sovalye gecilince kapi onunde kisa gorunum,
+	# sonra kacip kaybolur — kelimesiz anlatimda hedef hatirlatmasi.
+	var cameo_trig := Area2D.new()
+	cameo_trig.collision_layer = 0
+	cameo_trig.collision_mask = 4
+	var cc := CollisionShape2D.new()
+	var cr := RectangleShape2D.new()
+	cr.size = Vector2(30, 80)
+	cc.shape = cr
+	cameo_trig.add_child(cc)
+	cameo_trig.global_position = Vector2(4360, FLOOR_Y - 40)
+	cameo_trig.area_entered.connect(_on_thief_cameo, CONNECT_ONE_SHOT)
+	add_child(cameo_trig)
+
 
 func _build_fx() -> void:
 	camera = ScreenShake.new()
@@ -1023,6 +1037,15 @@ func _open_gate() -> void:
 		tw.tween_property(_gate_body, "modulate:a", 0.0, 0.4)
 	Pictogram.show_on(samurai, &"dots", 1.2, Vector2(0, -30))
 	AudioManager.play_sfx(&"sfx/door", Vector2(GATE_X, FLOOR_Y - 40))
+
+
+func _on_thief_cameo(area: Area2D) -> void:
+	var p := area.get_parent()
+	while p != null and not p.is_in_group(&"player"):
+		p = p.get_parent()
+	if p == null:
+		return
+	ThiefCameo.spawn(self, Vector2(4470, FLOOR_Y - 14))
 
 
 func _on_arena_entered(area: Area2D) -> void:
