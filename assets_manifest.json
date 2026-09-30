@@ -130,8 +130,8 @@
    "pack": "AI Sheet"
   },
   "enemy/skeleton": {
-   "path": "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-1.png",
-   "pack": "itch"
+   "path": "generated/ai/v2en3_10.png",
+   "pack": "AI Sheet"
   },
   "enemy/drone": {
    "path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
@@ -155,8 +155,8 @@
    "pack": "AI Sheet"
   },
   "bg/forest": {
-   "path": "env/forest/Free Pixel Art Forest/PNG/Background layers/Layer_0002_7.png",
-   "pack": "Free Pixel Art Forest"
+   "path": "env/forest/Sunny-land-forest-files/Assets/PNG/environment/layers/background.png",
+   "pack": "itch"
   },
   "bg/forest_mid": {
    "path": "generated/ai/bg_layer_mid.png",
@@ -354,8 +354,8 @@
    "pack": "AI Sheet"
   },
   "bg/cemetery_sky": {
-   "path": "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Background/Cemetery/background.png",
-   "pack": "itch"
+   "path": "generated/ai/bg_sky.png",
+   "pack": "AI Sheet"
   },
   "bg/cemetery_far": {
    "path": "generated/ai/bg_layer_far.png",
@@ -609,13 +609,13 @@
    "pack": "Blood Pack"
   },
   "fx/portal_loop": {
-   "path": "vfx/portal2/sprite-sheet.png",
+   "path": "itch/extracted/pixel-portal-fx-pack-free-2d-animated-portal-asset/Animated Portal/Portal-Spinning.png",
    "frame": [
     64,
     64
    ],
    "fps": 12,
-   "pack": "PortalVFX"
+   "pack": "itch"
   },
   "sfx/footstep": {
    "path": "itch/extracted/character-footsteps-rock-grass-pack-1/NA_Character Footsteps (Dirt & Grass) - Pack 1/Hard Walk/Dirt/DIRT - Hard Walk 1.wav",
@@ -737,12 +737,12 @@
    "pack": "0x72 Dungeon"
   },
   "bg/ash_sky": {
-   "path": "sprites/final/Final/Background_0.png",
-   "pack": "Final"
+   "path": "itch/extracted/vista-parallax-backgrounds/vista-ten/flue/flue_0_sky.png",
+   "pack": "itch"
   },
   "bg/ash_far": {
-   "path": "sprites/final/Final/Background_1.png",
-   "pack": "Final"
+   "path": "itch/extracted/vista-parallax-backgrounds/vista-ten/flue/flue_1_far.png",
+   "pack": "itch"
   },
   "terrain/ash_ground": {
    "path": "env/postapoc/Tiles/Garbage_TileSet.png",
@@ -1005,12 +1005,12 @@
    "pack": "AI Sheet"
   },
   "bg/dusk_clouds": {
-   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/far-clouds.png",
-   "pack": "Mountain Dusk"
+   "path": "generated/ai/bg_cloud.png",
+   "pack": "generated"
   },
   "bg/dusk_nearclouds": {
-   "path": "env/mountain_dusk/Super Mountain Dusk Files/Assets/version A/Layers/near-clouds.png",
-   "pack": "Mountain Dusk"
+   "path": "generated/ai/bg_fogstrip.png",
+   "pack": "generated"
   },
   "music/title": {
    "path": "itch/extracted/16-bit-fantasy-adventure-music-pack/xDeviruchi - 16 bit Fantasy & Adventure (2025)/Loopable + one shots/ogg/02 - Title Theme.ogg",
@@ -1199,38 +1199,20 @@
    "pack": "AI Sheet"
   },
   "enemy/glitch": {
-   "path": "generated/ai/glitch_0.png",
+   "path": "generated/ai/glitch_creature.png",
    "pack": "AI Sheet"
   },
   "enemy/glitch/idle": {
-   "files": [
-    "generated/ai/glitch_0.png",
-    "generated/ai/glitch_1.png",
-    "generated/ai/glitch_2.png",
-    "generated/ai/glitch_3.png",
-    "generated/ai/glitch_4.png",
-    "generated/ai/glitch_5.png"
-   ],
-   "pack": "AI Sheet",
-   "fps": 10
+   "path": "generated/ai/glitch_creature.png",
+   "pack": "AI Sheet"
   },
   "enemy/glitch/walk": {
-   "files": [
-    "generated/ai/glitch_0.png",
-    "generated/ai/glitch_1.png",
-    "generated/ai/glitch_2.png",
-    "generated/ai/glitch_3.png",
-    "generated/ai/glitch_4.png",
-    "generated/ai/glitch_5.png"
-   ],
-   "pack": "AI Sheet",
-   "fps": 12
+   "path": "generated/ai/glitch_creature.png",
+   "pack": "AI Sheet"
   },
   "enemy/glitch/hat": {
-   "pack": "AI Sheet",
-   "files": [
-    "generated/ai/glitch_7.png"
-   ]
+   "path": "generated/ai/glitch_creature.png",
+   "pack": "AI Sheet"
   },
   "amb/village": {
    "path": "itch/extracted/ambiences-music-pack/JDSherbert - Ambiences Music Pack [FREE]/Stereo/ogg/JDSherbert - Ambiences Music Pack - The Blackpenny Pub.ogg",
