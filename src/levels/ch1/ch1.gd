@@ -338,9 +338,13 @@ func _build_terrain() -> void:
 	# 4) Gecit + Olu Bahce (3350 - 5220) — gothicvania gercek mezarlik katmanlari:
 	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 5220},
-		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 5220},
-		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 5220},
+		# modulate>1 katmani aydinlatir — koyu sprite'lar gece fonunda okunur
+		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 5220,
+			modulate = Color(1.25, 1.2, 1.35)},
+		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 5220,
+			modulate = Color(1.25, 1.2, 1.3)},
+		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 5220,
+			modulate = Color(1.2, 1.15, 1.25)},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 5220,
 			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
@@ -658,6 +662,9 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(pit_x + 26, FLOOR_Y + 62), &"terrain/pf_block", 32)
 	_add_platform(Vector2(pit_x - 26, pit_floor - 30), &"terrain/pf_block", 28)
 	_add_platform(Vector2(pit_x - 28, pit_floor - 72), &"terrain/pf_ledge", 30)
+	# Cikis basamagi: boslugun altinda — dustukten sonra geri tirmanis kolay
+	# (rest point cukurde checkpoint birakir; zor cikis respawn tuzagi olur)
+	_add_platform(Vector2(494.0, FLOOR_Y + 14), &"terrain/pf_block", 20)
 	# Gizli oda kristal dekor (magara hissi)
 	_add_deco_ground(&"terrain/cave_crystal", pit_x - 14, pit_floor,
 		0.8, Color(0.8, 0.7, 1.0))
@@ -826,7 +833,7 @@ func _build_entities() -> void:
 
 	# A — koy: kukla (güvenli saldiri denemesi) + uc koylu dalgasi
 	var dummy := DummyEnemy.new()
-	dummy.global_position = Vector2(452, FLOOR_Y - 12)
+	dummy.global_position = Vector2(396, FLOOR_Y - 12)
 	add_child(dummy)
 	for x in [620.0, 800.0, 900.0]:
 		var v := Villager.new()
