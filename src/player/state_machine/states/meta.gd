@@ -26,6 +26,7 @@ class Transform:
 		super.enter()
 		sam.sprite_flash(Color(0.2, 0.7, 1.0))
 		FX.shake(1.0, 0.15)
+		FX.spark(sam.global_position)
 
 	func physics_process(delta: float) -> StringName:
 		sam.velocity.x = 0.0
@@ -34,7 +35,7 @@ class Transform:
 		var s := Vector2.ONE * (1.0 + 0.15 * sin(t * 25.0))
 		sam.sprite.scale = s
 		if sam._anims != null:
-			sam._anims.scale = s * 0.55
+			sam._anims.scale = s * Samurai.ANIMS_SCALE
 		if t >= 0.4:
 			return Samurai.S_FALL if not sam.is_on_floor() else Samurai.S_IDLE
 		return &""
@@ -42,7 +43,7 @@ class Transform:
 	func exit() -> void:
 		sam.sprite.scale = Vector2.ONE
 		if sam._anims != null:
-			sam._anims.scale = Vector2.ONE * 0.55
+			sam._anims.scale = Vector2.ONE * Samurai.ANIMS_SCALE
 		sam.apply_pending_form()
 
 

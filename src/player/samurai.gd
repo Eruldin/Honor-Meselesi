@@ -19,6 +19,9 @@ const S_REST := &"rest"
 const S_TRANSFORM := &"transform"
 const S_CUTSCENE := &"cutscene"
 
+## 64px cel sheet -> govde olcegi (Transform puls'u da buna geri doner).
+const ANIMS_SCALE := 0.62
+
 const Locomotion := preload("res://src/player/state_machine/states/locomotion.gd")
 const Combat := preload("res://src/player/state_machine/states/combat.gd")
 const Defense := preload("res://src/player/state_machine/states/defense.gd")
@@ -179,7 +182,7 @@ func _build_anims() -> void:
 	if bank.get_animation_names().is_empty():
 		return
 	_anims.sprite_frames = bank
-	_anims.scale = Vector2(0.62, 0.62)    # 64px cel -> ~34px govde
+	_anims.scale = Vector2(ANIMS_SCALE, ANIMS_SCALE)
 	_anims.position = Vector2(1, -11)     # ayak-hizali cel tabani govde dibine
 	sprite.visible = false
 	add_child(_anims)
@@ -575,13 +578,13 @@ func apply_form_data(f: FormData) -> void:
 	hb.size = form.body_size + Vector2(2, 2)
 	if _anims != null:
 		# Gercek animasyonlar sadece samurai formunda; diger formlar
-		# renkli placeholder sprite ile gosterilir.
+		# sprite uzerinden gercek dusman texture'i ile gosterilir.
 		var real := form.id == &"samurai"
 		_anims.visible = real
 		sprite.visible = not real
 		if real:
 			_anim_name = &""
-	else:
+	if _anims == null or form.id != &"samurai":
 		var tex_id := form.sprite_asset
 		if tex_id == &"" or not AssetLoader.has_asset(tex_id):
 			tex_id = &"player/%s/idle" % form.id
