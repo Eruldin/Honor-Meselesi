@@ -2,9 +2,16 @@ class_name LootChest
 extends Node2D
 ## Vurunca acilan odul sandigi: oyuncuyu tam iyilestirir, tek kullanimlik.
 ## Kelimesiz odul isareti — gizli odalarda durur; vurusla kapagi acilir.
+## chest_id GameState flag'ine baglanir: acilan sandik olum/reload'da dolmaz.
+
+@export var chest_id: StringName = &"chest"
 
 var _opened := false
 var _sprite: Sprite2D
+
+
+func _flag() -> StringName:
+	return &"chest_" + chest_id
 
 
 func _ready() -> void:
@@ -15,6 +22,9 @@ func _ready() -> void:
 	hb.pogoable = true
 	add_child(hb)
 	hb.hit_received.connect(_on_hit)
+	if GameState.get_flag(_flag(), false):
+		_opened = true
+		_sprite.modulate = Color(1.4, 1.2, 0.7)
 
 
 ## Hurtbox sahibi olarak hasar almaz; vurus sadece acma tetigidir.
@@ -26,6 +36,7 @@ func _on_hit(_info: DamageInfo) -> void:
 	if _opened:
 		return
 	_opened = true
+	GameState.set_flag(_flag())
 	_sprite.modulate = Color(1.4, 1.2, 0.7)
 	var tw := _sprite.create_tween()
 	tw.tween_property(_sprite, "scale", Vector2(1.15, 0.85), 0.12)
