@@ -93,6 +93,16 @@ func _build() -> void:
 	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.add_child(_content)
 
+	var quit := Button.new()
+	quit.text = "BASLIGA DON" if Settings.language == "tr" else "QUIT TO TITLE"
+	quit.add_theme_font_size_override("font_size", 9)
+	quit.pressed.connect(func() -> void:
+		AudioManager.play_sfx(&"sfx/ui", null, -6.0)
+		get_tree().paused = false
+		SaveSystem.save_game()
+		EventBus.scene_change_requested.emit("res://src/ui/Title.tscn"))
+	vbox.add_child(quit)
+
 	var hint := Label.new()
 	hint.text = tr_ui("close")
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
