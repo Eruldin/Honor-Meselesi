@@ -101,6 +101,31 @@ func _build_terrain() -> void:
 		s.rotation = randf_range(-0.06, 0.06)
 		add_child(s)
 
+	# Bellek monolitleri — boslukta yuzuce dev soluk veri saslaklari
+	for slab in [[330.0, 150.0, 34.0, 130.0, Color(0.5, 0.7, 1.0, 0.055)],
+			[890.0, 120.0, 44.0, 170.0, Color(0.9, 0.4, 0.8, 0.05)],
+			[1210.0, 145.0, 30.0, 150.0, Color(0.5, 0.7, 1.0, 0.065)],
+			[1660.0, 120.0, 52.0, 165.0, Color(0.6, 0.5, 1.0, 0.05)]]:
+		var m := ColorRect.new()
+		m.size = Vector2(slab[2], slab[3])
+		m.color = slab[4]
+		m.position = Vector2(slab[0] - slab[2] / 2.0, slab[1] - slab[3] / 2.0)
+		add_child(m)
+
+	# Bellek yankisi prop'lar — onceki dunyalarin soluk hatiralari
+	for echo in [[300, &"prop/deco_pillar", Vector2i(20, 60), Color(0.45, 0.5, 0.9, 0.5)],
+			[760, &"prop/deco_lantern", Vector2i(12, 18), Color(0.9, 0.5, 0.85, 0.45)],
+			[1080, &"prop/deco_tower", Vector2i(30, 70), Color(0.45, 0.55, 1.0, 0.45)],
+			[1540, &"prop/deco_pillar2", Vector2i(18, 55), Color(0.6, 0.5, 1.0, 0.5)]]:
+		if not AssetLoader.has_asset(echo[1]):
+			continue
+		var e := Sprite2D.new()
+		e.texture = AssetLoader.texture(echo[1], echo[2])
+		e.modulate = echo[3]
+		e.global_position = Vector2(echo[0], 135.0 - float(echo[2].y) * 0.5 + 28.0)
+		e.rotation = randf_range(-0.05, 0.05)
+		add_child(e)
+
 	for wx in [ARENA_L - 14, ARENA_R + 8]:
 		var wall := _make_wall(Vector2(wx, 135))
 		wall.set_deferred("collision_layer", 0)
