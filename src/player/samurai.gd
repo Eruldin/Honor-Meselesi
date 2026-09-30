@@ -445,6 +445,34 @@ func sprite_flash(color: Color) -> void:
 	_flash_timer = 0.09
 
 
+## Dash sirasinda kareye kopyalanip silinen soluk goruntu (HK dash izi).
+func spawn_dash_ghost() -> void:
+	var src: CanvasItem = _anims if _anims != null else sprite
+	var ghost := Sprite2D.new()
+	if _anims != null and _anims.sprite_frames != null:
+		var tex := _anims.sprite_frames.get_frame_texture(_anims.animation, _anims.frame)
+		if tex == null:
+			return
+		ghost.texture = tex
+		ghost.flip_h = _anims.flip_h
+		ghost.offset = _anims.offset
+	elif sprite.texture != null:
+		ghost.texture = sprite.texture
+		ghost.flip_h = sprite.flip_h
+		ghost.offset = sprite.offset
+	else:
+		return
+	ghost.global_position = src.global_position
+	ghost.global_rotation = src.global_rotation
+	ghost.scale = src.global_scale
+	ghost.z_index = src.z_index - 1
+	ghost.modulate = Color(0.35, 0.8, 1.0, 0.55)
+	add_sibling(ghost)
+	var tw := ghost.create_tween()
+	tw.tween_property(ghost, "modulate:a", 0.0, 0.28)
+	tw.tween_callback(ghost.queue_free)
+
+
 # --- Vurus geri cagrilari ---
 
 func _on_attack_struck(_hurtbox: Hurtbox) -> void:
