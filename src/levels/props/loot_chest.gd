@@ -35,4 +35,4 @@ func _on_hit(_info: DamageInfo) -> void:
 		p.health.reset()
 		Pictogram.show_on(p, &"heart", 1.2, Vector2(0, -26))
 	FX.spark(global_position + Vector2(0, -6))
-	AudioManager.play_sfx(&"sfx/checkpoint", global_position)
+	AudioManager.play_sfx(&"sfx/reward", global_position)

@@ -3181,6 +3181,30 @@
    ],
    "fps": 8,
    "pack": "itch"
+  },
+  "sfx/clang": {
+   "path": "itch/extracted/400-sounds-pack/Materials/metal_clang.wav",
+   "pack": "itch"
+  },
+  "sfx/swipe": {
+   "path": "itch/extracted/400-sounds-pack/Combat and Gore/swipe.wav",
+   "pack": "itch"
+  },
+  "sfx/reward": {
+   "path": "itch/extracted/400-sounds-pack/Items/coin_collect.wav",
+   "pack": "itch"
+  },
+  "sfx/powerup": {
+   "path": "itch/extracted/400-sounds-pack/Retro/power_up.wav",
+   "pack": "itch"
+  },
+  "sfx/powerup2": {
+   "path": "itch/extracted/400-sounds-pack/Retro/power_up_2.wav",
+   "pack": "itch"
+  },
+  "sfx/drip": {
+   "path": "itch/extracted/400-sounds-pack/Environment/water_dripping.wav",
+   "pack": "itch"
   }
  }
 }

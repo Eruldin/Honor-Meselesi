@@ -137,6 +137,11 @@ func _build_entities() -> void:
 	sh.global_position = Vector2(620, 143)
 	add_child(sh)
 
+	# Mahzen yankisi — kapali krip bolgesi (x430-560 duvarlari arasi)
+	var drip := AmbientDrip.new()
+	drip.global_position = Vector2(495, 168)
+	add_child(drip)
+
 	var gh1 := Ghost.new()
 	gh1.global_position = Vector2(340, FLOOR_Y - 14)
 	add_child(gh1)

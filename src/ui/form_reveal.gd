@@ -30,7 +30,7 @@ func _present(host: Node2D, form_id: StringName) -> void:
 	add_child(sp)
 
 	FX.spark(host.global_position + Vector2(0, -30))
-	AudioManager.play_sfx(&"sfx/checkpoint", host.global_position, -2.0)
+	AudioManager.play_sfx(&"sfx/powerup2", host.global_position, -2.0)
 
 	var tw := create_tween()
 	sp.scale = Vector2(0.15, 0.15)
