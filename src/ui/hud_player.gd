@@ -13,6 +13,7 @@ var _fill: Control
 var _use_ref := false
 var _form_badge: ColorRect
 var _form_icon: TextureRect
+var _form_time: ColorRect
 var _form_id: StringName = &"samurai"
 
 
@@ -51,6 +52,13 @@ func _ready() -> void:
 	_form_icon.position = Vector2(1, 1)
 	_form_icon.size = Vector2(11, 11)
 	_form_badge.add_child(_form_icon)
+	# Gecici form suresi — rozetin dibinde incelik cubuk
+	_form_time = ColorRect.new()
+	_form_time.color = Color(0.35, 0.8, 0.95, 0.9)
+	_form_time.position = Vector2(0, 11.5)
+	_form_time.size = Vector2(13, 1.5)
+	_form_time.visible = false
+	_form_badge.add_child(_form_time)
 
 	if _use_ref:
 		_build_hearts()
@@ -96,6 +104,12 @@ func _update_form_badge() -> void:
 			tex_id = &"player/%s/idle" % fid
 		_form_icon.texture = AssetLoader.texture(tex_id, Vector2i(11, 11))
 		_form_icon.modulate = form.sprite_color
+	if form.duration > 0.0:
+		_form_time.visible = true
+		_form_time.size.x = 13.0 * clampf(
+			_actor.form_time_left / form.duration, 0.0, 1.0)
+	else:
+		_form_time.visible = false
 
 
 func _build_hearts() -> void:
