@@ -458,6 +458,8 @@ func _on_down_struck(hb: Hurtbox) -> void:
 	invuln_timer = maxf(invuln_timer, 0.25)  # ayni frame diken hasarini yeme
 	FX.hitstop(tuning.hitstop_normal)
 	FX.shake(tuning.shake_light, tuning.shake_duration)
+	FX.spark(hb.global_position + Vector2(0, -4))
+	AudioManager.play_sfx(&"sfx/jump_dirt", global_position, -7.0, 1.3)
 	sm.change_to(S_JUMP, true)
 
 
