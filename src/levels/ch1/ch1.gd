@@ -670,8 +670,9 @@ func _build_terrain() -> void:
 		0.8, Color(0.8, 0.7, 1.0))
 	_add_deco_ground(&"terrain/cave_crystal", pit_x + 18, pit_floor,
 		0.7, Color(0.7, 0.8, 1.0))
-	# Gizli rest point — kuyu gizli odasinin dibinde
-	_add_rest(pit_x + 4, &"ch1_well_secret")
+	# NOT: cukur icine rest point KONMAZ — checkpoint burada kalirsa olumde
+	# oyuncu cikisi zor bir cukurde respawn alir (respawn tuzagi).
+	# Odanin odulu sandik; dinlenme koyde/ormanda kalir.
 	_add_chest(pit_x + 48, pit_floor, &"ch1_well")
 
 	# === OGRETICI TABELALAR ===
