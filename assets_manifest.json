@@ -1368,7 +1368,8 @@
   },
   "bg/j_moon": {
    "pack": "AI Sheet",
-   "path": "generated/ai/bg_moon.png"
+   "path": "generated/ai/bg_moon.png",
+   "region": [7, 20, 41, 30]
   },
   "bg/j_mountains": {
    "path": "generated/ai/bg_layer_far.png",
