@@ -152,6 +152,7 @@ func _choose() -> void:
 
 func _land() -> void:
 	FX.shake(3.5, 0.35)
+	AudioManager.play_sfx(&"sfx/explosion", global_position, -4.0, 0.8)
 	for d in [-1, 1]:
 		var w := Shockwave.new()
 		w.direction = d
