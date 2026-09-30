@@ -42,7 +42,8 @@ static func add(root: Node2D, level_w: float, specs: Array) -> void:
 		for x in range(0, need_w, tile_w):
 			layer_img.blit_rect(timg, Rect2i(0, 0, tile_w, 270), Vector2i(x, 0))
 		var p := Parallax2D.new()
-		p.scroll_scale = Vector2(scroll, 1.0)
+		# y=0: katman dikeyde ekrana sabit — icerik dokudaki gibi gorunur
+		p.scroll_scale = Vector2(scroll, 0.0)
 		var sp := Sprite2D.new()
 		sp.texture = ImageTexture.create_from_image(layer_img)
 		sp.centered = false

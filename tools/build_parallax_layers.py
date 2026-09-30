@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Parallax katman dokulari uretir — ParallaxBg her katmani 270px yukseklige
 olcekleyip yatayda dosemedigi icin, ciktilar 270px yukseklikte, icerik alta
-hizali ve ust kismi saydam/siyah uretilir.
+hizali ve ust kismi saydam uretilir.
 
 Cikti: assets_external/generated/ai/bg_layer_*.png
 """
@@ -20,11 +20,12 @@ def load(name):
     return Image.open(os.path.join(AI, name))
 
 
-def darken(img, f=0.35, blue=1.15):
+def darken(img, f=0.5, tint=(1.0, 1.0, 1.0)):
+    """RGB'yi f ile koyultup tint kanal carpanlari uygular; alpha korunur."""
     a = np.asarray(img).astype(np.float32)
-    a[:, :, 0] *= f
-    a[:, :, 1] *= f
-    a[:, :, 2] = np.clip(a[:, :, 2] * f * blue, 0, 255)
+    a[:, :, 0] = np.clip(a[:, :, 0] * f * tint[0], 0, 255)
+    a[:, :, 1] = np.clip(a[:, :, 1] * f * tint[1], 0, 255)
+    a[:, :, 2] = np.clip(a[:, :, 2] * f * tint[2], 0, 255)
     return Image.fromarray(a.astype(np.uint8))
 
 
@@ -35,49 +36,67 @@ def paste_on(layer, img, x, y_bottom, h=None):
     return x + img.width
 
 
-def strip_to_270(img):
-    """Kaynak seridi 270 tavana gore alt hizali 1024x270 katmana donustur."""
-    return img
+def ground_band(img, y0=228, col=(10, 9, 16, 255)):
+    """Katmanin altina kapali zemin seridi — siluetler havada durmasin."""
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, y0, img.width, 269], fill=col)
 
 
 def main() -> int:
-    # ============ FAR: dag siluetleri (1024x270, ust %60 saydam) ============
+    # ============ FAR: dag siluetleri (1024x270) ============
     far = Image.new("RGBA", (1024, 270), (0, 0, 0, 0))
     d = ImageDraw.Draw(far)
     rng = random.Random(11)
+    # arka sirt (uzak, daha acik/mavi)
+    x = -60
+    while x < 1100:
+        w = rng.randint(260, 420)
+        peak = rng.randint(70, 110)
+        pts = [(x, 270), (x + w * 0.5, 270 - peak - 30), (x + w, 270)]
+        d.polygon(pts, fill=(26, 32, 56, 255))
+        x += w * 2 // 3
+    # on sirt (yakin, biraz daha koyu)
     x = -40
+    rng = random.Random(23)
     while x < 1100:
         w = rng.randint(220, 380)
-        peak = rng.randint(80, 130)
-        base = 270
-        pts = [(x, base), (x + w * 0.5, base - peak), (x + w, base)]
-        d.polygon(pts, fill=(14, 18, 34, 255))
-        # tepe yankisi — ikinci, biraz acik siluet
+        peak = rng.randint(60, 100)
+        pts = [(x, 270), (x + w * 0.5, 270 - peak), (x + w, 270)]
+        d.polygon(pts, fill=(20, 25, 44, 255))
         x += w // 2
     far = far.filter(ImageFilter.GaussianBlur(1.2))
     far.save(os.path.join(AI, "bg_layer_far.png"))
 
     # ============ MID: uzak koy/agac silueti (1024x270) ============
     mid = Image.new("RGBA", (1024, 270), (0, 0, 0, 0))
+    ground_band(mid, 244)
     xs = 10
     seq = ["v2ha_1.png", "v2na_6.png", "v2ha_3.png", "v2na_8.png",
            "v2ha_0.png", "v2na_2.png", "v2td_5.png", "v2na_10.png",
            "v2ha_2.png", "v2na_8.png", "v2ha_5.png", "v2na_11.png"]
     for i, name in enumerate(seq):
-        t = darken(load(name), 0.30)
-        h = 70 + (i % 3) * 22
-        xs = paste_on(mid, t, xs, 270, h) - 14
+        p = os.path.join(AI, name)
+        if not os.path.exists(p):
+            continue
+        t = darken(load(name), 0.9, (0.85, 0.9, 1.05))
+        h = 90 + (i % 3) * 30
+        xs = paste_on(mid, t, xs, 250, h) - 16
     mid = mid.filter(ImageFilter.GaussianBlur(0.6))
     mid.save(os.path.join(AI, "bg_layer_mid.png"))
 
     # ============ TREES: yakin agac cizgisi (512x270) ============
     trees = Image.new("RGBA", (512, 270), (0, 0, 0, 0))
-    xs = -10
-    for i, name in enumerate(["v2na_8.png", "v2na_0.png", "v2na_10.png",
-                              "v2na_6.png", "v2na_2.png"]):
-        t = darken(load(name), 0.22)
-        h = 150 + (i % 2) * 40
-        xs = paste_on(trees, t, xs, 270, h) - 30
+    ground_band(trees, 246)
+    xs = -16
+    seq = ["v2na_8.png", "v2na_0.png", "v2na_10.png", "v2na_6.png",
+           "v2na_2.png", "v2na_11.png", "v2na_8.png", "v2na_0.png"]
+    for i, name in enumerate(seq):
+        p = os.path.join(AI, name)
+        if not os.path.exists(p):
+            continue
+        t = darken(load(name), 1.0, (0.9, 0.95, 0.9))  # koyu ama gorunur
+        h = 190 + (i % 2) * 50
+        xs = paste_on(trees, t, xs, 254, h) - 34
     trees.save(os.path.join(AI, "bg_layer_trees.png"))
 
     # ============ MIST: alcalan sis seridi (512x270, ust bos) ============
@@ -116,7 +135,8 @@ def main() -> int:
     xs = -20
     rng = random.Random(5)
     while xs < 1100:
-        rock = darken(load("v2wb_%d.png" % rng.choice([1, 3, 5])), 0.35)
+        rock = darken(load("v2wb_%d.png" % rng.choice([1, 3, 5])), 0.5,
+                      (0.8, 0.85, 1.1))
         h = rng.randint(60, 120)
         xs = paste_on(cave, rock, xs, 270, h) - 20
     cave = cave.filter(ImageFilter.GaussianBlur(1.5))

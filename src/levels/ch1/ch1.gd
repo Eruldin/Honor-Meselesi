@@ -326,8 +326,11 @@ func _build_terrain() -> void:
 	])
 	
 	# 5) Arena (4500 - LEVEL_W)
+	# NOT: buraya ikinci bir scroll=0 gokyuzu KONMAZ — scroll-0 katman ekrana
+	# sabittir ve bolgeden bagimsiz tum ekrani kaplar; son sirayla cizildigi
+	# icin diger tum parallax katmanlari gizler. Tek global gokyuzu koy
+	# grubunun ilk katmanidir (ustte).
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/dusk_sky", scroll = 0.0, x0 = 4500, x1 = LEVEL_W},
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 4500, x1 = LEVEL_W},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 4500, x1 = LEVEL_W},
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 4500, x1 = LEVEL_W},
