@@ -792,6 +792,10 @@ func _build_terrain() -> void:
 		door.texture = btex
 		door.modulate = Color(0.55, 0.4, 0.42)
 		_gate_body.add_child(door)
+	# Nobetci oldurulduyse kapi acik kalir — mini-boss respawn olmaz
+	if GameState.get_flag(&"ch1_knight_dead", false):
+		_gate_body.collision_layer = 0
+		_gate_body.modulate.a = 0.0
 
 	# Arena girisi: nobetci heykeller + ic duvarlar
 	_add_deco_ground(&"prop/statue", ARENA_L - 34, FLOOR_Y, 0.7,
@@ -934,11 +938,12 @@ func _build_entities() -> void:
 	add_child(crow)
 
 	_add_rest(4050, &"ch1_gate")
-	knight = HeavyKnight.new()
-	knight.grants_form = &"sovalye"
-	knight.global_position = Vector2(4230, FLOOR_Y - 14)
-	add_child(knight)
-	knight.health.died.connect(_open_gate, CONNECT_ONE_SHOT)
+	if not GameState.get_flag(&"ch1_knight_dead", false):
+		knight = HeavyKnight.new()
+		knight.grants_form = &"sovalye"
+		knight.global_position = Vector2(4230, FLOOR_Y - 14)
+		add_child(knight)
+		knight.health.died.connect(_open_gate, CONNECT_ONE_SHOT)
 
 	# F — olu bahce gauntlet: son savas dalgasi (arenadan once elit yogunluk)
 	for x in [4520.0, 4630.0]:
@@ -1077,6 +1082,7 @@ func _build_hud() -> void:
 
 func _open_gate() -> void:
 	GameState.set_flag(&"ch1_knight_dead")
+	SaveSystem.save_game()
 	if _gate_body != null:
 		_gate_body.set_deferred("collision_layer", 0)
 		var tw := _gate_body.create_tween()
