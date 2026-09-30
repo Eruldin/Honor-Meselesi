@@ -31,6 +31,7 @@ func _ready() -> void:
 	add_child(hitbox)
 	hitbox.activate(DamageInfo.make(1, self,
 		Vector2(0, 60) if vertical else Vector2(direction * 60, 0), true, false))
+	AudioManager.play_sfx(&"sfx/dash", global_position, -14.0, randf_range(1.15, 1.35))
 
 
 func _physics_process(delta: float) -> void:
