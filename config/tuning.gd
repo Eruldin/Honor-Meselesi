@@ -39,6 +39,7 @@ extends Resource
 @export var parry_stagger: float = 1.2        ## dusman sersemleme suresi
 
 @export_group("Hasar / Can")
+@export var hit_stagger: float = 0.22         ## vurusta dusman kesintisi (knockback_resist ile olceklenir)
 @export var max_health: int = 5               ## "5 maske"
 @export var hurt_invuln_time: float = 0.8
 @export var hurt_knockback: float = 140.0

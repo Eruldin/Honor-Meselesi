@@ -166,6 +166,10 @@ func take_damage(info: DamageInfo) -> void:
 		play_anim(&"hurt", 0.25)
 	_flash_timer = 0.08
 	_kb_vel += info.knockback * 0.6 * (1.0 - knockback_resist)
+	# Zirhli dusmanlar (knockback_resist yuksek) vurusa kesintisiz devam
+	# eder; hafif dusmanlar kisa sersemler — vurmak hissedilir olsun.
+	stagger_timer = maxf(stagger_timer,
+		tuning.hit_stagger * (1.0 - knockback_resist))
 	EventBus.damage_dealt.emit(self, info)
 
 
