@@ -38,6 +38,16 @@ func get_flag(key: StringName, default: Variant = false) -> Variant:
 	return flags.get(key, default)
 
 
+## respawn_pos flag'i bolumler arasi tasir: RestPoint respawn_ch'i de
+## yazar; sadece ayni bolumde gecerli kabul edilir. Yoksa onceki bolumun
+## koordinati (or. x=4050) dar bir bolumde dunya disi spawn uretir.
+func respawn_point(default_pos: Vector2) -> Vector2:
+	var cp: Variant = get_flag(&"respawn_pos", default_pos)
+	if cp is Vector2 and get_flag(&"respawn_ch", current_chapter) == current_chapter:
+		return cp
+	return default_pos
+
+
 func reset() -> void:
 	current_chapter = &"prolog"
 	current_form = &"samurai"

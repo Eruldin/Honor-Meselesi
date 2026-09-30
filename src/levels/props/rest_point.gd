@@ -41,6 +41,7 @@ func rest(player) -> void:
 	_used = true
 	GameState.checkpoint_id = checkpoint_id
 	GameState.set_flag(&"respawn_pos", global_position)
+	GameState.set_flag(&"respawn_ch", GameState.current_chapter)
 	player.sm.change_to(Samurai.S_REST, true)
 	player.health.reset()
 	SaveSystem.save_game()
