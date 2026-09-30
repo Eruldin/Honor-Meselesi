@@ -1760,6 +1760,10 @@
     "bg/cave_back": {
       "path": "generated/ai/bg_cavewall.png",
       "pack": "AI Sheet"
+    },
+    "ui/logo": {
+      "path": "generated/ai/ui_logo.png",
+      "pack": "AI Sheet"
     }
   }
 }

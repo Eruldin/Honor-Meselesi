@@ -399,6 +399,7 @@ def main() -> int:
         "terrain/ground": G + "ground_face.png",
         "prop/katana": A + "hud_katana.png",
         "ui/bar_frame": A + "bar_frame.png",
+        "ui/logo": A + "ui_logo.png",
     }.items():
         assets[lid] = {"path": path, "pack": "AI Sheet"}
 

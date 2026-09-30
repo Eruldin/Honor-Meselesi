@@ -101,29 +101,40 @@ func _build_scenery() -> void:
 
 
 func _build_menu() -> void:
-	# Baslik: koyu golge + kirmizi-altin harfler
-	var title := Label.new()
-	title.text = "HONOR  MESELESI"
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color(0.95, 0.82, 0.55))
-	title.add_theme_color_override("font_shadow_color", Color(0.35, 0.05, 0.08))
-	title.add_theme_constant_override("shadow_offset_x", 2)
-	title.add_theme_constant_override("shadow_offset_y", 2)
-	var tw := title.get_theme_default_font().get_string_size(
-		title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 26).x
-	title.position = Vector2(240 - tw / 2.0, 18)
-	title.z_index = 10
-	add_child(title)
+	# Gercek logo varsa kullan (ui/logo), yoksa metin basliga dus
+	if AssetLoader.has_asset(&"ui/logo"):
+		var logo := Sprite2D.new()
+		logo.texture = AssetLoader.texture(&"ui/logo")
+		logo.centered = true
+		# 360px genislikte — torii+kasa+katana+isim butun olarak
+		var lw := 210.0
+		logo.scale = Vector2.ONE * (lw / logo.texture.get_width())
+		logo.position = Vector2(240, 78)
+		logo.z_index = 10
+		add_child(logo)
+	else:
+		var title := Label.new()
+		title.text = "HONOR  MESELESI"
+		title.add_theme_font_size_override("font_size", 26)
+		title.add_theme_color_override("font_color", Color(0.95, 0.82, 0.55))
+		title.add_theme_color_override("font_shadow_color", Color(0.35, 0.05, 0.08))
+		title.add_theme_constant_override("shadow_offset_x", 2)
+		title.add_theme_constant_override("shadow_offset_y", 2)
+		var tw := title.get_theme_default_font().get_string_size(
+			title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 26).x
+		title.position = Vector2(240 - tw / 2.0, 18)
+		title.z_index = 10
+		add_child(title)
 
-	var sub := Label.new()
-	sub.text = "~ onurunu geri al ~"
-	sub.add_theme_font_size_override("font_size", 8)
-	sub.add_theme_color_override("font_color", Color(0.8, 0.65, 0.6, 0.85))
-	var sw := sub.get_theme_default_font().get_string_size(
-		sub.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
-	sub.position = Vector2(240 - sw / 2.0, 48)
-	sub.z_index = 10
-	add_child(sub)
+		var sub := Label.new()
+		sub.text = "~ onurunu geri al ~"
+		sub.add_theme_font_size_override("font_size", 8)
+		sub.add_theme_color_override("font_color", Color(0.8, 0.65, 0.6, 0.85))
+		var sw := sub.get_theme_default_font().get_string_size(
+			sub.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
+		sub.position = Vector2(240 - sw / 2.0, 48)
+		sub.z_index = 10
+		add_child(sub)
 
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 4)
