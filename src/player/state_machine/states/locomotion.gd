@@ -80,12 +80,19 @@ class Fall:
 class Dash:
 	extends PlayerState
 
+	var _trail := 0.0
+
 	func enter() -> void:
 		super.enter()
 		sam.velocity.y = 0.0
 		sam.sprite_flash(Color(0.3, 0.8, 1.0))
+		_trail = 0.0
 
 	func physics_process(delta: float) -> StringName:
+		_trail -= delta
+		if _trail <= 0.0:
+			_trail = 0.055
+			sam.spawn_dash_ghost()
 		sam.velocity = Vector2(sam.dash_dir * sam.tuning.dash_speed, 0.0)
 		if t >= sam.tuning.dash_time:
 			sam.dash_cooldown = sam.tuning.dash_cooldown
