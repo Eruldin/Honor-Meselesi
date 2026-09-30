@@ -34,7 +34,7 @@ extends Resource
 @export var pogo_factor: float = 0.85         ## ziplama hizinin %85'i
 
 @export_group("Parry")
-@export var parry_window: float = 0.12        ## 120 ms
+@export var parry_window: float = 0.15        ## 150 ms — ogretilen mekanik, tolerans
 @export var parry_recovery: float = 0.35      ## iskalama cezasi
 @export var parry_stagger: float = 1.2        ## dusman sersemleme suresi
 
