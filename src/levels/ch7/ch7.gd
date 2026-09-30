@@ -37,6 +37,14 @@ func _process(_delta: float) -> void:
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+	# Bosluk dususu: platform kenarindan dusen yaratik 1 can kaybedip geri doner
+	if creature != null and not _respawn_pending \
+			and (creature.global_position.y > 430.0 \
+				or creature.global_position.y < -80.0):
+		creature.global_position = Vector2(150, FLOOR_Y - 10)
+		creature.velocity = Vector2.ZERO
+		FX.glitch(0.4, 0.3)
+		creature._on_hit_info(DamageInfo.make(1, null, Vector2.ZERO, true, true))
 
 
 
