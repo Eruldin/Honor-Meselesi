@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 func take_damage(_info: DamageInfo) -> void:
 	FX.spark(hurtbox.global_position + Vector2(0, -10))
 	FX.hitstop(0.03)
+	AudioManager.play_sfx(&"sfx/clang", global_position, -4.0)
 
 
 ## Zayif pil: ayri hurtbox — sadece bu hasar gecirir.

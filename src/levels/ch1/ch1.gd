@@ -1030,6 +1030,7 @@ func _build_fx() -> void:
 	add_child(weather)
 	weather.setup(camera, [
 		{x0 = 0.0,    x1 = 2300.0, kind = "petals"},
+		{x0 = 2300.0, x1 = 3350.0, kind = "ash"},
 		{x0 = 3350.0, x1 = 5220.0, kind = "rain"},
 	])
 
