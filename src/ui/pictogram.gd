@@ -9,7 +9,7 @@ const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
 	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right", &"swap",
-	&"heart", &"eye", &"skull",
+	&"heart", &"eye", &"skull", &"dash",
 ]
 
 var icon: StringName = &"alarm"
@@ -133,6 +133,13 @@ func _draw_icon() -> void:
 			draw_arc(Vector2(0, 0), 6.5, PI + 0.45, TAU - 0.45, 10, c, 1.7)
 			draw_arc(Vector2(0, 0), 6.5, 0.45, PI - 0.45, 10, c, 1.7)
 			draw_circle(Vector2(0, 0), 2.2, c)
+		&"dash":  # cift seritli saga firlatma — dash ogretimi
+			for i in 2:
+				draw_polyline(PackedVector2Array([
+					Vector2(-5 + i * 5, -4), Vector2(-1 + i * 5, 0),
+					Vector2(-5 + i * 5, 4)]), c, 1.8)
+			draw_line(Vector2(-7, -4), Vector2(-4, -4), c, 1.4)
+			draw_line(Vector2(-7, 4), Vector2(-4, 4), c, 1.4)
 		&"skull":  # kurukafa — tehlike/olumluk bolge uyarisi
 			var kc := Color(0.85, 0.2, 0.25)
 			draw_circle(Vector2(0, -1.5), 4.2, kc)
