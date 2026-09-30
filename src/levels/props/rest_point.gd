@@ -7,8 +7,12 @@ extends Area2D
 @export var checkpoint_id: StringName = &"cp"
 
 var _used := false
-var _prev_music: StringName = &""
 var _resting_player: Node2D = null
+var _owns_music := false
+
+## Dinlenme temasina gecmeden once calan parca — tum noktalarin paylastigi
+## tek deger: B noktasi A'nin temasi sirasinda ele gecirirse ayni parcaya doner.
+static var _shared_prev_music: StringName = &""
 
 
 func _process(_delta: float) -> void:
@@ -21,9 +25,10 @@ func _process(_delta: float) -> void:
 		return
 	if _resting_player.global_position.distance_to(global_position) > 140.0:
 		_resting_player = null
-		if AudioManager._current_music == &"music/rest_point" \
-				and _prev_music != &"":
-			AudioManager.play_music(_prev_music)
+		if _owns_music and AudioManager._current_music == &"music/rest_point" \
+				and _shared_prev_music != &"":
+			AudioManager.play_music(_shared_prev_music)
+		_owns_music = false
 
 
 func _ready() -> void:
@@ -68,6 +73,9 @@ func rest(player) -> void:
 	FX.spark(global_position + Vector2(0, -10))
 	AudioManager.play_sfx(&"sfx/checkpoint", global_position)
 	# Bench temasi: dinlenme aninda sakin parca, uzaklasinca eski muzik.
-	_prev_music = AudioManager._current_music
+	# Tema hala caliyorsa onceki parcayi ezme; bu nokta sahipligi devralir.
+	if AudioManager._current_music != &"music/rest_point":
+		_shared_prev_music = AudioManager._current_music
+	_owns_music = true
 	_resting_player = player
 	AudioManager.play_music(&"music/rest_point")
