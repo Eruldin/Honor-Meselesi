@@ -90,9 +90,9 @@ func _build_terrain() -> void:
 		add_child(f)
 
 	# Kirik boyut parcalari — onceki bolumlerin tile dokularindan adaciklar
-	for frag in [[180, 120, &"terrain/ash_ground", Color(0.7, 0.7, 1.0)],
+	for frag in [[180, 120, &"terrain/ground_face", Color(0.7, 0.7, 1.0)],
 			[720, 110, &"terrain/block", Color(0.7, 0.8, 1.0)],
-			[1150, 100, &"terrain/ash_ground", Color(0.6, 0.7, 1.1)],
+			[1150, 100, &"terrain/ground_face", Color(0.6, 0.7, 1.1)],
 			[1450, 95, &"terrain/block", Color(0.7, 0.7, 1.0)]]:
 		var s := Sprite2D.new()
 		s.texture = AssetLoader.tiled_texture(frag[2], Vector2i(48, 18))
@@ -136,8 +136,8 @@ func _add_ground(center: Vector2, size: Vector2) -> void:
 	col.shape = rect
 	body.add_child(col)
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.tiled_texture(&"terrain/ash_ground", Vector2i(size))
-	sprite.modulate = Color(0.75, 0.72, 1.0)
+	sprite.texture = AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(size))
+	sprite.modulate = Color(0.4, 0.38, 0.62)
 	body.add_child(sprite)
 	body.global_position = center
 	add_child(body)

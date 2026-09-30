@@ -113,7 +113,7 @@ func _build_terrain() -> void:
 	body.global_position = Vector2(240, FLOOR_Y + 8)
 	add_child(body)
 	var sp := Sprite2D.new()
-	sp.texture = AssetLoader.tiled_texture(&"terrain/ash_ground", Vector2i(360, 20))
+	sp.texture = AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(360, 20))
 	sp.modulate = Color(0.6, 0.55, 0.9)
 	sp.global_position = body.global_position
 	add_child(sp)
