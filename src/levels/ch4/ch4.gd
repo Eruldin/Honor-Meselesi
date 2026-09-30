@@ -179,6 +179,19 @@ func _build_entities() -> void:
 	rest.global_position = Vector2(1060, FLOOR_Y - 12)
 	add_child(rest)
 
+	# Hirsiz cameo — boyutlar arasi kacis goruntusu, tek seferlik
+	var cameo_trig := Area2D.new()
+	cameo_trig.collision_layer = 0
+	cameo_trig.collision_mask = 4
+	var cc := CollisionShape2D.new()
+	var cr := RectangleShape2D.new()
+	cr.size = Vector2(10, 200)
+	cc.shape = cr
+	cameo_trig.add_child(cc)
+	cameo_trig.global_position = Vector2(850, FLOOR_Y - 40)
+	cameo_trig.area_entered.connect(_on_thief_cameo, CONNECT_ONE_SHOT)
+	add_child(cameo_trig)
+
 	if not GameState.get_flag(&"ch4_boss_dead", false):
 		boss = RedTyrant.new()
 		boss.name = "KizilTulumluTiran"
@@ -313,6 +326,16 @@ func _go_ch5() -> void:
 	GameState.current_chapter = &"ch5"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH5_PATH)
+
+
+func _on_thief_cameo(area: Area2D) -> void:
+	var p := area.get_parent()
+	while p != null and not p.is_in_group(&"player"):
+		p = p.get_parent()
+	if p == null or GameState.get_flag(&"ch4_cameo_done", false):
+		return
+	GameState.set_flag(&"ch4_cameo_done")
+	ThiefCameo.spawn(self, Vector2(880, FLOOR_Y - 14))
 
 
 func _on_actor_died(actor: Node) -> void:
