@@ -280,6 +280,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func toggle() -> void:
 	_open = not _open
 	visible = _open
+	get_tree().paused = _open
 	if _open:
 		_rebuild_tab()
-	get_tree().paused = _open
