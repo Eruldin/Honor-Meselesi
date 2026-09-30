@@ -269,6 +269,14 @@ func _add_chest(x: float, ground_y: float) -> void:
 	add_child(ch)
 
 
+## Kalp kristali — kalici +1 maks can (mahzen cikis platformunun ustunde).
+func _add_shard(x: float, y: float, id: StringName) -> void:
+	var sh := HeartShard.new()
+	sh.pickup_id = id
+	sh.global_position = Vector2(x, y)
+	add_child(sh)
+
+
 func _build_terrain() -> void:
 	# Gokyuzu zemin rengi (Tum bolume yayili, yeralti bosluklarini kapatir)
 	var sky := ColorRect.new()
@@ -691,6 +699,7 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"prop/grave_3", 3670, decor_crypt_y, 0.85, Color(0.6, 0.5, 0.5))
 	_add_rest(3900, &"ch1_gate_secret", decor_crypt_y - 4)
 	_add_chest(3940, decor_crypt_y)
+	_add_shard(3750, decor_crypt_y - 128, &"ch1_crypt")
 
 	# Ust Rota Dekoru (yosun, heykel kiriklari vb)
 	_add_deco(&"prop/moss", Vector2(3650, 148), 0.7, Color(0.5, 0.45, 0.4))

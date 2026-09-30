@@ -113,7 +113,7 @@ func _build_nodes() -> void:
 	_build_anims()
 
 	health = Health.new()
-	health.max_health = tuning.max_health
+	health.max_health = tuning.max_health + GameState.max_health_bonus
 	health.name = "Health"
 	add_child(health)
 

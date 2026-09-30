@@ -10,6 +10,7 @@ var _with_soul := true
 var _hearts: Array[TextureRect] = []
 var _soul_bar: TextureRect
 var _fill: Control
+var _use_ref := false
 
 
 static func make(actor: Node2D, with_soul := true) -> HudPlayer:
@@ -24,8 +25,8 @@ static func make(actor: Node2D, with_soul := true) -> HudPlayer:
 func _ready() -> void:
 	if _actor == null:
 		return
-	var use_ref := AssetLoader.has_asset(&"ui/hud_heart")
-	if use_ref and AssetLoader.has_asset(&"ui/hud_portrait"):
+	_use_ref = AssetLoader.has_asset(&"ui/hud_heart")
+	if _use_ref and AssetLoader.has_asset(&"ui/hud_portrait"):
 		var pr := TextureRect.new()
 		pr.texture = AssetLoader.texture(&"ui/hud_portrait")
 		pr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -34,18 +35,8 @@ func _ready() -> void:
 		pr.size = Vector2(19, 19)
 		add_child(pr)
 
-	if use_ref:
-		var hx := 27.0
-		for i in _actor.health.max_health:
-			var ht := TextureRect.new()
-			ht.texture = AssetLoader.texture(&"ui/hud_heart")
-			ht.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			ht.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
-			ht.position = Vector2(hx, 6)
-			ht.size = Vector2(9, 9)
-			add_child(ht)
-			_hearts.append(ht)
-			hx += 11.0
+	if _use_ref:
+		_build_hearts()
 		if _with_soul and AssetLoader.has_asset(&"ui/hud_katana"):
 			var kb := TextureRect.new()
 			kb.texture = AssetLoader.texture(&"ui/hud_katana")
@@ -70,9 +61,28 @@ func _ready() -> void:
 			pb.root.add_child(fr)
 
 
+func _build_hearts() -> void:
+	for h in _hearts:
+		h.queue_free()
+	_hearts.clear()
+	var hx := 27.0
+	for i in _actor.health.max_health:
+		var ht := TextureRect.new()
+		ht.texture = AssetLoader.texture(&"ui/hud_heart")
+		ht.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ht.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+		ht.position = Vector2(hx, 6)
+		ht.size = Vector2(9, 9)
+		add_child(ht)
+		_hearts.append(ht)
+		hx += 11.0
+
+
 func _process(_delta: float) -> void:
 	if _actor == null or not is_instance_valid(_actor):
 		return
+	if _use_ref and _hearts.size() != _actor.health.max_health:
+		_build_hearts()   # kalp kristali: sahnede max can artti
 	for i in _hearts.size():
 		_hearts[i].modulate = Color(1.25, 1.15, 1.1, 1.0) \
 			if i < _actor.health.current \
