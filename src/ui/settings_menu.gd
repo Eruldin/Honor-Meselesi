@@ -6,7 +6,7 @@ extends CanvasLayer
 const TABS: Array[StringName] = [&"grafik", &"ses", &"dil", &"kontrol"]
 const REBINDABLE: Array[StringName] = [
 	&"move_left", &"move_right", &"move_up", &"move_down",
-	&"jump", &"attack", &"parry", &"dash", &"form_prev", &"form_next",
+	&"jump", &"attack", &"parry", &"dash", &"focus", &"form_prev", &"form_next",
 ]
 const LABELS := {
 	"tr": {"grafik": "GRAFIK", "ses": "SES", "dil": "DIL", "kontrol": "KONTROLLER",
@@ -17,7 +17,8 @@ const LABELS := {
 const ACTION_NAMES := {
 	&"move_left": "Sola", &"move_right": "Saga", &"move_up": "Yukari",
 	&"move_down": "Asagi", &"jump": "Zipla", &"attack": "Saldir",
-	&"parry": "Parry", &"dash": "Dash", &"form_prev": "Onceki Form",
+	&"parry": "Parry", &"dash": "Dash", &"focus": "Odak/Iyilesme",
+	&"form_prev": "Onceki Form",
 	&"form_next": "Sonraki Form",
 }
 
