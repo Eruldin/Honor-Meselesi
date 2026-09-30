@@ -17,11 +17,24 @@ var _tex := {}
 func setup(cam: Camera2D, zones: Array) -> void:
 	_cam = cam
 	_zones = zones
-	for id in [&"vfx/petal", &"vfx/raindrop", &"vfx/dust", &"vfx/rainsplash"]:
-		if AssetLoader.has_asset(id):
-			_tex[id] = AssetLoader.texture(id) \
-				if not AssetLoader.has_frames(id) \
-				else AssetLoader.frames(id).get_frame_texture(&"default", 0)
+	# Partikul boyutlari kucuk tutulur — kaynak sprite'lar buyuk olabilir,
+	# texture() ikinci argumanda istenen piksel boyutuna olcekler.
+	var sizes := {
+		&"vfx/petal": Vector2i(5, 4),
+		&"vfx/raindrop": Vector2i(3, 9),
+		&"vfx/dust": Vector2i(10, 8),
+		&"vfx/rainsplash": Vector2i(8, 5),
+	}
+	for id in sizes:
+		if not AssetLoader.has_asset(id):
+			continue
+		if AssetLoader.has_frames(id):
+			var fr := AssetLoader.frames(id).get_frame_texture(&"default", 0)
+			var img := fr.get_image()
+			img.resize(sizes[id].x, sizes[id].y, Image.INTERPOLATE_NEAREST)
+			_tex[id] = ImageTexture.create_from_image(img)
+		else:
+			_tex[id] = AssetLoader.texture(id, sizes[id])
 
 
 func _process(delta: float) -> void:
@@ -108,7 +121,7 @@ static func puff(parent: Node, pos: Vector2) -> void:
 	if parent == null or not AssetLoader.has_asset(&"vfx/dust"):
 		return
 	var d := Sprite2D.new()
-	d.texture = AssetLoader.texture(&"vfx/dust")
+	d.texture = AssetLoader.texture(&"vfx/dust", Vector2i(10, 8))
 	d.position = pos + Vector2(randf_range(-2.0, 2.0), -2.0)
 	d.modulate = Color(0.75, 0.68, 0.6, 0.8)
 	d.z_index = 5
