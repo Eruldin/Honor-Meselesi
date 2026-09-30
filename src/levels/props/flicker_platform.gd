@@ -54,6 +54,8 @@ func _process(delta: float) -> void:
 			_t = off_time
 			collision_layer = 0
 			_sprite.visible = false
+			AudioManager.play_sfx(&"sfx/ghost", global_position,
+				-14.0, randf_range(1.2, 1.4))
 	else:
 		if _t <= 0.0:
 			_on = true
@@ -61,3 +63,5 @@ func _process(delta: float) -> void:
 			collision_layer = 1
 			_sprite.visible = true
 			_sprite.modulate.a = 1.0
+			AudioManager.play_sfx(&"sfx/ui", global_position,
+				-14.0, randf_range(1.3, 1.5))
