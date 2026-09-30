@@ -9,6 +9,7 @@ const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
 	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right", &"swap",
+	&"heart", &"eye", &"skull",
 ]
 
 var icon: StringName = &"alarm"
@@ -128,3 +129,15 @@ func _draw_icon() -> void:
 				Vector2(4.4, -0.9), Vector2(6.4, -0.1), Vector2(4.7, 1.0)]), c)
 			draw_colored_polygon(PackedVector2Array([
 				Vector2(-4.4, 0.9), Vector2(-6.4, 0.1), Vector2(-4.7, -1.0)]), c)
+		&"eye":  # goz — "dikkat et / gizli sey yakin" ipucu
+			draw_arc(Vector2(0, 0), 6.5, PI + 0.45, TAU - 0.45, 10, c, 1.7)
+			draw_arc(Vector2(0, 0), 6.5, 0.45, PI - 0.45, 10, c, 1.7)
+			draw_circle(Vector2(0, 0), 2.2, c)
+		&"skull":  # kurukafa — tehlike/olumluk bolge uyarisi
+			var kc := Color(0.85, 0.2, 0.25)
+			draw_circle(Vector2(0, -1.5), 4.2, kc)
+			draw_rect(Rect2(Vector2(-2.5, 1.0), Vector2(5, 3.5)), kc)
+			draw_circle(Vector2(-1.7, -2.0), 1.0, Color(0.12, 0.12, 0.14))
+			draw_circle(Vector2(1.7, -2.0), 1.0, Color(0.12, 0.12, 0.14))
+			draw_line(Vector2(-1.5, 4.5), Vector2(1.5, 4.5),
+				Color(0.12, 0.12, 0.14), 1.0)

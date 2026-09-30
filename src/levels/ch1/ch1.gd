@@ -665,6 +665,8 @@ func _build_terrain() -> void:
 	_add_sign(Vector2(1180, FLOOR_Y), &"jump")     # cukur oncesi
 	_add_sign(Vector2(2490, FLOOR_Y), &"down")     # pogo (asagi+saldiri)
 	_add_sign(Vector2(3660, FLOOR_Y), &"shield")   # parry — muhafizdan once
+	_add_sign(Vector2(1980, FLOOR_Y), &"eye")      # gizli tapinak — kirilebilir duvar
+	_add_sign(Vector2(2570, FLOOR_Y), &"skull")    # diken tarlasi oncesi tehlike
 
 
 	# === ORMAN DEKORU ===
