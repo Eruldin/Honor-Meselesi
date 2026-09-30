@@ -54,6 +54,12 @@ func on_reset() -> void:
 	pass
 
 
+## Faz gecis geri bildirimi: ugultu + kivilcim patlamasi (tum boss'lar).
+func _enrage_cue() -> void:
+	AudioManager.play_sfx(&"sfx/npc_grunt_3", global_position, -2.0, 0.85)
+	FX.spark(global_position + Vector2(0, -14))
+
+
 func take_damage(info: DamageInfo) -> void:
 	if not active or not health.is_alive():
 		return
@@ -63,6 +69,7 @@ func take_damage(info: DamageInfo) -> void:
 		phase += 1
 		phase_changed.emit(phase)
 		on_phase_changed(phase)
+		_enrage_cue()
 
 
 func _on_died() -> void:

@@ -125,6 +125,7 @@ func _land_slam() -> void:
 	_t = tuning.cluck_attack_gap_p2 if phase >= 1 else tuning.cluck_attack_gap
 	velocity = Vector2.ZERO
 	FX.shake(tuning.shake_heavy, 0.35)
+	AudioManager.play_sfx(&"sfx/explosion", global_position, -4.0, 0.8)
 	# Iki yone sok dalgasi
 	for dir in [-1, 1]:
 		var w := Shockwave.new()
