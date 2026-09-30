@@ -50,4 +50,5 @@ func _on_died() -> void:
 			var p := get_tree().get_first_node_in_group(&"player")
 			if p != null and p.has_method("equip_form"):
 				p.equip_form(grants_form)
+				FormReveal.show_on(p, grants_form)
 	super._on_died()
