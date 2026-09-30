@@ -375,6 +375,7 @@ func start_dash() -> void:
 func start_ground_attack() -> void:
 	combo_index = 1
 	combo_queued = false
+	velocity.x += facing * tuning.attack_lunge  # hafif ileri itme
 	AudioManager.play_sfx(&"sfx/attack", global_position)
 	_spawn_slash(combo_index >= 3)
 

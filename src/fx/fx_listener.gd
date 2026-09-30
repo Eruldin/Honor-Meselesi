@@ -10,6 +10,8 @@ func _ready() -> void:
 	EventBus.hitstop_requested.connect(_on_hitstop)
 	EventBus.screenshake_requested.connect(_on_shake)
 	EventBus.spark_emitted.connect(_on_spark)
+	EventBus.damage_dealt.connect(_on_damage_dealt)
+	EventBus.actor_died.connect(_on_actor_died)
 
 
 func _on_hitstop(duration: float) -> void:
@@ -29,9 +31,44 @@ func _on_spark(pos: Vector2) -> void:
 	spark.texture = AssetLoader.texture(&"fx/spark", Vector2i(10, 10))
 	spark.modulate = Color(1.0, 0.95, 0.4)
 	spark.global_position = pos
-	get_tree().current_scene.add_child(spark)
+	var parent := get_tree().current_scene
+	if parent == null:
+		parent = self
+	parent.add_child(spark)
 	var tw := spark.create_tween()
 	tw.set_ignore_time_scale(true)
 	tw.tween_property(spark, "scale", Vector2(2.2, 2.2), 0.12)
 	tw.parallel().tween_property(spark, "modulate:a", 0.0, 0.12)
 	tw.finished.connect(spark.queue_free)
+
+
+## Vurus aninda kucuk parcacik sacilimi; olumde daha buyuk patlama.
+func _on_damage_dealt(target: Node, _info) -> void:
+	if target is Node2D:
+		_burst((target as Node2D).global_position, 3,
+			Color(1.0, 0.9, 0.5), 26.0, 0.22)
+
+
+func _on_actor_died(actor: Node) -> void:
+	if actor is Node2D:
+		_burst((actor as Node2D).global_position, 9,
+			Color(1.0, 0.85, 0.45), 48.0, 0.4)
+
+
+func _burst(pos: Vector2, n: int, col: Color, spread: float, life: float) -> void:
+	var parent := get_tree().current_scene
+	if parent == null:
+		parent = self  # test sahnelerinde current_scene yok
+	for i in n:
+		var sp := Sprite2D.new()
+		sp.texture = AssetLoader.texture(&"fx/spark", Vector2i(8, 8))
+		sp.modulate = col
+		sp.global_position = pos
+		parent.add_child(sp)
+		var dir := Vector2.RIGHT.rotated(randf() * TAU)
+		var tw := sp.create_tween()
+		tw.set_ignore_time_scale(true)
+		tw.tween_property(sp, "global_position",
+			pos + dir * randf_range(spread * 0.5, spread), life)
+		tw.parallel().tween_property(sp, "modulate:a", 0.0, life)
+		tw.finished.connect(sp.queue_free)

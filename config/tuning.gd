@@ -30,6 +30,7 @@ extends Resource
 @export var down_attack_duration: float = 0.3
 @export var player_damage: int = 1
 @export var attack_knockback: float = 120.0
+@export var attack_lunge: float = 38.0         ## vurusta ileri ivme px/s
 @export var pogo_factor: float = 0.85         ## ziplama hizinin %85'i
 
 @export_group("Parry")

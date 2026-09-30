@@ -22,6 +22,7 @@ var stagger_timer: float = 0.0
 var using_real_sprite := false
 var _anim_lock := 0.0                ## attack/hurt/die oynarken otomatik animi durdurur
 var _flash_timer: float = 0.0
+var _kb_vel := Vector2.ZERO          ## vurus geri tepmesi — pozisyon itkisi
 
 
 func _ready() -> void:
@@ -130,6 +131,10 @@ func play_anim(anim: StringName, lock_sec := 0.4) -> void:
 
 
 func _process(delta: float) -> void:
+	# vurus geri tepmesi: altsinif hareketinden bagimsiz pozisyon itkisi
+	if _kb_vel.length() > 0.5:
+		position += _kb_vel * delta
+		_kb_vel = _kb_vel.move_toward(Vector2.ZERO, 900.0 * delta)
 	_anim_lock = maxf(_anim_lock - delta, 0.0)
 	if anims != null and _anim_lock <= 0.0 and health != null and health.is_alive():
 		var want := &"walk" if absf(velocity.x) > 4.0 else &"idle"
@@ -157,6 +162,7 @@ func take_damage(info: DamageInfo) -> void:
 		anims.modulate = Color(2.0, 2.0, 2.0)
 		play_anim(&"hurt", 0.25)
 	_flash_timer = 0.08
+	_kb_vel += info.knockback * 0.6
 	EventBus.damage_dealt.emit(self, info)
 
 
