@@ -22,6 +22,7 @@ var _look_x := 0.0
 var boss: Unit0
 var _walls: Array[StaticBody2D] = []
 var _boss_bar: Control
+var _boss_bars: Dictionary
 var _boss_root: Control
 var _boss_started := false
 var _boss_home := Vector2.ZERO
@@ -61,7 +62,7 @@ func _process(delta: float) -> void:
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
 		_boss_bar.visible = true
-		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+		HudBars.drain(_boss_bars, float(boss.health.current) / maxf(boss.health.max_health, 1), 160.0, delta)
 
 
 func _build_terrain() -> void:
@@ -257,11 +258,12 @@ func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	layer.add_child(HudPlayer.make(samurai))
-	var boss_bar := HudBars.make(160, 6, Color(0.4, 0.8, 1.0))
+	var boss_bar := HudBars.make(160, 6, Color(0.4, 0.8, 1.0), true)
 	boss_bar.root.position = Vector2(160, 250)
 	layer.add_child(boss_bar.root)
 	_boss_root = boss_bar.root
 	_boss_root.visible = false
+	_boss_bars = boss_bar
 	_boss_bar = boss_bar.fill
 	_boss_bar.visible = false
 
