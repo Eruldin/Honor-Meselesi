@@ -13,6 +13,9 @@ func _init() -> void:
 	body_size = Vector2(14, 22)
 	asset_key = &"machine_guy"
 	speed_override = 42.0
+	aggro_sfx = &"sfx/ui"
+	aggro_db = -12.0
+	aggro_pitch = 0.8
 
 
 func _ready() -> void:
