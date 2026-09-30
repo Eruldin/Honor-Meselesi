@@ -14,6 +14,9 @@ func _ready() -> void:
 	super._ready()
 	_ai = AIInputSource.new()
 	samurai.set_input_source(_ai)
+	# Kayit turu dokumantasyon icin: bot dodgesiz oynadigi icin olmemeli
+	samurai.health.max_health = 99
+	samurai.health.reset()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_frames_dir))
 	_run_script()
 
@@ -107,17 +110,37 @@ func _run_script() -> void:
 	await _walk_to(4060)
 	await _wait(0.8)        # rest
 	await _walk_to(4230)
-	await _fight(5)         # sovalye -> kapi acilir
+	# Sovalye: yanina sabitlen, olene kadar vur — sovalye oyuncuya
+	# yaklastigi icin yerinde durmak vuruslari isabet ettirir.
+	if is_instance_valid(knight):
+		samurai.global_position.x = knight.global_position.x - 22.0
+	var kt := 0.0
+	while is_instance_valid(knight) and knight.health.is_alive() and kt < 20.0:
+		_ai.axis(0.0)
+		_ai.tap(&"attack")
+		await _wait(0.35)
+		kt += 0.35
 	await _wait(1.0)
 
-	# E: torii -> arena -> boss
-	await _walk_to(4590)
+	# E: torii -> arena -> boss — teleport dusse bile tetigi gecmemesi icin
+	# 4520'ye atliyoruz, sonra 4580 tetigini dogal geciyoruz
+	await _walk_to(4520)
+	await _walk_to(4590, 4.0)
+	# Kayit aracinda bot kimi zaman tetigi teleportla atlayabiliyor —
+	# testlerdeki gibi sahneyi elle tetikle (kaydin amaci bossu gostermek)
+	if not _boss_started:
+		_on_arena_entered(samurai.hurtbox)
 	await _wait(1.0)        # duvarlar yukselir
-	await _fight(3)
+	# Boss hareketlerini goster: yaklasma, telegraph, slam, yumurta
+	if samurai.global_position.x < 4600:
+		samurai.global_position.x = 4640.0
+	await _fight(2)
+	await _wait(1.5)
+	await _fight(2)
 	_ai.tap(&"jump")
 	await _wait(0.5)
-	await _fight(3)
-	await _wait(2.0)        # boss slam + yumurta
+	await _fight(2)
+	await _wait(4.0)        # slam + yumurta dongusu
 
 	_capturing = false
 	print("capture done: %d frames" % _capture_count)
@@ -134,3 +157,10 @@ func _process(delta: float) -> void:
 	var img := get_viewport().get_texture().get_image()
 	img.resize(480, 270, Image.INTERPOLATE_NEAREST)
 	img.save_png("%s/f%04d.png" % [_frames_dir, _capture_count])
+	if _capture_count % 150 == 0:
+		print("[REC f%d] sam=%.0f kn=%s gate_a=%s boss=%s" % [
+			_capture_count, samurai.global_position.x,
+			str(knight.health.current) if is_instance_valid(knight) else "DEAD",
+			str(snapped(_gate_body.modulate.a, 0.01)) if _gate_body != null else "-",
+			str(boss.bstate) if is_instance_valid(boss) else "?",
+		])

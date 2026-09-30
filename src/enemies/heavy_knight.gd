@@ -16,6 +16,7 @@ func _init() -> void:
 	body_size = Vector2(18, 24)
 	contact_damage = true
 	asset_key = &"heavy_knight"
+	knockback_resist = 0.85   # zirhli — itkiyle kacmaz
 
 
 func _ready() -> void:

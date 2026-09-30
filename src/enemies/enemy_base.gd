@@ -19,6 +19,8 @@ var sprite: Sprite2D
 var anims: AnimatedSprite2D          ## enemy/<key>/<durum> sheet'leri varsa
 var contact_hitbox: Hitbox
 var stagger_timer: float = 0.0
+## Vurus geri tepmesi direnci: 0 = tam tepme, 1 = yerinden kipirdamaz (agir dusmanlar).
+@export var knockback_resist: float = 0.0
 var using_real_sprite := false
 var _anim_lock := 0.0                ## attack/hurt/die oynarken otomatik animi durdurur
 var _flash_timer: float = 0.0
@@ -162,7 +164,7 @@ func take_damage(info: DamageInfo) -> void:
 		anims.modulate = Color(2.0, 2.0, 2.0)
 		play_anim(&"hurt", 0.25)
 	_flash_timer = 0.08
-	_kb_vel += info.knockback * 0.6
+	_kb_vel += info.knockback * 0.6 * (1.0 - knockback_resist)
 	EventBus.damage_dealt.emit(self, info)
 
 
