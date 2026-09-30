@@ -29,6 +29,7 @@ var _glitch_t := 6.0
 func _ready() -> void:
 	GameState.current_chapter = &"ch6"
 	AudioManager.play_music(&"music/ch6")
+	AudioManager.play_ambience(&"amb/cave")  # boslugun yankisi
 	_build_terrain()
 	_build_entities()
 	_build_fx()

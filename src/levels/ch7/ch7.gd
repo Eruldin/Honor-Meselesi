@@ -24,6 +24,7 @@ var _motes: Array[Sprite2D] = []
 func _ready() -> void:
 	GameState.current_chapter = &"ch7"
 	AudioManager.play_music(&"music/ch7")
+	AudioManager.play_ambience(&"amb/wind")
 	_build_terrain()
 	_build_fx()
 	_build_hud()

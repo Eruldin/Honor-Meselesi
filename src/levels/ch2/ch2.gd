@@ -30,6 +30,7 @@ var _respawn_pending := false
 func _ready() -> void:
 	GameState.current_chapter = &"ch2"
 	AudioManager.play_music(&"music/ch2")
+	AudioManager.play_ambience(&"amb/wind")  # gece cati ruzgari
 	if grant_drone_to_player:
 		GameState.unlock_form(&"drone")
 		get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
