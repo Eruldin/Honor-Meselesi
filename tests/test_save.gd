@@ -51,3 +51,39 @@ func test_settings_volume_persists() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(Settings.PATH))
 	assert_almost_eq(float(data.get("music_volume", -1.0)), 0.4, 0.001)
 	Settings.set_music_volume(old_music)
+
+
+func test_death_mark_cycle() -> void:
+	GameState.current_chapter = &"ch3"
+	GameState.soul = 7
+	GameState.mark_death(Vector2(300, 200))
+	assert_eq(GameState.soul, 0, "olum ruhu golgede kalir")
+	assert_true(GameState.has_death_mark())
+	var pos: Variant = GameState.get_flag(&"death_mark_pos")
+	assert_true(pos is Vector2)
+	assert_almost_eq(pos.x, 300.0, 0.01)
+	var recovered := GameState.clear_death_mark()
+	assert_eq(recovered, 7)
+	assert_eq(GameState.soul, 7, "golge vurulunca ruh geri doner")
+	assert_false(GameState.has_death_mark())
+
+
+func test_death_mark_only_in_same_chapter() -> void:
+	GameState.current_chapter = &"ch3"
+	GameState.soul = 5
+	GameState.mark_death(Vector2(100, 100))
+	GameState.current_chapter = &"ch4"
+	assert_false(GameState.has_death_mark(),
+		"baska bolumdeki olum izi bu bolumde golge dogurmaz")
+
+
+func test_death_mark_survives_save_load() -> void:
+	GameState.current_chapter = &"ch3"
+	GameState.soul = 9
+	GameState.mark_death(Vector2(150.5, 210.25))
+	assert_eq(SaveSystem.save_game(), OK)
+	GameState.reset()
+	GameState.current_chapter = &"ch3"
+	assert_eq(SaveSystem.load_game(), OK)
+	assert_true(GameState.has_death_mark(), "olum izi kayit sonrasi korunur")
+	assert_eq(GameState.clear_death_mark(), 9)
