@@ -7,9 +7,11 @@ extends Node2D
 
 var hitbox: Hitbox
 var _travelled := 0.0
+var _tuning: Tuning
 
 
 func _ready() -> void:
+	_tuning = load("res://config/tuning.tres")
 	var sprite := Sprite2D.new()
 	sprite.texture = AssetLoader.texture(&"fx/shockwave", Vector2i(8, 6))
 	sprite.modulate = Color(0.9, 0.7, 0.3)
@@ -24,12 +26,11 @@ func _ready() -> void:
 	col.shape = rect
 	hitbox.add_child(col)
 	add_child(hitbox)
-	var t: Tuning = load("res://config/tuning.tres")
 	hitbox.activate(DamageInfo.make(1, self, Vector2(direction * 100, -60), true, true))
 
 
 func _physics_process(delta: float) -> void:
-	var t: Tuning = load("res://config/tuning.tres")
+	var t := _tuning
 	var step := t.shockwave_speed * delta
 	position.x += direction * step
 	_travelled += step

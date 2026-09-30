@@ -7,11 +7,12 @@ var _eye_l: ColorRect
 var _eye_r: ColorRect
 var _player: Node2D
 var _t: float
+var _tuning: Tuning
 
 
 func _ready() -> void:
-	var t: Tuning = load("res://config/tuning.tres")
-	_t = t.cloud_tip_interval * randf()
+	_tuning = load("res://config/tuning.tres")
+	_t = _tuning.cloud_tip_interval * randf()
 	var body := Sprite2D.new()
 	body.texture = _cloud_texture()
 	add_child(body)
@@ -28,7 +29,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var t: Tuning = load("res://config/tuning.tres")
+	var t := _tuning
 	if _player == null:
 		_player = get_tree().get_first_node_in_group(&"player")
 	else:
