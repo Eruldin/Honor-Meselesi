@@ -23,6 +23,7 @@ const ARENA_TRIGGER := 4580.0  ## oyuncu tamamen icerideyken tetiklenir
 
 var samurai: Samurai
 var camera: ScreenShake
+var _look_x := 0.0
 var boss: LordCluck
 var knight: HeavyKnight
 var _arena_walls: Array[StaticBody2D] = []
@@ -50,7 +51,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if samurai != null and is_instance_valid(samurai):
-		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
+		_look_x = lerpf(_look_x,
+			clampf(samurai.velocity.x * 0.14, -30.0, 30.0),
+			1.0 - exp(-3.0 * delta))
+		camera.global_position.x = clampf(
+			samurai.global_position.x + _look_x, 240, LEVEL_W - 240)
 		# Dikey takip: yuzeyde sabit y=135; yeraltina inince kamera kayar
 		# (kuyu/kristal odasi gibi derin bolumler ekranda kalir).
 		var cam_y := 135.0
