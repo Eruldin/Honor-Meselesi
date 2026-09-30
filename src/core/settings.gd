@@ -15,6 +15,7 @@ var master_volume: float = 1.0     ## ana bus seviyesi (0-1)
 var language: String = "tr"        ## "tr" | "en"
 var fullscreen: bool = false       ## pencere modu
 var window_scale: int = 3          ## 480x270 * n pencere boyutu
+var bind_overrides: Dictionary = {}  ## action -> seri InputEvent (k/m/j)
 
 
 func _apply_bus_volume() -> void:
@@ -37,6 +38,54 @@ func _apply_window() -> void:
 
 func _ready() -> void:
 	load_settings()
+	_apply_bindings()
+
+
+static func _serialize_event(ev: InputEvent) -> Dictionary:
+	if ev is InputEventKey:
+		return {"k": ev.physical_keycode}
+	if ev is InputEventMouseButton:
+		return {"m": ev.button_index}
+	if ev is InputEventJoypadButton:
+		return {"j": ev.button_index}
+	return {}
+
+
+static func _deserialize_event(ser: Dictionary) -> InputEvent:
+	if ser.has("k"):
+		var k := InputEventKey.new()
+		k.physical_keycode = int(ser["k"]) as Key
+		return k
+	if ser.has("m"):
+		var m := InputEventMouseButton.new()
+		m.button_index = int(ser["m"]) as MouseButton
+		return m
+	if ser.has("j"):
+		var j := InputEventJoypadButton.new()
+		j.button_index = int(ser["j"]) as JoyButton
+		return j
+	return null
+
+
+func set_binding(action: StringName) -> void:
+	# Action'in simdiki tum event listesini snapshot'la — restart'ta ayni
+	# kombinasyon geri yuklenir (key erase+mouse append karisik durumu dahil).
+	var list: Array = []
+	for ev in InputMap.action_get_events(action):
+		var ser := _serialize_event(ev)
+		if not ser.is_empty():
+			list.append(ser)
+	bind_overrides[action] = list
+	_commit()
+
+
+func _apply_bindings() -> void:
+	for action in bind_overrides:
+		InputMap.action_erase_events(action)
+		for ser: Dictionary in bind_overrides[action]:
+			var ev := _deserialize_event(ser)
+			if ev != null:
+				InputMap.action_add_event(action, ev)
 
 
 func set_fx_intensity(v: float) -> void:
@@ -108,6 +157,7 @@ func save_settings() -> void:
 		"language": language,
 		"fullscreen": fullscreen,
 		"window_scale": window_scale,
+		"binds": bind_overrides,
 	}))
 
 
@@ -126,6 +176,15 @@ func load_settings() -> void:
 	language = String(data.get("language", "tr"))
 	fullscreen = bool(data.get("fullscreen", false))
 	window_scale = int(data.get("window_scale", 3))
+	var raw_binds: Variant = data.get("binds", {})
+	if raw_binds is Dictionary:
+		for k: String in raw_binds:
+			if raw_binds[k] is Array:
+				var list: Array = []
+				for ser in raw_binds[k]:
+					if ser is Dictionary:
+						list.append(ser)
+				bind_overrides[StringName(k)] = list
 	_apply_bus_volume()
 	_apply_window()
 	changed.emit()
