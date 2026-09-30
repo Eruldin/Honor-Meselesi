@@ -326,6 +326,12 @@ func _process(delta: float) -> void:
 			if _anims != null:
 				_anims.modulate = Color.WHITE if form != null and \
 					form.id == &"samurai" else c
+	# Focus ogretimi: ruh ilk kez bir iyilesmeye yettiginde tek seferlik
+	# kalp piktogrami — oyuncu cubuktaki nabizla balonu iliskilendirir.
+	if GameState.soul >= 6 and not GameState.get_flag(&"focus_used", false) \
+		and not GameState.get_flag(&"focus_hint_shown", false):
+		GameState.set_flag(&"focus_hint_shown")
+		Pictogram.show_on(self, &"heart", 1.6, Vector2(0, -26))
 
 
 func _update_facing() -> void:
