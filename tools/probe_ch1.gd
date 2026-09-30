@@ -26,7 +26,8 @@ func _go(spot: String) -> void:
 		"arena": [4640.0, -10.0], "forest": [2200.0, -16.0],
 		"cave": [2700.0, -10.0], "well": [480.0, -10.0],
 		"boss": [4700.0, -10.0], "cave2": [3050.0, -40.0],
-		"crypt": [3820.0, 140.0], "approach": [4000.0, -30.0]}
+		"crypt": [3820.0, 140.0], "approach": [4000.0, -30.0],
+		"cameo": [4300.0, -10.0]}
 	var s: Array = spots.get(spot, [300.0, -10.0])
 	var x: float = s[0]
 	samurai.global_position = Vector2(x, FLOOR_Y + s[1])
@@ -38,6 +39,11 @@ func _go(spot: String) -> void:
 	if spot == "arena" or spot == "boss":
 		_on_arena_entered(samurai.hurtbox)
 		await get_tree().create_timer(1.5).timeout
+	if spot == "cameo":
+		_ai.axis(1.0)
+		await get_tree().create_timer(0.9).timeout
+		_ai.axis(0.0)
+		await get_tree().create_timer(0.6).timeout
 	get_viewport().get_texture().get_image().save_png(
 		"res://.probe_out/ch1_%s.png" % spot)
 	await get_tree().create_timer(0.5).timeout
