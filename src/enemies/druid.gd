@@ -17,5 +17,6 @@ func _physics_process(delta: float) -> void:
 	# Oyuncu yakinsa saldiri animi (vurus hitbox'i temas hitbox'idir)
 	if _player != null and health.is_alive() and not is_staggered():
 		var dx: float = _player.global_position.x - global_position.x
-		if absf(dx) < 30.0:
+		if absf(dx) < 30.0 and _anim_lock <= 0.0:
 			play_anim(&"attack", 0.7)
+			AudioManager.play_sfx(&"sfx/swipe", global_position, -10.0, 0.9)

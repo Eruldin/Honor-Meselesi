@@ -52,6 +52,7 @@ func _physics_process(delta: float) -> void:
 		_phase = 1
 		get_node("warn").visible = false
 		get_node("spike").visible = true
+		AudioManager.play_sfx(&"sfx/land_dirt", global_position, -10.0, 0.6)
 		hitbox.activate(DamageInfo.make(1, self, Vector2(0, -120), true, false))
 		# Kazik firlayip geri cekilir
 		var tw := create_tween()
