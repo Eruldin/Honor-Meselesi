@@ -149,6 +149,7 @@ func test_ch4_flow_boss_to_ch5() -> void:
 	add_child_autofree(ch4)
 	await wait_seconds(0.2)
 	ch4._on_arena_entered(ch4.samurai.hurtbox)
+	await wait_seconds(1.4)   # intro ~1.15s sonra boss aktif olur
 	assert_true(ch4.boss.active)
 	ch4.boss.health.take(99)
 	assert_true(bool(GameState.get_flag(&"piksel_sicramasi")))

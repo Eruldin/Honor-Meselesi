@@ -1027,16 +1027,8 @@ func _on_arena_entered(area: Area2D) -> void:
 
 
 func _boss_intro() -> void:
-	# HK tarzi kisa intro: boss kabarip kukrer, isim+belirir, sonra savas acilir.
-	if is_instance_valid(boss):
-		Pictogram.show_on(boss, &"anger", 1.3, Vector2(0, -30))
-		var s: Node2D = boss.anims if boss.anims != null else boss.sprite
-		if s != null:
-			var base: Vector2 = s.scale
-			var tw := s.create_tween()
-			tw.tween_property(s, "scale", base * 1.28, 0.35).set_trans(Tween.TRANS_BACK)
-			tw.tween_property(s, "scale", base, 0.25)
-		AudioManager.play_sfx(&"sfx/npc_grunt_3", boss.global_position)
+	# HK tarzi kisa intro: boss kabarip kukrer, isim+bar belirir, sonra savas acilir.
+	BossIntro.play(boss)
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
 	await get_tree().create_timer(1.15).timeout

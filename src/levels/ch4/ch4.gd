@@ -243,7 +243,12 @@ func _on_arena_entered(area: Area2D) -> void:
 		w.visible = true
 	FX.glitch(0.7, 0.7)
 	AudioManager.play_music(&"music/ch4_boss")
-	boss.activate()
+	BossIntro.play(boss)
+	_boss_root.visible = true
+	_boss_bar.size.x = 160.0
+	await get_tree().create_timer(1.15).timeout
+	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
+		boss.activate()
 
 
 func _on_boss_defeated() -> void:
