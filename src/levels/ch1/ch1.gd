@@ -12,6 +12,7 @@ const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
 	{x = 1050.0, id = &"music/ch1_forest",  amb = &"amb/forest"},
 	{x = 2300.0, id = &"music/ch1_cave",    amb = &"amb/cave"},
 	{x = 3350.0, id = &"music/ch1_gate",    amb = &"amb/wind"},
+	{x = 4410.0, id = &"music/ch1_cave",    amb = &"amb/cave"},  # olu bahce — kript kasveti
 ]
 const GATE_X := 4400.0       ## torii kapi cizgisi
 const ARENA_L := 5220.0      ## arena sol duvari
