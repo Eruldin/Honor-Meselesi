@@ -32,6 +32,22 @@ func test_settings_menu_pauses_world() -> void:
 	assert_false(get_tree().paused, "Kapaninca devam etmeli")
 
 
+func test_slowmo_short_request_does_not_clip_longer() -> void:
+	var fx: FxListener = add_child_autofree(FxListener.new())
+	Engine.time_scale = 1.0
+	# Not: gercek-zaman timer'lar — wait_seconds() time_scale'e takilip kalir.
+	fx._slow_time(0.22, 0.55)   # kill-beat
+	await get_tree().create_timer(0.05, true, false, true).timeout
+	fx._slow_time(0.001, 0.05)  # ust uste binen kisa hitstop
+	assert_almost_eq(Engine.time_scale, 0.001, 0.0001, "en dusuk scale aktif")
+	await get_tree().create_timer(0.12, true, false, true).timeout
+	assert_almost_eq(Engine.time_scale, 0.22, 0.0001,
+		"kisa istek bitince uzun kill-beat surmeli — erken 1.0'a donmemeli")
+	await get_tree().create_timer(0.5, true, false, true).timeout
+	assert_eq(Engine.time_scale, 1.0, "tum istekler bitince normale doner")
+	Engine.time_scale = 1.0
+
+
 func test_save_roundtrip() -> void:
 	GameState.set_flag(&"test_flag", 42)
 	GameState.checkpoint_id = &"cp_test"
