@@ -58,6 +58,9 @@ func _on_actor_died(actor: Node) -> void:
 		var boss := actor is BossBase
 		_anim_burst((actor as Node2D).global_position,
 			&"fx/explosion" if boss else &"fx/puff", 72.0 if boss else 40.0)
+		if boss:
+			# ruh salinimi: altin halka genisleyip solar (Elden Ring esintisi)
+			_anim_burst((actor as Node2D).global_position, &"fx/eldenring", 110.0)
 		_burst((actor as Node2D).global_position, 9 if not boss else 14,
 			Color(1.0, 0.85, 0.45), 48.0 if not boss else 64.0, 0.4)
 

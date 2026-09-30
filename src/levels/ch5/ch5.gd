@@ -230,7 +230,7 @@ func _on_arena_entered(area: Area2D) -> void:
 func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch5_boss_dead")
 	await get_tree().create_timer(1.4, true).timeout
-	var portal := PortalFx.make()
+	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	AudioManager.play_music(&"music/victory")
