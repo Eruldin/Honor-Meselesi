@@ -15,6 +15,7 @@ var _form_badge: ColorRect
 var _form_icon: TextureRect
 var _form_time: ColorRect
 var _form_id: StringName = &"samurai"
+var _soul_notch: ColorRect
 
 
 var _portrait_id: StringName = &"ui/hud_portrait"
@@ -77,6 +78,13 @@ func _ready() -> void:
 			kb.modulate = Color(1, 1, 1, 0.35)
 			add_child(kb)
 			_soul_bar = kb
+			# Focus esigi: 6/12 ruh — katananin ortasinda ince centik
+			var notch := ColorRect.new()
+			notch.size = Vector2(1, 7)
+			notch.position = Vector2(27 + 28.0, 17.5)
+			notch.color = Color(0.5, 0.95, 1.0, 0.35)
+			add_child(notch)
+			_soul_notch = notch
 	else:
 		var pb := HudBars.make(110, 10, Color(0.8, 0.25, 0.3))
 		pb.root.position = Vector2(8, 6)
@@ -159,6 +167,8 @@ func _process(_delta: float) -> void:
 		if GameState.soul >= 6 and not GameState.get_flag(&"focus_used", false):
 			var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 180.0)
 			_soul_bar.modulate.a = 0.45 + 0.55 * pulse
+		if _soul_notch != null:
+			_soul_notch.color.a = 0.85 if GameState.soul >= 6 else 0.3
 	if _fill != null:
 		_fill.size.x = 110.0 * float(_actor.health.current) \
 			/ maxf(_actor.health.max_health, 1)
