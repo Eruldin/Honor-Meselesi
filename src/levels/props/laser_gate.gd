@@ -38,6 +38,7 @@ func _ready() -> void:
 func _on_hacked(_id: StringName) -> void:
 	open = true
 	hitbox.deactivate()
+	AudioManager.play_sfx(&"sfx/door", global_position, -2.0)
 	var tw := create_tween()
 	tw.tween_property(beam, "scale:y", 0.05, 0.3)
 	tw.parallel().tween_property(beam, "modulate:a", 0.0, 0.3)
