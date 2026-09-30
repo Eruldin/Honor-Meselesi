@@ -266,6 +266,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			_rebinding = &""
 			_rebuild_tab()
 			get_viewport().set_input_as_handled()
+		elif event is InputEventJoypadButton and event.pressed:
+			InputMap.action_add_event(_rebinding, event)
+			Settings.set_binding(_rebinding)
+			_rebinding = &""
+			_rebuild_tab()
+			get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed(&"pause"):
 		toggle()
