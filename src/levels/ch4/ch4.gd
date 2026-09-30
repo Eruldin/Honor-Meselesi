@@ -93,7 +93,7 @@ func _build_terrain() -> void:
 		pc.shape = pr
 		pipe.add_child(pc)
 		var ps := Sprite2D.new()
-		ps.texture = AssetLoader.texture(&"terrain/pipe", Vector2i(20, 26))
+		ps.texture = AssetLoader.tiled_texture(&"terrain/pipe", Vector2i(20, 26))
 		ps.modulate = Color(0.2, 0.6, 0.25)
 		pipe.add_child(ps)
 		pipe.global_position = Vector2(px, FLOOR_Y - 13)
@@ -131,7 +131,7 @@ func _add_ground(center: Vector2, size: Vector2) -> void:
 	col.shape = rect
 	body.add_child(col)
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.texture(&"terrain/ch4_ground", Vector2i(size))
+	sprite.texture = AssetLoader.tiled_texture(&"terrain/ch4_ground", Vector2i(size))
 	sprite.modulate = Color(0.35, 0.6, 0.3)
 	body.add_child(sprite)
 	body.global_position = center

@@ -34,7 +34,7 @@ func _ready() -> void:
 	
 	# Havada ucmamasi icin tavana bagli kopan zincir/ip gorunumu
 	var chain := Sprite2D.new()
-	chain.texture = AssetLoader.texture(&"terrain/chain", Vector2i(4, 150))
+	chain.texture = AssetLoader.tiled_texture(&"terrain/chain", Vector2i(4, 150))
 	chain.modulate = Color(0.3, 0.3, 0.4, 0.6)
 	chain.position = Vector2(0, -75)
 	chain.z_index = -1
