@@ -69,18 +69,20 @@ func _build_terrain() -> void:
 		moon.modulate = Color(0.9, 0.8, 1.0, 0.9)
 		add_child(moon)
 
-	# Sutunlar + gotik pencere siluetleri
+	# Sutunlar — gokyuzunden sarkan gotik harabe kolonlari (kelimesiz
+	# anlatim: vampir diyarinin bozulmus mimarisi). Placeholder dikdortgen
+	# yerine gercek pillar asset'i, basligini asagi veren flip'li.
 	for i in 10:
-		var pillar := ColorRect.new()
-		pillar.color = Color(0.13, 0.09, 0.18)
-		pillar.position = Vector2(70.0 + i * 150.0, 60)
-		pillar.size = Vector2(16, 190)
+		var tex_id := &"prop/deco_pillar" if i % 2 == 0 else &"prop/deco_pillar2"
+		if not AssetLoader.has_asset(tex_id):
+			tex_id = &"prop/deco_pillar"
+		var pillar := Sprite2D.new()
+		pillar.texture = AssetLoader.texture(tex_id)
+		pillar.scale = Vector2(0.5, 0.9)
+		pillar.flip_v = true
+		pillar.position = Vector2(70.0 + i * 150.0, 60.0 + 95.0)
+		pillar.modulate = Color(0.4, 0.33, 0.55)
 		add_child(pillar)
-		var arch := ColorRect.new()
-		arch.color = Color(0.2, 0.12, 0.28)
-		arch.position = pillar.position + Vector2(-8, -14)
-		arch.size = Vector2(32, 14)
-		add_child(arch)
 
 	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
 	_add_ground(Vector2(-6, 135), Vector2(12, 270))
