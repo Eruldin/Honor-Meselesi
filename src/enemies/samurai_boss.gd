@@ -53,6 +53,15 @@ func on_activated() -> void:
 	Pictogram.show_on(self, &"alarm", 1.2, Vector2(0, -30))
 
 
+func on_reset() -> void:
+	bstate = BState.SLEEP
+	_t = 0.0
+	_player = null
+	_combo = 0
+	_atk_tick = 0
+	_slash_hitbox.deactivate()
+
+
 func on_phase_changed(_p: int) -> void:
 	FX.glitch(1.0, 0.8)
 	FX.shake(3.0, 0.4)

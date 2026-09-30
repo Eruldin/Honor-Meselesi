@@ -13,8 +13,6 @@ var samurai: Samurai            ## giris cutscene'i icin (sonra boss'a cevrilir)
 var creature: GlitchCreature    ## oyuncu — perspektif kaymasi sonrasi
 var boss: SamuraiBoss
 var camera: ScreenShake
-var _player_fill: Control
-var _hud_label: Label
 var _boss_bar: Control
 var _boss_root: Control
 var _respawn_pending := false
@@ -39,8 +37,7 @@ func _process(_delta: float) -> void:
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
-	if creature != null and _player_fill != null:
-		_player_fill.size.x = 90.0 * float(creature.health.current) / maxf(creature.health.max_health, 1)
+
 
 
 func _build_terrain() -> void:
@@ -83,6 +80,9 @@ func _spawn_fight() -> void:
 	creature.global_position = Vector2(150, FLOOR_Y - 10)
 	creature.set_input_source(PlayerInputSource.new())
 	add_child(creature)
+	var hl := CanvasLayer.new()
+	add_child(hl)
+	hl.add_child(HudPlayer.make(creature, false))
 
 	boss = SamuraiBoss.new()
 	boss.name = "Samurai"
@@ -195,6 +195,8 @@ func _on_actor_died(actor: Node) -> void:
 	if actor != creature or _respawn_pending:
 		return
 	_respawn_pending = true
+	AudioManager.play_sfx(&"sfx/gameover", creature.global_position)
+	FX.glitch(0.6, 0.5)
 	await get_tree().create_timer(1.4, true).timeout
 	creature.global_position = Vector2(150, FLOOR_Y - 10)
 	creature.velocity = Vector2.ZERO
@@ -203,6 +205,11 @@ func _on_actor_died(actor: Node) -> void:
 	creature.sprite.scale = Vector2.ONE
 	creature.sprite.modulate = Color(0.05, 0.05, 0.12)
 	_respawn_pending = false
+	# Boss da sifirlanir — yeniden denemede ayni duellodan baslar.
+	if is_instance_valid(boss) and boss.health.is_alive():
+		_boss_root.visible = false
+		boss.reset_fight(Vector2(330, FLOOR_Y - 16))
+		boss.activate()
 
 
 func _build_fx() -> void:
@@ -224,15 +231,6 @@ func _build_fx() -> void:
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	_hud_label = Label.new()
-	_hud_label.text = "sen: glitch yaratik"
-	_hud_label.position = Vector2(6, 4)
-	_hud_label.add_theme_font_size_override("font_size", 8)
-	layer.add_child(_hud_label)
-	var pb := HudBars.make(90, 7, Color(0.4, 1.0, 0.9))
-	pb.root.position = Vector2(6, 16)
-	layer.add_child(pb.root)
-	_player_fill = pb.fill
 	var bb := HudBars.make(160, 6, Color(0.9, 0.4, 0.3))
 	bb.root.position = Vector2(160, 250)
 	layer.add_child(bb.root)

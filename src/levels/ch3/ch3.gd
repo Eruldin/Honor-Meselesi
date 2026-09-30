@@ -20,8 +20,6 @@ var boss: CountVlad
 var _walls: Array[StaticBody2D] = []
 var _boss_bar: Control
 var _boss_root: Control
-var _player_fill: Control
-var _hud_label: Label
 var _boss_started := false
 var _boss_home := Vector2.ZERO
 var _respawn_pending := false
@@ -44,12 +42,6 @@ func _process(_delta: float) -> void:
 		_boss_root.visible = true
 		_boss_bar.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
-	if samurai != null and _player_fill != null:
-		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
-	if samurai != null and _hud_label != null:
-		_hud_label.text = "can %d/%d  form %s" % [
-			samurai.health.current, samurai.health.max_health,
-			samurai.form.id if samurai.form != null else "?"]
 
 
 func _build_terrain() -> void:
@@ -207,14 +199,7 @@ func _build_fx() -> void:
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	_hud_label = Label.new()
-	_hud_label.position = Vector2(6, 4)
-	_hud_label.add_theme_font_size_override("font_size", 8)
-	layer.add_child(_hud_label)
-	var pb := HudBars.make(90, 7, Color(0.8, 0.3, 0.9))
-	pb.root.position = Vector2(6, 16)
-	layer.add_child(pb.root)
-	_player_fill = pb.fill
+	layer.add_child(HudPlayer.make(samurai))
 	var boss_bar := HudBars.make(160, 6, Color(0.8, 0.3, 0.9))
 	boss_bar.root.position = Vector2(160, 250)
 	layer.add_child(boss_bar.root)

@@ -30,10 +30,6 @@ var _arena_wall_sprites: Array[Sprite2D] = []
 var _boss_home := Vector2.ZERO
 var _boss_bar: Control
 var _boss_root: Control
-var _player_fill: Control
-var _hearts: Array[TextureRect] = []
-var _soul_bar: TextureRect
-var _soul := 0
 var _boss_started := false
 var _respawn_pending := false
 var _music_zone := 0
@@ -74,26 +70,6 @@ func _process(delta: float) -> void:
 		_boss_root.visible = true
 		_boss_bar.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
-	if samurai != null and _player_fill != null:
-		_player_fill.size.x = 90.0 * float(samurai.health.current) / maxf(samurai.health.max_health, 1)
-	# maske kalpler: mevcut can kadari dolu, gerisi soluk
-	for i in _hearts.size():
-		_hearts[i].modulate = Color(1.25, 1.15, 1.1, 1.0) \
-			if samurai != null and i < samurai.health.current \
-			else Color(0.5, 0.42, 0.48, 0.55)
-	# ruh olceri solma: dolu ise parlak, bosarken soluk
-	if _soul_bar != null:
-		var f := float(_soul) / 12.0
-		_soul_bar.modulate = Color(1.0 + f * 0.6, 1.0 + f * 0.4,
-			1.0 + f * 0.2, 0.35 + f * 0.65)
-
-
-func _on_soul_gain(_t: Node, _i) -> void:
-	_gain_soul(1)
-
-
-func _gain_soul(n: int) -> void:
-	_soul = mini(_soul + n, 12)
 
 
 # --- Arazi kurulumu ---
@@ -951,56 +927,8 @@ func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 
-	# === HK-vari HUD: portre + oni-maske kalpler + katana ruh olceri ===
-	var use_ref := AssetLoader.has_asset(&"ui/hud_heart")
-	if use_ref and AssetLoader.has_asset(&"ui/hud_portrait"):
-		var pr := TextureRect.new()
-		pr.texture = AssetLoader.texture(&"ui/hud_portrait")
-		pr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		pr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
-		pr.position = Vector2(4, 4)
-		pr.size = Vector2(19, 19)
-		layer.add_child(pr)
-
-	if use_ref:
-		# her kalp = 1 can; dolu/dolu-disi soluk maske
-		var hx := 27.0
-		for i in samurai.health.max_health:
-			var h := TextureRect.new()
-			h.texture = AssetLoader.texture(&"ui/hud_heart")
-			h.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			h.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
-			h.position = Vector2(hx, 6)
-			h.size = Vector2(9, 9)
-			layer.add_child(h)
-			_hearts.append(h)
-			hx += 11.0
-		# ruh olceri: katana bar, vurus/parry ile dolar
-		if AssetLoader.has_asset(&"ui/hud_katana"):
-			var kb := TextureRect.new()
-			kb.texture = AssetLoader.texture(&"ui/hud_katana")
-			kb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			kb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			kb.position = Vector2(27, 17)
-			kb.size = Vector2(56, 9)
-			kb.modulate = Color(1, 1, 1, 0.35)
-			layer.add_child(kb)
-			_soul_bar = kb
-		EventBus.damage_dealt.connect(_on_soul_gain)
-		EventBus.parry_succeeded.connect(func(_p) -> void: _gain_soul(2))
-	else:
-		# Fallback: eski cerceveli bar
-		var pb := HudBars.make(110, 10, Color(0.8, 0.25, 0.3))
-		pb.root.position = Vector2(8, 6)
-		layer.add_child(pb.root)
-		_player_fill = pb.fill
-		if AssetLoader.has_asset(&"ui/bar_frame"):
-			var fr := TextureRect.new()
-			fr.texture = AssetLoader.texture(&"ui/bar_frame")
-			fr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			fr.stretch_mode = TextureRect.STRETCH_SCALE
-			fr.size = Vector2(110, 10)
-			pb.root.add_child(fr)
+	# HK-vari HUD: portre + oni-maske kalpler + katana ruh olceri
+	layer.add_child(HudPlayer.make(samurai))
 
 	var boss_bar := HudBars.make(170, 9, Color(0.9, 0.3, 0.35))
 	boss_bar.root.position = Vector2(155, 248)
