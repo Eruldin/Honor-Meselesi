@@ -54,6 +54,16 @@ func on_reset() -> void:
 	pass
 
 
+## Parry sarsintisi: boss altin renkte donuk kalir ve davranisi donar —
+## oyuncuya kisa bir acik pencere verir. Alt sinif _physics_process'teki
+## erken-donus kosulunda cagirir; true iken durum makinesi ve _t donar.
+func _parry_frozen(delta: float) -> bool:
+	if not is_staggered():
+		return false
+	velocity.x = move_toward(velocity.x, 0.0, 600.0 * delta)
+	return true
+
+
 ## Faz gecis geri bildirimi: ugultu + kivilcim patlamasi (tum boss'lar).
 func _enrage_cue() -> void:
 	AudioManager.play_sfx(&"sfx/npc_grunt_3", global_position, -2.0, 0.85)

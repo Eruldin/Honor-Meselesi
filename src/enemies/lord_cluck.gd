@@ -65,7 +65,7 @@ func on_reset() -> void:
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
-	if not active or not health.is_alive():
+	if not active or not health.is_alive() or _parry_frozen(delta):
 		return
 	if _player == null:
 		_player = get_tree().get_first_node_in_group(&"player")
