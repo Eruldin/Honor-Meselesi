@@ -28,11 +28,17 @@ func physics_process(_delta: float) -> StringName:
 func _shared(delta: float) -> StringName:
 	if sam.input.attack_just_pressed():
 		if sam.is_on_floor():
+			if sam.input.up_held():
+				sam.start_up_attack()
+				return Samurai.S_UP_ATTACK
 			sam.start_ground_attack()
 			return Samurai.S_ATTACK
 		if sam.input.down_held():
 			sam.start_down_attack()
 			return Samurai.S_DOWN_ATTACK
+		if sam.input.up_held():
+			sam.start_up_attack()
+			return Samurai.S_UP_ATTACK
 		sam.start_air_attack()
 		return Samurai.S_AIR_ATTACK
 	if sam.input.parry_just_pressed():

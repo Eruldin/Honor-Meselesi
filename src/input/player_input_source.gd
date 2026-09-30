@@ -11,6 +11,10 @@ func down_held() -> bool:
 	return Input.is_action_pressed(&"move_down")
 
 
+func up_held() -> bool:
+	return Input.is_action_pressed(&"move_up")
+
+
 func jump_just_pressed() -> bool:
 	return Input.is_action_just_pressed(&"jump")
 

@@ -12,6 +12,7 @@ const S_DASH := &"dash"
 const S_ATTACK := &"attack"
 const S_AIR_ATTACK := &"air_attack"
 const S_DOWN_ATTACK := &"down_attack"
+const S_UP_ATTACK := &"up_attack"
 const S_PARRY := &"parry"
 const S_HURT := &"hurt"
 const S_DEAD := &"dead"
@@ -35,6 +36,7 @@ var sm: StateMachine
 var health: Health
 var hurtbox: Hurtbox
 var attack_hitbox: Hitbox
+var up_hitbox: Hitbox
 var down_hitbox: Hitbox
 var sprite: Sprite2D
 var _anims: AnimatedSprite2D      ## gercek sheet asset'i varsa gorunur budur
@@ -85,6 +87,7 @@ func _ready() -> void:
 	sm.register_state(S_ATTACK, Combat.Attack.new(self))
 	sm.register_state(S_AIR_ATTACK, Combat.AirAttack.new(self))
 	sm.register_state(S_DOWN_ATTACK, Combat.DownAttack.new(self))
+	sm.register_state(S_UP_ATTACK, Combat.UpAttack.new(self))
 	sm.register_state(S_PARRY, Defense.Parry.new(self))
 	sm.register_state(S_HURT, Defense.Hurt.new(self))
 	sm.register_state(S_DEAD, Defense.Dead.new(self))
@@ -157,6 +160,19 @@ func _build_nodes() -> void:
 	down_hitbox.struck.connect(_on_down_struck)
 	add_child(down_hitbox)
 
+	up_hitbox = Hitbox.new()
+	up_hitbox.name = "UpHitbox"
+	up_hitbox.collision_layer = 8
+	up_hitbox.collision_mask = 16
+	var up_col := CollisionShape2D.new()
+	var up_rect := RectangleShape2D.new()
+	up_rect.size = Vector2(14, 20)
+	up_col.shape = up_rect
+	up_hitbox.add_child(up_col)
+	up_hitbox.position = Vector2(0, -18)
+	up_hitbox.struck.connect(_on_attack_struck)
+	add_child(up_hitbox)
+
 
 ## Gercek samuray spritesheet'leri varsa AnimatedSprite2D kurar
 ## (placeholder sprite yedek kalir — samurai disi formlar onu kullanir).
@@ -200,7 +216,7 @@ func _sync_anim() -> void:
 			want = &"jump"
 		S_AIR_ATTACK:
 			want = &"air_attack"
-		S_ATTACK, S_DOWN_ATTACK, S_PARRY:
+		S_ATTACK, S_DOWN_ATTACK, S_PARRY, S_UP_ATTACK:
 			want = &"attack"
 		S_HURT:
 			want = &"hurt"
@@ -402,6 +418,10 @@ func start_down_attack() -> void:
 	pass
 
 
+func start_up_attack() -> void:
+	pass
+
+
 func start_parry() -> void:
 	pass
 
@@ -421,6 +441,13 @@ func ensure_down_hitbox() -> void:
 	if down_hitbox.monitoring:
 		return
 	down_hitbox.activate(DamageInfo.make(tuning.player_damage, self, Vector2(0, 60), false, false))
+
+
+func ensure_up_hitbox() -> void:
+	if up_hitbox.monitoring:
+		return
+	var dmg := int(round(tuning.player_damage * form.damage_mult))
+	up_hitbox.activate(DamageInfo.make(dmg, self, Vector2(0, -70), false, false))
 
 
 ## Ruh odaklamasi: 6 ruh -> 1 kalp (HK Focus karsiligi). Maliyet
@@ -542,7 +569,7 @@ func is_alive() -> bool:
 
 
 ## Katana savrulusu: gercek slash sheet'i, tek sefer oynat ve sil.
-func _spawn_slash(heavy := false) -> void:
+func _spawn_slash(heavy := false, upward := false) -> void:
 	var id := &"fx/slash_heavy" if heavy else &"fx/slash"
 	if not AssetLoader.has_frames(id):
 		return
@@ -555,7 +582,11 @@ func _spawn_slash(heavy := false) -> void:
 	var s := AnimatedSprite2D.new()
 	s.sprite_frames = frames
 	s.scale = Vector2(0.42, 0.42)   # 128px cel -> ~54px kesik
-	s.global_position = global_position + Vector2(facing * 20.0, -22.0)
+	if upward:
+		s.global_position = global_position + Vector2(facing * 4.0, -30.0)
+		s.rotation = -PI / 2.0  # arki yukari cevir
+	else:
+		s.global_position = global_position + Vector2(facing * 20.0, -22.0)
 	s.flip_h = facing < 0
 	s.z_index = 40
 	get_parent().add_child(s)

@@ -56,6 +56,10 @@ func down_held() -> bool:
 	return _held.get(&"move_down", false)
 
 
+func up_held() -> bool:
+	return _held.get(&"move_up", false)
+
+
 func jump_just_pressed() -> bool:
 	return _active_jp.get(&"jump", false)
 
