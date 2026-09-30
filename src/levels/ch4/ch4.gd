@@ -142,8 +142,8 @@ func _add_ground(center: Vector2, size: Vector2) -> void:
 func _build_entities() -> void:
 	samurai = Samurai.new()
 	var spawn := Vector2(60, FLOOR_Y - 20)
-	var cp: Variant = GameState.get_flag(&"respawn_pos", false)
-	if cp is Vector2:
+	var cp: Vector2 = GameState.respawn_point(Vector2(-10000, -10000))
+	if cp.x > -5000.0:
 		spawn = cp + Vector2(0, -14)
 	samurai.global_position = spawn
 	add_child(samurai)
@@ -300,7 +300,7 @@ func _on_actor_died(actor: Node) -> void:
 		return
 	_respawn_pending = true
 	await get_tree().create_timer(1.4, true).timeout
-	var cp: Variant = GameState.get_flag(&"respawn_pos", Vector2(60, FLOOR_Y - 20))
+	var cp: Vector2 = GameState.respawn_point(Vector2(60, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)
 	samurai.velocity = Vector2.ZERO
 	samurai.set_gravity_flipped(false)
