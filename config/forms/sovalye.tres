@@ -6,7 +6,8 @@
 script = ExtResource("1_fd")
 id = &"sovalye"
 display_name = "Sovalye (gecici)"
-sprite_color = Color(0.7, 0.7, 0.85, 1)
+sprite_asset = &"enemy/heavy_knight"
+sprite_color = Color(0.95, 0.95, 1, 1)
 body_size = Vector2(14, 20)
 damage_mult = 2.0
 duration = 25.0

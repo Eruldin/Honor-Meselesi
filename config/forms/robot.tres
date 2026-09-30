@@ -6,7 +6,8 @@
 script = ExtResource("1_fd")
 id = &"robot"
 display_name = "Robot"
-sprite_color = Color(0.55, 0.6, 0.7, 1)
+sprite_asset = &"enemy/machine_guy/idle"
+sprite_color = Color(1, 1, 1, 1)
 body_size = Vector2(14, 20)
 run_speed_mult = 0.62
 jump_velocity_mult = 0.85
