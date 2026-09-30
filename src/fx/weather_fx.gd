@@ -1,12 +1,13 @@
 class_name WeatherFx
 extends Node2D
 ## Bolge bazli hava efektleri — gercek sprite'lar, hafif oynatim.
-## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "dust_motes".
+## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes".
 ## Parcaciklar kameranin gordugu alana duser, ekran disinda silinir.
 
 const PETAL_FALL := 22.0
 const PETAL_SWAY := 14.0
 const RAIN_FALL := 190.0
+const ASH_FALL := 11.0
 
 var _cam: Camera2D
 var _zones: Array = []
@@ -58,6 +59,16 @@ func _tick_spawn() -> void:
 					_spawn_petal(vx)
 			"rain":
 				_spawn_rain(vx)
+			"ash":
+				# Yanmis saha: gri kul yavasca suzulur, bazen bir koz yukselir
+				if randf() < 0.5:
+					_spawn_ash(vx)
+				if randf() < 0.12:
+					_spawn_ember(vx)
+			"motes":
+				# Bosluk/hafiza alemi: cyan-mor toz tanesi suruklenir
+				if randf() < 0.35:
+					_spawn_mote(vx)
 
 
 func _spawn_petal(vx: float) -> void:
@@ -113,6 +124,65 @@ func _splash(drop: Sprite2D) -> void:
 	var tw := s.create_tween()
 	tw.tween_property(s, "modulate:a", 0.0, 0.25)
 	tw.finished.connect(s.queue_free)
+
+
+func _spawn_ash(vx: float) -> void:
+	if not _tex.has(&"vfx/dust"):
+		return
+	var p := Sprite2D.new()
+	p.texture = _tex[&"vfx/dust"]
+	p.scale = Vector2(0.28, 0.28)   # kul tanesi — puff kadar buyuk degil
+	var px := vx + randf_range(-240.0, 240.0)
+	p.position = Vector2(px, _cam.get_screen_center_position().y - 145.0)
+	p.modulate = Color(0.62, 0.58, 0.55, randf_range(0.35, 0.6))
+	p.z_index = 6
+	add_child(p)
+	var dur := randf_range(8.0, 13.0)
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position:y", p.position.y + ASH_FALL * dur, dur)
+	tw.tween_property(p, "position:x", px + randf_range(-20.0, 20.0), dur)
+	tw.tween_property(p, "rotation", randf_range(-0.9, 0.9), dur)
+	tw.chain().tween_property(p, "modulate:a", 0.0, 0.6)
+	tw.finished.connect(p.queue_free)
+
+
+func _spawn_ember(vx: float) -> void:
+	if not _tex.has(&"vfx/dust"):
+		return
+	var p := Sprite2D.new()
+	p.texture = _tex[&"vfx/dust"]
+	p.scale = Vector2(0.18, 0.18)
+	var px := vx + randf_range(-240.0, 240.0)
+	p.position = Vector2(px, _cam.get_screen_center_position().y + 150.0)
+	p.modulate = Color(1.0, 0.45, 0.15, randf_range(0.5, 0.8))
+	p.z_index = 6
+	add_child(p)
+	var dur := randf_range(4.0, 6.0)
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position:y", p.position.y - 220.0, dur)
+	tw.tween_property(p, "position:x", px + randf_range(-14.0, 14.0), dur)
+	tw.chain().tween_property(p, "modulate:a", 0.0, 0.4)
+	tw.finished.connect(p.queue_free)
+
+
+func _spawn_mote(vx: float) -> void:
+	if not _tex.has(&"vfx/dust"):
+		return
+	var p := Sprite2D.new()
+	p.texture = _tex[&"vfx/dust"]
+	p.scale = Vector2(0.22, 0.22)
+	# Hafiza boslugu — alan icinde her yerde dogabilir
+	var px := vx + randf_range(-240.0, 240.0)
+	p.position = Vector2(px, _cam.get_screen_center_position().y + randf_range(-130.0, 130.0))
+	p.modulate = Color(0.45 + randf() * 0.25, 0.75, 1.0, randf_range(0.25, 0.5))
+	p.z_index = 6
+	add_child(p)
+	var dur := randf_range(7.0, 11.0)
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position:x", px + randf_range(-45.0, 45.0), dur)
+	tw.tween_property(p, "position:y", p.position.y + randf_range(-30.0, 30.0), dur)
+	tw.tween_property(p, "modulate:a", 0.0, dur)
+	tw.finished.connect(p.queue_free)
 
 
 ## Yuruyus/kosu tozu — karakter ayagina tek seferlik puff.
