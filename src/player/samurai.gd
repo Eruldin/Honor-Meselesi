@@ -582,8 +582,13 @@ func apply_form_data(f: FormData) -> void:
 		if real:
 			_anim_name = &""
 	else:
-		sprite.texture = AssetLoader.texture(
-			&"player/%s/idle" % form.id, Vector2i(form.body_size))
+		var tex_id := form.sprite_asset
+		if tex_id == &"" or not AssetLoader.has_asset(tex_id):
+			tex_id = &"player/%s/idle" % form.id
+		# Dusmanlar gibi govdeyi asan, ayak hizali gosterim
+		var vis := Vector2i((form.body_size * 1.6).round())
+		sprite.texture = AssetLoader.texture(tex_id, vis)
+		sprite.position.y = form.body_size.y * 0.5 - vis.y * 0.5
 	sprite.modulate = form.sprite_color
 	if _anims != null:
 		# Gercek sprite kendi renklerini tasir; tint sadece placeholder'a.

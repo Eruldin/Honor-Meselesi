@@ -6,7 +6,8 @@
 script = ExtResource("1_fd")
 id = &"drone"
 display_name = "Drone"
-sprite_color = Color(0.3, 0.9, 1.0, 1)
+sprite_asset = &"enemy/drone"
+sprite_color = Color(0.85, 1, 1, 1)
 body_size = Vector2(12, 10)
 can_hack = true
 hover_gravity_mult = 0.55

@@ -6,7 +6,8 @@
 script = ExtResource("1_fd")
 id = &"tavuk"
 display_name = "Tavuk"
-sprite_color = Color(1, 0.9, 0.3, 1)
+sprite_asset = &"enemy/rooster"
+sprite_color = Color(1, 1, 1, 1)
 body_size = Vector2(8, 10)
 run_speed_mult = 0.9
 jump_velocity_mult = 0.78
