@@ -29,7 +29,7 @@ func _ready() -> void:
 		var fy: float = _scene.get("FLOOR_Y") if _scene.get("FLOOR_Y") != null else 250.0
 		GameState.set_flag(&"death_mark_ch", StringName(ch))
 		GameState.set_flag(&"death_mark_pos",
-			Vector2(lerpf(200.0, lw - 200.0, spot), fy - 14))
+			Vector2(lerpf(200.0, lw - 200.0, spot) - 60.0, fy - 14))
 		GameState.set_flag(&"death_mark_soul", 8)
 	add_child(_scene)
 	get_tree().create_timer(6.0).timeout.connect(get_tree().quit)
