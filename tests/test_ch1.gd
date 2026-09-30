@@ -175,7 +175,7 @@ func test_ch1_scene_builds_and_arena_triggers() -> void:
 	assert_false(ch1.boss.active)
 	# Tetigi elle cagir (oyuncu hurtbox'i ile)
 	ch1._on_arena_entered(ch1.samurai.hurtbox)
-	await wait_seconds(0.2)
+	await wait_seconds(1.4)   # intro ~1.15s sonra boss aktif olur
 	assert_true(ch1.boss.active, "arena girince boss aktif")
 	assert_true(ch1._boss_started)
 

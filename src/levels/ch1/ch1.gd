@@ -1070,7 +1070,25 @@ func _on_arena_entered(area: Area2D) -> void:
 	FX.glitch(0.7, 0.7)
 	FX.shake(2.0, 0.3)
 	AudioManager.play_music(&"music/ch1_boss")
-	boss.activate()
+	_boss_intro()
+
+
+func _boss_intro() -> void:
+	# HK tarzi kisa intro: boss kabarip kukrer, isim+belirir, sonra savas acilir.
+	if is_instance_valid(boss):
+		Pictogram.show_on(boss, &"anger", 1.3, Vector2(0, -30))
+		var s: Node2D = boss.anims if boss.anims != null else boss.sprite
+		if s != null:
+			var base: Vector2 = s.scale
+			var tw := s.create_tween()
+			tw.tween_property(s, "scale", base * 1.28, 0.35).set_trans(Tween.TRANS_BACK)
+			tw.tween_property(s, "scale", base, 0.25)
+		AudioManager.play_sfx(&"sfx/npc_grunt_3", boss.global_position)
+	_boss_root.visible = true
+	_boss_bar.size.x = 160.0
+	await get_tree().create_timer(1.15).timeout
+	if is_instance_valid(boss) and boss.health.is_alive():
+		boss.activate()
 
 
 func _on_boss_defeated() -> void:
@@ -1126,6 +1144,8 @@ func _on_actor_died(actor: Node) -> void:
 	if actor != samurai or _respawn_pending:
 		return
 	_respawn_pending = true
+	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
+	FX.glitch(0.6, 0.5)
 	await get_tree().create_timer(1.4, true).timeout
 	var cp: Variant = GameState.get_flag(&"respawn_pos", Vector2(80, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)

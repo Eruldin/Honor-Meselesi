@@ -47,3 +47,4 @@ func rest(player) -> void:
 	EventBus.checkpoint_reached.emit(checkpoint_id)
 	Pictogram.show_on(player, &"sleep", 1.2, Vector2(0, -26))
 	FX.spark(global_position + Vector2(0, -10))
+	AudioManager.play_sfx(&"sfx/checkpoint", global_position)
