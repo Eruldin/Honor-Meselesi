@@ -80,6 +80,10 @@ func dash_just_pressed() -> bool:
 	return _active_jp.get(&"dash", false)
 
 
+func focus_just_pressed() -> bool:
+	return _active_jp.get(&"focus", false)
+
+
 func form_next_just_pressed() -> bool:
 	return _active_jp.get(&"form_next", false)
 

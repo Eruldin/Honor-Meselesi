@@ -3,6 +3,7 @@ extends Node
 ## Bolum ilerlemesi, acilan formlar ve serbest flag'ler burada durur.
 
 const SAVE_VERSION := 1
+const SOUL_MAX := 12
 
 var current_chapter: StringName = &"prolog"
 var current_form: StringName = &"samurai"
@@ -10,6 +11,26 @@ var unlocked_forms: Array[StringName] = [&"samurai"]
 var checkpoint_id: StringName = &""
 var flags: Dictionary = {}
 var play_time: float = 0.0
+var soul: int = 0
+
+
+func _ready() -> void:
+	# Ruh sadece oyuncunun VERDIGI hasardan dolar; alinan hasar sayilmaz.
+	EventBus.damage_dealt.connect(func(t: Node, _i) -> void:
+		if t == null or not t.is_in_group(&"player"):
+			gain_soul(1))
+	EventBus.parry_succeeded.connect(func(_p) -> void: gain_soul(2))
+
+
+func gain_soul(n: int) -> void:
+	soul = mini(soul + n, SOUL_MAX)
+
+
+func try_spend_soul(n: int) -> bool:
+	if soul < n:
+		return false
+	soul -= n
+	return true
 
 
 func _process(delta: float) -> void:
@@ -55,6 +76,7 @@ func reset() -> void:
 	checkpoint_id = &""
 	flags.clear()
 	play_time = 0.0
+	soul = 0
 
 
 func to_dict() -> Dictionary:

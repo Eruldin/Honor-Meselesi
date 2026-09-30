@@ -34,6 +34,9 @@ func parry_just_pressed() -> bool:
 func dash_just_pressed() -> bool:
 	return false
 
+func focus_just_pressed() -> bool:
+	return false
+
 func form_next_just_pressed() -> bool:
 	return false
 
