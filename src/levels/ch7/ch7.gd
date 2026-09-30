@@ -180,7 +180,7 @@ func _finish() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	var label := Label.new()
-	label.text = "SAMSARA — dongu kapanir."
+	label.text = "HONOR MESELESI — dongu kapanir."
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_CENTER)
 	label.add_theme_font_size_override("font_size", 14)

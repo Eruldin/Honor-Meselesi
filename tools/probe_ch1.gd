@@ -34,8 +34,8 @@ func _go(spot: String) -> void:
 		_on_arena_entered(samurai.hurtbox)
 		await get_tree().create_timer(1.5).timeout
 	get_viewport().get_texture().get_image().save_png(
-		"C:/Users/PC/AppData/Local/Temp/ch1_%s.png" % spot)
+		"res://.probe_out/ch1_%s.png" % spot)
 	await get_tree().create_timer(0.5).timeout
 	get_viewport().get_texture().get_image().save_png(
-		"C:/Users/PC/AppData/Local/Temp/ch1_%s_b.png" % spot)
+		"res://.probe_out/ch1_%s_b.png" % spot)
 	get_tree().quit()

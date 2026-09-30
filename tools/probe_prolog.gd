@@ -13,12 +13,12 @@ func _ready() -> void:
 func _shoot() -> void:
 	await get_tree().create_timer(2.0).timeout
 	get_viewport().get_texture().get_image().save_png(
-		"C:/Users/PC/AppData/Local/Temp/prolog_room.png")
+		"res://.probe_out/prolog_room.png")
 	# cutscene baslatip yaratik cikisini de yakala
 	crt_game.glitch_out()
 	await get_tree().create_timer(2.2).timeout
 	get_viewport().get_texture().get_image().save_png(
-		"C:/Users/PC/AppData/Local/Temp/prolog_creature.png")
+		"res://.probe_out/prolog_creature.png")
 	await get_tree().create_timer(2.5).timeout
 	get_viewport().get_texture().get_image().save_png(
-		"C:/Users/PC/AppData/Local/Temp/prolog_late.png")
+		"res://.probe_out/prolog_late.png")
