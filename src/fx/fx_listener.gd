@@ -6,6 +6,7 @@ extends Node
 @export var camera_path: NodePath
 
 var _ts_token := 0
+var _ts_reqs := {}  # token -> [end_msec, scale] — aktif yavaslatma istekleri
 var _hurt_layer: CanvasLayer
 var _hurt_rect: ColorRect
 
@@ -22,15 +23,29 @@ func _on_hitstop(duration: float) -> void:
 	_slow_time(0.001, duration)
 
 
-## Zaman olcegi istekleri tek kuyrukta: ust uste binen isteklerde en
-## dusuk scale gecerli kalir, son istegin timer'i eski hiza dondurur.
+## Zaman olcegi istekleri cakissa da bagimsiz isler: aktif isteklerin en
+## dusuk scale'i uygulanir, her istek kendi suresi dolunca duser — kisa bir
+## istek uzun bir istegi erken kesmez (kill-beat icindeki hitstop durumu).
 func _slow_time(scale: float, duration: float) -> void:
 	_ts_token += 1
 	var my := _ts_token
-	Engine.time_scale = minf(Engine.time_scale, scale)
+	_ts_reqs[my] = [Time.get_ticks_msec() + int(duration * 1000.0), scale]
+	_apply_time_scale()
 	await get_tree().create_timer(duration, true, false, true).timeout
-	if my == _ts_token:
-		Engine.time_scale = 1.0
+	_ts_reqs.erase(my)
+	_apply_time_scale()
+
+
+func _apply_time_scale() -> void:
+	var now := Time.get_ticks_msec()
+	var min_scale := 1.0
+	for k in _ts_reqs.keys():
+		var r: Array = _ts_reqs[k]
+		if r[0] <= now:
+			_ts_reqs.erase(k)
+		else:
+			min_scale = minf(min_scale, r[1])
+	Engine.time_scale = min_scale
 
 
 func _on_shake(strength: float, duration: float) -> void:
