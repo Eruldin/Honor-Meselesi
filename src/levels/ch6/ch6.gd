@@ -140,6 +140,12 @@ func _build_entities() -> void:
 	samurai.global_position = spawn
 	add_child(samurai)
 
+	# Kalp kristali — bellek adasinin ustundeki flicker platformdan erisilir
+	var sh := HeartShard.new()
+	sh.pickup_id = &"ch6_isle"
+	sh.global_position = Vector2(1050, 153)
+	add_child(sh)
+
 	# Bellek yankilari — onceki bolumlerin dusmanlari, cyan soluk
 	var echoes: Array = [
 		[Villager.new(), 300], [CyberNinja.new(), 540],
