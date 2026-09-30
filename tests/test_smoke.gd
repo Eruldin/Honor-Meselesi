@@ -24,6 +24,14 @@ func test_asset_loader_deterministic_color() -> void:
 	assert_same(a, b, "Placeholder cache ayni instance donmeli")
 
 
+func test_settings_menu_pauses_world() -> void:
+	var menu: SettingsMenu = add_child_autofree(SettingsMenu.new())
+	menu.toggle()
+	assert_true(get_tree().paused, "Ayarlar acikken dunya durmali")
+	menu.toggle()
+	assert_false(get_tree().paused, "Kapaninca devam etmeli")
+
+
 func test_save_roundtrip() -> void:
 	GameState.set_flag(&"test_flag", 42)
 	GameState.checkpoint_id = &"cp_test"
