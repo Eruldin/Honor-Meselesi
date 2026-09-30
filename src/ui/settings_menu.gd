@@ -254,6 +254,11 @@ func _rebuild_all() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _rebinding != &"" and _open:
 		if event is InputEventKey and event.pressed and not event.echo:
+			if event.keycode == KEY_ESCAPE:
+				_rebinding = &""  # Esc: atamayi iptal et (menuyu de kapatmaz)
+				_rebuild_tab()
+				get_viewport().set_input_as_handled()
+				return
 			InputMap.action_erase_events(_rebinding)
 			InputMap.action_add_event(_rebinding, event)
 			Settings.set_binding(_rebinding)
