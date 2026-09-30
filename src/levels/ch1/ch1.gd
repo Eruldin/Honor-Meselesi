@@ -272,9 +272,10 @@ func _add_rest(x: float, id: StringName, y: float = FLOOR_Y - 4) -> void:
 			sp.modulate = Color(1.0, 0.85, 0.6)
 
 
-## Gizli oda odulu — vurunca acilan sandik (tam iyilesme).
-func _add_chest(x: float, ground_y: float) -> void:
+## Gizli oda odulu — vurunca acilan sandik (tam iyilesme, kalici).
+func _add_chest(x: float, ground_y: float, id: StringName) -> void:
 	var ch := LootChest.new()
+	ch.chest_id = id
 	ch.global_position = Vector2(x, ground_y - 8)
 	add_child(ch)
 
@@ -664,7 +665,7 @@ func _build_terrain() -> void:
 		0.7, Color(0.7, 0.8, 1.0))
 	# Gizli rest point — kuyu gizli odasinin dibinde
 	_add_rest(pit_x + 4, &"ch1_well_secret")
-	_add_chest(pit_x + 48, pit_floor)
+	_add_chest(pit_x + 48, pit_floor, &"ch1_well")
 
 	# === OGRETICI TABELALAR ===
 	_add_sign(Vector2(150, FLOOR_Y), &"move")      # A/D oku
@@ -714,7 +715,7 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"terrain/cave_shroom", 3140.0, FLOOR_Y + 140.0, 0.8,
 		Color(0.8, 0.4, 0.9))
 	_add_rest(3170.0, &"ch1_cave_secret", FLOOR_Y + 140.0 - 4)
-	_add_chest(3250.0, FLOOR_Y + 140.0)
+	_add_chest(3250.0, FLOOR_Y + 140.0, &"ch1_cave")
 
 	# === GECIT DEKORU — harabe mezarlik yolu ===
 	# Oluler diyari hissi: mezar taslari, kuru agaclar, kapi nobetcisi heykelleri
@@ -758,7 +759,7 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"prop/statue", 3870, decor_crypt_y, 0.7, Color(0.4, 0.4, 0.5))
 	_add_deco_ground(&"prop/grave_3", 3670, decor_crypt_y, 0.85, Color(0.6, 0.5, 0.5))
 	_add_rest(3900, &"ch1_gate_secret", decor_crypt_y - 4)
-	_add_chest(3940, decor_crypt_y)
+	_add_chest(3940, decor_crypt_y, &"ch1_crypt")
 	_add_shard(3750, decor_crypt_y - 128, &"ch1_crypt")
 
 	# Ust Rota Dekoru (yosun, heykel kiriklari vb)
