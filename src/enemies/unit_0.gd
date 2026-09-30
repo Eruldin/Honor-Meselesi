@@ -161,6 +161,7 @@ func take_damage(info: DamageInfo) -> void:
 	else:
 		FX.spark(hurtbox.global_position + Vector2(facing * -10, -8))
 		FX.hitstop(0.03)
+		AudioManager.play_sfx(&"sfx/clang", global_position, -4.0)
 
 
 ## Oyuncu hidrolik yumrugu parry'ledi — zirh catlar.
