@@ -68,7 +68,8 @@ func _process(delta: float) -> void:
 	var can: bool = _player.form != null and _player.form.can_hack
 	if not can:
 		if not _hacking:
-			Pictogram.show_on(_player, &"question", 0.9, Vector2(0, -30))
+			# "?" yerine "form degistir" — drone'a bürünmen gerektigi ipucu
+			Pictogram.show_on(_player, &"swap", 0.9, Vector2(0, -30))
 			_hacking = true  # spam onleme — cikana kadar tekrar gosterme
 		return
 	_hacking = true
