@@ -391,8 +391,7 @@ func start_ground_attack() -> void:
 	combo_index = 1
 	combo_queued = false
 	velocity.x += facing * tuning.attack_lunge  # hafif ileri itme
-	AudioManager.play_sfx(&"sfx/attack", global_position)
-	_spawn_slash(combo_index >= 3)
+	# Kesik + savrus sesi Attack.enter()'da — kombo zincirinde her vurus icin.
 
 
 func start_air_attack() -> void:
@@ -412,6 +411,9 @@ func ensure_attack_hitbox() -> void:
 		return
 	var kb := Vector2(facing * tuning.attack_knockback, -30.0)
 	var dmg := int(round(tuning.player_damage * form.damage_mult))
+	if combo_index >= 3:
+		dmg = int(round(dmg * 1.4))  # finisher: zinciri tamamlayan vurus
+		kb.x *= 1.5
 	attack_hitbox.activate(DamageInfo.make(dmg, self, kb, false, false))
 
 
