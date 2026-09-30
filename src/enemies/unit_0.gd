@@ -14,6 +14,7 @@ var facing := -1
 var armor_broken := false
 var _armor_timer := 0.0
 var _atk_idx := 0
+var _hint_shown := false
 var punch_hitbox: Hitbox
 
 var arena_root: Node2D
@@ -62,6 +63,7 @@ func on_reset() -> void:
 	_atk_idx = 0
 	armor_broken = false
 	_armor_timer = 0.0
+	_hint_shown = false
 	sprite.modulate = Color(0.55, 0.65, 0.8)
 	if punch_hitbox != null:
 		punch_hitbox.deactivate()
@@ -162,6 +164,10 @@ func take_damage(info: DamageInfo) -> void:
 		FX.spark(hurtbox.global_position + Vector2(facing * -10, -8))
 		FX.hitstop(0.03)
 		AudioManager.play_sfx(&"sfx/clang", global_position, -4.0)
+		# Seken vurus cozumu ogretir: kalkan piktogrami = parry et
+		if not _hint_shown:
+			_hint_shown = true
+			Pictogram.show_on(self, &"shield", 2.2, Vector2(0, -32))
 
 
 ## Oyuncu hidrolik yumrugu parry'ledi — zirh catlar.
