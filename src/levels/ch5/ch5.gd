@@ -16,6 +16,7 @@ const ARENA_R := 1600.0
 
 var samurai: Samurai
 var camera: ScreenShake
+var _look_x := 0.0
 var boss: AshGuardian
 var _walls: Array[StaticBody2D] = []
 var _boss_bar: Control
@@ -36,9 +37,13 @@ func _ready() -> void:
 	EventBus.actor_died.connect(_on_actor_died)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if samurai != null and is_instance_valid(samurai):
-		camera.global_position.x = clampf(samurai.global_position.x, 240, LEVEL_W - 240)
+		_look_x = lerpf(_look_x,
+			clampf(samurai.velocity.x * 0.14, -30.0, 30.0),
+			1.0 - exp(-3.0 * delta))
+		camera.global_position.x = clampf(
+			samurai.global_position.x + _look_x, 240, LEVEL_W - 240)
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
 		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
