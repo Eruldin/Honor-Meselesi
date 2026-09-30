@@ -59,6 +59,7 @@ func _build_terrain() -> void:
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/ash_sky", scroll = 0.0, modulate = Color(0.8, 0.72, 0.68)},
 		{id = &"bg/ash_far", scroll = 0.15, modulate = Color(0.72, 0.62, 0.58)},
+		{id = &"bg/cemetery_far", scroll = 0.35, modulate = Color(0.6, 0.52, 0.52, 0.8)},
 	])
 
 	# Moloz zemin (Garbage tileset bolgesi doseme)

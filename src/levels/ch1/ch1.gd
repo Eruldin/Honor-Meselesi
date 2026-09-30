@@ -319,6 +319,8 @@ func _build_terrain() -> void:
 			z_index = 5, modulate = Color(0.5, 0.45, 0.6, 0.9)},
 		{id = &"bg/cave_px_2", scroll = 0.9, x0 = 2300, x1 = 3350,
 			z_index = 6, modulate = Color(0.4, 0.35, 0.5, 0.95)},
+		{id = &"bg/cave_px_0", scroll = 0.55, x0 = 2300, x1 = 3350,
+			modulate = Color(0.4, 0.35, 0.5, 0.7)},  # derin dikilitas silueti
 	])
 	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
 	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
