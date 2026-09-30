@@ -300,7 +300,11 @@ func _build_terrain() -> void:
 			modulate = Color(0.8, 0.7, 0.85)},
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
+		{id = &"bg/taiga_mid", scroll = 0.30, x0 = 0, x1 = 1200,
+			modulate = Color(0.55, 0.5, 0.65)},  # alacakaranlik tini
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
+		{id = &"bg/taiga_ext_green", scroll = 0.5, x0 = 0, x1 = 1200,
+			modulate = Color(0.45, 0.38, 0.55, 0.9)},  # kosturulan duzluk
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
 	# Ay gokyuzu kompozitine pisirilmis (bg_sky 1440px genislikte tek ay)
@@ -327,11 +331,14 @@ func _build_terrain() -> void:
 	])
 	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
 	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
-	# 4) Gecit (3350 - 4500)
+	# 4) Gecit (3350 - 4500) — gothicvania gercek mezarlik katmanlari:
+	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_far", scroll = 0.15, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_sky", scroll = 0.05, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_mountains", scroll = 0.12, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_yard", scroll = 0.28, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500,
-			modulate = Color(1.4, 1.4, 1.6, 0.8)},  # hayalet duvar — gokyuzu sizar
+			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
 	
 	# 5) Arena (4500 - LEVEL_W)
