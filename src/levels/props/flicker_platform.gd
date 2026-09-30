@@ -28,13 +28,13 @@ func _ready() -> void:
 	if tex_id != &"" and AssetLoader.has_asset(tex_id):
 		_sprite.texture = AssetLoader.tiled_texture(tex_id, Vector2i(size))
 	else:
-		_sprite.texture = AssetLoader.placeholder_texture("terrain/flicker", Vector2i(size))
+		_sprite.texture = AssetLoader.texture(&"terrain/flicker", Vector2i(size))
 		_sprite.modulate = Color(0.45, 0.4, 0.7)
 	add_child(_sprite)
 	
 	# Havada ucmamasi icin tavana bagli kopan zincir/ip gorunumu
 	var chain := Sprite2D.new()
-	chain.texture = AssetLoader.placeholder_texture("terrain/chain", Vector2i(4, 150))
+	chain.texture = AssetLoader.texture(&"terrain/chain", Vector2i(4, 150))
 	chain.modulate = Color(0.3, 0.3, 0.4, 0.6)
 	chain.position = Vector2(0, -75)
 	chain.z_index = -1

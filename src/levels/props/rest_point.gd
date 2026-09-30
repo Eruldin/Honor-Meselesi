@@ -19,7 +19,7 @@ func _ready() -> void:
 	add_child(col)
 
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("prop/rest_point", Vector2i(12, 18))
+	sprite.texture = AssetLoader.texture(&"prop/rest_point", Vector2i(12, 18))
 	sprite.modulate = Color(0.5, 0.8, 1.0)
 	sprite.name = "sprite"
 	sprite.position.y = -6

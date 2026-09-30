@@ -26,7 +26,7 @@ func _on_shake(strength: float, duration: float) -> void:
 
 func _on_spark(pos: Vector2) -> void:
 	var spark := Sprite2D.new()
-	spark.texture = AssetLoader.placeholder_texture("fx/spark", Vector2i(10, 10))
+	spark.texture = AssetLoader.texture(&"fx/spark", Vector2i(10, 10))
 	spark.modulate = Color(1.0, 0.95, 0.4)
 	spark.global_position = pos
 	get_tree().current_scene.add_child(spark)

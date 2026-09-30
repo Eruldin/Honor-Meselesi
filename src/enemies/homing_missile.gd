@@ -12,7 +12,7 @@ var _life := 5.0
 func _ready() -> void:
 	_tuning = load("res://config/tuning.tres")
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("enemy/missile", Vector2i(10, 5))
+	sprite.texture = AssetLoader.texture(&"enemy/missile", Vector2i(10, 5))
 	sprite.modulate = Color(1.0, 0.6, 0.2)
 	add_child(sprite)
 

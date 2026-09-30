@@ -28,7 +28,7 @@ func _ready() -> void:
 	add_child(col)
 
 	sprite = Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("enemy/egg", Vector2i(10, 12))
+	sprite.texture = AssetLoader.texture(&"enemy/egg", Vector2i(10, 12))
 	sprite.modulate = Color(0.95, 0.9, 0.6)
 	add_child(sprite)
 

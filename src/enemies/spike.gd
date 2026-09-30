@@ -17,7 +17,7 @@ func _ready() -> void:
 	add_child(col)
 
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("hazard/spike", Vector2i(size))
+	sprite.texture = AssetLoader.texture(&"hazard/spike", Vector2i(size))
 	sprite.modulate = Color(0.85, 0.2, 0.3)
 	add_child(sprite)
 

@@ -29,7 +29,7 @@ func _ready() -> void:
 
 	# Prolog'daki yaratikla ayni gorunum: koyu kutle + cyan gozler
 	sprite = Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("enemy/glitch_creature", Vector2i(16, 14))
+	sprite.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(16, 14))
 	sprite.modulate = Color(0.05, 0.05, 0.12)
 	add_child(sprite)
 	for dx in [-3.0, 3.0]:

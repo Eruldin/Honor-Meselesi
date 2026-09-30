@@ -18,7 +18,7 @@ func _ready() -> void:
 	bc.shape = br
 	add_child(bc)
 	var bs := Sprite2D.new()
-	bs.texture = AssetLoader.placeholder_texture("fx/bolt", Vector2i(6, 4))
+	bs.texture = AssetLoader.texture(&"fx/bolt", Vector2i(6, 4))
 	bs.modulate = Color(0.4, 1.0, 0.9)
 	add_child(bs)
 	area_entered.connect(_on_hit)

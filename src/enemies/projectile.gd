@@ -16,7 +16,7 @@ var _travelled: float = 0.0
 
 func _ready() -> void:
 	var sprite := Sprite2D.new()
-	sprite.texture = AssetLoader.placeholder_texture("enemy/projectile", Vector2i(6, 6))
+	sprite.texture = AssetLoader.texture(&"enemy/projectile", Vector2i(6, 6))
 	sprite.modulate = Color(1.0, 0.4, 0.9)
 	add_child(sprite)
 

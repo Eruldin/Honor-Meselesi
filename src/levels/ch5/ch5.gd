@@ -120,7 +120,7 @@ func _add_ground(center: Vector2, size: Vector2, tex_id := StringName()) -> void
 	if tex_id != &"" and AssetLoader.has_asset(tex_id):
 		sprite.texture = AssetLoader.tiled_texture(tex_id, Vector2i(size))
 	else:
-		sprite.texture = AssetLoader.placeholder_texture("terrain/ch5_ground", Vector2i(size))
+		sprite.texture = AssetLoader.texture(&"terrain/ch5_ground", Vector2i(size))
 		sprite.modulate = Color(0.42, 0.38, 0.36)
 	body.add_child(sprite)
 	body.global_position = center

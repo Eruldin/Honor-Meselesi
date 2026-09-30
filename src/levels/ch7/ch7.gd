@@ -107,7 +107,7 @@ func _run_intro() -> void:
 	var blob := Node2D.new()
 	blob.name = "HatCreature"
 	var bs := Sprite2D.new()
-	bs.texture = AssetLoader.placeholder_texture("enemy/glitch_creature", Vector2i(16, 14))
+	bs.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(16, 14))
 	bs.modulate = Color(0.05, 0.05, 0.12)
 	blob.add_child(bs)
 	for dx in [-3.0, 3.0]:

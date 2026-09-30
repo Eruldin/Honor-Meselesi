@@ -191,11 +191,11 @@ func _add_para_sprite(id: StringName, scroll: float, pos: Vector2,
 	if not AssetLoader.has_asset(id):
 		return
 	var p := Parallax2D.new()
-	p.scroll_scale = Vector2(scroll, 1.0)
+	p.scroll_scale = Vector2(scroll, 0.0)  # x suruklenir, y gokyuzunde sabit
 	var s := Sprite2D.new()
 	s.texture = AssetLoader.texture(id)
 	s.centered = false
-	s.position = pos * scroll  # gorsel konum scroll carpaniyla telafi
+	s.position = pos  # konum katman-yerel; scroll Parallax2D uygular
 	s.modulate = mod
 	p.add_child(s)
 	add_child(p)
@@ -231,8 +231,7 @@ func _add_sign(pos: Vector2, icon: StringName) -> void:
 		Color(0.9, 0.8, 0.7))
 	if sign == null:
 		sign = Sprite2D.new()
-		sign.texture = AssetLoader.placeholder_texture(
-			"prop/sign", Vector2i(10, 14))
+		sign.texture = AssetLoader.texture(&"prop/sign", Vector2i(10, 14))
 		sign.position = pos + Vector2(0, -8)
 		add_child(sign)
 	var trig := Area2D.new()
@@ -304,13 +303,10 @@ func _build_terrain() -> void:
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
-	# Tek sprite parallax: buyuk ay — koy uzerinde yavas suruklenir
-	_add_para_sprite(&"bg/j_moon", 0.03, Vector2(320, 40),
-		Color(1.1, 0.95, 0.85))
+	# Ay gokyuzu kompozitine pisirilmis (bg_sky 1440px genislikte tek ay)
 	
 	# 2) Orman (1200 - 2300) — derin yesil katmanlar + japon agac bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/forest_sky", scroll = 0.0, x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_far", scroll = 0.08, x0 = 1200, x1 = 2300},
 		{id = &"bg/forest_mid", scroll = 0.18, x0 = 1200, x1 = 2300},
 		{id = &"bg/j_trees", scroll = 0.26, modulate = Color(0.7, 0.85, 0.75), x0 = 1200, x1 = 2300},
@@ -321,25 +317,10 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"bg/j_falls", 1260, FLOOR_Y + 30, 1.6,
 		Color(0.65, 0.75, 0.85), false, -3)
 	
-	# 3) Magara (2300 - 3350) - Parallax degil, sabit duvar
-	var cave_bg := ColorRect.new()
-	cave_bg.color = Color(0.04, 0.03, 0.06)
-	cave_bg.position = Vector2(2300, -100)
-	cave_bg.size = Vector2(1050, 700)
-	cave_bg.z_index = -5
-	add_child(cave_bg)
-	if AssetLoader.has_asset(&"terrain/wall_tile"):
-		var cw := Sprite2D.new()
-		cw.texture = AssetLoader.tiled_texture(&"terrain/wall_tile", Vector2i(1050, 700))
-		cw.centered = false
-		cw.position = Vector2(2300, -100)
-		cw.modulate = Color(0.2, 0.15, 0.22)
-		cw.z_index = -4
-		add_child(cw)
-		
+	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
+	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
 	# 4) Gecit (3350 - 4500)
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_sky", scroll = 0.0, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_far", scroll = 0.15, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500},
 	])
@@ -352,6 +333,15 @@ func _build_terrain() -> void:
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 4500, x1 = LEVEL_W},
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 4500, x1 = LEVEL_W},
 	])
+
+	# Magara duvari: parallax'larin ustune, zeminlerin/varliklarin altina
+	if AssetLoader.has_asset(&"bg/cave_back"):
+		var cw := Sprite2D.new()
+		cw.texture = AssetLoader.tiled_texture(&"bg/cave_back", Vector2i(1050, 700))
+		cw.centered = false
+		cw.position = Vector2(2300, -100)
+		cw.modulate = Color(0.7, 0.65, 0.8)
+		add_child(cw)
 
 	# === ZEMINLER ===
 	# A: koy duzlugu — kuyu girisi icin x=458-502 arasi bosluklu iki parca
@@ -535,7 +525,7 @@ func _build_terrain() -> void:
 
 	# Magarayi karartan ortu
 	var dark := ColorRect.new()
-	dark.color = Color(0.04, 0.03, 0.1, 0.45)
+	dark.color = Color(0.04, 0.03, 0.1, 0.28)
 	dark.position = Vector2(2300, -200)
 	dark.size = Vector2(1050, 1000)
 	dark.z_index = 20
@@ -1004,7 +994,7 @@ func _on_boss_defeated() -> void:
 	creature.global_position = boss.global_position + Vector2(0, -30)
 	add_child(creature)
 	var cs := Sprite2D.new()
-	cs.texture = AssetLoader.placeholder_texture("enemy/glitch_creature", Vector2i(16, 14))
+	cs.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(16, 14))
 	cs.modulate = Color(0.05, 0.05, 0.1)
 	creature.add_child(cs)
 	for dx in [-3.0, 3.0]:
