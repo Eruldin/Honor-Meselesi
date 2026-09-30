@@ -55,8 +55,10 @@ func test_guard_blocks_frontal_damage() -> void:
 	await wait_seconds(0.1)
 	var hp_before := g.health.current
 	# Onden vurus: guard sola bakiyor, kaynak solda
+	var soul_before: int = GameState.soul
 	g.take_damage(DamageInfo.make(1, s))
 	assert_eq(g.health.current, hp_before, "onden vurus bloklanmali")
+	assert_eq(GameState.soul, soul_before, "bloklanan vurus ruh vermemeli")
 	# Arkadan: kaynagi saga tasiyinca hasar gecmeli
 	s.global_position = Vector2(480, 240)
 	g.gstate = Guard.GState.APPROACH
