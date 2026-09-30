@@ -474,9 +474,13 @@ func sprite_flash(color: Color) -> void:
 
 ## Dash sirasinda kareye kopyalanip silinen soluk goruntu (HK dash izi).
 func spawn_dash_ghost() -> void:
-	var src: CanvasItem = _anims if _anims != null else sprite
+	# Form donusumunde _anims gizlenir ve sprite gercek texture tasir —
+	# hayalet her zaman gorunen kaynagi kopyalar.
+	var use_anims := _anims != null and _anims.visible \
+		and _anims.sprite_frames != null
+	var src: CanvasItem = _anims if use_anims else sprite
 	var ghost := Sprite2D.new()
-	if _anims != null and _anims.sprite_frames != null:
+	if use_anims:
 		var tex := _anims.sprite_frames.get_frame_texture(_anims.animation, _anims.frame)
 		if tex == null:
 			return
