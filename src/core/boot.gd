@@ -10,7 +10,7 @@ func _ready() -> void:
 	add_child(bg)
 
 	var label := Label.new()
-	label.text = "SAMSARA GLITCH\nM0 skeleton OK — %s" % Engine.get_version_info().string
+	label.text = "HONOR MESELESI\nboot OK — %s" % Engine.get_version_info().string
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_CENTER)
 	add_child(label)
