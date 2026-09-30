@@ -71,6 +71,29 @@ func respawn_point(default_pos: Vector2) -> Vector2:
 	return default_pos
 
 
+## Olum golgesi (HK shade): oyuncu olurken ruhunu birakir; ayni bolume
+## donup golgeyi vurunca geri alir. Flag'ler save'e de tasir.
+func mark_death(pos: Vector2) -> void:
+	set_flag(&"death_mark_ch", current_chapter)
+	set_flag(&"death_mark_pos", pos)
+	set_flag(&"death_mark_soul", soul)
+	soul = 0
+
+
+func has_death_mark() -> bool:
+	return get_flag(&"death_mark_ch", &"") == current_chapter \
+		and int(get_flag(&"death_mark_soul", 0)) > 0
+
+
+func clear_death_mark() -> int:
+	var s := int(get_flag(&"death_mark_soul", 0))
+	flags.erase(&"death_mark_ch")
+	flags.erase(&"death_mark_pos")
+	flags.erase(&"death_mark_soul")
+	gain_soul(s)
+	return s
+
+
 func reset() -> void:
 	current_chapter = &"prolog"
 	current_form = &"samurai"
