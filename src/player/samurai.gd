@@ -294,6 +294,14 @@ func _process(delta: float) -> void:
 			WeatherFx.puff(get_parent(), global_position + Vector2(0, -2))
 	else:
 		_step_timer = 0.05
+	# Dokunulmazlik penceresi boyunca goz kirpma (dash i-frame'i de sayilir)
+	var blink := invuln_timer > 0.0 and sm.current_name != S_DEAD \
+		and int(Time.get_ticks_msec() / 70) % 2 == 0
+	var want_a := 0.55 if blink else 1.0
+	if sprite.modulate.a != want_a:
+		sprite.modulate.a = want_a
+	if _anims != null and _anims.modulate.a != want_a:
+		_anims.modulate.a = want_a
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
