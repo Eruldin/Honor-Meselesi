@@ -9,6 +9,7 @@ extends EnemyBase
 @export var auto_equip := true
 
 var _player: Node2D
+var _noticed := false
 
 
 func _init() -> void:
@@ -36,6 +37,9 @@ func _physics_process(delta: float) -> void:
 		return
 	var dx: float = _player.global_position.x - global_position.x
 	if absf(dx) < 140.0:
+		if not _noticed:
+			_noticed = true
+			AudioManager.play_sfx(&"sfx/parry", global_position, -8.0, 0.9)
 		velocity.x = signf(dx) * tuning.knight_speed
 
 

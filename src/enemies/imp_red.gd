@@ -9,3 +9,4 @@ func _init() -> void:
 	body_size = Vector2(13, 14)
 	asset_key = &"imp_red"
 	speed_override = 70.0
+	aggro_pitch = 1.4

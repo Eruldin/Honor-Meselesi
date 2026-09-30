@@ -4,8 +4,13 @@ extends EnemyBase
 ## Zayif (2 can) — kalabalik hissi icin.
 
 @export var speed_override: float = 0.0
+## Oyuncuyu ilk fark ettiginde calinan uyari sesi ("" = sessiz).
+@export var aggro_sfx: StringName = &"sfx/npc_blip"
+@export var aggro_db := -10.0
+@export var aggro_pitch := 1.0
 
 var _player: Node2D
+var _noticed := false
 
 
 func _init() -> void:
@@ -32,6 +37,11 @@ func _physics_process(delta: float) -> void:
 	var dx: float = _player.global_position.x - global_position.x
 	var range: float = tuning.villager_aggro_range
 	if absf(dx) < range:
+		if not _noticed:
+			_noticed = true
+			if aggro_sfx != &"":
+				AudioManager.play_sfx(aggro_sfx, global_position,
+					aggro_db, aggro_pitch * randf_range(0.92, 1.08))
 		var sp: float = speed_override if speed_override > 0.0 else tuning.villager_speed
 		velocity.x = signf(dx) * sp
 	else:

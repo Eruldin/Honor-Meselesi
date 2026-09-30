@@ -18,6 +18,9 @@ func _init() -> void:
 	asset_key = &"executioner"
 	speed_override = 20.0
 	knockback_resist = 0.7
+	aggro_sfx = &"sfx/parry"
+	aggro_db = -6.0
+	aggro_pitch = 0.85
 
 
 func _ready() -> void:

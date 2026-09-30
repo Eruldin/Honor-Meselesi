@@ -9,6 +9,7 @@ func _init() -> void:
 	body_size = Vector2(12, 10)
 	asset_key = &"summonling"
 	speed_override = 52.0
+	aggro_sfx = &""
 	contact_damage = true
 
 
