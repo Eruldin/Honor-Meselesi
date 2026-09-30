@@ -23,8 +23,10 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	_home_x = position.x
-	# Rise animasyonu _build_anims'in disinda kalir — elle bankaya eklenir
-	if anims != null and AssetLoader.has_frames(&"enemy/skeleton/rise"):
+	# Rise animasyonu _build_anims bankasina girer; eski manifestlerde yoksa
+	# elle eklenir.
+	if anims != null and not anims.sprite_frames.has_animation(&"rise") \
+			and AssetLoader.has_frames(&"enemy/skeleton/rise"):
 		var src := AssetLoader.frames(&"enemy/skeleton/rise")
 		if src != null and src.get_frame_count(&"default") > 0:
 			anims.sprite_frames.add_animation(&"rise")
