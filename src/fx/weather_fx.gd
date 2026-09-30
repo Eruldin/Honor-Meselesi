@@ -1,7 +1,7 @@
 class_name WeatherFx
 extends Node2D
 ## Bolge bazli hava efektleri — gercek sprite'lar, hafif oynatim.
-## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes" | "fog".
+## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes" | "fog" | "static".
 ## Parcaciklar kameranin gordugu alana duser, ekran disinda silinir.
 
 const PETAL_FALL := 22.0
@@ -73,6 +73,10 @@ func _tick_spawn() -> void:
 				# Mezarlik sisi: yerde buyuk soluk bulut yavasca kayar
 				if randf() < 0.5:
 					_spawn_fog(vx)
+			"static":
+				# Retro alemi: kisa omurlu renkli piksel parlamalari (CRT gurultusu)
+				if randf() < 0.45:
+					_spawn_static(vx)
 
 
 func _spawn_petal(vx: float) -> void:
@@ -208,6 +212,24 @@ func _spawn_fog(vx: float) -> void:
 	var fade := p.create_tween()
 	fade.tween_property(p, "modulate:a", peak, dur * 0.35)
 	fade.tween_property(p, "modulate:a", 0.0, dur * 0.65)
+	tw.finished.connect(p.queue_free)
+
+
+func _spawn_static(vx: float) -> void:
+	var p := ColorRect.new()
+	p.size = Vector2(2, 2)
+	var px := vx + randf_range(-240.0, 240.0)
+	p.position = Vector2(px, _cam.get_screen_center_position().y + randf_range(-135.0, 135.0))
+	var tones := [Color(0.4, 0.9, 1.0), Color(1.0, 0.35, 0.5), Color(0.9, 1.0, 0.5)]
+	p.color = tones[randi() % tones.size()]
+	p.color.a = randf_range(0.25, 0.55)
+	p.z_index = 6
+	add_child(p)
+	var dur := randf_range(0.5, 1.3)
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position:y", p.position.y + randf_range(8.0, 22.0), dur)
+	tw.tween_property(p, "position:x", px + randf_range(-12.0, 12.0), dur)
+	tw.chain().tween_property(p, "color:a", 0.0, 0.12)
 	tw.finished.connect(p.queue_free)
 
 

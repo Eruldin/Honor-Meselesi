@@ -240,6 +240,11 @@ func _build_fx() -> void:
 	add_child(PostFX.new())
 	add_child(SettingsMenu.new())
 
+	# Retro alem CRT gurultusu — kisa omurlu renkli piksel parlamalari
+	var weather := WeatherFx.new()
+	add_child(weather)
+	weather.setup(camera, [{x0 = 0.0, x1 = LEVEL_W, kind = "static"}])
+
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
