@@ -53,6 +53,7 @@ func on_phase_changed(_p: int) -> void:
 	sprite.modulate = Color(0.4, 0.2, 0.45)
 	FX.glitch(0.7, 0.6)
 	FX.shake(3.0, 0.4)
+	AudioManager.play_sfx(&"sfx/ghost", global_position, -4.0, 0.7)
 	_spawn_darkness()
 
 

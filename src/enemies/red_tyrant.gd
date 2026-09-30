@@ -155,6 +155,7 @@ func _do_attack() -> void:
 
 func _land_pound() -> void:
 	FX.shake(3.5, 0.35)
+	AudioManager.play_sfx(&"sfx/explosion", global_position, -4.0, 0.8)
 	for d in [-1, 1]:
 		var w := Shockwave.new()
 		w.direction = d
@@ -169,6 +170,7 @@ func _start_flip() -> void:
 		_player.set_gravity_flipped(true)
 		_flip_timer = tuning.gravity_flip_time
 		FX.glitch(0.6, 0.4)
+		AudioManager.play_sfx(&"sfx/ghost", global_position, -6.0, 0.65)
 	bstate = State.GAP
 	_t = tuning.tyrant_attack_gap
 
