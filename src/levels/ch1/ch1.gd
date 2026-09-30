@@ -26,6 +26,8 @@ var camera: ScreenShake
 var boss: LordCluck
 var knight: HeavyKnight
 var _arena_walls: Array[StaticBody2D] = []
+var _arena_wall_sprites: Array[Sprite2D] = []
+var _boss_home := Vector2.ZERO
 var _boss_bar: Control
 var _boss_root: Control
 var _player_fill: Control
@@ -887,6 +889,7 @@ func _build_entities() -> void:
 	boss.arena_root = self
 	boss.global_position = Vector2(4780, FLOOR_Y - 16)
 	add_child(boss)
+	_boss_home = boss.global_position
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 
 	# Arena tetigi duvarin ICINDE — oyuncu tamamen girince kapanir
@@ -1067,6 +1070,7 @@ func _on_arena_entered(area: Area2D) -> void:
 		ws.scale = Vector2(1.0, 0.0)
 		ws.create_tween().set_trans(Tween.TRANS_BACK) \
 			.tween_property(ws, "scale", Vector2.ONE, 0.3)
+		_arena_wall_sprites.append(ws)
 	FX.glitch(0.7, 0.7)
 	FX.shake(2.0, 0.3)
 	AudioManager.play_music(&"music/ch1_boss")
@@ -1087,7 +1091,7 @@ func _boss_intro() -> void:
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
 	await get_tree().create_timer(1.15).timeout
-	if is_instance_valid(boss) and boss.health.is_alive():
+	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
 		boss.activate()
 
 
@@ -1154,3 +1158,22 @@ func _on_actor_died(actor: Node) -> void:
 	samurai.modulate.a = 1.0
 	samurai.sm.change_to(Samurai.S_IDLE, true)
 	_respawn_pending = false
+	_reset_boss_fight()
+
+
+## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere
+## doner, tetik yeniden ateslenebilir (HK tarzi yeniden deneme).
+func _reset_boss_fight() -> void:
+	if not _boss_started or not is_instance_valid(boss) \
+			or not boss.health.is_alive():
+		return
+	_boss_started = false
+	for w in _arena_walls:
+		w.set_deferred("collision_layer", 0)
+	for ws in _arena_wall_sprites:
+		ws.queue_free()
+	_arena_wall_sprites.clear()
+	_boss_root.visible = false
+	boss.reset_fight(_boss_home)
+	AudioManager.play_music(&"music/ch1_gate")
+	AudioManager.play_ambience(&"amb/wind")

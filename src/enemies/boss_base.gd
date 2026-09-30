@@ -32,6 +32,28 @@ func on_phase_changed(_new_phase: int) -> void:
 	pass
 
 
+## Oyuncu boss'a olup checkpoint'ten dondugunde arena sifirlanir: boss
+## uyku durumuna ve dogdugu noktaya doner, arena tetigi yeniden
+## ateslenebilir. Savas sirasinda uretilen mermiler boss_spawn grubundan
+## toplanip silinir.
+func reset_fight(home: Vector2) -> void:
+	active = false
+	phase = 0
+	health.reset()
+	velocity = Vector2.ZERO
+	global_position = home
+	sprite.modulate = Color.WHITE
+	if anims != null:
+		anims.modulate = Color.WHITE
+	for n in get_tree().get_nodes_in_group(&"boss_spawn"):
+		n.queue_free()
+	on_reset()
+
+
+func on_reset() -> void:
+	pass
+
+
 func take_damage(info: DamageInfo) -> void:
 	if not active or not health.is_alive():
 		return

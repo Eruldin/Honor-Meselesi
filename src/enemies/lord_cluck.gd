@@ -55,6 +55,14 @@ func on_phase_changed(_p: int) -> void:
 	FX.glitch(0.6, 0.5)
 
 
+func on_reset() -> void:
+	bstate = State.SLEEP
+	_t = 0.0
+	_laid_count = 0
+	_player = null
+	_puff_scale(Vector2.ONE)
+
+
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if not active or not health.is_alive():
@@ -122,6 +130,7 @@ func _land_slam() -> void:
 		var w := Shockwave.new()
 		w.direction = dir
 		w.global_position = global_position + Vector2(dir * 14, 8)
+		w.add_to_group(&"boss_spawn")
 		_parent_for(w).add_child(w)
 
 
@@ -132,6 +141,7 @@ func _lay_egg() -> void:
 		egg.boss = self
 		egg.global_position = global_position + Vector2(facing * (10 + i * 14), -8)
 		egg.velocity = Vector2(facing * 50.0, -80.0)
+		egg.add_to_group(&"boss_spawn")
 		_parent_for(egg).add_child(egg)
 
 

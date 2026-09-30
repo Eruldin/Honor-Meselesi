@@ -115,6 +115,15 @@ def extract_all():
             elif fn.lower().endswith(('.rar', '.7z')) and shutil.which('tar'):
                 subprocess.run(['tar', '-xf', p, '-C', out], check=False)
         print('extracted', slug_dir)
+    # macOS AppleDouble cop dosyalari (._*) — import'da WAV/PNG hatalari basar.
+    n = 0
+    for root, _dirs, files in os.walk('assets_external'):
+        for f in files:
+            if f.startswith('._'):
+                os.remove(os.path.join(root, f))
+                n += 1
+    if n:
+        print('appledouble temizlendi:', n)
 
 
 if __name__ == '__main__':

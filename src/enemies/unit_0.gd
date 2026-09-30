@@ -55,6 +55,18 @@ func on_phase_changed(_p: int) -> void:
 	FX.shake(3.0, 0.4)
 
 
+func on_reset() -> void:
+	bstate = State.SLEEP
+	_t = 0.0
+	_player = null
+	_atk_idx = 0
+	armor_broken = false
+	_armor_timer = 0.0
+	sprite.modulate = Color(0.55, 0.65, 0.8)
+	if punch_hitbox != null:
+		punch_hitbox.deactivate()
+
+
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if not active or not health.is_alive():
@@ -102,6 +114,7 @@ func _physics_process(delta: float) -> void:
 					var w := Shockwave.new()
 					w.direction = dir
 					w.global_position = global_position + Vector2(dir * 16, 12)
+					w.add_to_group(&"boss_spawn")
 					_root().add_child(w)
 				bstate = State.GAP
 				_t = gap
@@ -110,6 +123,7 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0:
 				var m := HomingMissile.new()
 				m.global_position = global_position + Vector2(facing * 10, -20)
+				m.add_to_group(&"boss_spawn")
 				_root().add_child(m)
 				bstate = State.GAP
 				_t = gap

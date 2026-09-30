@@ -101,6 +101,18 @@ def ensure_pack(url, match, dest, sentinel):
         print('WARN sentinel yok:', sentinel)
 
 
+def clean_appledouble():
+    # macOS AppleDouble cop dosyalari (._*) — import'da WAV/PNG hatalari basar.
+    n = 0
+    for root, _dirs, files in os.walk(EXT):
+        for f in files:
+            if f.startswith('._'):
+                os.remove(os.path.join(root, f))
+                n += 1
+    if n:
+        print('appledouble temizlendi:', n)
+
+
 def main():
     seed_prebaked()
     for url, (match, dest, sentinel) in EXTRA_PACKS:
@@ -111,6 +123,7 @@ def main():
             except Exception as e:
                 print('ERR', url, type(e).__name__, str(e)[:80])
                 time.sleep(30)
+    clean_appledouble()
     for script in ('tools/slice_env_sheets.py', 'tools/finalize_env_slices.py'):
         code = os.system(sys.executable + ' ' + script)
         print(script, '->', code)
