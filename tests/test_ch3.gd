@@ -115,6 +115,7 @@ func test_ch3_flow_boss_to_ch4_golge() -> void:
 	add_child_autofree(ch3)
 	await wait_seconds(0.2)
 	ch3._on_arena_entered(ch3.samurai.hurtbox)
+	await wait_seconds(1.4)   # intro ~1.15s sonra boss aktif olur
 	assert_true(ch3.boss.active)
 	ch3.boss.health.take(99)
 	assert_has(GameState.unlocked_forms, &"golge", "Vlad olumu Golge acar")

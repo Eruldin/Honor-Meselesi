@@ -151,6 +151,7 @@ func test_ch2_flow_grants_drone_and_boss_to_ch3() -> void:
 	assert_has(GameState.unlocked_forms, &"drone", "bolum drone formu verir")
 	assert_not_null(ch2.boss)
 	ch2._on_arena_entered(ch2.samurai.hurtbox)
+	await wait_seconds(1.4)   # intro ~1.15s sonra boss aktif olur
 	assert_true(ch2.boss.active)
 	ch2.boss.armor_broken = true
 	ch2.boss.take_damage(DamageInfo.make(99, ch2.samurai))
