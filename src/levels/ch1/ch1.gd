@@ -453,9 +453,9 @@ func _build_terrain() -> void:
 	# C: magara — daha alcak tavan hissi
 	# Zemin iki parca: 2310-3130 ve 3190-3330 (60px bosluk kirilabilir zemin olacak)
 	_add_ground(Vector2(2720, FLOOR_Y + 10), Vector2(820, 26),
-		&"terrain/edge_dirt", &"terrain/cave_rock")
+		&"terrain/edge_dirt", &"terrain/cave_bricks")
 	_add_ground(Vector2(3260, FLOOR_Y + 10), Vector2(140, 26),
-		&"terrain/edge_dirt", &"terrain/cave_rock")
+		&"terrain/edge_dirt", &"terrain/cave_bricks")
 	
 	# Magara cukuru: diken + pogo platformlari
 	_add_platform(Vector2(2540, 210), &"terrain/pf_block", 44)
@@ -481,7 +481,7 @@ func _build_terrain() -> void:
 	# Kristal odasi (sub-basement) zemin ve duvarlari
 	var cry_floor_y := FLOOR_Y + 140.0
 	_add_ground(Vector2(3160, cry_floor_y + 13), Vector2(240, 26),
-		&"terrain/edge_dirt", &"terrain/cave_rock")
+		&"terrain/edge_dirt", &"terrain/cave_bricks")
 	
 	for wx in [3040.0, 3280.0]:
 		var cw := StaticBody2D.new()
@@ -640,7 +640,7 @@ func _build_terrain() -> void:
 		add_child(pw)
 	# Cukur tabanı — gizli oda zemini
 	_add_ground(Vector2(pit_x, pit_floor + 13), Vector2(128, 26),
-		&"terrain/edge_dirt", &"terrain/cave_rock")
+		&"terrain/edge_dirt", &"terrain/cave_bricks")
 	# Inis/cikis platformlari (merdiven — her basamak <44px; ziplama ~56px)
 	_add_platform(Vector2(pit_x - 20, FLOOR_Y + 40), &"terrain/pf_ledge", 36)
 	_add_platform(Vector2(pit_x + 26, FLOOR_Y + 62), &"terrain/pf_block", 32)
