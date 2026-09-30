@@ -301,10 +301,8 @@ func _build_terrain() -> void:
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
 		{id = &"bg/taiga_mid", scroll = 0.30, x0 = 0, x1 = 1200,
-			modulate = Color(0.55, 0.5, 0.65)},  # alacakaranlik tini
+			modulate = Color(0.55, 0.5, 0.65)},  # taiga duzluk, dusk tint
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
-		{id = &"bg/taiga_ext_green", scroll = 0.5, x0 = 0, x1 = 1200,
-			modulate = Color(0.45, 0.38, 0.55, 0.9)},  # kosturulan duzluk
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
 	# Ay gokyuzu kompozitine pisirilmis (bg_sky 1440px genislikte tek ay)
@@ -334,9 +332,9 @@ func _build_terrain() -> void:
 	# 4) Gecit (3350 - 4500) — gothicvania gercek mezarlik katmanlari:
 	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_sky", scroll = 0.05, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_mountains", scroll = 0.12, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_yard", scroll = 0.28, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500,
 			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
@@ -462,6 +460,16 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(2540, 210), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2640, 195), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2740, 210), &"terrain/pf_block", 44)
+
+	# Magara zemini bitki susleri (browncave paketi) — alacakaranlik tini
+	for d in [
+		[2450.0, &"prop/cave_grass1", 0.5],
+		[2620.0, &"prop/cave_plant1", 0.45],
+		[2870.0, &"prop/cave_grass2", 0.5],
+		[3050.0, &"prop/cave_plants_grp", 0.55],
+		[3250.0, &"prop/cave_grass3", 0.5],
+	]:
+		_add_deco_ground(d[1], d[0], FLOOR_Y, d[2], Color(0.55, 0.5, 0.65))
 
 	# Kirilabilir zemin ve altındaki Kristal Odası
 	var bb_cave := BreakableBlock.new()

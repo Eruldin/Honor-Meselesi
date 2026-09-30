@@ -140,6 +140,9 @@ func _build_entities() -> void:
 	s1.variant = 1
 	s1.global_position = Vector2(500, FLOOR_Y - 12)
 	add_child(s1)
+	var mg := MachineGuy.new()
+	mg.global_position = Vector2(700, FLOOR_Y - 13)
+	add_child(mg)
 
 	# Terminal + lazer kapi bulmacasi
 	var term := HackTerminal.new()
