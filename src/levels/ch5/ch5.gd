@@ -182,6 +182,11 @@ func _build_entities() -> void:
 		var b := AshBat.new()
 		b.global_position = bp
 		add_child(b)
+	# Harabe savas kalintisi: yaklasana kalan tek kule — sola parry'lenebilir mermi
+	var tur := Turret.new()
+	tur.fire_interval = 2.2
+	tur.global_position = Vector2(1010, FLOOR_Y - 10)
+	add_child(tur)
 
 	var rest := RestPoint.new()
 	rest.checkpoint_id = &"ch5_ruins"
