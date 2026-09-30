@@ -247,6 +247,11 @@ func _build_fx() -> void:
 	add_child(PostFX.new())
 	add_child(SettingsMenu.new())
 
+	# Neon sehir uzerinde ince yagmur — siberpunk dokusunu tamamlar
+	var weather := WeatherFx.new()
+	add_child(weather)
+	weather.setup(camera, [{x0 = 0.0, x1 = LEVEL_W, kind = "rain"}])
+
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
