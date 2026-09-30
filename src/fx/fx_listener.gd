@@ -5,6 +5,8 @@ extends Node
 
 @export var camera_path: NodePath
 
+var _ts_token := 0
+
 
 func _ready() -> void:
 	EventBus.hitstop_requested.connect(_on_hitstop)
@@ -15,9 +17,18 @@ func _ready() -> void:
 
 
 func _on_hitstop(duration: float) -> void:
-	Engine.time_scale = 0.001
+	_slow_time(0.001, duration)
+
+
+## Zaman olcegi istekleri tek kuyrukta: ust uste binen isteklerde en
+## dusuk scale gecerli kalir, son istegin timer'i eski hiza dondurur.
+func _slow_time(scale: float, duration: float) -> void:
+	_ts_token += 1
+	var my := _ts_token
+	Engine.time_scale = minf(Engine.time_scale, scale)
 	await get_tree().create_timer(duration, true, false, true).timeout
-	Engine.time_scale = 1.0
+	if my == _ts_token:
+		Engine.time_scale = 1.0
 
 
 func _on_shake(strength: float, duration: float) -> void:
@@ -86,6 +97,8 @@ func _on_actor_died(actor: Node) -> void:
 		if boss:
 			# ruh salinimi: altin halka genisleyip solar (Elden Ring esintisi)
 			_anim_burst((actor as Node2D).global_position, &"fx/eldenring", 110.0)
+			# kill beat: darbe ani yavaslar — zafer hissi
+			_slow_time(0.22, 0.55)
 		_burst((actor as Node2D).global_position, 9 if not boss else 14,
 			Color(1.0, 0.85, 0.45), 48.0 if not boss else 64.0, 0.4)
 
