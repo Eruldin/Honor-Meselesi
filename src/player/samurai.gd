@@ -272,6 +272,7 @@ func _process(delta: float) -> void:
 			AudioManager.play_sfx(&"sfx/jump_dirt", global_position, -10.0, randf_range(0.9, 1.1))
 		elif _last_state == S_FALL and is_on_floor():
 			AudioManager.play_sfx(&"sfx/land_dirt", global_position, -8.0, randf_range(0.9, 1.1))
+			WeatherFx.puff(get_parent(), global_position + Vector2(0, -2))
 		_last_state = sm.current_name
 		
 	_sync_anim()
