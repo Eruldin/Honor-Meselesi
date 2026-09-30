@@ -46,6 +46,9 @@ func _ready() -> void:
 	_build_entities()
 	_build_fx()
 	_build_hud()
+	# Olumde sahne yeniden kurulur; karartma katmani kalici —
+	# yeni sahnenin acilmasi icin burada acilir.
+	SceneRouter.fade_to(0.0, 0.45)
 	EventBus.actor_died.connect(_on_actor_died)
 
 
@@ -956,27 +959,29 @@ func _build_entities() -> void:
 	# Arena oncesi son dinlenme — boss oncesi HK-vari bank
 	_add_rest(5160, &"ch1_arena")
 
-	# E — arena + boss (uyurken tetik bekler)
-	boss = LordCluck.new()
-	boss.name = "LordCluck"
-	boss.arena_root = self
-	boss.global_position = Vector2(5480, FLOOR_Y - 16)
-	add_child(boss)
-	_boss_home = boss.global_position
-	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
+	# E — arena + boss (uyurken tetik bekler); oldurulmusse dogmaz
+	if not GameState.get_flag(&"ch1_boss_dead", false):
+		boss = LordCluck.new()
+		boss.name = "LordCluck"
+		boss.arena_root = self
+		boss.global_position = Vector2(5480, FLOOR_Y - 16)
+		add_child(boss)
+		_boss_home = boss.global_position
+		boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 
 	# Arena tetigi duvarin ICINDE — oyuncu tamamen girince kapanir
-	var trigger := Area2D.new()
-	trigger.collision_layer = 0
-	trigger.collision_mask = 4
-	var tc := CollisionShape2D.new()
-	var tr := RectangleShape2D.new()
-	tr.size = Vector2(10, 160)
-	tc.shape = tr
-	trigger.add_child(tc)
-	trigger.global_position = Vector2(ARENA_TRIGGER, FLOOR_Y - 60)
-	trigger.area_entered.connect(_on_arena_entered)
-	add_child(trigger)
+	if not GameState.get_flag(&"ch1_boss_dead", false):
+		var trigger := Area2D.new()
+		trigger.collision_layer = 0
+		trigger.collision_mask = 4
+		var tc := CollisionShape2D.new()
+		var tr := RectangleShape2D.new()
+		tr.size = Vector2(10, 160)
+		tc.shape = tr
+		trigger.add_child(tc)
+		trigger.global_position = Vector2(ARENA_TRIGGER, FLOOR_Y - 60)
+		trigger.area_entered.connect(_on_arena_entered)
+		add_child(trigger)
 
 	# Sapka hirsizi cameo'su: sovalye gecilince kapi onunde kisa gorunum,
 	# sonra kacip kaybolur — kelimesiz anlatimda hedef hatirlatmasi.
@@ -1048,10 +1053,11 @@ func _build_hud() -> void:
 	face.size = Vector2(16, 16)
 	face.position = Vector2(77, -19)
 	boss_bar.root.add_child(face)
-	boss.health.damaged.connect(
-		func(_a: int, _r: int) -> void:
-			_boss_root.visible = true
-			_boss_bar.visible = true)
+	if boss != null:
+		boss.health.damaged.connect(
+			func(_a: int, _r: int) -> void:
+				_boss_root.visible = true
+				_boss_bar.visible = true)
 
 
 # --- Boss / kapi akisi ---
@@ -1173,31 +1179,6 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
-	await get_tree().create_timer(0.3, true).timeout
-	var cp: Vector2 = GameState.respawn_point(Vector2(80, FLOOR_Y - 20))
-	samurai.global_position = cp + Vector2(0, -14)
-	samurai.velocity = Vector2.ZERO
-	samurai.health.reset()
-	samurai.modulate.a = 1.0
-	samurai.sm.change_to(Samurai.S_IDLE, true)
-	_respawn_pending = false
-	await SceneRouter.fade_to(0.0, 0.45)
-	_reset_boss_fight()
-
-
-## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere
-## doner, tetik yeniden ateslenebilir (HK tarzi yeniden deneme).
-func _reset_boss_fight() -> void:
-	if not _boss_started or not is_instance_valid(boss) \
-			or not boss.health.is_alive():
-		return
-	_boss_started = false
-	for w in _arena_walls:
-		w.set_deferred("collision_layer", 0)
-	for ws in _arena_wall_sprites:
-		ws.queue_free()
-	_arena_wall_sprites.clear()
-	_boss_root.visible = false
-	boss.reset_fight(_boss_home)
-	AudioManager.play_music(&"music/ch1_gate")
-	AudioManager.play_ambience(&"amb/wind")
+	# HK tarzi: olumde sahne yeniden kurulur — dusmanlar geri doner,
+	# checkpoint GameState'ten okunur, tum bayraklar korunur.
+	SceneRouter.reload()

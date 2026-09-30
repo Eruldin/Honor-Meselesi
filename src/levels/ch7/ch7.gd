@@ -28,9 +28,15 @@ func _ready() -> void:
 	_build_terrain()
 	_build_fx()
 	_build_hud()
+	SceneRouter.fade_to(0.0, 0.45)
 	EventBus.actor_died.connect(_on_actor_died)
 	if auto_advance:
-		_run_intro()
+		if GameState.get_flag(&"ch7_boss_dead", false):
+			pass  # final tamamlandi — bos arena
+		elif GameState.get_flag(&"ch7_intro_done", false):
+			_spawn_fight()  # olum sonrasi reload: giris atlanir
+		else:
+			_run_intro()
 	else:
 		_spawn_fight()  # testler icin dogrudan savas
 
@@ -121,6 +127,7 @@ func _build_terrain() -> void:
 
 
 func _spawn_fight() -> void:
+	GameState.set_flag(&"ch7_intro_done")  # reload'da intro bir daha oynamaz
 	# Perspektif: oyuncu = Glitch Yaratik (solda, ufak), samuray = boss
 	creature = GlitchCreature.new()
 	creature.global_position = Vector2(150, FLOOR_Y - 10)
@@ -247,20 +254,7 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", creature.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
-	await get_tree().create_timer(0.3, true).timeout
-	creature.global_position = Vector2(150, FLOOR_Y - 10)
-	creature.velocity = Vector2.ZERO
-	creature.health.reset()
-	creature.dead = false
-	creature.sprite.scale = Vector2.ONE
-	creature.sprite.modulate = Color(0.05, 0.05, 0.12)
-	_respawn_pending = false
-	await SceneRouter.fade_to(0.0, 0.45)
-	# Boss da sifirlanir — yeniden denemede ayni duellodan baslar.
-	if is_instance_valid(boss) and boss.health.is_alive():
-		_boss_root.visible = false
-		boss.reset_fight(Vector2(330, FLOOR_Y - 16))
-		boss.activate()
+	SceneRouter.reload()  # dusmanlar + boss sifirlanir (intro atlanir)
 
 
 func _build_fx() -> void:

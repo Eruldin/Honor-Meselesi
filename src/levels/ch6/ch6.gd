@@ -35,6 +35,7 @@ func _ready() -> void:
 	_build_entities()
 	_build_fx()
 	_build_hud()
+	SceneRouter.fade_to(0.0, 0.45)
 	EventBus.actor_died.connect(_on_actor_died)
 
 
@@ -175,28 +176,29 @@ func _build_entities() -> void:
 	rest.global_position = Vector2(1260, FLOOR_Y - 12)
 	add_child(rest)
 
-	boss = GlitchAmalgam.new()
-	boss.name = "GlitchAmalgam"
-	boss.arena_root = self
-	boss.arena_left = ARENA_L
-	boss.arena_right = ARENA_R
-	boss.floor_y = FLOOR_Y
-	boss.global_position = Vector2(1520, FLOOR_Y - 16)
-	add_child(boss)
-	_boss_home = boss.global_position
-	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
+	if not GameState.get_flag(&"ch6_boss_dead", false):
+		boss = GlitchAmalgam.new()
+		boss.name = "GlitchAmalgam"
+		boss.arena_root = self
+		boss.arena_left = ARENA_L
+		boss.arena_right = ARENA_R
+		boss.floor_y = FLOOR_Y
+		boss.global_position = Vector2(1520, FLOOR_Y - 16)
+		add_child(boss)
+		_boss_home = boss.global_position
+		boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
 
-	var trigger := Area2D.new()
-	trigger.collision_layer = 0
-	trigger.collision_mask = 4
-	var tc := CollisionShape2D.new()
-	var tr := RectangleShape2D.new()
-	tr.size = Vector2(10, 200)
-	tc.shape = tr
-	trigger.add_child(tc)
-	trigger.global_position = Vector2(ARENA_X, 170)
-	trigger.area_entered.connect(_on_arena_entered)
-	add_child(trigger)
+		var trigger := Area2D.new()
+		trigger.collision_layer = 0
+		trigger.collision_mask = 4
+		var tc := CollisionShape2D.new()
+		var tr := RectangleShape2D.new()
+		tr.size = Vector2(10, 200)
+		tc.shape = tr
+		trigger.add_child(tc)
+		trigger.global_position = Vector2(ARENA_X, 170)
+		trigger.area_entered.connect(_on_arena_entered)
+		add_child(trigger)
 
 
 func _build_fx() -> void:
@@ -294,28 +296,5 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
-	await get_tree().create_timer(0.3, true).timeout
-	var cp: Vector2 = GameState.respawn_point(Vector2(60, FLOOR_Y - 20))
-	samurai.global_position = cp + Vector2(0, -14)
-	samurai.velocity = Vector2.ZERO
-	samurai.set_gravity_flipped(false)
-	samurai.health.reset()
-	samurai.modulate.a = 1.0
-	samurai.sm.change_to(Samurai.S_IDLE, true)
-	_respawn_pending = false
-	await SceneRouter.fade_to(0.0, 0.45)
-	_reset_boss_fight()
-
-## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere
-## doner, tetik yeniden ateslenebilir (yeniden deneme).
-func _reset_boss_fight() -> void:
-	if not _boss_started or not is_instance_valid(boss) 			or not boss.health.is_alive():
-		return
-	_boss_started = false
-	for w in _walls:
-		w.set_deferred("collision_layer", 0)
-		w.visible = false
-	_boss_root.visible = false
-	boss.reset_fight(_boss_home)
-	AudioManager.play_music(&"music/ch6")
+	SceneRouter.reload()
 
