@@ -14,6 +14,7 @@ var creature: GlitchCreature    ## oyuncu — perspektif kaymasi sonrasi
 var boss: SamuraiBoss
 var camera: ScreenShake
 var _boss_bar: Control
+var _boss_bars: Dictionary
 var _boss_root: Control
 var _respawn_pending := false
 var _hat_prop: Sprite2D
@@ -44,7 +45,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
-		_boss_bar.size.x = 160.0 * float(boss.health.current) / maxf(boss.health.max_health, 1)
+		HudBars.drain(_boss_bars, float(boss.health.current) / maxf(boss.health.max_health, 1), 160.0, _delta)
 	# Bosluk dususu: platform kenarindan dusen yaratik 1 can kaybedip geri doner
 	if creature != null and not _respawn_pending \
 			and (creature.global_position.y > 430.0 \
@@ -293,9 +294,10 @@ func _build_fx() -> void:
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	var bb := HudBars.make(160, 6, Color(0.9, 0.4, 0.3))
+	var bb := HudBars.make(160, 6, Color(0.9, 0.4, 0.3), true)
 	bb.root.position = Vector2(160, 250)
 	layer.add_child(bb.root)
 	_boss_root = bb.root
 	_boss_root.visible = false
+	_boss_bars = bb
 	_boss_bar = bb.fill
