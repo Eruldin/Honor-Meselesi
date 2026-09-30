@@ -16,7 +16,10 @@ func _ready() -> void:
 			spot = float(a.get_slice("=", 1))
 		if a == "--death":
 			death = true
-	var scn := load("res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)])
+	var path := "res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)]
+	if ch == "prolog" or ch == "test_room":
+		path = "res://src/levels/%s/%s.tscn" % [ch, ch.capitalize().replace("_", "")]
+	var scn := load(path)
 	if scn == null:
 		push_error("no scene for " + ch)
 		get_tree().quit(1)
