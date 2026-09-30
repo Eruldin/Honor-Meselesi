@@ -198,6 +198,19 @@ func _build_entities() -> void:
 		trigger.area_entered.connect(_on_arena_entered)
 		add_child(trigger)
 
+	# Hirsiz cameo — boyutlar arasi kacis goruntusu, tek seferlik
+	var cameo_trig := Area2D.new()
+	cameo_trig.collision_layer = 0
+	cameo_trig.collision_mask = 4
+	var cc := CollisionShape2D.new()
+	var cr := RectangleShape2D.new()
+	cr.size = Vector2(30, 80)
+	cc.shape = cr
+	cameo_trig.add_child(cc)
+	cameo_trig.global_position = Vector2(700, FLOOR_Y - 40)
+	cameo_trig.area_entered.connect(_on_thief_cameo, CONNECT_ONE_SHOT)
+	add_child(cameo_trig)
+
 
 func _build_fx() -> void:
 	camera = ScreenShake.new()
@@ -287,6 +300,16 @@ func _go_ch4() -> void:
 	GameState.current_chapter = &"ch4"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH4_PATH)
+
+
+func _on_thief_cameo(area: Area2D) -> void:
+	var p := area.get_parent()
+	while p != null and not p.is_in_group(&"player"):
+		p = p.get_parent()
+	if p == null or GameState.get_flag(&"ch3_cameo_done", false):
+		return
+	GameState.set_flag(&"ch3_cameo_done")
+	ThiefCameo.spawn(self, Vector2(730, FLOOR_Y - 14))
 
 
 func _on_actor_died(actor: Node) -> void:
