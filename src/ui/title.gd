@@ -16,6 +16,9 @@ const CHAPTER_SCENES := {
 var _settings: SettingsMenu
 var _petals: Array[Sprite2D] = []
 var _new_game_armed := false
+var _creature: Sprite2D
+var _peek_timer := 5.0
+var _peek_t := 0.0
 
 
 func _ready() -> void:
@@ -100,6 +103,14 @@ func _build_scenery() -> void:
 		_petals.append(petal)
 		add_child(petal)
 
+	# Glitch Yaratik — arada belirip statikle gozden kaybolur (onsezme)
+	_creature = Sprite2D.new()
+	_creature.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(14, 12))
+	_creature.modulate = Color(0.55, 0.9, 1.0, 0.95)
+	_creature.z_index = 7
+	_creature.visible = false
+	add_child(_creature)
+
 
 func _build_menu() -> void:
 	# Gercek logo varsa kullan (ui/logo), yoksa metin basliga dus
@@ -160,6 +171,21 @@ func _build_menu() -> void:
 
 
 func _process(delta: float) -> void:
+	# Yaratik pusuda: 5-9 saniyede bir kisaca goz kirpar
+	if _peek_t > 0.0:
+		_peek_t -= delta
+		_creature.visible = int(Time.get_ticks_msec() / 45) % 3 != 0
+		if _peek_t <= 0.0:
+			_creature.visible = false
+	else:
+		_peek_timer -= delta
+		if _peek_timer <= 0.0:
+			_peek_timer = randf_range(5.0, 9.0)
+			_peek_t = 1.0
+			_creature.position = Vector2(
+				randf_range(70.0, 410.0), randf_range(140.0, 215.0))
+			_creature.visible = true
+			AudioManager.play_sfx(&"sfx/glitch", null, -16.0, randf_range(1.1, 1.3))
 	for p in _petals:
 		p.position.x += 14.0 * delta
 		p.position.y += (8.0 + sin(p.position.x * 0.05) * 5.0) * delta
