@@ -29,7 +29,12 @@ func _ready() -> void:
 	add_child(hitbox)
 	hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, false, false))
 
-	# Ayni id'li terminallerden "hacked" dinle
+	# Ayni id'li terminallerden "hacked" dinle — deferred: ekleme sirasindan
+	# bagimsiz (terminal once/sonra eklense de baglanir)
+	call_deferred(&"_bind_terminals")
+
+
+func _bind_terminals() -> void:
 	for t in get_tree().get_nodes_in_group(&"terminals"):
 		if t.gate_id == gate_id:
 			t.hacked.connect(_on_hacked)
