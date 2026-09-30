@@ -243,7 +243,8 @@ func _on_actor_died(actor: Node) -> void:
 	_respawn_pending = true
 	AudioManager.play_sfx(&"sfx/gameover", creature.global_position)
 	FX.glitch(0.6, 0.5)
-	await get_tree().create_timer(1.4, true).timeout
+	await SceneRouter.fade_to(1.0, 0.7)
+	await get_tree().create_timer(0.3, true).timeout
 	creature.global_position = Vector2(150, FLOOR_Y - 10)
 	creature.velocity = Vector2.ZERO
 	creature.health.reset()
@@ -251,6 +252,7 @@ func _on_actor_died(actor: Node) -> void:
 	creature.sprite.scale = Vector2.ONE
 	creature.sprite.modulate = Color(0.05, 0.05, 0.12)
 	_respawn_pending = false
+	await SceneRouter.fade_to(0.0, 0.45)
 	# Boss da sifirlanir — yeniden denemede ayni duellodan baslar.
 	if is_instance_valid(boss) and boss.health.is_alive():
 		_boss_root.visible = false

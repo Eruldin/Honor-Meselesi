@@ -267,7 +267,8 @@ func _on_actor_died(actor: Node) -> void:
 	_respawn_pending = true
 	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
 	FX.glitch(0.6, 0.5)
-	await get_tree().create_timer(1.4, true).timeout
+	await SceneRouter.fade_to(1.0, 0.7)
+	await get_tree().create_timer(0.3, true).timeout
 	var cp: Vector2 = GameState.respawn_point(Vector2(60, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)
 	samurai.velocity = Vector2.ZERO
@@ -276,6 +277,7 @@ func _on_actor_died(actor: Node) -> void:
 	samurai.modulate.a = 1.0
 	samurai.sm.change_to(Samurai.S_IDLE, true)
 	_respawn_pending = false
+	await SceneRouter.fade_to(0.0, 0.45)
 	_reset_boss_fight()
 
 ## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere

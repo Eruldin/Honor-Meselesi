@@ -229,7 +229,8 @@ func _on_arena_entered(area: Area2D) -> void:
 
 func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch5_boss_dead")
-	await get_tree().create_timer(1.4, true).timeout
+	await SceneRouter.fade_to(1.0, 0.7)
+	await get_tree().create_timer(0.3, true).timeout
 	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
@@ -273,6 +274,7 @@ func _on_actor_died(actor: Node) -> void:
 	samurai.modulate.a = 1.0
 	samurai.sm.change_to(Samurai.S_IDLE, true)
 	_respawn_pending = false
+	await SceneRouter.fade_to(0.0, 0.45)
 	_reset_boss_fight()
 
 ## Bossa olunce arena sifirlanir: duvarlar iner, boss dogdugu yere
