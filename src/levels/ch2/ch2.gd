@@ -127,6 +127,12 @@ func _build_entities() -> void:
 	samurai.global_position = spawn
 	add_child(samurai)
 
+	# Kalp kristali — orta cati platformunun ustunde
+	var sh := HeartShard.new()
+	sh.pickup_id = &"ch2_roof"
+	sh.global_position = Vector2(760, 153)
+	add_child(sh)
+
 	var n1 := CyberNinja.new()
 	n1.global_position = Vector2(400, FLOOR_Y - 12)
 	add_child(n1)
