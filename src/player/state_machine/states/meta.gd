@@ -27,6 +27,7 @@ class Transform:
 		sam.sprite_flash(Color(0.2, 0.7, 1.0))
 		FX.shake(1.0, 0.15)
 		FX.spark(sam.global_position)
+		AudioManager.play_sfx(&"sfx/ghost", sam.global_position, -8.0, 1.25)
 
 	func physics_process(delta: float) -> StringName:
 		sam.velocity.x = 0.0
