@@ -122,6 +122,8 @@ func _physics_process(delta: float) -> void:
 
 	if input.jump_just_pressed():
 		velocity.y = -160.0  # hafif hop
+	if input.jump_just_released() and velocity.y < -60.0:
+		velocity.y = -60.0  # erken birakilan hop kisa kalir
 	if input.dash_just_pressed() and _dash_cd <= 0.0:
 		_dash_cd = 0.7
 		_iframes = 0.25
