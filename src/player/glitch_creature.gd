@@ -11,6 +11,7 @@ var sprite: Sprite2D
 var anims: AnimatedSprite2D
 var facing := -1
 var _dash_cd := 0.0
+var _bolt_cd := 0.0
 var _iframes := 0.0
 var _flicker := 0.0
 var dead := false
@@ -100,6 +101,7 @@ func _physics_process(delta: float) -> void:
 		return
 	input.poll()
 	_dash_cd = maxf(_dash_cd - delta, 0.0)
+	_bolt_cd = maxf(_bolt_cd - delta, 0.0)
 	_iframes = maxf(_iframes - delta, 0.0)
 
 	# Ucan: hafif yercekimi + dusuk maks dusus
@@ -126,7 +128,8 @@ func _physics_process(delta: float) -> void:
 		FX.glitch(0.35, 0.2)
 		position.x += facing * 26.0
 		AudioManager.play_sfx(&"sfx/dash", global_position)
-	if input.attack_just_pressed():
+	if input.attack_just_pressed() and _bolt_cd <= 0.0:
+		_bolt_cd = 0.32
 		_fire_bolt()
 	move_and_slide()
 
