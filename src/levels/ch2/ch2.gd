@@ -140,6 +140,9 @@ func _build_entities() -> void:
 	s1.variant = 1
 	s1.global_position = Vector2(500, FLOOR_Y - 12)
 	add_child(s1)
+	var mg := MachineGuy.new()
+	mg.global_position = Vector2(700, FLOOR_Y - 13)
+	add_child(mg)
 
 	# Terminal + lazer kapi bulmacasi
 	var term := HackTerminal.new()
@@ -246,7 +249,7 @@ func _on_arena_entered(area: Area2D) -> void:
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"robot")
 	GameState.set_flag(&"ch2_boss_dead")
-	var portal := PortalFx.make()
+	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	AudioManager.play_music(&"music/victory")

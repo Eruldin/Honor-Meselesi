@@ -242,7 +242,7 @@ func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch3_boss_dead")
 	if boss.darkness != null:
 		boss.darkness.create_tween().tween_property(boss.darkness, "modulate:a", 0.0, 0.8)
-	var portal := PortalFx.make()
+	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_grey")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	AudioManager.play_music(&"music/victory")

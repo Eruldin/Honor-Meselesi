@@ -92,7 +92,8 @@ func _build_anims() -> void:
 		return
 	var bank := SpriteFrames.new()
 	var first_anim := StringName()
-	for anim in [&"idle", &"walk", &"attack", &"hurt", &"die"]:
+	for anim in [&"idle", &"walk", &"attack", &"hurt", &"die",
+			&"summon", &"appear", &"rise"]:
 		var id := StringName("enemy/%s/%s" % [asset_key, anim])
 		if not AssetLoader.has_frames(id):
 			continue

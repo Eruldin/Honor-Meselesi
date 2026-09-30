@@ -4,11 +4,11 @@ extends RefCounted
 ## kullanir, yoksa renkli halka placeholder.
 
 
-static func make(size := Vector2(24, 40)) -> Node2D:
+static func make(size := Vector2(24, 40), key: StringName = &"fx/portal") -> Node2D:
 	var root := Node2D.new()
-	if AssetLoader.has_frames(&"fx/portal"):
+	if AssetLoader.has_frames(key):
 		var a := AnimatedSprite2D.new()
-		a.sprite_frames = AssetLoader.frames(&"fx/portal")
+		a.sprite_frames = AssetLoader.frames(key)
 		var ts: Vector2 = a.sprite_frames.get_frame_texture(&"default", 0).get_size()
 		a.scale = size / ts
 		a.play(&"default")

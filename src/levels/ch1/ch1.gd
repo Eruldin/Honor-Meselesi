@@ -301,10 +301,8 @@ func _build_terrain() -> void:
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
 		{id = &"bg/taiga_mid", scroll = 0.30, x0 = 0, x1 = 1200,
-			modulate = Color(0.55, 0.5, 0.65)},  # alacakaranlik tini
+			modulate = Color(0.55, 0.5, 0.65)},  # taiga duzluk, dusk tint
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
-		{id = &"bg/taiga_ext_green", scroll = 0.5, x0 = 0, x1 = 1200,
-			modulate = Color(0.45, 0.38, 0.55, 0.9)},  # kosturulan duzluk
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
 	# Ay gokyuzu kompozitine pisirilmis (bg_sky 1440px genislikte tek ay)
@@ -334,9 +332,9 @@ func _build_terrain() -> void:
 	# 4) Gecit (3350 - 4500) — gothicvania gercek mezarlik katmanlari:
 	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_sky", scroll = 0.05, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_mountains", scroll = 0.12, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_yard", scroll = 0.28, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500,
 			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
@@ -348,7 +346,8 @@ func _build_terrain() -> void:
 	# grubunun ilk katmanidir (ustte).
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 4500, x1 = LEVEL_W},
-		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 4500, x1 = LEVEL_W},
+		# ufukta gotik kale — Elden Ring tarzi uzak siluet; yaklastikca buyur
+		{id = &"bg/gothic_castle", scroll = 0.35, x0 = 4500, x1 = LEVEL_W},
 		# tek ince agac bandi — boss savasi icin temiz fon; yogun momiji yok
 		{id = &"bg/dusk_trees", scroll = 0.5, modulate = Color(0.5, 0.4, 0.45, 0.55), x0 = 4500, x1 = LEVEL_W},
 	])
@@ -462,6 +461,16 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(2540, 210), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2640, 195), &"terrain/pf_block", 44)
 	_add_platform(Vector2(2740, 210), &"terrain/pf_block", 44)
+
+	# Magara zemini bitki susleri (browncave paketi) — alacakaranlik tini
+	for d in [
+		[2450.0, &"prop/cave_grass1", 0.5],
+		[2620.0, &"prop/cave_plant1", 0.45],
+		[2870.0, &"prop/cave_grass2", 0.5],
+		[3050.0, &"prop/cave_plants_grp", 0.55],
+		[3250.0, &"prop/cave_grass3", 0.5],
+	]:
+		_add_deco_ground(d[1], d[0], FLOOR_Y, d[2], Color(0.55, 0.5, 0.65))
 
 	# Kirilabilir zemin ve altındaki Kristal Odası
 	var bb_cave := BreakableBlock.new()
@@ -853,7 +862,11 @@ func _build_entities() -> void:
 	sword.global_position = Vector2(3260, FLOOR_Y - 90)
 	add_child(sword)
 
-	# Gecit yaklasimi: balta demonu + veba kargasi eliti
+	# Gecit yaklasimi: mezara gomulu iskeletler (yaklasinca yukselir)
+	for x in [3450.0, 3630.0, 3900.0, 4320.0]:
+		var gsk := CryptSkeleton.new()
+		gsk.global_position = Vector2(x, FLOOR_Y - 10)
+		add_child(gsk)
 	var demon := DemonAxe.new()
 	demon.global_position = Vector2(3980, FLOOR_Y - 12)
 	add_child(demon)

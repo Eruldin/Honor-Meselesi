@@ -130,8 +130,8 @@
       "pack": "AI Sheet"
     },
     "enemy/skeleton": {
-      "path": "generated/ai/v2en3_10.png",
-      "pack": "AI Sheet"
+      "path": "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-1.png",
+      "pack": "itch"
     },
     "enemy/drone": {
       "path": "env/warped/warped city files/Assets/SPRITES/misc/drone/drone-1.png",
@@ -1422,29 +1422,29 @@
     },
     "enemy/skeleton/walk": {
       "files": [
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-2.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-3.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-4.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-5.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-6.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-7.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/Sprites/Walk/skeleton-8.png"
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-1.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-2.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-3.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-4.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-5.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-6.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-7.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-8.png"
       ],
       "fps": 10,
-      "pack": "GothicVania Cemetery"
+      "pack": "itch"
     },
     "enemy/skeleton/rise": {
       "files": [
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-1.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-2.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-3.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-4.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-5.png",
-        "env/gothic_cemetery/gothicvania-cemetery-files/Assets/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-6.png"
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-1.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-2.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-3.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-4.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-5.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-6.png"
       ],
-      "fps": 10,
-      "pack": "GothicVania Cemetery"
+      "fps": 8,
+      "pack": "itch"
     },
     "vfx/petal": {
       "path": "generated/ai/fx_petal.png",
@@ -2975,6 +2975,228 @@
     },
     "tex/retro_floor": {
       "path": "itch/generated/retro_floor.png",
+      "pack": "itch"
+    },
+    "enemy/cap_guy/idle": {
+      "files": [
+        "itch/generated/cap_guy/cap_guy_idle_0.png",
+        "itch/generated/cap_guy/cap_guy_idle_1.png",
+        "itch/generated/cap_guy/cap_guy_idle_2.png",
+        "itch/generated/cap_guy/cap_guy_idle_3.png",
+        "itch/generated/cap_guy/cap_guy_idle_4.png",
+        "itch/generated/cap_guy/cap_guy_idle_5.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/cap_guy/walk": {
+      "files": [
+        "itch/generated/cap_guy/cap_guy_walk_0.png",
+        "itch/generated/cap_guy/cap_guy_walk_1.png",
+        "itch/generated/cap_guy/cap_guy_walk_2.png",
+        "itch/generated/cap_guy/cap_guy_walk_3.png",
+        "itch/generated/cap_guy/cap_guy_walk_4.png",
+        "itch/generated/cap_guy/cap_guy_walk_5.png",
+        "itch/generated/cap_guy/cap_guy_walk_6.png",
+        "itch/generated/cap_guy/cap_guy_walk_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/cap_guy/attack": {
+      "files": [
+        "itch/generated/cap_guy/cap_guy_attack_0.png",
+        "itch/generated/cap_guy/cap_guy_attack_1.png",
+        "itch/generated/cap_guy/cap_guy_attack_2.png",
+        "itch/generated/cap_guy/cap_guy_attack_3.png",
+        "itch/generated/cap_guy/cap_guy_attack_4.png",
+        "itch/generated/cap_guy/cap_guy_attack_5.png",
+        "itch/generated/cap_guy/cap_guy_attack_6.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/cap_guy/die": {
+      "files": [
+        "itch/generated/cap_guy/cap_guy_die_0.png",
+        "itch/generated/cap_guy/cap_guy_die_1.png",
+        "itch/generated/cap_guy/cap_guy_die_2.png",
+        "itch/generated/cap_guy/cap_guy_die_3.png",
+        "itch/generated/cap_guy/cap_guy_die_4.png",
+        "itch/generated/cap_guy/cap_guy_die_5.png",
+        "itch/generated/cap_guy/cap_guy_die_6.png",
+        "itch/generated/cap_guy/cap_guy_die_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy/idle": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_idle_0.png",
+        "itch/generated/machine_guy/machine_guy_idle_1.png",
+        "itch/generated/machine_guy/machine_guy_idle_2.png",
+        "itch/generated/machine_guy/machine_guy_idle_3.png",
+        "itch/generated/machine_guy/machine_guy_idle_4.png",
+        "itch/generated/machine_guy/machine_guy_idle_5.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy/walk": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_walk_0.png",
+        "itch/generated/machine_guy/machine_guy_walk_1.png",
+        "itch/generated/machine_guy/machine_guy_walk_2.png",
+        "itch/generated/machine_guy/machine_guy_walk_3.png",
+        "itch/generated/machine_guy/machine_guy_walk_4.png",
+        "itch/generated/machine_guy/machine_guy_walk_5.png",
+        "itch/generated/machine_guy/machine_guy_walk_6.png",
+        "itch/generated/machine_guy/machine_guy_walk_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy/attack": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_attack_0.png",
+        "itch/generated/machine_guy/machine_guy_attack_1.png",
+        "itch/generated/machine_guy/machine_guy_attack_2.png",
+        "itch/generated/machine_guy/machine_guy_attack_3.png",
+        "itch/generated/machine_guy/machine_guy_attack_4.png",
+        "itch/generated/machine_guy/machine_guy_attack_5.png",
+        "itch/generated/machine_guy/machine_guy_attack_6.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy/die": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_die_0.png",
+        "itch/generated/machine_guy/machine_guy_die_1.png",
+        "itch/generated/machine_guy/machine_guy_die_2.png",
+        "itch/generated/machine_guy/machine_guy_die_3.png",
+        "itch/generated/machine_guy/machine_guy_die_4.png",
+        "itch/generated/machine_guy/machine_guy_die_5.png",
+        "itch/generated/machine_guy/machine_guy_die_6.png",
+        "itch/generated/machine_guy/machine_guy_die_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy_b/idle": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_b_idle_0.png",
+        "itch/generated/machine_guy/machine_guy_b_idle_1.png",
+        "itch/generated/machine_guy/machine_guy_b_idle_2.png",
+        "itch/generated/machine_guy/machine_guy_b_idle_3.png",
+        "itch/generated/machine_guy/machine_guy_b_idle_4.png",
+        "itch/generated/machine_guy/machine_guy_b_idle_5.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy_b/walk": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_b_walk_0.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_1.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_2.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_3.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_4.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_5.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_6.png",
+        "itch/generated/machine_guy/machine_guy_b_walk_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy_b/attack": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_b_attack_0.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_1.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_2.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_3.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_4.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_5.png",
+        "itch/generated/machine_guy/machine_guy_b_attack_6.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/machine_guy_b/die": {
+      "files": [
+        "itch/generated/machine_guy/machine_guy_b_die_0.png",
+        "itch/generated/machine_guy/machine_guy_b_die_1.png",
+        "itch/generated/machine_guy/machine_guy_b_die_2.png",
+        "itch/generated/machine_guy/machine_guy_b_die_3.png",
+        "itch/generated/machine_guy/machine_guy_b_die_4.png",
+        "itch/generated/machine_guy/machine_guy_b_die_5.png",
+        "itch/generated/machine_guy/machine_guy_b_die_6.png",
+        "itch/generated/machine_guy/machine_guy_b_die_7.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "prop/cave_grass1": {
+      "path": "itch/generated/cave_props/cave_grass1.png",
+      "pack": "itch"
+    },
+    "prop/cave_grass2": {
+      "path": "itch/generated/cave_props/cave_grass2.png",
+      "pack": "itch"
+    },
+    "prop/cave_grass3": {
+      "path": "itch/generated/cave_props/cave_grass3.png",
+      "pack": "itch"
+    },
+    "prop/cave_plant1": {
+      "path": "itch/generated/cave_props/cave_plant1.png",
+      "pack": "itch"
+    },
+    "prop/cave_plant2": {
+      "path": "itch/generated/cave_props/cave_plant2.png",
+      "pack": "itch"
+    },
+    "prop/cave_plants_grp": {
+      "path": "itch/generated/cave_props/cave_plants_grp.png",
+      "pack": "itch"
+    },
+    "enemy/skeleton/idle": {
+      "files": [
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-1.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-2.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-3.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-4.png"
+      ],
+      "fps": 5,
+      "pack": "itch"
+    },
+    "enemy/skeleton/attack": {
+      "files": [
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-5.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-6.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-7.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-8.png"
+      ],
+      "fps": 8,
+      "pack": "itch"
+    },
+    "enemy/skeleton/hurt": {
+      "files": [
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-4.png"
+      ],
+      "fps": 1,
+      "pack": "itch"
+    },
+    "enemy/skeleton/die": {
+      "files": [
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-6.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-5.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-4.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-3.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-2.png",
+        "itch/extracted/metroidvania-demo-godot/Metroidvania/Sprites/Gothicvania/Characters/Enemies/CemeteryStage/Skeleton/skeleton-rise-1.png"
+      ],
+      "fps": 8,
       "pack": "itch"
     }
   }

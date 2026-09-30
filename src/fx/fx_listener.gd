@@ -44,18 +44,25 @@ func _on_spark(pos: Vector2) -> void:
 
 ## Vurus aninda kucuk parcacik sacilimi + gercek VFX animi (varsa);
 ## olumde daha buyuk patlama animasyonu.
-func _on_damage_dealt(target: Node, _info) -> void:
+func _on_damage_dealt(target: Node, info) -> void:
 	if target is Node2D:
-		_anim_burst((target as Node2D).global_position, &"fx/smallhit", 18.0)
+		var heavy: bool = info is DamageInfo and info.damage >= 2
+		_anim_burst((target as Node2D).global_position,
+			&"fx/bighit" if heavy else &"fx/smallhit", 26.0 if heavy else 18.0)
 		_burst((target as Node2D).global_position, 3,
 			Color(1.0, 0.9, 0.5), 26.0, 0.22)
 
 
 func _on_actor_died(actor: Node) -> void:
 	if actor is Node2D:
-		_anim_burst((actor as Node2D).global_position, &"fx/puff", 40.0)
-		_burst((actor as Node2D).global_position, 9,
-			Color(1.0, 0.85, 0.45), 48.0, 0.4)
+		var boss := actor is BossBase
+		_anim_burst((actor as Node2D).global_position,
+			&"fx/explosion" if boss else &"fx/puff", 72.0 if boss else 40.0)
+		if boss:
+			# ruh salinimi: altin halka genisleyip solar (Elden Ring esintisi)
+			_anim_burst((actor as Node2D).global_position, &"fx/eldenring", 110.0)
+		_burst((actor as Node2D).global_position, 9 if not boss else 14,
+			Color(1.0, 0.85, 0.45), 48.0 if not boss else 64.0, 0.4)
 
 
 ## Tek atimlik VFX animasyonu (codemanu paketi). Kare yoksa sessizce gecer.
