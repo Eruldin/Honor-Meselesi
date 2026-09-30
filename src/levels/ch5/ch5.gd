@@ -111,6 +111,14 @@ func _make_wall(center: Vector2) -> StaticBody2D:
 	return body
 
 
+## Kalp kristali — kalici +1 maks can (en yuksek yikik yukseltinin ustunde).
+func _add_shard(x: float, y: float, id: StringName) -> void:
+	var sh := HeartShard.new()
+	sh.pickup_id = id
+	sh.global_position = Vector2(x, y)
+	add_child(sh)
+
+
 func _add_ground(center: Vector2, size: Vector2, tex_id := StringName()) -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 1
@@ -138,6 +146,8 @@ func _build_entities() -> void:
 		spawn = cp + Vector2(0, -14)
 	samurai.global_position = spawn
 	add_child(samurai)
+
+	_add_shard(690, 146, &"ch5_ridge")
 
 	# Kul kovanlari — surunen balta zombileri
 	for hx in [330.0, 640.0, 900.0, 1160.0]:
