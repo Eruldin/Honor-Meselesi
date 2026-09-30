@@ -208,6 +208,13 @@ func _build_entities() -> void:
 	cameo_trig.area_entered.connect(_on_thief_cameo, CONNECT_ONE_SHOT)
 	add_child(cameo_trig)
 
+	# Olum golgesi — olumde birakilan ruh vurunca geri alinir
+	if GameState.has_death_mark():
+		var shade := DeathShade.new()
+		shade.global_position = GameState.get_flag(&"death_mark_pos",
+			Vector2(60, FLOOR_Y - 14))
+		add_child(shade)
+
 
 func _build_fx() -> void:
 	camera = ScreenShake.new()
@@ -315,5 +322,6 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
+	GameState.mark_death(samurai.global_position)
 	SceneRouter.reload()
 

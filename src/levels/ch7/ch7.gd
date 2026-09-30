@@ -148,6 +148,12 @@ func _spawn_fight() -> void:
 	boss.activate()
 	AudioManager.play_music(&"music/final_boss")
 
+	if GameState.has_death_mark():
+		var shade := DeathShade.new()
+		shade.global_position = GameState.get_flag(&"death_mark_pos",
+			Vector2(150, FLOOR_Y - 10))
+		add_child(shade)
+
 
 func _run_intro() -> void:
 	# Samuray bosluga girer; ortada kasayi tutan yaratik bekler
@@ -235,13 +241,21 @@ func _finish() -> void:
 	AudioManager.play_music(&"music/credits")
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	var label := Label.new()
-	label.text = "HONOR MESELESI"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.set_anchors_preset(Control.PRESET_CENTER)
-	label.add_theme_font_size_override("font_size", 14)
-	label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
-	layer.add_child(label)
+	if AssetLoader.has_asset(&"ui/logo"):
+		var logo := Sprite2D.new()
+		logo.texture = AssetLoader.texture(&"ui/logo")
+		logo.centered = true
+		logo.scale = Vector2.ONE * (240.0 / logo.texture.get_width())
+		logo.position = Vector2(240, 135)
+		layer.add_child(logo)
+	else:
+		var label := Label.new()
+		label.text = "HONOR MESELESI"
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.set_anchors_preset(Control.PRESET_CENTER)
+		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
+		layer.add_child(label)
 	await get_tree().create_timer(3.0, true).timeout
 	if auto_advance:
 		EventBus.scene_change_requested.emit(PROLOG_PATH)
@@ -254,6 +268,7 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", creature.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
+	GameState.mark_death(creature.global_position)
 	SceneRouter.reload()  # dusmanlar + boss sifirlanir (intro atlanir)
 
 
