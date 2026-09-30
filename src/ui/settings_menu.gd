@@ -81,6 +81,7 @@ func _build() -> void:
 		b.text = tr_ui(t)
 		b.add_theme_font_size_override("font_size", 11)
 		b.pressed.connect(func() -> void:
+			AudioManager.play_sfx(&"sfx/ui", null, -6.0)
 			_tab = t
 			_rebuild_tab())
 		tabs.add_child(b)
@@ -161,6 +162,7 @@ func _tab_language() -> void:
 		b.add_theme_font_size_override("font_size", 10)
 		b.modulate = Color(1.0, 0.85, 0.5) if Settings.language == spec[0] else Color.WHITE
 		b.pressed.connect(func() -> void:
+			AudioManager.play_sfx(&"sfx/ui", null, -6.0)
 			Settings.set_language(spec[0])
 			_rebuild_all())
 		row.add_child(b)
@@ -189,6 +191,7 @@ func _tab_controls() -> void:
 		b.add_theme_font_size_override("font_size", 10)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.pressed.connect(func() -> void:
+			AudioManager.play_sfx(&"sfx/ui", null, -6.0)
 			_rebinding = action
 			_rebuild_tab())
 		row.add_child(b)
