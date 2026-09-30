@@ -87,6 +87,8 @@ class Dash:
 		sam.velocity.y = 0.0
 		sam.sprite_flash(Color(0.3, 0.8, 1.0))
 		_trail = 0.0
+		if sam.form != null and sam.form.dash_iframes:
+			sam.invuln_timer = maxf(sam.invuln_timer, sam.tuning.dash_time)
 
 	func physics_process(delta: float) -> StringName:
 		_trail -= delta
