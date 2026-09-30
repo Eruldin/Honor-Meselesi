@@ -28,6 +28,7 @@ var _respawn_pending := false
 func _ready() -> void:
 	GameState.current_chapter = &"ch3"
 	AudioManager.play_music(&"music/ch3")
+	AudioManager.play_ambience(&"amb/wind")  # mezarlik ruzgari
 	_build_terrain()
 	_build_entities()
 	_build_fx()

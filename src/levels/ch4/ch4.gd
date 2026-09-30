@@ -29,6 +29,7 @@ var _gameover: Label
 func _ready() -> void:
 	GameState.current_chapter = &"ch4"
 	AudioManager.play_music(&"music/ch4")
+	AudioManager.play_ambience(&"amb/forest")  # neseli platform dunyasi
 	_build_terrain()
 	_build_entities()
 	_build_fx()
