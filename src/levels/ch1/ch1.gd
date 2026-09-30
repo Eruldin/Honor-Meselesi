@@ -1076,8 +1076,9 @@ func _on_thief_cameo(area: Area2D) -> void:
 	var p := area.get_parent()
 	while p != null and not p.is_in_group(&"player"):
 		p = p.get_parent()
-	if p == null:
+	if p == null or GameState.get_flag(&"ch1_cameo_done", false):
 		return
+	GameState.set_flag(&"ch1_cameo_done")
 	ThiefCameo.spawn(self, Vector2(4470, FLOOR_Y - 14))
 
 

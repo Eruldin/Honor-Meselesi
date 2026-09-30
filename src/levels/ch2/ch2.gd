@@ -33,9 +33,11 @@ func _ready() -> void:
 	AudioManager.play_music(&"music/ch2")
 	AudioManager.play_ambience(&"amb/wind")  # gece cati ruzgari
 	if grant_drone_to_player:
+		var was_new := not GameState.unlocked_forms.has(&"drone")
 		GameState.unlock_form(&"drone")
-		SaveSystem.save_game()
-		get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
+		if was_new:
+			SaveSystem.save_game()
+			get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
 	_build_terrain()
 	_build_entities()
 	_build_fx()
