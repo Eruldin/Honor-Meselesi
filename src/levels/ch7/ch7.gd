@@ -18,6 +18,7 @@ var _boss_root: Control
 var _respawn_pending := false
 var _hat_prop: Sprite2D
 var _black: ColorRect
+var _motes: Array[Sprite2D] = []
 
 
 func _ready() -> void:
@@ -45,6 +46,13 @@ func _process(_delta: float) -> void:
 		creature.velocity = Vector2.ZERO
 		FX.glitch(0.4, 0.3)
 		creature._on_hit_info(DamageInfo.make(1, null, Vector2.ZERO, true, true))
+	# Zerrecik suzulmesi: yavas yukari + hafif yalpa, ustte sarilir
+	for m in _motes:
+		m.position.y -= 7.0 * _delta
+		m.position.x += sin(Time.get_ticks_msec() / 900.0 + m.position.y * 0.05) * 5.0 * _delta
+		if m.position.y < -8.0:
+			m.position.y = 278.0
+			m.position.x = randf() * 480.0
 
 
 
@@ -52,12 +60,41 @@ func _build_terrain() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0.05, 0.04, 0.11)  # bosluk siyahi-moru (okunabilir)
 	bg.size = Vector2(480, 270)
+	bg.z_index = -10
 	add_child(bg)
 	# Uzak katman — kirik bellek artiklari, soluk mor parilti
 	ParallaxBg.add(self, 480, [
 		{id = &"bg/ash_far", scroll = 0.05, modulate = Color(0.6, 0.5, 0.9, 0.7)},
 		{id = &"bg/ash_sky", scroll = 0.12, modulate = Color(0.5, 0.5, 0.85, 0.5)},
 	])
+	# Final sahnesinin merkezi: dunya yarigi (samurayin geldigi boyut yarisi)
+	if AssetLoader.has_asset(&"prop/rift"):
+		var rift := Sprite2D.new()
+		rift.texture = AssetLoader.texture(&"prop/rift", Vector2i(96, 140))
+		rift.global_position = Vector2(240, 78)
+		rift.modulate = Color(1.2, 0.9, 1.5, 0.95)
+		rift.z_index = -1
+		add_child(rift)
+		var rt := rift.create_tween().set_loops()
+		rt.tween_property(rift, "scale", Vector2(1.06, 1.10), 1.6).set_trans(Tween.TRANS_SINE)
+		rt.tween_property(rift, "scale", Vector2.ONE, 1.6).set_trans(Tween.TRANS_SINE)
+	# Solgun ay — boslugun uzak ufku
+	if AssetLoader.has_asset(&"bg/j_moon"):
+		var moon := Sprite2D.new()
+		moon.texture = AssetLoader.texture(&"bg/j_moon", Vector2i(26, 26))
+		moon.global_position = Vector2(414, 36)
+		moon.modulate = Color(0.7, 0.65, 1.0, 0.5)
+		moon.z_index = -2
+		add_child(moon)
+	# Yuzan glitch zerrecikleri — CRT'den sizen kivilcim tozu
+	for i in 9:
+		var mt := Sprite2D.new()
+		mt.texture = AssetLoader.texture(&"enemy/glitch", Vector2i(5, 5))
+		mt.modulate = Color(0.5, 1.0, 0.9, randf_range(0.25, 0.6))
+		mt.global_position = Vector2(randf() * 480.0, randf() * 270.0)
+		mt.z_index = -1
+		add_child(mt)
+		_motes.append(mt)
 	# Tek genis platform — boslukta asili
 	var body := StaticBody2D.new()
 	body.collision_layer = 1
