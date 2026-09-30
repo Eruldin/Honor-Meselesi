@@ -28,6 +28,8 @@ func _on_spark(pos: Vector2) -> void:
 
 
 func reveal() -> void:
+	if not revealed:
+		AudioManager.play_sfx(&"sfx/ghost", global_position, -6.0)
 	revealed = true
 	_reveal_timer = tuning.ghost_reveal_time
 	sprite.modulate = Color(0.7, 0.85, 1.0, 0.95)
