@@ -97,6 +97,22 @@ func _build_terrain() -> void:
 		s.global_position = Vector2(pp[0], FLOOR_Y - 9)
 		add_child(s)
 
+	# Buyuk harabe parcalari — kule icine yari gomulu yontma kalintilar
+	var ruins: Array = [
+		[300, &"prop/statue", Vector2i(24, 32), 4.0],
+		[620, &"prop/deco_wall", Vector2i(44, 20), 5.0],
+		[960, &"prop/statue", Vector2i(20, 28), 5.0],
+	]
+	for r in ruins:
+		if not AssetLoader.has_asset(r[1]):
+			continue
+		var ru := Sprite2D.new()
+		ru.texture = AssetLoader.texture(r[1], r[2])
+		ru.modulate = Color(0.5, 0.46, 0.44)
+		ru.global_position = Vector2(r[0],
+			FLOOR_Y - float(r[2].y) / 2.0 + float(r[3]))
+		add_child(ru)
+
 	for wx in [ARENA_L - 14, ARENA_R + 8]:
 		var wall := _make_wall(Vector2(wx, 135))
 		wall.set_deferred("collision_layer", 0)
