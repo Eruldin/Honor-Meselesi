@@ -66,10 +66,58 @@ def download_pack(url, out_name=None):
     return slug, saved
 
 
+DEFAULT_PACKS = [
+    'https://darkpixel-kronovi.itch.io/undead-executioner',
+    'https://pedrovmvictor.itch.io/metroidvania-demo-godot',
+    'https://maaot.itch.io/2d-browncave-assets',
+    'https://monopixelart.itch.io/dark-fantasy-enemies-asset-pack',
+    'https://vnitti.itch.io/taiga-asset-pack',
+    'https://admurin.itch.io/parallax-backgrounds-caves',
+    'https://gabry-corti.itch.io/plague-crow',
+    'https://sanctumpixel.itch.io/imp-axe-demon-pixel-art-character',
+    'https://didigameboy.itch.io/legacy-vania-long-sword',
+    'https://kiyoz.itch.io/duskborne-enemy-2',
+    'https://synapse-forge.itch.io/pixel-portal-fx-pack-free-2d-animated-portal-asset',
+    'https://jik-a-4.itch.io/orius',
+    'https://helianthus-games.itch.io/axe-warrior',
+    'https://hoshin.itch.io/dark-character-2',
+    'https://dead-pixelsz.itch.io/cap-guy-free',
+    'https://dead-pixelsz.itch.io/machine-guy-free',
+    'https://jasontomlee.itch.io/beast-man',
+    'https://penzilla.itch.io/top-down-retro-interior',
+    'https://codemanu.itch.io/vfx-free-pack',
+]
+
+
+def extract_all():
+    """assets_external/itch/<slug>/ altindaki zip/rar'lari
+    assets_external/itch/extracted/<slug>/ altina cikarir (bsdtar)."""
+    import subprocess, shutil
+    ext_root = os.path.join(OUT_ROOT, 'extracted')
+    os.makedirs(ext_root, exist_ok=True)
+    for slug_dir in sorted(os.listdir(OUT_ROOT)):
+        src = os.path.join(OUT_ROOT, slug_dir)
+        if not os.path.isdir(src) or slug_dir == 'extracted':
+            continue
+        out = os.path.join(ext_root, slug_dir)
+        os.makedirs(out, exist_ok=True)
+        for fn in os.listdir(src):
+            p = os.path.join(src, fn)
+            if fn.lower().endswith('.zip'):
+                with __import__('zipfile').ZipFile(p) as z:
+                    z.extractall(out)
+            elif fn.lower().endswith(('.rar', '.7z')) and shutil.which('tar'):
+                subprocess.run(['tar', '-xf', p, '-C', out], check=False)
+        print('extracted', slug_dir)
+
+
 if __name__ == '__main__':
     urls = [u.strip() for u in sys.argv[1:] if u.strip().startswith('http')]
+    if not urls:
+        urls = DEFAULT_PACKS
     for u in urls:
         try:
             download_pack(u)
         except Exception as e:
             print('FAIL', u, '->', e)
+    extract_all()
