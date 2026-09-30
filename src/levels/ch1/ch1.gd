@@ -1144,6 +1144,8 @@ func _on_actor_died(actor: Node) -> void:
 	if actor != samurai or _respawn_pending:
 		return
 	_respawn_pending = true
+	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
+	FX.glitch(0.6, 0.5)
 	await get_tree().create_timer(1.4, true).timeout
 	var cp: Variant = GameState.get_flag(&"respawn_pos", Vector2(80, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)
