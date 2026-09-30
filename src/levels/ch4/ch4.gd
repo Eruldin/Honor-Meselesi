@@ -149,6 +149,12 @@ func _build_entities() -> void:
 	samurai.global_position = spawn
 	add_child(samurai)
 
+	# Kalp kristali — en yuksek retro platformun ustunde
+	var sh := HeartShard.new()
+	sh.pickup_id = &"ch4_ridge"
+	sh.global_position = Vector2(700, 138)
+	add_child(sh)
+
 	var m1 := SplitMushroom.new()
 	m1.global_position = Vector2(300, FLOOR_Y - 12)
 	add_child(m1)
