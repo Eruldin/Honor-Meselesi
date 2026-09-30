@@ -12,6 +12,8 @@ var checkpoint_id: StringName = &""
 var flags: Dictionary = {}
 var play_time: float = 0.0
 var soul: int = 0
+## Kalp kristalleriyle kazanilan kalici +max can (kaydedilir).
+var max_health_bonus: int = 0
 
 
 func _ready() -> void:
@@ -77,6 +79,7 @@ func reset() -> void:
 	flags.clear()
 	play_time = 0.0
 	soul = 0
+	max_health_bonus = 0
 
 
 func to_dict() -> Dictionary:
@@ -96,6 +99,7 @@ func to_dict() -> Dictionary:
 		"flags": ser_flags,
 		"play_time": play_time,
 		"soul": soul,
+		"hp_bonus": max_health_bonus,
 	}
 
 
@@ -105,6 +109,7 @@ func from_dict(data: Dictionary) -> void:
 	checkpoint_id = StringName(data.get("checkpoint", ""))
 	play_time = float(data.get("play_time", 0.0))
 	soul = int(data.get("soul", 0))
+	max_health_bonus = int(data.get("hp_bonus", 0))
 	flags.clear()
 	for k in data.get("flags", {}):
 		var v: Variant = data["flags"][k]
