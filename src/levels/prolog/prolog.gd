@@ -112,13 +112,13 @@ func _build_room() -> void:
 	# Duvar susleri: parşömenler, kirmizi armagan bayragi, parlayan
 	# kagit fenerler (referans ic mekandaki gibi)
 	var deco_specs := [
-		{ id = &"prop/shoji",    pos = Vector2(56, 96), mod = Color(0.95, 0.9, 0.85) },
-		{ id = &"prop/scroll_a", pos = Vector2(118, 80), mod = Color(1, 0.92, 0.82) },
-		{ id = &"prop/moonwin",  pos = Vector2(432, 88), mod = Color(0.95, 0.9, 0.85) },
-		{ id = &"prop/scroll_b", pos = Vector2(392, 80), mod = Color(1, 0.92, 0.82) },
-		{ id = &"prop/banner",   pos = Vector2(228, 62), mod = Color(1, 0.9, 0.85) },
-		{ id = &"prop/lantern_hang",  pos = Vector2(96, 62), mod = Color(1.05, 0.95, 0.85) },
-		{ id = &"prop/lantern_hang2", pos = Vector2(378, 62), mod = Color(1.05, 0.95, 0.85) },
+		{ id = &"prop/shoji",    pos = Vector2(56, 96),  h = 58.0, mod = Color(0.95, 0.9, 0.85) },
+		{ id = &"prop/scroll_a", pos = Vector2(118, 80), h = 46.0, mod = Color(1, 0.92, 0.82) },
+		{ id = &"prop/moonwin",  pos = Vector2(432, 88), h = 46.0, mod = Color(0.95, 0.9, 0.85) },
+		{ id = &"prop/scroll_b", pos = Vector2(392, 80), h = 46.0, mod = Color(1, 0.92, 0.82) },
+		{ id = &"prop/banner",   pos = Vector2(228, 62), h = 60.0, mod = Color(1, 0.9, 0.85) },
+		{ id = &"prop/lantern_hang",  pos = Vector2(96, 62),  h = 34.0, mod = Color(1.05, 0.95, 0.85) },
+		{ id = &"prop/lantern_hang2", pos = Vector2(378, 62), h = 40.0, mod = Color(1.05, 0.95, 0.85) },
 	]
 	for f in deco_specs:
 		if not AssetLoader.has_asset(f.id):
@@ -126,6 +126,8 @@ func _build_room() -> void:
 		var ds := Sprite2D.new()
 		ds.texture = AssetLoader.texture(f.id)
 		var ts := ds.texture.get_size()
+		var sc: float = f.h / ts.y
+		ds.scale = Vector2(sc, sc)
 		ds.offset = Vector2(-ts.x / 2.0, 0)  # tavandan asili
 		ds.position = f.pos
 		ds.modulate = f.mod
@@ -134,14 +136,14 @@ func _build_room() -> void:
 	# Mobilyalar: kalabalik raf + dama dolap + yanan fener sagda;
 	# masa + caydanlik + mum solda, hali ortada — referans kompozisyon
 	var furn_specs := [
-		{ id = &"prop/shelf_big",  pos = Vector2(430, FLOOR_Y - 2), mod = Color(1, 0.9, 0.85) },
-		{ id = &"prop/cabinet",    pos = Vector2(28, FLOOR_Y - 2),  mod = Color(0.95, 0.82, 0.72) },
-		{ id = &"prop/lantern3",   pos = Vector2(390, FLOOR_Y - 2), mod = Color(1.02, 0.95, 0.85) },
-		{ id = &"prop/vase",       pos = Vector2(80, FLOOR_Y - 2),  mod = Color(0.95, 0.85, 0.8) },
-		{ id = &"prop/table",      pos = Vector2(196, FLOOR_Y - 2), mod = Color(0.95, 0.85, 0.75) },
-		{ id = &"prop/furn_rug",   pos = Vector2(196, FLOOR_Y - 3), mod = Color(0.85, 0.62, 0.55) },
-		{ id = &"prop/candle",     pos = Vector2(330, FLOOR_Y - 2), mod = Color(1.02, 0.95, 0.85) },
-		{ id = &"prop/kettle",     pos = Vector2(150, FLOOR_Y - 2), mod = Color(0.9, 0.8, 0.75) },
+		{ id = &"prop/shelf_big",  pos = Vector2(430, FLOOR_Y - 2), h = 88.0, mod = Color(1, 0.9, 0.85) },
+		{ id = &"prop/cabinet",    pos = Vector2(28, FLOOR_Y - 2),  h = 52.0, mod = Color(0.95, 0.82, 0.72) },
+		{ id = &"prop/lantern3",   pos = Vector2(390, FLOOR_Y - 2), h = 40.0, mod = Color(1.02, 0.95, 0.85) },
+		{ id = &"prop/vase",       pos = Vector2(80, FLOOR_Y - 2),  h = 24.0, mod = Color(0.95, 0.85, 0.8) },
+		{ id = &"prop/table",      pos = Vector2(196, FLOOR_Y - 2), h = 30.0, mod = Color(0.95, 0.85, 0.75) },
+		{ id = &"prop/furn_rug",   pos = Vector2(196, FLOOR_Y - 3), h = 20.0, mod = Color(0.85, 0.62, 0.55) },
+		{ id = &"prop/candle",     pos = Vector2(330, FLOOR_Y - 2), h = 18.0, mod = Color(1.02, 0.95, 0.85) },
+		{ id = &"prop/kettle",     pos = Vector2(150, FLOOR_Y - 2), h = 14.0, mod = Color(0.9, 0.8, 0.75) },
 	]
 	for f in furn_specs:
 		if not AssetLoader.has_asset(f.id):
@@ -149,6 +151,8 @@ func _build_room() -> void:
 		var fs := Sprite2D.new()
 		fs.texture = AssetLoader.texture(f.id)
 		var ts := fs.texture.get_size()
+		var sc2: float = f.h / ts.y
+		fs.scale = Vector2(sc2, sc2)
 		# Ayak hizasi: sprite'in alti zemine oturur
 		fs.offset = Vector2(-ts.x / 2.0, -ts.y)
 		fs.position = f.pos
@@ -162,13 +166,17 @@ func _build_room() -> void:
 		var tv := Sprite2D.new()
 		tv.texture = AssetLoader.texture(&"prop/crt_tv")
 		var ts := tv.texture.get_size()
+		var tv_sc: float = 62.0 / ts.y
+		tv.scale = Vector2(tv_sc, tv_sc)
 		tv.offset = Vector2(-ts.x / 2.0, -ts.y)
 		tv.position = tv_pos
 		add_child(tv)
-		# ekran bolgesini sprite oranina gore olcekle
-		var sw: float = min(46.0, ts.x * 0.62)
+		# ekran bolgesini olcekli sprite oranina gore hesapla
+		var ex: float = ts.x * tv_sc
+		var ey: float = ts.y * tv_sc
+		var sw: float = min(46.0, ex * 0.62)
 		var sh: float = sw * 34.0 / 46.0
-		tv_screen = Rect2(tv_pos.x - ts.x * 0.30, tv_pos.y - ts.y * 0.72, sw, sh)
+		tv_screen = Rect2(tv_pos.x - ex * 0.30, tv_pos.y - ey * 0.72, sw, sh)
 	else:
 		var table := ColorRect.new()
 		table.color = Color(0.28, 0.2, 0.12)
@@ -205,6 +213,8 @@ func _build_room() -> void:
 		var rack := Sprite2D.new()
 		rack.texture = AssetLoader.texture(rack_id)
 		var rs := rack.texture.get_size()
+		var rk_sc: float = 74.0 / rs.y
+		rack.scale = Vector2(rk_sc, rk_sc)
 		rack.offset = Vector2(-rs.x / 2.0, -rs.y / 2.0)
 		rack.global_position = Vector2(352, 150)
 		add_child(rack)
@@ -239,7 +249,8 @@ func _build_actors() -> void:
 		sit.texture = AssetLoader.texture(&"prop/player_sit")
 		var ss := sit.texture.get_size()
 		sit.offset = Vector2(-ss.x / 2.0, -ss.y)
-		sit.scale = Vector2(1.4, 1.4)
+		var sit_sc: float = 30.0 / ss.y
+		sit.scale = Vector2(sit_sc, sit_sc)
 		sit.flip_h = true
 		samurai.add_child(sit)
 		if samurai._anims != null:

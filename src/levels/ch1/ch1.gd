@@ -1061,7 +1061,7 @@ func _on_arena_entered(area: Area2D) -> void:
 		if AssetLoader.has_asset(&"prop/deco_barrier"):
 			ws.texture = AssetLoader.texture(&"prop/deco_barrier")
 		else:
-			ws.texture = AssetLoader.texture(&"terrain/cave_bricks", Vector2i(18, 160))
+			ws.texture = AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(18, 160))
 		ws.modulate = Color(0.8, 0.5, 0.45)
 		w.add_child(ws)
 		ws.scale = Vector2(1.0, 0.0)

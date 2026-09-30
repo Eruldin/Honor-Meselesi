@@ -84,8 +84,10 @@ func _load_image_texture(rel: String) -> Texture2D:
 
 ## Mantiksal asset icin texture dondurur; yoksa placeholder uretir.
 ## Manifest "region": [x,y,w,h] varsa atlas bolgesi (AtlasTexture) doner.
-func texture(logical_id: StringName, size := Vector2i(16, 16)) -> Texture2D:
-	var key := "tex_" + String(logical_id)
+## size > 0 verilirse doku o boyuta NEAREST ile olceklenir (sprite'larin
+## istenen oyun boyutunda gorunmesi icin); negatif/varsayilan = native boyut.
+func texture(logical_id: StringName, size := Vector2i(-1, -1)) -> Texture2D:
+	var key := "tex_%s_%dx%d" % [logical_id, size.x, size.y]
 	if _cache.has(key):
 		return _cache[key]
 	if has_asset(logical_id):
@@ -94,19 +96,24 @@ func texture(logical_id: StringName, size := Vector2i(16, 16)) -> Texture2D:
 		var rel: String = entry["files"][0] if entry.has("files") else entry.get("path", "")
 		var full := _load_image_texture(rel)
 		if full != null:
+			var src: Texture2D = full
 			if entry.has("region"):
 				var r: Array = entry["region"]
 				var at := AtlasTexture.new()
 				at.atlas = full
 				at.region = Rect2(r[0], r[1], r[2], r[3])
-				_cache[key] = at
-				return at
-			_cache[key] = full
-			return full
+				src = at
+			if size.x > 0 and size.y > 0 and Vector2i(src.get_size()) != size:
+				var img := src.get_image()
+				if img != null:
+					img.resize(size.x, size.y, Image.INTERPOLATE_NEAREST)
+					src = ImageTexture.create_from_image(img)
+			_cache[key] = src
+			return src
 	var local_path: String = PLACEHOLDER_ROOT.path_join(String(logical_id).replace("/", "_") + ".png")
 	if ResourceLoader.exists(local_path):
 		return load(local_path)
-	return placeholder_texture(String(logical_id), size)
+	return placeholder_texture(String(logical_id), size if size.x > 0 else Vector2i(16, 16))
 
 
 ## Spritesheet'ten SpriteFrames uretir: manifest "frame": [w,h], "fps": n.
@@ -149,7 +156,7 @@ func tiled_texture(logical_id: StringName, size: Vector2i) -> Texture2D:
 	var key := "tile_%s_%dx%d" % [logical_id, size.x, size.y]
 	if _cache.has(key):
 		return _cache[key]
-	var src: Texture2D = texture(logical_id, size)
+	var src: Texture2D = texture(logical_id)
 	if src == null:
 		return null
 	var t := src.get_image()
