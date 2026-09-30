@@ -462,6 +462,7 @@ func _apply_end_state() -> void:
 func _finish_prolog() -> void:
 	_phase = &"done"
 	GameState.set_flag(&"prolog_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch1"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH1_PATH)

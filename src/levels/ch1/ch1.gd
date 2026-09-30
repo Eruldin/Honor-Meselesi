@@ -1066,6 +1066,7 @@ func _boss_intro() -> void:
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"tavuk")
 	GameState.set_flag(&"ch1_boss_dead")
+	SaveSystem.save_game()
 	var creature := Node2D.new()
 	creature.global_position = boss.global_position + Vector2(0, -30)
 	add_child(creature)
@@ -1111,6 +1112,7 @@ func _on_boss_defeated() -> void:
 
 func _go_ch2() -> void:
 	GameState.set_flag(&"ch1_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch2"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH2_PATH)

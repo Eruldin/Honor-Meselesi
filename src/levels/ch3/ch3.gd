@@ -251,6 +251,7 @@ func _on_arena_entered(area: Area2D) -> void:
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"golge")
 	GameState.set_flag(&"ch3_boss_dead")
+	SaveSystem.save_game()
 	if boss.darkness != null:
 		boss.darkness.create_tween().tween_property(boss.darkness, "modulate:a", 0.0, 0.8)
 	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_grey")
@@ -280,6 +281,7 @@ func _on_boss_defeated() -> void:
 
 func _go_ch4() -> void:
 	GameState.set_flag(&"ch3_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch4"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH4_PATH)
