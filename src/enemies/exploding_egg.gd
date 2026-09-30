@@ -109,6 +109,7 @@ func _explode() -> void:
 	sprite.scale = Vector2(3, 3)
 	sprite.modulate = Color(1.0, 0.8, 0.3, 0.9)
 	FX.shake(2.0, 0.2)
+	AudioManager.play_sfx(&"sfx/explosion", global_position)
 	var tw := create_tween()
 	tw.tween_property(sprite, "modulate:a", 0.0, 0.15)
 	tw.finished.connect(queue_free)
