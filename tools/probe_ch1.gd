@@ -22,10 +22,14 @@ func _ready() -> void:
 
 func _go(spot: String) -> void:
 	await get_tree().create_timer(0.6).timeout
-	var spots := {"village": 300.0, "gate": 4200.0, "arena": 4640.0,
-		"forest": 1900.0, "cave": 2700.0, "well": 480.0, "boss": 4700.0}
-	var x: float = spots.get(spot, 300.0)
-	samurai.global_position = Vector2(x, FLOOR_Y - 10)
+	var spots := {"village": [300.0, -10.0], "gate": [4200.0, -10.0],
+		"arena": [4640.0, -10.0], "forest": [2200.0, -16.0],
+		"cave": [2700.0, -10.0], "well": [480.0, -10.0],
+		"boss": [4700.0, -10.0], "cave2": [3050.0, -40.0],
+		"crypt": [3820.0, 140.0], "approach": [4000.0, -30.0]}
+	var s: Array = spots.get(spot, [300.0, -10.0])
+	var x: float = s[0]
+	samurai.global_position = Vector2(x, FLOOR_Y + s[1])
 	await get_tree().create_timer(0.4).timeout
 	_dump_parallax()
 	if spot == "gate":

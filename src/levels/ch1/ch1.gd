@@ -316,7 +316,15 @@ func _build_terrain() -> void:
 	# Selale ucurumu — ormanin arkasi, sabit dunya konumunda dekor
 	_add_deco_ground(&"bg/j_falls", 1260, FLOOR_Y + 30, 1.6,
 		Color(0.65, 0.75, 0.85), false, -3)
-	
+
+	# Magara (2300 - 3350) — Admurin dikilitas siluetleri: onplan
+	# derinligi (z>0 → oynanisin onunde, HK tarzi ic perspektif)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/cave_px_1", scroll = 0.8, x0 = 2300, x1 = 3350,
+			z_index = 5, modulate = Color(0.5, 0.45, 0.6, 0.9)},
+		{id = &"bg/cave_px_2", scroll = 0.9, x0 = 2300, x1 = 3350,
+			z_index = 6, modulate = Color(0.4, 0.35, 0.5, 0.95)},
+	])
 	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
 	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
 	# 4) Gecit (3350 - 4500)
@@ -814,6 +822,37 @@ func _build_entities() -> void:
 		var sk := CryptSkeleton.new()
 		sk.global_position = Vector2(x, FLOOR_Y + 160.0 - 12)
 		add_child(sk)
+
+	# Kripta mini-boss: Undead Executioner + imp yancilari
+	var exec := Executioner.new()
+	exec.global_position = Vector2(3920, FLOOR_Y + 160.0 - 20)
+	add_child(exec)
+	for x in [3760.0, 3940.0]:
+		var imp := ImpRed.new()
+		imp.global_position = Vector2(x, FLOOR_Y + 160.0 - 10)
+		add_child(imp)
+
+	# Orman cikisi eliti: DuskBorne buyucusu
+	var druid := Druid.new()
+	druid.global_position = Vector2(2260, FLOOR_Y - 16)
+	add_child(druid)
+
+	# Magara yarasa + ucan kilic (Dark Fantasy / Legacy Vania)
+	for x in [2560.0, 3060.0]:
+		var bat := CaveBat.new()
+		bat.global_position = Vector2(x, FLOOR_Y - 80)
+		add_child(bat)
+	var sword := FlyingSword.new()
+	sword.global_position = Vector2(3260, FLOOR_Y - 90)
+	add_child(sword)
+
+	# Gecit yaklasimi: balta demonu + veba kargasi eliti
+	var demon := DemonAxe.new()
+	demon.global_position = Vector2(3980, FLOOR_Y - 12)
+	add_child(demon)
+	var crow := Crow.new()
+	crow.global_position = Vector2(4150, FLOOR_Y - 70)
+	add_child(crow)
 
 	_add_rest(4050, &"ch1_gate")
 	knight = HeavyKnight.new()
