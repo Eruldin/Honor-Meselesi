@@ -16,6 +16,9 @@ func move_axis() -> float:
 func down_held() -> bool:
 	return false
 
+func up_held() -> bool:
+	return false
+
 func jump_just_pressed() -> bool:
 	return false
 

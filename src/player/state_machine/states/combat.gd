@@ -39,6 +39,34 @@ class Attack:
 		sam.combo_queued = false
 
 
+class UpAttack:
+	extends PlayerState
+	## Yukari kesik (HK up-slash): yerde veya havada yukari+saldiri.
+	## Ucan dusmanlari (yarasa/karga/drone) vurmanin tek dogrudan yolu.
+
+	func enter() -> void:
+		super.enter()
+		sam.sprite_flash(Color(0.7, 0.9, 1.0))
+		sam._spawn_slash(false, true)
+		AudioManager.play_sfx(&"sfx/attack", sam.global_position)
+
+	func physics_process(delta: float) -> StringName:
+		var tun: Tuning = sam.tuning
+		if sam.is_on_floor():
+			sam.velocity.x = move_toward(sam.velocity.x, 0.0, tun.ground_decel * delta)
+		else:
+			sam.apply_run(delta, sam.input.move_axis())
+			sam.apply_gravity(delta)
+		if t >= tun.air_attack_duration * tun.attack_active_start and t <= tun.air_attack_duration * tun.attack_active_end:
+			sam.ensure_up_hitbox()
+		if t >= tun.air_attack_duration:
+			return Samurai.S_IDLE if sam.is_on_floor() else Samurai.S_FALL
+		return &""
+
+	func exit() -> void:
+		sam.up_hitbox.deactivate()
+
+
 class AirAttack:
 	extends PlayerState
 
