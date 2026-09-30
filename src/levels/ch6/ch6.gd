@@ -48,6 +48,14 @@ func _process(delta: float) -> void:
 		_glitch_t = randf_range(5.0, 9.0)
 		FX.glitch(0.25, 0.5)
 
+	# Bosluk dususu: asama disina dusen 1 can kaybedip checkpoint'e doner
+	if samurai != null and not _respawn_pending 			and (samurai.global_position.y > 430.0 				or samurai.global_position.y < -80.0):
+		var cp2: Vector2 = GameState.respawn_point(Vector2(60, FLOOR_Y - 20))
+		samurai.global_position = cp2 + Vector2(0, -14)
+		samurai.velocity = Vector2.ZERO
+		samurai.set_gravity_flipped(false)
+		FX.glitch(0.4, 0.3)
+		samurai.take_damage(DamageInfo.make(1, null, Vector2.ZERO, true, true))
 
 func _build_terrain() -> void:
 	var bg := ColorRect.new()
@@ -252,6 +260,8 @@ func _on_actor_died(actor: Node) -> void:
 	if actor != samurai or _respawn_pending:
 		return
 	_respawn_pending = true
+	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
+	FX.glitch(0.6, 0.5)
 	await get_tree().create_timer(1.4, true).timeout
 	var cp: Vector2 = GameState.respawn_point(Vector2(60, FLOOR_Y - 20))
 	samurai.global_position = cp + Vector2(0, -14)
