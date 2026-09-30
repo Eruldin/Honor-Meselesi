@@ -135,6 +135,12 @@ func _build_entities() -> void:
 	d1.global_position = Vector2(600, FLOOR_Y - 60)
 	add_child(d1)
 
+	# Orius devriye piyade
+	var s1 := Soldier.new()
+	s1.variant = 1
+	s1.global_position = Vector2(500, FLOOR_Y - 12)
+	add_child(s1)
+
 	# Terminal + lazer kapi bulmacasi
 	var term := HackTerminal.new()
 	term.gate_id = &"ch2_gate1"
@@ -154,6 +160,11 @@ func _build_entities() -> void:
 	rest.checkpoint_id = &"ch2_shrine"
 	rest.global_position = Vector2(1100, FLOOR_Y - 12)
 	add_child(rest)
+
+	var s2 := Soldier.new()
+	s2.variant = 3
+	s2.global_position = Vector2(1150, FLOOR_Y - 12)
+	add_child(s2)
 
 	var gd := Guardian.new()
 	gd.global_position = Vector2(1200, FLOOR_Y - 18)

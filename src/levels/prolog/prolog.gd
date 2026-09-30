@@ -85,8 +85,9 @@ func _build_room() -> void:
 	floor_rect.position = Vector2(0, FLOOR_Y)
 	floor_rect.size = Vector2(480, 270 - FLOOR_Y)
 	add_child(floor_rect)
-	var floor_id := &"tex/j_floor" if AssetLoader.has_asset(&"tex/j_floor") \
-		else &"terrain/cabin_floor"
+	var floor_id := &"tex/retro_floor" if AssetLoader.has_asset(&"tex/retro_floor") \
+		else (&"tex/j_floor" if AssetLoader.has_asset(&"tex/j_floor") \
+			else &"terrain/cabin_floor")
 	if AssetLoader.has_asset(floor_id):
 		var ftex := TextureRect.new()
 		ftex.texture = AssetLoader.tiled_texture(

@@ -300,7 +300,11 @@ func _build_terrain() -> void:
 			modulate = Color(0.8, 0.7, 0.85)},
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
+		{id = &"bg/taiga_mid", scroll = 0.30, x0 = 0, x1 = 1200,
+			modulate = Color(0.55, 0.5, 0.65)},  # alacakaranlik tini
 		{id = &"bg/dusk_trees", scroll = 0.42, modulate = Color(0.95, 0.8, 0.8), x0 = 0, x1 = 1200},
+		{id = &"bg/taiga_ext_green", scroll = 0.5, x0 = 0, x1 = 1200,
+			modulate = Color(0.45, 0.38, 0.55, 0.9)},  # kosturulan duzluk
 		{id = &"bg/dusk_trees", scroll = 0.55, modulate = Color(0.35, 0.25, 0.3), x0 = 0, x1 = 1200},
 	])
 	# Ay gokyuzu kompozitine pisirilmis (bg_sky 1440px genislikte tek ay)
@@ -316,14 +320,25 @@ func _build_terrain() -> void:
 	# Selale ucurumu — ormanin arkasi, sabit dunya konumunda dekor
 	_add_deco_ground(&"bg/j_falls", 1260, FLOOR_Y + 30, 1.6,
 		Color(0.65, 0.75, 0.85), false, -3)
-	
+
+	# Magara (2300 - 3350) — Admurin dikilitas siluetleri: onplan
+	# derinligi (z>0 → oynanisin onunde, HK tarzi ic perspektif)
+	ParallaxBg.add(self, LEVEL_W, [
+		{id = &"bg/cave_px_1", scroll = 0.8, x0 = 2300, x1 = 3350,
+			z_index = 5, modulate = Color(0.5, 0.45, 0.6, 0.9)},
+		{id = &"bg/cave_px_2", scroll = 0.9, x0 = 2300, x1 = 3350,
+			z_index = 6, modulate = Color(0.4, 0.35, 0.5, 0.95)},
+	])
 	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
 	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
-	# 4) Gecit (3350 - 4500)
+	# 4) Gecit (3350 - 4500) — gothicvania gercek mezarlik katmanlari:
+	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_far", scroll = 0.15, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_sky", scroll = 0.05, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_mountains", scroll = 0.12, x0 = 3350, x1 = 4500},
+		{id = &"bg/cemetery_yard", scroll = 0.28, x0 = 3350, x1 = 4500},
 		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500,
-			modulate = Color(1.4, 1.4, 1.6, 0.8)},  # hayalet duvar — gokyuzu sizar
+			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
 	
 	# 5) Arena (4500 - LEVEL_W)
@@ -814,6 +829,37 @@ func _build_entities() -> void:
 		var sk := CryptSkeleton.new()
 		sk.global_position = Vector2(x, FLOOR_Y + 160.0 - 12)
 		add_child(sk)
+
+	# Kripta mini-boss: Undead Executioner + imp yancilari
+	var exec := Executioner.new()
+	exec.global_position = Vector2(3920, FLOOR_Y + 160.0 - 20)
+	add_child(exec)
+	for x in [3760.0, 3940.0]:
+		var imp := ImpRed.new()
+		imp.global_position = Vector2(x, FLOOR_Y + 160.0 - 10)
+		add_child(imp)
+
+	# Orman cikisi eliti: DuskBorne buyucusu
+	var druid := Druid.new()
+	druid.global_position = Vector2(2260, FLOOR_Y - 16)
+	add_child(druid)
+
+	# Magara yarasa + ucan kilic (Dark Fantasy / Legacy Vania)
+	for x in [2560.0, 3060.0]:
+		var bat := CaveBat.new()
+		bat.global_position = Vector2(x, FLOOR_Y - 80)
+		add_child(bat)
+	var sword := FlyingSword.new()
+	sword.global_position = Vector2(3260, FLOOR_Y - 90)
+	add_child(sword)
+
+	# Gecit yaklasimi: balta demonu + veba kargasi eliti
+	var demon := DemonAxe.new()
+	demon.global_position = Vector2(3980, FLOOR_Y - 12)
+	add_child(demon)
+	var crow := Crow.new()
+	crow.global_position = Vector2(4150, FLOOR_Y - 70)
+	add_child(crow)
 
 	_add_rest(4050, &"ch1_gate")
 	knight = HeavyKnight.new()

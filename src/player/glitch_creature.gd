@@ -8,6 +8,7 @@ var input: InputSource
 var health: Health
 var hurtbox: Hurtbox
 var sprite: Sprite2D
+var anims: AnimatedSprite2D
 var facing := -1
 var _dash_cd := 0.0
 var _iframes := 0.0
@@ -39,6 +40,10 @@ func _ready() -> void:
 		eye.color = Color(0.4, 1.0, 0.9)
 		sprite.add_child(eye)
 
+	# Sapka hirsizinin ana formu: dark_character anim bankasi varsa
+	# oynar, yoksa koyu kutle gorunumunde kalir.
+	_build_anims()
+
 	health = Health.new()
 	health.max_health = 5
 	add_child(health)
@@ -63,6 +68,33 @@ func set_input_source(src: InputSource) -> void:
 	add_child(input)
 
 
+func _build_anims() -> void:
+	var sf := SpriteFrames.new()
+	for anim in [&"idle", &"walk", &"attack", &"hurt", &"die"]:
+		var f := AssetLoader.frames(&"enemy/dark_character/" + String(anim))
+		if f != null and f.get_frame_count(&"default") > 0:
+			var speed := f.get_animation_speed(&"default")
+			var loop := f.get_animation_loop(&"default")
+			sf.add_animation(anim)
+			for i in f.get_frame_count(&"default"):
+				sf.add_frame(anim, f.get_frame_texture(&"default", i),
+					f.get_frame_duration(&"default", i))
+			sf.set_animation_speed(anim, speed)
+			sf.set_animation_loop(anim, loop)
+	sf.remove_animation(&"default")
+	if not sf.has_animation(&"idle"):
+		return
+	anims = AnimatedSprite2D.new()
+	anims.sprite_frames = sf
+	var fs: Vector2 = sf.get_frame_texture(&"idle", 0).get_size()
+	if fs.x > 0 and fs.y > 0:
+		anims.scale = Vector2(14, 20) * 1.8 / fs
+		anims.position.y = -8.0
+	add_child(anims)
+	anims.play(&"idle")
+	sprite.visible = false
+
+
 func _physics_process(delta: float) -> void:
 	if dead or input == null:
 		return
@@ -76,9 +108,15 @@ func _physics_process(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, dir * 80.0, 500.0 * delta)
 	if absf(dir) > 0.1:
 		facing = 1 if dir > 0 else -1
+	if anims != null:
+		anims.flip_h = facing < 0
+		if not anims.is_playing() or anims.animation in [&"idle", &"walk"]:
+			anims.play(&"walk" if absf(velocity.x) > 10.0 else &"idle")
 	# Fliker: glitch karakteri hafif titrer
 	_flicker += delta
 	sprite.modulate = Color(0.05, 0.05, 0.12 + 0.08 * absf(sin(_flicker * 13.0)))
+	if anims != null:
+		anims.modulate = sprite.modulate + Color(0.35, 0.35, 0.4)
 
 	if input.jump_just_pressed():
 		velocity.y = -160.0  # hafif hop
@@ -94,6 +132,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _fire_bolt() -> void:
+	if anims != null:
+		anims.play(&"attack")
 	var bolt := GlitchBolt.new()
 	bolt.vel = Vector2(facing * 150.0, 0)
 	bolt.src = self
@@ -110,6 +150,8 @@ func _on_hit_info(info: DamageInfo) -> void:
 	FX.shake(2.0, 0.2)
 	AudioManager.play_sfx(&"sfx/hurt", global_position)
 	sprite.modulate = Color(2.0, 0.6, 0.6)
+	if anims != null:
+		anims.play(&"hurt")
 
 
 func _on_died() -> void:
@@ -117,6 +159,10 @@ func _on_died() -> void:
 	EventBus.actor_died.emit(self)
 	died.emit()
 	sprite.modulate = Color(1.0, 0.2, 0.2)
+	if anims != null:
+		anims.play(&"die")
 	var tw := create_tween()
 	tw.tween_property(sprite, "scale", Vector2.ZERO, 0.6)
+	if anims != null:
+		tw.parallel().tween_property(anims, "scale", Vector2.ZERO, 0.6)
 	FX.glitch(1.2, 0.9)

@@ -42,17 +42,44 @@ func _on_spark(pos: Vector2) -> void:
 	tw.finished.connect(spark.queue_free)
 
 
-## Vurus aninda kucuk parcacik sacilimi; olumde daha buyuk patlama.
+## Vurus aninda kucuk parcacik sacilimi + gercek VFX animi (varsa);
+## olumde daha buyuk patlama animasyonu.
 func _on_damage_dealt(target: Node, _info) -> void:
 	if target is Node2D:
+		_anim_burst((target as Node2D).global_position, &"fx/smallhit", 18.0)
 		_burst((target as Node2D).global_position, 3,
 			Color(1.0, 0.9, 0.5), 26.0, 0.22)
 
 
 func _on_actor_died(actor: Node) -> void:
 	if actor is Node2D:
+		_anim_burst((actor as Node2D).global_position, &"fx/puff", 40.0)
 		_burst((actor as Node2D).global_position, 9,
 			Color(1.0, 0.85, 0.45), 48.0, 0.4)
+
+
+## Tek atimlik VFX animasyonu (codemanu paketi). Kare yoksa sessizce gecer.
+## Not: AssetLoader.frames() onbellekli SpriteFrames doner — dongu bayragini
+## kopya uzerinde kapatiyoruz (orijinali baska kullanicilarla paylasilir).
+func _anim_burst(pos: Vector2, key: StringName, size: float) -> void:
+	var src := AssetLoader.frames(key)
+	if src == null or src.get_frame_count(&"default") == 0:
+		return
+	var f := src.duplicate()
+	f.set_animation_loop(&"default", false)
+	var parent := get_tree().current_scene
+	if parent == null:
+		parent = self
+	var a := AnimatedSprite2D.new()
+	a.sprite_frames = f
+	a.position = pos
+	var fs: Vector2 = f.get_frame_texture(&"default", 0).get_size()
+	if fs.y > 0.0:
+		a.scale = Vector2.ONE * (size / fs.y)
+	a.z_index = 8
+	parent.add_child(a)
+	a.animation_finished.connect(a.queue_free)
+	a.play(&"default")
 
 
 func _burst(pos: Vector2, n: int, col: Color, spread: float, life: float) -> void:
