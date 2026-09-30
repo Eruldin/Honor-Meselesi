@@ -417,6 +417,7 @@ func _try_focus_heal() -> void:
 	if not GameState.try_spend_soul(6):
 		return
 	health.heal(1)
+	GameState.set_flag(&"focus_used")
 	sprite_flash(Color(0.6, 1.3, 0.9))
 	FX.spark(global_position + Vector2(0, -14))
 	AudioManager.play_sfx(&"sfx/checkpoint", global_position, -4.0)

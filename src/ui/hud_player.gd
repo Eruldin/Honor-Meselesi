@@ -81,6 +81,10 @@ func _process(_delta: float) -> void:
 		var f := float(GameState.soul) / GameState.SOUL_MAX
 		_soul_bar.modulate = Color(1.0 + f * 0.6, 1.0 + f * 0.4,
 			1.0 + f * 0.2, 0.35 + f * 0.65)
+		# Ilk focus'a kadar ipucu: ruh bir iyilesmeye yetiyorsa bar nabiz atar
+		if GameState.soul >= 6 and not GameState.get_flag(&"focus_used", false):
+			var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 180.0)
+			_soul_bar.modulate.a = 0.45 + 0.55 * pulse
 	if _fill != null:
 		_fill.size.x = 110.0 * float(_actor.health.current) \
 			/ maxf(_actor.health.max_health, 1)
