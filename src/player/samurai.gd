@@ -223,6 +223,9 @@ func set_input_source(src: InputSource) -> void:
 func _physics_process(delta: float) -> void:
 	input.poll()
 
+	if input.focus_just_pressed():
+		_try_focus_heal()
+
 	# Ziplama buffer'i her frame guncellenir ki durumlar okuyabilsin.
 	if input.jump_just_pressed():
 		jump_buffer_timer = tuning.jump_buffer_time
@@ -404,6 +407,21 @@ func ensure_down_hitbox() -> void:
 	if down_hitbox.monitoring:
 		return
 	down_hitbox.activate(DamageInfo.make(tuning.player_damage, self, Vector2(0, 60), false, false))
+
+
+## Ruh odaklamasi: 6 ruh -> 1 kalp (HK Focus karsiligi). Maliyet
+## GameState'ten harcanir; HUD dolulugu oradan okur.
+func _try_focus_heal() -> void:
+	if health.current >= health.max_health:
+		return
+	if not GameState.try_spend_soul(6):
+		return
+	health.heal(1)
+	GameState.set_flag(&"focus_used")
+	sprite_flash(Color(0.6, 1.3, 0.9))
+	FX.spark(global_position + Vector2(0, -14))
+	AudioManager.play_sfx(&"sfx/checkpoint", global_position, -4.0)
+	Pictogram.show_on(self, &"heart", 0.9, Vector2(0, -26))
 
 
 func sprite_flash(color: Color) -> void:

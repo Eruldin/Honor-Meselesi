@@ -40,6 +40,7 @@ func before_each() -> void:
 
 func after_each() -> void:
 	Engine.time_scale = 1.0
+	GameState.soul = 0
 
 
 # --- Hareket ---
@@ -214,3 +215,34 @@ func test_invuln_blocks_repeat_hits() -> void:
 	sam.take_damage(DamageInfo.make(1, src))
 	sam.take_damage(DamageInfo.make(1, src))  # invuln icerisinde
 	assert_eq(sam.health.current, sam.tuning.max_health - 1)
+
+
+# --- Ruh odaklamasi (focus heal) ---
+
+func test_focus_heal_spends_soul_and_heals() -> void:
+	var src: Node2D = add_child_autofree(Node2D.new())
+	sam.invuln_timer = 0.0
+	sam.take_damage(DamageInfo.make(1, src))
+	GameState.soul = 6
+	ai.tap(&"focus")
+	await _frames(2)
+	assert_eq(GameState.soul, 0, "6 ruh harcanmali")
+	assert_eq(sam.health.current, sam.tuning.max_health, "1 kalp iyilesmeli")
+
+
+func test_focus_fails_without_soul() -> void:
+	var src: Node2D = add_child_autofree(Node2D.new())
+	sam.invuln_timer = 0.0
+	sam.take_damage(DamageInfo.make(1, src))
+	GameState.soul = 5
+	ai.tap(&"focus")
+	await _frames(2)
+	assert_eq(GameState.soul, 5, "ruh yetmezse harcanmaz")
+	assert_eq(sam.health.current, sam.tuning.max_health - 1)
+
+
+func test_focus_noop_at_full_health() -> void:
+	GameState.soul = 12
+	ai.tap(&"focus")
+	await _frames(2)
+	assert_eq(GameState.soul, 12, "tam canda ruh korunur")

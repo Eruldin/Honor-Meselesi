@@ -35,6 +35,10 @@ func dash_just_pressed() -> bool:
 	return Input.is_action_just_pressed(&"dash")
 
 
+func focus_just_pressed() -> bool:
+	return Input.is_action_just_pressed(&"focus")
+
+
 func form_next_just_pressed() -> bool:
 	return Input.is_action_just_pressed(&"form_next")
 
