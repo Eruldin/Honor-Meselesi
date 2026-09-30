@@ -6,6 +6,8 @@ extends Node
 @export var camera_path: NodePath
 
 var _ts_token := 0
+var _hurt_layer: CanvasLayer
+var _hurt_rect: ColorRect
 
 
 func _ready() -> void:
@@ -62,8 +64,31 @@ func _on_damage_dealt(target: Node, info) -> void:
 			&"fx/bighit" if heavy else &"fx/smallhit", 26.0 if heavy else 18.0)
 		_burst((target as Node2D).global_position, 3,
 			Color(1.0, 0.9, 0.5), 26.0, 0.22)
-		if not target.is_in_group(&"player"):
+		if target.is_in_group(&"player"):
+			_hurt_vignette()
+		else:
 			_soul_wisp((target as Node2D).global_position)
+
+
+## Oyuncu hasar alinca ekran kirmizi yanip soner — hasar hissi (Souls-vari).
+func _hurt_vignette() -> void:
+	if _hurt_layer == null:
+		_hurt_layer = CanvasLayer.new()
+		_hurt_layer.layer = 40
+		var scene := get_tree().current_scene
+		if scene == null:
+			scene = self
+		scene.add_child(_hurt_layer)
+		_hurt_rect = ColorRect.new()
+		_hurt_rect.color = Color(0.85, 0.08, 0.12)
+		_hurt_rect.modulate.a = 0.0
+		_hurt_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_hurt_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_hurt_layer.add_child(_hurt_rect)
+	_hurt_rect.modulate.a = 0.3
+	var tw := _hurt_rect.create_tween()
+	tw.set_ignore_time_scale(true)
+	tw.tween_property(_hurt_rect, "modulate:a", 0.0, 0.4)
 
 
 ## Oyuncu disindaki vurusa +1 ruh: HUD ruh olcegi kosesine ucan cyan zerrecik.
