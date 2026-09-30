@@ -11,6 +11,9 @@ var _hearts: Array[TextureRect] = []
 var _soul_bar: TextureRect
 var _fill: Control
 var _use_ref := false
+var _form_badge: ColorRect
+var _form_icon: TextureRect
+var _form_id: StringName = &"samurai"
 
 
 static func make(actor: Node2D, with_soul := true) -> HudPlayer:
@@ -34,6 +37,20 @@ func _ready() -> void:
 		pr.position = Vector2(4, 4)
 		pr.size = Vector2(19, 19)
 		add_child(pr)
+
+	# Aktif form rozeti — portrenin altinda kucuk ikon; samurayda gizli.
+	_form_badge = ColorRect.new()
+	_form_badge.color = Color(0.08, 0.08, 0.1, 0.65)
+	_form_badge.position = Vector2(4, 25)
+	_form_badge.size = Vector2(13, 13)
+	_form_badge.visible = false
+	add_child(_form_badge)
+	_form_icon = TextureRect.new()
+	_form_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_form_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_form_icon.position = Vector2(1, 1)
+	_form_icon.size = Vector2(11, 11)
+	_form_badge.add_child(_form_icon)
 
 	if _use_ref:
 		_build_hearts()
@@ -61,6 +78,26 @@ func _ready() -> void:
 			pb.root.add_child(fr)
 
 
+## Aktif form rozeti: samuray disi formlarda form sprite'ini gosterir.
+func _update_form_badge() -> void:
+	if _form_badge == null:
+		return
+	var form: FormData = _actor.form if _actor is Samurai else null
+	var fid: StringName = form.id if form != null else &"samurai"
+	if fid == &"samurai" or fid == &"":
+		_form_badge.visible = false
+		_form_id = &"samurai"
+		return
+	_form_badge.visible = true
+	if fid != _form_id:
+		_form_id = fid
+		var tex_id := form.sprite_asset
+		if tex_id == &"":
+			tex_id = &"player/%s/idle" % fid
+		_form_icon.texture = AssetLoader.texture(tex_id, Vector2i(11, 11))
+		_form_icon.modulate = form.sprite_color
+
+
 func _build_hearts() -> void:
 	for h in _hearts:
 		h.queue_free()
@@ -81,6 +118,7 @@ func _build_hearts() -> void:
 func _process(_delta: float) -> void:
 	if _actor == null or not is_instance_valid(_actor):
 		return
+	_update_form_badge()
 	if _use_ref and _hearts.size() != _actor.health.max_health:
 		_build_hearts()   # kalp kristali: sahnede max can artti
 	for i in _hearts.size():
