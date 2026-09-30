@@ -69,14 +69,14 @@ func _build_terrain() -> void:
 		{id = &"bg/cemetery_far", scroll = 0.35, modulate = Color(0.6, 0.52, 0.52, 0.8)},
 	])
 
-	# Moloz zemin (Garbage tileset bolgesi doseme)
-	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24), &"terrain/ash_ground")
+	# Kul zemini — sakin kir yuzu (Garbage tileset cok gurultuluydu)
+	_add_ground(Vector2(LEVEL_W / 2, FLOOR_Y + 10), Vector2(LEVEL_W, 24))
 	_add_ground(Vector2(-6, 135), Vector2(12, 270))
 	# Yikik yukseltiler
-	_add_ground(Vector2(430, 196), Vector2(70, 10), &"terrain/ash_ground")
-	_add_ground(Vector2(690, 178), Vector2(80, 10), &"terrain/ash_ground")
-	_add_ground(Vector2(950, 196), Vector2(70, 10), &"terrain/ash_ground")
-	_add_ground(Vector2(1120, 182), Vector2(64, 10), &"terrain/ash_ground")
+	_add_ground(Vector2(430, 196), Vector2(70, 10))
+	_add_ground(Vector2(690, 178), Vector2(80, 10))
+	_add_ground(Vector2(950, 196), Vector2(70, 10))
+	_add_ground(Vector2(1120, 182), Vector2(64, 10))
 
 	# Coken zemin kirigi (dusen parca — gerilim)
 	for gx in [560.0, 1010.0]:
