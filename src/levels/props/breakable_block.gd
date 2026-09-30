@@ -33,6 +33,7 @@ func _ready() -> void:
 
 func take_damage(_info: DamageInfo) -> void:
 	FX.shake(0.8, 0.1)
+	AudioManager.play_sfx(&"sfx/hit", global_position, -4.0, 0.8)
 	var tw := create_tween()
 	tw.tween_property(self, "scale", Vector2(1.3, 0.4), 0.08)
 	tw.parallel().tween_property(self, "modulate:a", 0.0, 0.08)

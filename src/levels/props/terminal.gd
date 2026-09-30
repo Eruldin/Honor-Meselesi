@@ -79,4 +79,5 @@ func _process(delta: float) -> void:
 		_done = true
 		_lamp.color = Color(0.3, 1.0, 0.5)
 		Pictogram.show_on(_player, &"note", 0.9, Vector2(0, -30))
+		AudioManager.play_sfx(&"sfx/ui", global_position, -2.0)
 		hacked.emit(gate_id)

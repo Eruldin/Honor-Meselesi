@@ -51,6 +51,7 @@ func break_apart() -> void:
 	broken = true
 	_col.set_deferred("disabled", true)
 	FX.shake(2.0, 0.15)
+	AudioManager.play_sfx(&"sfx/land_dirt", global_position, -2.0, 0.7)
 	var tw := create_tween()
 	tw.tween_property(_sprite, "scale", Vector2(1.0, 0.1), 0.18)
 	tw.parallel().tween_property(_sprite, "modulate:a", 0.0, 0.25)
