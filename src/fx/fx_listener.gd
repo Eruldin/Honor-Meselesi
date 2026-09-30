@@ -51,6 +51,31 @@ func _on_damage_dealt(target: Node, info) -> void:
 			&"fx/bighit" if heavy else &"fx/smallhit", 26.0 if heavy else 18.0)
 		_burst((target as Node2D).global_position, 3,
 			Color(1.0, 0.9, 0.5), 26.0, 0.22)
+		if not target.is_in_group(&"player"):
+			_soul_wisp((target as Node2D).global_position)
+
+
+## Oyuncu disindaki vurusa +1 ruh: HUD ruh olcegi kosesine ucan cyan zerrecik.
+func _soul_wisp(pos: Vector2) -> void:
+	var cam := get_node_or_null(camera_path) as Camera2D
+	if cam == null:
+		return
+	var parent := get_tree().current_scene
+	if parent == null:
+		parent = self
+	var w := Sprite2D.new()
+	w.texture = AssetLoader.texture(&"fx/spark", Vector2i(7, 7))
+	w.modulate = Color(0.5, 0.95, 1.0, 0.9)
+	w.global_position = pos
+	w.z_index = 20
+	parent.add_child(w)
+	var dest := cam.get_screen_center_position() + Vector2(-216, -109)
+	var tw := w.create_tween()
+	tw.set_ignore_time_scale(true)
+	tw.tween_property(w, "global_position", dest, 0.5)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(w, "modulate:a", 0.0, 0.5)
+	tw.finished.connect(w.queue_free)
 
 
 func _on_actor_died(actor: Node) -> void:
