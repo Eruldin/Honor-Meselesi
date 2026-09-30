@@ -6,6 +6,11 @@ var _t := 0.0
 var area_left := 0.0
 var area_right := 0.0
 var active := false
+var _interval: float
+
+
+func _ready() -> void:
+	_interval = load("res://config/tuning.tres").pixel_rain_interval
 
 
 func _physics_process(delta: float) -> void:
@@ -13,7 +18,7 @@ func _physics_process(delta: float) -> void:
 		return
 	_t -= delta
 	if _t <= 0.0:
-		_t = load("res://config/tuning.tres").pixel_rain_interval
+		_t = _interval
 		var px := PixelDrop.new()
 		px.global_position = Vector2(randf_range(area_left, area_right), -24)
 		add_child(px)
