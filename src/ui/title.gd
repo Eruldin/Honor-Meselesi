@@ -16,6 +16,7 @@ const CHAPTER_SCENES := {
 var _settings: SettingsMenu
 var _petals: Array[Sprite2D] = []
 var _new_game_armed := false
+var _new_game_btn: Button
 var _creature: Sprite2D
 var _peek_timer := 5.0
 var _peek_t := 0.0
@@ -150,21 +151,20 @@ func _build_menu() -> void:
 
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 4)
-	vbox.position = Vector2(190, 196)
+	vbox.position = Vector2(190, 174)
 	vbox.z_index = 10
 	add_child(vbox)
 	if SaveSystem.has_save():
 		vbox.add_child(_btn("DEVAM ET", _on_continue))
-	var ng: Button
-	ng = _btn("YENI OYUN", func() -> void:
+	_new_game_btn = _btn("YENI OYUN", func() -> void:
 		# Kayit varsa tek tikla silinmesin — ikinci tik onaylar
 		if _new_game_armed or not SaveSystem.has_save():
 			_on_new_game()
 			return
 		_new_game_armed = true
-		ng.text = "EMIN MISIN?" if Settings.language == "tr" else "SURE?"
-		ng.modulate = Color(1.0, 0.5, 0.5))
-	vbox.add_child(ng)
+		_new_game_btn.text = "EMIN MISIN?" if Settings.language == "tr" else "SURE?"
+		_new_game_btn.modulate = Color(1.0, 0.5, 0.5))
+	vbox.add_child(_new_game_btn)
 	vbox.add_child(_btn("AYARLAR", _on_settings))
 	if not OS.has_feature("web"):
 		vbox.add_child(_btn("CIKIS", func() -> void: get_tree().quit()))
