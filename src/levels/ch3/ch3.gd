@@ -236,6 +236,11 @@ func _build_fx() -> void:
 	add_child(PostFX.new())
 	add_child(SettingsMenu.new())
 
+	# Mezarlik sisi — yerde yavasca kayan soluk bulut tabakasi
+	var weather := WeatherFx.new()
+	add_child(weather)
+	weather.setup(camera, [{x0 = 0.0, x1 = LEVEL_W, kind = "fog"}])
+
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
