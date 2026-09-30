@@ -1369,7 +1369,12 @@
   "bg/j_moon": {
    "pack": "AI Sheet",
    "path": "generated/ai/bg_moon.png",
-   "region": [7, 20, 41, 30]
+   "region": [
+    7,
+    20,
+    41,
+    30
+   ]
   },
   "bg/j_mountains": {
    "path": "generated/ai/bg_layer_far.png",
@@ -3205,6 +3210,10 @@
   "sfx/drip": {
    "path": "itch/extracted/400-sounds-pack/Environment/water_dripping.wav",
    "pack": "itch"
+  },
+  "sfx/glitch": {
+   "path": "itch/extracted/400-sounds-pack/Other/white_noise_short.wav",
+   "pack": "400 Sounds Retro"
   }
  }
 }
