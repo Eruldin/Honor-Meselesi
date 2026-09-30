@@ -49,7 +49,8 @@ func _shoot(ch: String, spot: float) -> void:
 	await get_tree().create_timer(1.2).timeout
 	var img: Image = null
 	for i in 10:
-		await RenderingServer.frame_post_draw
+		RenderingServer.force_draw(true)
+		await get_tree().process_frame
 		var tex := get_viewport().get_texture()
 		if tex != null:
 			img = tex.get_image()
