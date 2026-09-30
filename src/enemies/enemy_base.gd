@@ -181,6 +181,7 @@ func _on_died() -> void:
 	EventBus.actor_died.emit(self)
 	AudioManager.play_sfx(&"sfx/slime_death", global_position, -6.0,
 		randf_range(0.92, 1.08))
+	_death_debris()
 	if anims != null and anims.sprite_frames.has_animation(&"die"):
 		_anim_lock = 10.0
 		anims.play(&"die")
@@ -195,3 +196,27 @@ func _on_died() -> void:
 		var target: CanvasItem = anims if anims != null else sprite
 		tw.tween_property(target, "modulate:a", 0.0, 0.3)
 		tw.finished.connect(queue_free)
+
+
+## Olumde kucuk parcacik patlamasi — vucut renklerinden 4 kare sacilir.
+func _death_debris() -> void:
+	var col := Color(0.9, 0.85, 0.7)
+	if anims != null:
+		col = anims.modulate
+	elif sprite != null:
+		col = sprite.modulate
+	var parent := get_parent()
+	if parent == null:
+		return
+	for i in 4:
+		var d := ColorRect.new()
+		d.size = Vector2(3, 3)
+		d.color = col.lightened(0.25)
+		d.position = global_position + Vector2(-2, -8)
+		parent.add_child(d)
+		var dir := Vector2(randf_range(-1.0, 1.0), randf_range(-1.4, -0.5))
+		var tw := d.create_tween()
+		tw.tween_property(d, "position",
+			d.position + dir * randf_range(9.0, 16.0), 0.28)
+		tw.parallel().tween_property(d, "modulate:a", 0.0, 0.34)
+		tw.finished.connect(d.queue_free)
