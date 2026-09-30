@@ -179,6 +179,8 @@ func on_parried() -> void:
 
 func _on_died() -> void:
 	EventBus.actor_died.emit(self)
+	AudioManager.play_sfx(&"sfx/slime_death", global_position, -6.0,
+		randf_range(0.92, 1.08))
 	if anims != null and anims.sprite_frames.has_animation(&"die"):
 		_anim_lock = 10.0
 		anims.play(&"die")
