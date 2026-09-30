@@ -1,7 +1,7 @@
 class_name WeatherFx
 extends Node2D
 ## Bolge bazli hava efektleri — gercek sprite'lar, hafif oynatim.
-## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes".
+## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes" | "fog".
 ## Parcaciklar kameranin gordugu alana duser, ekran disinda silinir.
 
 const PETAL_FALL := 22.0
@@ -69,6 +69,10 @@ func _tick_spawn() -> void:
 				# Bosluk/hafiza alemi: cyan-mor toz tanesi suruklenir
 				if randf() < 0.35:
 					_spawn_mote(vx)
+			"fog":
+				# Mezarlik sisi: yerde buyuk soluk bulut yavasca kayar
+				if randf() < 0.5:
+					_spawn_fog(vx)
 
 
 func _spawn_petal(vx: float) -> void:
@@ -182,6 +186,28 @@ func _spawn_mote(vx: float) -> void:
 	tw.tween_property(p, "position:x", px + randf_range(-45.0, 45.0), dur)
 	tw.tween_property(p, "position:y", p.position.y + randf_range(-30.0, 30.0), dur)
 	tw.tween_property(p, "modulate:a", 0.0, dur)
+	tw.finished.connect(p.queue_free)
+
+
+func _spawn_fog(vx: float) -> void:
+	if not _tex.has(&"vfx/dust"):
+		return
+	var p := Sprite2D.new()
+	p.texture = _tex[&"vfx/dust"]
+	p.scale = Vector2(randf_range(1.6, 2.6), randf_range(1.0, 1.6))
+	var px := vx + randf_range(-240.0, 240.0)
+	# Zemin hizasinda alcak tabaka — ayaklari sis icinde birakir
+	p.position = Vector2(px, _cam.get_screen_center_position().y + randf_range(40.0, 105.0))
+	p.modulate = Color(0.5, 0.56, 0.58, 0.0)
+	p.z_index = 6
+	add_child(p)
+	var dur := randf_range(11.0, 17.0)
+	var peak := randf_range(0.10, 0.18)
+	var tw := p.create_tween()
+	tw.tween_property(p, "position:x", px + randf_range(50.0, 110.0), dur)
+	var fade := p.create_tween()
+	fade.tween_property(p, "modulate:a", peak, dur * 0.35)
+	fade.tween_property(p, "modulate:a", 0.0, dur * 0.65)
 	tw.finished.connect(p.queue_free)
 
 
