@@ -28,8 +28,11 @@ func activate(info: DamageInfo) -> void:
 
 
 func _late_overlap_check() -> void:
-	await get_tree().physics_frame
-	_check_overlaps()
+	# Node free edilirse baglanti otomatik duser — await-instead kalintisi
+	# "class instance is gone" hatasi vermez. Ayni fizik frame'de tekrar
+	# aktivasyon tek baglantiyla yeterli (one-shot).
+	if not get_tree().physics_frame.is_connected(_check_overlaps):
+		get_tree().physics_frame.connect(_check_overlaps, CONNECT_ONE_SHOT)
 
 
 func deactivate() -> void:
