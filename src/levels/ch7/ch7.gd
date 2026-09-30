@@ -289,6 +289,10 @@ func _build_fx() -> void:
 	add_child(fx)
 	add_child(PostFX.new())
 	add_child(SettingsMenu.new())
+	# Yarilmis dunya: glitch statik parlamalari butun arenayi kaplar
+	var weather := WeatherFx.new()
+	add_child(weather)
+	weather.setup(camera, [{x0 = 0.0, x1 = 480.0, kind = "static"}])
 
 
 func _build_hud() -> void:
