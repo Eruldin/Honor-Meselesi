@@ -27,6 +27,7 @@ func _go(spot: String) -> void:
 	var x: float = spots.get(spot, 300.0)
 	samurai.global_position = Vector2(x, FLOOR_Y - 10)
 	await get_tree().create_timer(0.4).timeout
+	_dump_parallax()
 	if spot == "gate":
 		# sovalye olmemis gibi kapi kapali gorunsun; ayrica acik hali icin:
 		pass
@@ -39,3 +40,12 @@ func _go(spot: String) -> void:
 	get_viewport().get_texture().get_image().save_png(
 		"res://.probe_out/ch1_%s_b.png" % spot)
 	get_tree().quit()
+
+func _dump_parallax() -> void:
+	for n in get_children():
+		if n is Parallax2D:
+			var sp := n.get_child(0) as Sprite2D
+			if sp == null or sp.texture == null:
+				continue
+			print("[PARA] pos=", sp.position, " scale=", n.scroll_scale,
+				" tex=", sp.texture.get_width(), "x", sp.texture.get_height())
