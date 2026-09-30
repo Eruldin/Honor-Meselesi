@@ -17,10 +17,15 @@ var _form_time: ColorRect
 var _form_id: StringName = &"samurai"
 
 
-static func make(actor: Node2D, with_soul := true) -> HudPlayer:
+var _portrait_id: StringName = &"ui/hud_portrait"
+
+
+static func make(actor: Node2D, with_soul := true,
+		portrait_id: StringName = &"ui/hud_portrait") -> HudPlayer:
 	var h := HudPlayer.new()
 	h._actor = actor
 	h._with_soul = with_soul
+	h._portrait_id = portrait_id
 	h.set_anchors_preset(Control.PRESET_FULL_RECT)
 	h.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return h
@@ -30,9 +35,9 @@ func _ready() -> void:
 	if _actor == null:
 		return
 	_use_ref = AssetLoader.has_asset(&"ui/hud_heart")
-	if _use_ref and AssetLoader.has_asset(&"ui/hud_portrait"):
+	if _use_ref and AssetLoader.has_asset(_portrait_id):
 		var pr := TextureRect.new()
-		pr.texture = AssetLoader.texture(&"ui/hud_portrait")
+		pr.texture = AssetLoader.texture(_portrait_id, Vector2i(19, 19))
 		pr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 		pr.position = Vector2(4, 4)
