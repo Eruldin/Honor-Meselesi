@@ -129,6 +129,7 @@ func _build_hearts() -> void:
 		ht.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 		ht.position = Vector2(hx, 6)
 		ht.size = Vector2(9, 9)
+		ht.pivot_offset = Vector2(4.5, 4.5)
 		add_child(ht)
 		_hearts.append(ht)
 		hx += 11.0
@@ -144,6 +145,12 @@ func _process(_delta: float) -> void:
 		_hearts[i].modulate = Color(1.25, 1.15, 1.1, 1.0) \
 			if i < _actor.health.current \
 			else Color(0.5, 0.42, 0.48, 0.55)
+		_hearts[i].scale = Vector2.ONE
+	# Kritik can: son kalp kipkirmizi nabiz atar — kelimesiz uyari
+	if _actor.health.current == 1 and not _hearts.is_empty():
+		var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 140.0)
+		_hearts[0].modulate = Color(1.3 + pulse * 0.4, 0.55, 0.5, 1.0)
+		_hearts[0].scale = Vector2.ONE * (1.0 + pulse * 0.3)
 	if _soul_bar != null:
 		var f := float(GameState.soul) / GameState.SOUL_MAX
 		_soul_bar.modulate = Color(1.0 + f * 0.6, 1.0 + f * 0.4,
