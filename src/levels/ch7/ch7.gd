@@ -135,7 +135,9 @@ func _spawn_fight() -> void:
 	add_child(creature)
 	var hl := CanvasLayer.new()
 	add_child(hl)
-	hl.add_child(HudPlayer.make(creature, false))
+	# Yaratik kalpleri; portrede samuray degil yaratik yuzu (ruh cubugu yok —
+	# yaratigin soul harcama aksiyonu yok, bos cubuk gostermeyiz)
+	hl.add_child(HudPlayer.make(creature, false, &"enemy/glitch_creature"))
 
 	boss = SamuraiBoss.new()
 	boss.name = "Samurai"

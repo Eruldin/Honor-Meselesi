@@ -182,6 +182,11 @@ func _on_died() -> void:
 	AudioManager.play_sfx(&"sfx/slime_death", global_position, -6.0,
 		randf_range(0.92, 1.08))
 	_death_debris()
+	# Olu beden artik zarar vermez/vurulamaz — solma suresince hayalet
+	# temas hasari ve lutfen pogo yok.
+	if contact_hitbox != null:
+		contact_hitbox.deactivate()
+	hurtbox.set_deferred(&"monitoring", false)
 	if anims != null and anims.sprite_frames.has_animation(&"die"):
 		_anim_lock = 10.0
 		anims.play(&"die")
