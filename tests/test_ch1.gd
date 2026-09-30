@@ -99,6 +99,7 @@ func test_rest_point_saves_and_heals() -> void:
 	var s := _make_samurai()
 	s.global_position = Vector2(300, 240)
 	s.health.take(2)
+	GameState.soul = 3
 	var r := RestPoint.new()
 	r.checkpoint_id = &"cp_test_ch1"
 	r.global_position = Vector2(300, 240)
@@ -106,6 +107,7 @@ func test_rest_point_saves_and_heals() -> void:
 	await wait_seconds(0.15)
 	assert_eq(GameState.checkpoint_id, &"cp_test_ch1")
 	assert_eq(s.health.current, s.health.max_health, "tam can")
+	assert_eq(GameState.soul, GameState.SOUL_MAX, "dinlenme ruhu da doldurur")
 	assert_true(SaveSystem.has_save(), "kayit dosyasi yazilmali")
 	assert_true(GameState.get_flag(&"respawn_pos") is Vector2)
 

@@ -1,7 +1,7 @@
 class_name RestPoint
 extends Area2D
 ## Dinlenme noktasi / checkpoint (DEVIN_PLAN M4): oyuncu degince REST
-## durumu, tam can, checkpoint_id set edilir ve oyun kaydedilir.
+## durumu, tam can + tam ruh, checkpoint_id set edilir ve oyun kaydedilir.
 ## Metinsiz geri bildirim: sleep piktogrami + mavi parilti.
 
 @export var checkpoint_id: StringName = &"cp"
@@ -44,6 +44,7 @@ func rest(player) -> void:
 	GameState.set_flag(&"respawn_ch", GameState.current_chapter)
 	player.sm.change_to(Samurai.S_REST, true)
 	player.health.reset()
+	GameState.soul = GameState.SOUL_MAX
 	SaveSystem.save_game()
 	EventBus.checkpoint_reached.emit(checkpoint_id)
 	Pictogram.show_on(player, &"sleep", 1.2, Vector2(0, -26))
