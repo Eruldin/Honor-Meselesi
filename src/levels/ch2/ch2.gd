@@ -34,6 +34,7 @@ func _ready() -> void:
 	AudioManager.play_ambience(&"amb/wind")  # gece cati ruzgari
 	if grant_drone_to_player:
 		GameState.unlock_form(&"drone")
+		SaveSystem.save_game()
 		get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
 	_build_terrain()
 	_build_entities()
@@ -259,6 +260,7 @@ func _on_arena_entered(area: Area2D) -> void:
 func _on_boss_defeated() -> void:
 	GameState.unlock_form(&"robot")
 	GameState.set_flag(&"ch2_boss_dead")
+	SaveSystem.save_game()
 	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
@@ -286,6 +288,7 @@ func _on_boss_defeated() -> void:
 
 func _go_ch3() -> void:
 	GameState.set_flag(&"ch2_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch3"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH3_PATH)

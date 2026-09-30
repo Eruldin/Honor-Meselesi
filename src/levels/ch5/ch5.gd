@@ -251,6 +251,7 @@ func _on_arena_entered(area: Area2D) -> void:
 
 func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch5_boss_dead")
+	SaveSystem.save_game()
 	await SceneRouter.fade_to(1.0, 0.7)
 	await get_tree().create_timer(0.3, true).timeout
 	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
@@ -276,6 +277,7 @@ func _on_boss_defeated() -> void:
 
 func _go_ch6() -> void:
 	GameState.set_flag(&"ch5_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch6"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH6_PATH)

@@ -264,6 +264,7 @@ func _on_arena_entered(area: Area2D) -> void:
 
 func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch4_boss_dead")
+	SaveSystem.save_game()
 	AudioManager.play_sfx(&"sfx/gameover")
 	# Retro olum: "GAME OVER" bandi + Tiran asagi duser
 	_gameover.visible = true
@@ -299,6 +300,7 @@ func _on_boss_defeated() -> void:
 
 func _go_ch5() -> void:
 	GameState.set_flag(&"ch4_done")
+	SaveSystem.save_game()
 	GameState.current_chapter = &"ch5"
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH5_PATH)

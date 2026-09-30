@@ -198,6 +198,7 @@ func _run_intro() -> void:
 
 func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch7_boss_dead")
+	SaveSystem.save_game()
 	AudioManager.play_sfx(&"sfx/gameover")
 	await get_tree().create_timer(1.8, true).timeout
 	# Ouroboros: yaratik kasayi birakip CRT isigina siner -> Prolog
@@ -217,7 +218,8 @@ func _on_boss_defeated() -> void:
 		{op = "glitch", strength = 1.6, dur = 1.0},
 	], {"creature": creature, "black": _black},
 	func() -> void:
-		GameState.set_flag(&"ouroboros_done", true))
+		GameState.set_flag(&"ouroboros_done", true)
+		SaveSystem.save_game())
 	cs.finished.connect(_finish, CONNECT_ONE_SHOT)
 
 
