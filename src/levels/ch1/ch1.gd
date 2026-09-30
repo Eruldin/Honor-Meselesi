@@ -683,6 +683,23 @@ func _build_terrain() -> void:
 		Color(0.8, 0.6, 0.9))
 	_add_deco_ground(&"terrain/cave_shroom", 3080, FLOOR_Y, 0.7,
 		Color(0.7, 0.55, 0.85))
+	# Duvar yuzu susleri — 1050x700 tugla duvarin monotonlugunu kirar
+	for spec in [
+		[2370.0, 62.0, &"prop/deco_wall", 0.7],
+		[2480.0, 130.0, &"terrain/cave_crystal", 0.6],
+		[2590.0, 48.0, &"prop/cave_plant2", 0.8],
+		[2690.0, 150.0, &"terrain/cave_rock", 0.8],
+		[2720.0, 105.0, &"prop/cave_plants_grp", 0.9],
+		[2790.0, 70.0, &"terrain/cave_crystal", 0.7],
+		[2900.0, 140.0, &"prop/cave_plants_grp", 1.0],
+		[2960.0, 100.0, &"terrain/cave_rock", 0.6],
+		[3000.0, 55.0, &"terrain/cave_shroom", 0.6],
+		[3110.0, 120.0, &"terrain/cave_rock", 0.7],
+		[3220.0, 75.0, &"prop/deco_wall", 0.6],
+		[3290.0, 160.0, &"terrain/cave_crystal", 0.65],
+	]:
+		_add_deco(spec[2], Vector2(spec[0], spec[1]), spec[3],
+			Color(0.55, 0.5, 0.7))
 	# Alt Kristal Odasi (Sub-basement) Dekoru
 	for x in [3060.0, 3110.0, 3210.0, 3250.0]:
 		_add_deco_ground(&"terrain/cave_crystal", x, FLOOR_Y + 140.0, 0.9,
