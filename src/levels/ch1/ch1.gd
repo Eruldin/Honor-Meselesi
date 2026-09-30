@@ -6,7 +6,7 @@ extends Node2D
 
 const CH2_PATH := "res://src/levels/ch2/Ch2.tscn"
 const FLOOR_Y := 250.0
-const LEVEL_W := 5000.0
+const LEVEL_W := 5600.0
 const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
 	{x = 700.0,  id = &"music/ch1_village", amb = &"amb/village"},  # pazar alani — sicak koy havasi
 	{x = 1050.0, id = &"music/ch1_forest",  amb = &"amb/forest"},
@@ -14,9 +14,9 @@ const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
 	{x = 3350.0, id = &"music/ch1_gate",    amb = &"amb/wind"},
 ]
 const GATE_X := 4400.0       ## torii kapi cizgisi
-const ARENA_L := 4520.0      ## arena sol duvari
-const ARENA_R := 4900.0      ## arena sag duvari
-const ARENA_TRIGGER := 4580.0  ## oyuncu tamamen icerideyken tetiklenir
+const ARENA_L := 5220.0      ## arena sol duvari
+const ARENA_R := 5560.0      ## arena sag duvari
+const ARENA_TRIGGER := 5280.0  ## oyuncu tamamen icerideyken tetiklenir
 
 ## Testlerde gercek sahne gecisini kapatmak icin.
 @export var auto_advance := true
@@ -329,27 +329,27 @@ func _build_terrain() -> void:
 	])
 	# 3) Magara (2300 - 3350) — duvar tum parallax bittikten sonra eklenir
 	# (asagida, zeminlerden once: parallax ustunde, oynanis altinda)
-	# 4) Gecit (3350 - 4500) — gothicvania gercek mezarlik katmanlari:
+	# 4) Gecit + Olu Bahce (3350 - 5220) — gothicvania gercek mezarlik katmanlari:
 	# kizil ay gokyuzu + siluet daglar + mezartas bandi
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 4500},
-		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 4500,
+		{id = &"bg/cemetery_sky", scroll = 0.15, x0 = 3350, x1 = 5220},
+		{id = &"bg/cemetery_mountains", scroll = 0.22, x0 = 3350, x1 = 5220},
+		{id = &"bg/cemetery_yard", scroll = 0.30, x0 = 3350, x1 = 5220},
+		{id = &"bg/cemetery_near", scroll = 0.3, x0 = 3350, x1 = 5220,
 			modulate = Color(1.4, 1.4, 1.6, 0.35)},  # hayalet duvar — hafif sizar
 	])
 	
-	# 5) Arena (4500 - LEVEL_W)
+	# 5) Arena (5220 - LEVEL_W)
 	# NOT: buraya ikinci bir scroll=0 gokyuzu KONMAZ — scroll-0 katman ekrana
 	# sabittir ve bolgeden bagimsiz tum ekrani kaplar; son sirayla cizildigi
 	# icin diger tum parallax katmanlari gizler. Tek global gokyuzu koy
 	# grubunun ilk katmanidir (ustte).
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/dusk_far", scroll = 0.10, x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_far", scroll = 0.10, x0 = 5220, x1 = LEVEL_W},
 		# ufukta gotik kale — Elden Ring tarzi uzak siluet; yaklastikca buyur
-		{id = &"bg/gothic_castle", scroll = 0.35, x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/gothic_castle", scroll = 0.35, x0 = 5220, x1 = LEVEL_W},
 		# tek ince agac bandi — boss savasi icin temiz fon; yogun momiji yok
-		{id = &"bg/dusk_trees", scroll = 0.5, modulate = Color(0.5, 0.4, 0.45, 0.55), x0 = 4500, x1 = LEVEL_W},
+		{id = &"bg/dusk_trees", scroll = 0.5, modulate = Color(0.5, 0.4, 0.45, 0.55), x0 = 5220, x1 = LEVEL_W},
 	])
 
 	# Magara duvari: parallax'larin ustune, zeminlerin/varliklarin altina
@@ -551,8 +551,10 @@ func _build_terrain() -> void:
 	_add_platform(Vector2(4070, 160), &"terrain/pf_ledge", 40)
 	_add_platform(Vector2(4120, 190), &"terrain/pf_ledge", 40)
 
-	# E: arena zemini
-	_add_ground(Vector2(4690, FLOOR_Y + 10), Vector2(560, 26), &"terrain/edge_dirt")
+	# F: olu bahce zemini — gecitten arenaya son gauntlet (4410-5120)
+	_add_ground(Vector2(4765, FLOOR_Y + 10), Vector2(710, 26), &"terrain/edge_dirt")
+	# E: arena zemini (5120-5600)
+	_add_ground(Vector2(5360, FLOOR_Y + 10), Vector2(480, 26), &"terrain/edge_dirt")
 
 
 	# Magarayi karartan ortu
@@ -723,6 +725,29 @@ func _build_terrain() -> void:
 		_add_deco_ground(spec[1], spec[0], FLOOR_Y, 0.85,
 			Color(0.7, 0.62, 0.6))
 	
+	# === OLU BAHCE DEKORU (4410-5220) ===
+	# Arenaya giden son patika: mezar taslari siklasir, kuru agaclar
+	# yol kenarina siner, tas fenerler areneyi isaretler.
+	_add_deco_ground(&"prop/deadtree_1", 4480, FLOOR_Y, 0.6,
+		Color(0.45, 0.38, 0.44), true)
+	_add_deco_ground(&"prop/deadtree_2", 4780, FLOOR_Y, 0.55,
+		Color(0.4, 0.34, 0.4))
+	_add_deco_ground(&"prop/deadtree_3", 5090, FLOOR_Y, 0.6,
+		Color(0.45, 0.38, 0.44), true)
+	for spec in [[4450.0, &"prop/grave_2"], [4560.0, &"prop/grave_1"],
+			[4650.0, &"prop/grave_3"], [4740.0, &"prop/grave_1"],
+			[4830.0, &"prop/grave_2"], [4920.0, &"prop/grave_3"],
+			[5010.0, &"prop/grave_1"], [5100.0, &"prop/grave_2"]]:
+		_add_deco_ground(spec[1], spec[0], FLOOR_Y, 0.8,
+			Color(0.65, 0.58, 0.58))
+	# Dusmus nobetci heykeller — bahcenin eski bekciileri
+	_add_deco_ground(&"prop/statue", 4700, FLOOR_Y, 0.55, Color(0.5, 0.45, 0.5), true)
+	_add_deco_ground(&"prop/statue", 5040, FLOOR_Y, 0.55, Color(0.5, 0.45, 0.5))
+	# Tas fenerler — arena girisine giden isik hatti
+	for x in [5130.0, 5180.0]:
+		_add_deco_ground(&"prop/stone_lamp", x, FLOOR_Y, 0.5,
+			Color(0.9, 0.8, 0.75))
+
 	# Mahzen Ici Dekoru
 	var decor_crypt_y := FLOOR_Y + 160.0
 	_add_deco_ground(&"prop/statue", 3870, decor_crypt_y, 0.7, Color(0.4, 0.4, 0.5))
@@ -908,11 +933,34 @@ func _build_entities() -> void:
 	add_child(knight)
 	knight.health.died.connect(_open_gate, CONNECT_ONE_SHOT)
 
+	# F — olu bahce gauntlet: son savas dalgasi (arenadan once elit yogunluk)
+	for x in [4520.0, 4630.0]:
+		var gsk2 := CryptSkeleton.new()
+		gsk2.global_position = Vector2(x, FLOOR_Y - 10)
+		add_child(gsk2)
+	var cat2 := Hellcat.new()
+	cat2.global_position = Vector2(4720, FLOOR_Y - 10)
+	add_child(cat2)
+	var demon2 := DemonAxe.new()
+	demon2.global_position = Vector2(4830, FLOOR_Y - 12)
+	add_child(demon2)
+	for x in [4910.0, 5050.0]:
+		var crow2 := Crow.new()
+		crow2.global_position = Vector2(x, FLOOR_Y - 70)
+		add_child(crow2)
+	for x in [4980.0, 5110.0]:
+		var gsk3 := CryptSkeleton.new()
+		gsk3.global_position = Vector2(x, FLOOR_Y - 10)
+		add_child(gsk3)
+
+	# Arena oncesi son dinlenme — boss oncesi HK-vari bank
+	_add_rest(5160, &"ch1_arena")
+
 	# E — arena + boss (uyurken tetik bekler)
 	boss = LordCluck.new()
 	boss.name = "LordCluck"
 	boss.arena_root = self
-	boss.global_position = Vector2(4780, FLOOR_Y - 16)
+	boss.global_position = Vector2(5480, FLOOR_Y - 16)
 	add_child(boss)
 	_boss_home = boss.global_position
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
@@ -968,7 +1016,7 @@ func _build_fx() -> void:
 	add_child(weather)
 	weather.setup(camera, [
 		{x0 = 0.0,    x1 = 2300.0, kind = "petals"},
-		{x0 = 3350.0, x1 = 4500.0, kind = "rain"},
+		{x0 = 3350.0, x1 = 5220.0, kind = "rain"},
 	])
 
 
