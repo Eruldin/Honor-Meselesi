@@ -319,8 +319,8 @@ func _on_boss_defeated() -> void:
 
 func _go_ch3() -> void:
 	GameState.set_flag(&"ch2_done")
-	SaveSystem.save_game()
 	GameState.current_chapter = &"ch3"
+	SaveSystem.save_game()
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH3_PATH)
 
