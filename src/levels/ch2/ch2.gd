@@ -32,11 +32,17 @@ func _ready() -> void:
 	AudioManager.play_music(&"music/ch2")
 	if grant_drone_to_player:
 		GameState.unlock_form(&"drone")
+		get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
 	_build_terrain()
 	_build_entities()
 	_build_fx()
 	_build_hud()
 	EventBus.actor_died.connect(_on_actor_died)
+
+
+func _reveal_drone() -> void:
+	if is_instance_valid(samurai):
+		FormReveal.show_on(samurai, &"drone")
 
 
 func _process(_delta: float) -> void:
@@ -248,6 +254,9 @@ func _on_boss_defeated() -> void:
 		{op = "glitch", strength = 1.0, dur = 1.0},
 		{op = "wait", t = 0.5},
 		{op = "picto", node = "samurai", icon = &"dots", t = 1.0, wait = true},
+		{op = "call", fn = func() -> void:
+			FormReveal.show_on(samurai, &"robot")},
+		{op = "wait", t = 1.1},
 		{op = "walk_to", node = "samurai", x = portal.global_position.x - 8, speed = 130.0},
 		{op = "call", fn = func() -> void:
 			samurai.create_tween().tween_property(samurai, "modulate:a", 0.0, 0.25)},

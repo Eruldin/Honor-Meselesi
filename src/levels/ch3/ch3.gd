@@ -241,6 +241,9 @@ func _on_boss_defeated() -> void:
 		{op = "glitch", strength = 1.0, dur = 1.0},
 		{op = "wait", t = 0.5},
 		{op = "picto", node = "samurai", icon = &"dots", t = 1.0, wait = true},
+		{op = "call", fn = func() -> void:
+			FormReveal.show_on(samurai, &"golge")},
+		{op = "wait", t = 1.1},
 		{op = "walk_to", node = "samurai", x = portal.global_position.x - 8, speed = 130.0},
 		{op = "call", fn = func() -> void:
 			samurai.create_tween().tween_property(samurai, "modulate:a", 0.0, 0.25)},

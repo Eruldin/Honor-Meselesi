@@ -1071,6 +1071,9 @@ func _on_boss_defeated() -> void:
 		{op = "wait", t = 0.5},
 		{op = "hop_to", node = "creature", to = samurai.global_position + Vector2(10, -20), dur = 0.5, arc = 40.0},
 		{op = "picto", node = "samurai", icon = &"alarm", t = 0.9, wait = true},
+		{op = "call", fn = func() -> void:
+			FormReveal.show_on(samurai, &"tavuk")},
+		{op = "wait", t = 1.1},
 		{op = "hop_to", node = "creature", to = portal.global_position, dur = 0.5, arc = 30.0},
 		{op = "call", fn = func() -> void:
 			creature.create_tween().tween_property(creature, "scale", Vector2.ZERO, 0.3)},
