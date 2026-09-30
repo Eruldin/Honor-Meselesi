@@ -1033,6 +1033,15 @@ func _build_fx() -> void:
 	camera.position_smoothing_speed = 6.0
 	add_child(camera)
 	camera.make_current()
+	# Checkpoint/olum respawn'i: kamerayi oyuncuya kilit olarak kur —
+	# smoothing (240,135)'ten spawn'a haritayi taramasin. ch1'de gizli
+	# oda rest'leri yeraltinda oldugundan Y de spawn'a kilitlenir.
+	camera.global_position.x = clampf(samurai.global_position.x,
+		240.0, LEVEL_W - 240.0)
+	if samurai.global_position.y > FLOOR_Y + 24.0:
+		camera.global_position.y = minf(samurai.global_position.y - 90.0,
+			FLOOR_Y + 116.0)
+	camera.reset_smoothing()
 
 	var fx := FxListener.new()
 	fx.camera_path = camera.get_path()

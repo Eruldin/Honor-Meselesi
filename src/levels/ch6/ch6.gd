@@ -258,6 +258,11 @@ func _build_fx() -> void:
 	camera.position_smoothing_speed = 6.0
 	add_child(camera)
 	camera.make_current()
+	# Checkpoint/olum respawn'i: kamerayi oyuncuya kilit olarak kur —
+	# smoothing (240,135)'ten spawn'a haritayi taramasin.
+	camera.global_position.x = clampf(samurai.global_position.x,
+		240.0, LEVEL_W - 240.0)
+	camera.reset_smoothing()
 	var fx := FxListener.new()
 	fx.camera_path = camera.get_path()
 	add_child(fx)
