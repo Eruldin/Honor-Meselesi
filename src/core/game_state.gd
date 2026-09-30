@@ -95,6 +95,7 @@ func to_dict() -> Dictionary:
 		"checkpoint": String(checkpoint_id),
 		"flags": ser_flags,
 		"play_time": play_time,
+		"soul": soul,
 	}
 
 
@@ -103,6 +104,7 @@ func from_dict(data: Dictionary) -> void:
 	current_form = StringName(data.get("current_form", "samurai"))
 	checkpoint_id = StringName(data.get("checkpoint", ""))
 	play_time = float(data.get("play_time", 0.0))
+	soul = int(data.get("soul", 0))
 	flags.clear()
 	for k in data.get("flags", {}):
 		var v: Variant = data["flags"][k]

@@ -104,7 +104,7 @@ func _build_hud() -> void:
 	layer.add_child(hud_label)
 
 	var hint := Label.new()
-	hint.text = "A/D:hareket Space:zipla J:saldiri(alt+pogo) K:parry L:dash Q/E:form Esc:ayar"
+	hint.text = "A/D:hareket Space:zipla J:saldiri(alt+pogo) K:parry L:dash F:odak Q/E:form Esc:ayar"
 	hint.position = Vector2(6, 256)
 	hint.add_theme_font_size_override("font_size", 7)
 	hint.add_theme_color_override("font_color", Color(0.6, 0.6, 0.65))
