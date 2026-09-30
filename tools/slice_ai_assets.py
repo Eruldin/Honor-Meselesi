@@ -133,20 +133,39 @@ def main() -> None:
         slice_spec("interior.png", "glitch_%d" % i, (x0, GL[0], x1, GL[1]),
                    cell=64)
 
-    # === IC MEKAN OBJELERI (interior.png — oda sahnesi) ===
+    # === IC MEKAN OBJELERI (interior.png 1670x942) ===
+    # Panoramadaki duvar ogeleri (arka plan sahne duvari — alp kalir)
     for name, box in [
-        ("j_lantern",   (105, 225, 200, 310)),   # asili fener + isilti
-        ("j_scroll_a",  (515, 155, 575, 240)),   # dag manzara parsomen
-        ("j_scroll_b",  (580, 155, 645, 240)),   # kaligrafi parsomen
-        ("j_shelf",     (655, 140, 790, 265)),   # kavanoz raf
-        ("j_banner",    (1195, 165, 1310, 335)), # kirmizi armali bayrak
-        ("j_lantern2",  (1265, 225, 1340, 340)), # sag fener
-        ("j_tv",        (355, 305, 500, 400)),   # TV + sehpa
-        ("j_sit",       (275, 315, 350, 405)),   # oturan samuray
-        ("j_katana",    (315, 225, 465, 275)),   # duvar katana rafi
-        ("j_rift",      (1290, 150, 1535, 345)), # mor glitch yarik + sapka
-        ("j_wall",      (230, 120, 330, 230)),   # temiz tahta duvar
-        ("j_floor",     (150, 392, 420, 448)),   # tahta doseme seridi
+        ("j_shoji",    (55, 145, 188, 345)),    # ayli soji pencere
+        ("j_scroll_a", (295, 118, 398, 340)),   # dag manzara parsomen
+        ("j_scroll_b", (900, 142, 988, 338)),   # kaligrafi parsomen
+        ("j_banner",   (1130, 562, 1202, 688)), # kirmizi armali bayrak (izole)
+        ("j_lantern",  (1165, 148, 1258, 292)), # asili buyuk fener
+        ("j_lantern2", (908, 278, 972, 352)),   # duvarda kucuk fener
+        ("j_sit",      (318, 288, 432, 405)),   # oturan samuray
+        ("j_rift",     (1238, 138, 1408, 398)), # mor glitch yarik + sapka
+        ("j_wall",     (798, 148, 898, 292)),   # temiz tahta duvar
+        ("j_floor",    (98, 390, 700, 440)),    # tahta doseme seridi
+    ]:
+        slice_spec("interior.png", name, box)
+    # Orta bolum: koyu zeminde izole mobilyalar (INTERIOR VE SAHNE ASSETLERI)
+    for name, box in [
+        ("j_shelf",    (1268, 553, 1372, 657)), # kalabalik raf unitesi
+        ("j_cabinet",  (1198, 558, 1272, 662)), # dama desenli dolap
+        ("j_vase",     (1358, 553, 1408, 602)), # cicekli vazo
+        ("j_moonwin",  (1405, 538, 1462, 665)), # ayli pencere
+        ("j_katana",   (1268, 662, 1422, 682)), # stantta kilic (yatay)
+        ("j_lantern3", (1448, 693, 1522, 777)), # suslu yanan fener
+        ("j_chest",    (1558, 698, 1632, 777)), # sari dolap/sandik
+        ("j_table",    (998, 713, 1124, 762)),  # alcak masa + minderler
+    ]:
+        slice_spec("interior.png", name, box)
+    # Alt bolum: CRT TV + kucuk esyalar (DIGER ONEMLI VARLIKLAR)
+    for name, box in [
+        ("j_tv",       (1258, 698, 1332, 767)), # CRT televizyon (mavi ek)
+        ("j_tv_bars",  (1070, 838, 1132, 902)), # renk barli TV (glitch!)
+        ("j_kettle",   (1400, 825, 1462, 872)), # cay takimi
+        ("j_candle",   (1558, 812, 1612, 880)), # yanan mum fener
     ]:
         slice_spec("interior.png", name, box)
 
@@ -159,23 +178,51 @@ def main() -> None:
                    (22 + i * 63, 617, 84 + i * 63, 662))
         slice_spec("buildings.png", "tile_wood_%d" % i,
                    (22 + i * 63, 664, 84 + i * 63, 708))
-    # buyuk iki katli ev (oyuncunun evi)
-    slice_spec("buildings.png", "j_house_main", (340, 527, 545, 700))
+    # buyuk iki katli japon evi — "YAPI ASSETLERI" etiketinin ALTINDAN
+    slice_spec("buildings.png", "j_house_main", (325, 578, 502, 745))
+    # torii kapisi (zemin tiles bolumunun altinda, iki direkli kapi)
+    slice_spec("buildings.png", "j_torii",      (100, 652, 290, 720))
     # arka plan: ay, dag silsilesi, kiraz agaci, selale ucurumu
     slice_spec("buildings.png", "bg_moon",      (955, 530, 1040, 615))
     slice_spec("buildings.png", "bg_mountains", (1040, 545, 1300, 645))
     slice_spec("buildings.png", "bg_cherry",    (1380, 535, 1565, 665))
     slice_spec("buildings.png", "bg_falls",     (1575, 535, 1665, 705))
     slice_spec("buildings.png", "bg_trees",     (1140, 615, 1400, 705))
-    # torii + fener direkleri (sahne tilesi bolumunde ahshap parcalar)
-    slice_spec("buildings.png", "j_lamppost",   (280, 645, 330, 700))
+    # DEKORASYON: saksili bitkiler + cit + tas pagoda fener
+    slice_spec("buildings.png", "j_plant_0",   (12, 788, 90, 845))
+    slice_spec("buildings.png", "j_plant_1",   (98, 792, 160, 845))
+    slice_spec("buildings.png", "j_plant_2",   (168, 795, 230, 845))
+    slice_spec("buildings.png", "j_plant_3",   (12, 862, 160, 920))
+    slice_spec("buildings.png", "j_fence_0",   (168, 862, 285, 905))
+    slice_spec("buildings.png", "j_stone_lamp",(340, 858, 392, 925))
+    slice_spec("buildings.png", "j_stone_sml", (242, 790, 292, 845))
+    # IŞIK: asili kagit fenerler (parlayan) + mum/stand
+    slice_spec("buildings.png", "j_lantern_hang_0", (890, 772, 925, 838))
+    slice_spec("buildings.png", "j_lantern_hang_1", (930, 772, 965, 838))
+    # IC MEKAN: TV (ekraninda samuray), kazan, buyuk raf, kilic rafi,
+    # yesil minder, kucuk dolap — hepsi etiketsiz bolgelerden
+    slice_spec("buildings.png", "j_tv_frame",  (408, 782, 482, 848))
+    slice_spec("buildings.png", "j_cauldron",  (787, 870, 838, 920))
+    slice_spec("buildings.png", "j_shelf_big", (678, 780, 770, 865))
+    slice_spec("buildings.png", "j_sword_rack",(775, 780, 838, 862))
+    slice_spec("buildings.png", "j_cushion",   (703, 873, 768, 915))
+    slice_spec("buildings.png", "j_chest",     (635, 878, 692, 918))
     # HUD: samuray portresi + oni maske kalp + katana bar (panorama sol ust)
     slice_spec("buildings.png", "hud_portrait", (5, 45, 95, 110))
     slice_spec("buildings.png", "hud_heart",    (112, 32, 148, 70), thr=28)
     slice_spec("buildings.png", "hud_heart_row",(108, 30, 300, 72), thr=28)
     slice_spec("buildings.png", "hud_katana",   (95, 70, 295, 95))
-    # samuray sapkasi (sapka bolumu — sapka sprite'lari)
-    slice_spec("buildings.png", "j_hat",        (1120, 830, 1175, 885))
+    # samuray sapkasi — SAPKA SPRITELARI sirasindan tek saman sapka
+    slice_spec("buildings.png", "j_hat",        (1198, 882, 1258, 918))
+    slice_spec("buildings.png", "j_hat_b",      (1430, 882, 1492, 918))
+    # GLITCH YARATIK (buildings) — hayalet + sapkali kacis karesi
+    for i, (x0, x1) in enumerate([(1222, 1312), (1320, 1412),
+                                  (1420, 1512), (1520, 1610)]):
+        slice_spec("buildings.png", "glitchb_%d" % i, (x0, 784, x1, 848),
+                   cell=64)
+    # yanan pagoda/tapinak (sol sutun) + hedef sahne panorama seridi
+    slice_spec("buildings.png", "j_shrine",     (1118, 742, 1194, 860))
+    slice_spec("buildings.png", "bg_village_pan", (1100, 696, 1669, 730))
 
     print("bitti ->", OUT)
 

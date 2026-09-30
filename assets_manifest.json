@@ -1421,8 +1421,8 @@
       "path": "generated/ai/j_sit.png"
     },
     "prop/house_main": {
-      "pack": "AI Sheet",
-      "path": "generated/ai/j_house_main.png"
+      "path": "generated/ai/j_house_main.png",
+      "pack": "AI Sheet"
     },
     "prop/lamppost_j": {
       "pack": "AI Sheet",
@@ -1552,6 +1552,120 @@
       ],
       "fps": 14,
       "pack": "Postapoc"
+    },
+    "prop/torii": {
+      "path": "generated/ai/j_torii.png",
+      "pack": "AI Sheet"
+    },
+    "prop/plant_0": {
+      "path": "generated/ai/j_plant_0.png",
+      "pack": "AI Sheet"
+    },
+    "prop/plant_1": {
+      "path": "generated/ai/j_plant_1.png",
+      "pack": "AI Sheet"
+    },
+    "prop/plant_2": {
+      "path": "generated/ai/j_plant_2.png",
+      "pack": "AI Sheet"
+    },
+    "prop/plant_3": {
+      "path": "generated/ai/j_plant_3.png",
+      "pack": "AI Sheet"
+    },
+    "prop/j_fence": {
+      "path": "generated/ai/j_fence_0.png",
+      "pack": "AI Sheet"
+    },
+    "prop/stone_lamp": {
+      "path": "generated/ai/j_stone_lamp.png",
+      "pack": "AI Sheet"
+    },
+    "prop/stone_sml": {
+      "path": "generated/ai/j_stone_sml.png",
+      "pack": "AI Sheet"
+    },
+    "prop/lantern_hang": {
+      "path": "generated/ai/j_lantern_hang_0.png",
+      "pack": "AI Sheet"
+    },
+    "prop/lantern_hang2": {
+      "path": "generated/ai/j_lantern_hang_1.png",
+      "pack": "AI Sheet"
+    },
+    "prop/tv_frame": {
+      "path": "generated/ai/j_tv_frame.png",
+      "pack": "AI Sheet"
+    },
+    "prop/cauldron": {
+      "path": "generated/ai/j_cauldron.png",
+      "pack": "AI Sheet"
+    },
+    "prop/shelf_big": {
+      "path": "generated/ai/j_shelf_big.png",
+      "pack": "AI Sheet"
+    },
+    "prop/sword_rack": {
+      "path": "generated/ai/j_sword_rack.png",
+      "pack": "AI Sheet"
+    },
+    "prop/cushion": {
+      "path": "generated/ai/j_cushion.png",
+      "pack": "AI Sheet"
+    },
+    "prop/chest": {
+      "path": "generated/ai/j_chest.png",
+      "pack": "AI Sheet"
+    },
+    "prop/moonwin": {
+      "path": "generated/ai/j_moonwin.png",
+      "pack": "AI Sheet"
+    },
+    "prop/lantern3": {
+      "path": "generated/ai/j_lantern3.png",
+      "pack": "AI Sheet"
+    },
+    "prop/cabinet": {
+      "path": "generated/ai/j_cabinet.png",
+      "pack": "AI Sheet"
+    },
+    "prop/vase": {
+      "path": "generated/ai/j_vase.png",
+      "pack": "AI Sheet"
+    },
+    "prop/table": {
+      "path": "generated/ai/j_table.png",
+      "pack": "AI Sheet"
+    },
+    "prop/candle": {
+      "path": "generated/ai/j_candle.png",
+      "pack": "AI Sheet"
+    },
+    "prop/kettle": {
+      "path": "generated/ai/j_kettle.png",
+      "pack": "AI Sheet"
+    },
+    "prop/tv_bars": {
+      "path": "generated/ai/j_tv_bars.png",
+      "pack": "AI Sheet"
+    },
+    "prop/shrine": {
+      "path": "generated/ai/j_shrine.png",
+      "pack": "AI Sheet"
+    },
+    "prop/shoji": {
+      "path": "generated/ai/j_shoji.png",
+      "pack": "AI Sheet"
+    },
+    "npc/glitchb": {
+      "files": [
+        "generated/ai/glitchb_0.png",
+        "generated/ai/glitchb_1.png",
+        "generated/ai/glitchb_2.png",
+        "generated/ai/glitchb_3.png"
+      ],
+      "fps": 5,
+      "pack": "AI Sheet"
     }
   }
 }

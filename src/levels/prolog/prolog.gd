@@ -108,13 +108,16 @@ func _build_room() -> void:
 	body.position = Vector2(240, FLOOR_Y + 15)
 	add_child(body)
 
-	# Duvar susleri: parşömenler, kirmizi armagan bayragi, asili fenerler
+	# Duvar susleri: parşömenler, kirmizi armagan bayragi, parlayan
+	# kagit fenerler (referans ic mekandaki gibi)
 	var deco_specs := [
-		{ id = &"prop/scroll_a", pos = Vector2(52, 78), mod = Color(1, 0.92, 0.82) },
-		{ id = &"prop/scroll_b", pos = Vector2(430, 74), mod = Color(1, 0.92, 0.82) },
+		{ id = &"prop/shoji",    pos = Vector2(56, 96), mod = Color(0.95, 0.9, 0.85) },
+		{ id = &"prop/scroll_a", pos = Vector2(118, 80), mod = Color(1, 0.92, 0.82) },
+		{ id = &"prop/moonwin",  pos = Vector2(432, 88), mod = Color(0.95, 0.9, 0.85) },
+		{ id = &"prop/scroll_b", pos = Vector2(392, 80), mod = Color(1, 0.92, 0.82) },
 		{ id = &"prop/banner",   pos = Vector2(228, 62), mod = Color(1, 0.9, 0.85) },
-		{ id = &"prop/lantern",  pos = Vector2(96, 66), mod = Color(1.15, 1.0, 0.8) },
-		{ id = &"prop/lantern",  pos = Vector2(378, 66), mod = Color(1.15, 1.0, 0.8) },
+		{ id = &"prop/lantern_hang",  pos = Vector2(96, 62), mod = Color(1.05, 0.95, 0.85) },
+		{ id = &"prop/lantern_hang2", pos = Vector2(378, 62), mod = Color(1.05, 0.95, 0.85) },
 	]
 	for f in deco_specs:
 		if not AssetLoader.has_asset(f.id):
@@ -127,11 +130,17 @@ func _build_room() -> void:
 		ds.modulate = f.mod
 		add_child(ds)
 
-	# Mobilyalar: japon raf, CRT TV sehpasi, futon, hali
+	# Mobilyalar: kalabalik raf + dama dolap + yanan fener sagda;
+	# masa + caydanlik + mum solda, hali ortada — referans kompozisyon
 	var furn_specs := [
-		{ id = &"prop/shelf",      pos = Vector2(404, FLOOR_Y - 2), mod = Color(1, 0.9, 0.85) },
-		{ id = &"prop/furn_bed",   pos = Vector2(28, FLOOR_Y - 2),  mod = Color(0.85, 0.7, 0.65) },
+		{ id = &"prop/shelf_big",  pos = Vector2(430, FLOOR_Y - 2), mod = Color(1, 0.9, 0.85) },
+		{ id = &"prop/cabinet",    pos = Vector2(28, FLOOR_Y - 2),  mod = Color(0.95, 0.82, 0.72) },
+		{ id = &"prop/lantern3",   pos = Vector2(390, FLOOR_Y - 2), mod = Color(1.02, 0.95, 0.85) },
+		{ id = &"prop/vase",       pos = Vector2(80, FLOOR_Y - 2),  mod = Color(0.95, 0.85, 0.8) },
+		{ id = &"prop/table",      pos = Vector2(196, FLOOR_Y - 2), mod = Color(0.95, 0.85, 0.75) },
 		{ id = &"prop/furn_rug",   pos = Vector2(196, FLOOR_Y - 3), mod = Color(0.85, 0.62, 0.55) },
+		{ id = &"prop/candle",     pos = Vector2(330, FLOOR_Y - 2), mod = Color(1.02, 0.95, 0.85) },
+		{ id = &"prop/kettle",     pos = Vector2(150, FLOOR_Y - 2), mod = Color(0.9, 0.8, 0.75) },
 	]
 	for f in furn_specs:
 		if not AssetLoader.has_asset(f.id):
@@ -188,10 +197,12 @@ func _build_room() -> void:
 		tv_screen.size.y / CrtGame.VIEW.y)
 	add_child(screen)
 
-	# Duvardaki katana rafi + alinacak katana
-	if AssetLoader.has_asset(&"prop/katana_rack"):
+	# Duvardaki kilic rafi + alinacak katana
+	var rack_id := &"prop/sword_rack" if AssetLoader.has_asset(&"prop/sword_rack") \
+		else &"prop/katana_rack"
+	if AssetLoader.has_asset(rack_id):
 		var rack := Sprite2D.new()
-		rack.texture = AssetLoader.texture(&"prop/katana_rack")
+		rack.texture = AssetLoader.texture(rack_id)
 		var rs := rack.texture.get_size()
 		rack.offset = Vector2(-rs.x / 2.0, -rs.y / 2.0)
 		rack.global_position = Vector2(352, 150)

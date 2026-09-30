@@ -543,45 +543,50 @@ func _build_terrain() -> void:
 
 	# === KOY DEKORU ===
 	var house_mod := Color(0.75, 0.6, 0.62)
-	# Samurayin evi — prolog evinin dis gorunumu, koy girisinde
-	_add_deco_ground(&"prop/house_main", 62, FLOOR_Y + 4, 0.62,
-		Color(0.85, 0.72, 0.7))
-	_add_deco_ground(&"prop/house_c", 190, FLOOR_Y, 0.52, house_mod)
-	_add_deco_ground(&"prop/house_a", 340, FLOOR_Y, 0.5, house_mod)
-	_add_deco_ground(&"prop/house_b", 570, FLOOR_Y, 0.45, house_mod)
-	_add_deco_ground(&"prop/house_a", 770, FLOOR_Y, 0.5, house_mod, true)
-	_add_deco_ground(&"prop/house_c", 930, FLOOR_Y, 0.5, house_mod)
-	# Pazar alani evleri (sag kanat — x=700-1040)
-	_add_deco_ground(&"prop/house_b", 1000, FLOOR_Y, 0.48, house_mod, true)
-	# Koy meydani: kuyu, araba, kasalar, varil — hepsi zemine oturur
+	# === JAPON KOYU ===
+	# Torii girisi — koyun batı ucunda ikonik kapi
+	_add_deco_ground(&"prop/torii", 48, FLOOR_Y + 2, 1.15,
+		Color(0.9, 0.55, 0.45))
+	# Samurayin evi — prolog evinin dis gorunumu
+	_add_deco_ground(&"prop/house_main", 178, FLOOR_Y + 4, 0.78,
+		Color(0.88, 0.75, 0.7))
+	# Mahalle evleri — ayni tip japon evi, farkli tonlarla varyasyon
+	_add_deco_ground(&"prop/house_main", 520, FLOOR_Y + 4, 0.7,
+		Color(0.75, 0.62, 0.62))
+	_add_deco_ground(&"prop/house_main", 905, FLOOR_Y + 4, 0.74,
+		Color(0.82, 0.66, 0.58))
+	# Tas pagoda fenerler — sokak aydinlatmasi
+	for x in [300.0, 660.0, 1010.0]:
+		_add_deco_ground(&"prop/stone_lamp", x, FLOOR_Y, 0.55,
+			Color(0.9, 0.85, 0.8))
+	# Asili kagit fenerler — ev girislerinin saçaklari altinda
+	for x in [150.0, 210.0, 492.0, 552.0, 875.0, 940.0]:
+		_add_deco(&"prop/lantern_hang", Vector2(x, FLOOR_Y - 52), 0.42,
+			Color(1.0, 0.85, 0.65), false, 1)
+	# Ahsap citler — bahce sinirlari
+	_add_deco_ground(&"prop/j_fence", 385, FLOOR_Y, 0.8, Color(0.7, 0.55, 0.45))
+	_add_deco_ground(&"prop/j_fence", 620, FLOOR_Y, 0.8,
+		Color(0.7, 0.55, 0.45), true)
+	# Saksili bitkiler — ev onleri
+	_add_deco_ground(&"prop/plant_0", 126, FLOOR_Y, 0.45, Color(0.8, 0.9, 0.7))
+	_add_deco_ground(&"prop/plant_1", 236, FLOOR_Y, 0.5, Color(0.75, 0.85, 0.65))
+	_add_deco_ground(&"prop/plant_2", 470, FLOOR_Y, 0.5, Color(0.8, 0.9, 0.7))
+	_add_deco_ground(&"prop/plant_3", 850, FLOOR_Y, 0.55, Color(0.75, 0.85, 0.65))
+	# Koy meydani: kuyu (gizli oda girisi), araba, kasalar, varil
 	_add_deco_ground(&"prop/well", 480, FLOOR_Y + 18, 1.0, house_mod)
-	_add_deco_ground(&"prop/wagon", 230, FLOOR_Y, 0.75, house_mod)
+	_add_deco_ground(&"prop/wagon", 330, FLOOR_Y, 0.75, house_mod)
 	_add_deco_ground(&"prop/crate_stack", 700, FLOOR_Y, 0.7, house_mod)
 	_add_deco_ground(&"prop/crate", 745, FLOOR_Y, 0.8, house_mod)
-	_add_deco_ground(&"prop/barrel", 960, FLOOR_Y, 0.85, house_mod)
+	_add_deco_ground(&"prop/barrel", 985, FLOOR_Y, 0.85, house_mod)
 	# === PAZAR ALANI (x=700-1040) ===
-	# Tezgahlar — sign sprite pazar tezgahi olarak kullaniliyor
 	_add_deco_ground(&"prop/market_stall", 740, FLOOR_Y, 0.55, Color(0.9, 0.8, 0.6))
 	_add_deco_ground(&"prop/market_stall", 840, FLOOR_Y, 0.55, Color(0.85, 0.75, 0.55), true)
-	# Cuvallar ve tahil kasalari tezgah yaninda
 	_add_deco_ground(&"prop/sack", 780, FLOOR_Y, 0.5, Color(0.7, 0.62, 0.5))
-	_add_deco_ground(&"prop/crate", 860, FLOOR_Y, 0.6, Color(0.65, 0.55, 0.48))
-	# Ahir cevresine kisa tahta cit parcalari
-	for fx in [895.0, 920.0, 945.0]:
-		_add_deco_ground(&"prop/fence", fx, FLOOR_Y, 0.38, Color(0.55, 0.45, 0.38))
-	# Sokak lambalari — japon tas fener direkleri + kagit fenerler
-	for x in [205.0, 650.0]:
-		_add_deco_ground(&"prop/lamppost_j", x, FLOOR_Y, 0.9,
-			Color(1.05, 0.95, 0.8))
-	for x in [415.0, 855.0]:
-		_add_deco_ground(&"prop/deco_lantern", x, FLOOR_Y, 0.85,
-			Color(1.0, 0.9, 0.7))
+	_add_deco_ground(&"prop/crate", 870, FLOOR_Y, 0.6, Color(0.65, 0.55, 0.48))
 	# Kiraz agaci — koy meydaninin sag kenari, ormana gecis
-	_add_deco_ground(&"bg/j_cherry", 1062, FLOOR_Y + 4, 1.15,
+	_add_deco_ground(&"bg/j_cherry", 1080, FLOOR_Y + 4, 1.15,
 		Color(1.0, 0.85, 0.9))
-	# Pazar cevresi: kucuk cali/agac parcalari
-	_add_deco_ground(&"prop/bush_small", 1020, FLOOR_Y, 0.7, Color(0.5, 0.65, 0.45))
-	_add_deco_ground(&"prop/bush_small", 1035, FLOOR_Y, 0.55, Color(0.45, 0.6, 0.4))
+	_add_deco_ground(&"prop/bush_small", 1030, FLOOR_Y, 0.7, Color(0.5, 0.65, 0.45))
 	# Kumes hayvanlari + pasif koylu
 	for i in 4:
 		var npc := AmbientNpc.new()
@@ -884,30 +889,30 @@ func _build_hud() -> void:
 		pr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 		pr.position = Vector2(4, 4)
-		pr.size = Vector2(22, 22)
+		pr.size = Vector2(19, 19)
 		layer.add_child(pr)
 
 	if use_ref:
 		# her kalp = 1 can; dolu/dolu-disi soluk maske
-		var hx := 30.0
+		var hx := 27.0
 		for i in samurai.health.max_health:
 			var h := TextureRect.new()
 			h.texture = AssetLoader.texture(&"ui/hud_heart")
 			h.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			h.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 			h.position = Vector2(hx, 6)
-			h.size = Vector2(11, 11)
+			h.size = Vector2(9, 9)
 			layer.add_child(h)
 			_hearts.append(h)
-			hx += 13.0
+			hx += 11.0
 		# ruh olceri: katana bar, vurus/parry ile dolar
 		if AssetLoader.has_asset(&"ui/hud_katana"):
 			var kb := TextureRect.new()
 			kb.texture = AssetLoader.texture(&"ui/hud_katana")
 			kb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			kb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			kb.position = Vector2(30, 19)
-			kb.size = Vector2(64, 10)
+			kb.position = Vector2(27, 17)
+			kb.size = Vector2(56, 9)
 			kb.modulate = Color(1, 1, 1, 0.35)
 			layer.add_child(kb)
 			_soul_bar = kb

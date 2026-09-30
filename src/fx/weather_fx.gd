@@ -28,8 +28,7 @@ func _process(delta: float) -> void:
 	if _cam == null or _zones.is_empty():
 		return
 	_spawn_acc += delta
-	# ~10 parcacik/sn dagilimi bolge turune gore bolunur
-	if _spawn_acc >= 0.1:
+	if _spawn_acc >= 0.12:
 		_spawn_acc = 0.0
 		_tick_spawn()
 
@@ -39,10 +38,11 @@ func _tick_spawn() -> void:
 	for z in _zones:
 		if vx < z.x0 - 240 or vx > z.x1 + 240:
 			continue  # bolge ekran disi — parcacik uretme
-		var kind: String = z.kind
-		match kind:
+		match z.kind:
 			"petals":
-				_spawn_petal(vx)
+				# Seyrek: her tik %35 ihtimalle tek petal
+				if randf() < 0.35:
+					_spawn_petal(vx)
 			"rain":
 				_spawn_rain(vx)
 
@@ -52,18 +52,19 @@ func _spawn_petal(vx: float) -> void:
 		return
 	var p := Sprite2D.new()
 	p.texture = _tex[&"vfx/petal"]
-	var px := vx + randf_range(-220.0, 220.0)
+	p.scale = Vector2(0.5, 0.5)   # 5x4px -> ince petal, dev yaprak degil
+	var px := vx + randf_range(-230.0, 230.0)
 	p.position = Vector2(px, _cam.get_screen_center_position().y - 140.0)
-	p.modulate = Color(1.0, 0.75, 0.85, 0.9)
+	p.modulate = Color(1.0, 0.8, 0.9, 0.65)
 	p.z_index = 6
 	add_child(p)
 	var sway := randf_range(-PETAL_SWAY, PETAL_SWAY)
-	var dur := randf_range(3.2, 5.0)
+	var dur := randf_range(4.0, 6.5)
 	var tw := p.create_tween().set_parallel(true)
 	tw.tween_property(p, "position:y", p.position.y + 280.0, dur)
 	tw.tween_property(p, "position:x", px + sway, dur)
-	tw.tween_property(p, "rotation", randf_range(-2.2, 2.2), dur)
-	tw.chain().tween_property(p, "modulate:a", 0.0, 0.4)
+	tw.tween_property(p, "rotation", randf_range(-1.6, 1.6), dur)
+	tw.chain().tween_property(p, "modulate:a", 0.0, 0.5)
 	tw.finished.connect(p.queue_free)
 
 
