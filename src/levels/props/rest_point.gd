@@ -7,6 +7,23 @@ extends Area2D
 @export var checkpoint_id: StringName = &"cp"
 
 var _used := false
+var _prev_music: StringName = &""
+var _resting_player: Node2D = null
+
+
+func _process(_delta: float) -> void:
+	if _resting_player == null:
+		return
+	# Dinlenme temasi sadece oyuncu nokta yakinindayken calar;
+	# uzaklasinca (ya da baska bir tetik muzigi degistirdiyse) eski parcaya don.
+	if not is_instance_valid(_resting_player):
+		_resting_player = null
+		return
+	if _resting_player.global_position.distance_to(global_position) > 140.0:
+		_resting_player = null
+		if AudioManager._current_music == &"music/rest_point" \
+				and _prev_music != &"":
+			AudioManager.play_music(_prev_music)
 
 
 func _ready() -> void:
@@ -50,3 +67,7 @@ func rest(player) -> void:
 	Pictogram.show_on(player, &"sleep", 1.2, Vector2(0, -26))
 	FX.spark(global_position + Vector2(0, -10))
 	AudioManager.play_sfx(&"sfx/checkpoint", global_position)
+	# Bench temasi: dinlenme aninda sakin parca, uzaklasinca eski muzik.
+	_prev_music = AudioManager._current_music
+	_resting_player = player
+	AudioManager.play_music(&"music/rest_point")
