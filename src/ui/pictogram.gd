@@ -8,7 +8,7 @@ extends Node2D
 const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
-	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right",
+	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right", &"swap",
 ]
 
 var icon: StringName = &"alarm"
@@ -121,3 +121,10 @@ func _draw_icon() -> void:
 			draw_polyline(PackedVector2Array([
 				Vector2(1, 0), Vector2(4, 4), Vector2(7, 0)]), c, 1.8)
 			draw_line(Vector2(4, -4), Vector2(4, 4), c, 1.6)
+		&"swap":  # donusturme — dairesel iki ok (Q/E form degisimi)
+			draw_arc(Vector2(0, 0), 4.6, PI, TAU, 10, c, 1.7)
+			draw_arc(Vector2(0, 0), 4.6, 0.0, PI, 10, c, 1.7)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(4.4, -0.9), Vector2(6.4, -0.1), Vector2(4.7, 1.0)]), c)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(-4.4, 0.9), Vector2(-6.4, 0.1), Vector2(-4.7, -1.0)]), c)
