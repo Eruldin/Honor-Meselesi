@@ -121,9 +121,15 @@ func _physics_process(delta: float) -> void:
 			anims.play(&"walk" if absf(velocity.x) > 10.0 else &"idle")
 	# Fliker: glitch karakteri hafif titrer
 	_flicker += delta
+	# Dokunulmazlik penceresinde goz kirpma (samurai ile ayni dil)
+	var blink := _iframes > 0.0 and not dead \
+		and int(Time.get_ticks_msec() / 70) % 2 == 0
+	var want_a := 0.55 if blink else 1.0
 	sprite.modulate = Color(0.05, 0.05, 0.12 + 0.08 * absf(sin(_flicker * 13.0)))
+	sprite.modulate.a = want_a
 	if anims != null:
 		anims.modulate = sprite.modulate + Color(0.35, 0.35, 0.4)
+		anims.modulate.a = want_a
 
 	if input.jump_just_pressed():
 		velocity.y = -160.0  # hafif hop

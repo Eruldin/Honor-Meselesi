@@ -29,6 +29,21 @@ func test_glitch_creature_moves_and_shoots() -> void:
 	assert_true(found, "glitch tanesi firlatilir")
 
 
+func test_creature_hit_iframes_and_blink() -> void:
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	add_child_autofree(c)
+	await _frames(3)
+	c._on_hit_info(DamageInfo.make(1, c))
+	assert_gt(c._iframes, 0.0, "vurusta dokunulmazlik")
+	await _frames(2)
+	# i-frame goz kirpmasi: alfa ya yanip sonme (0.55) ya tam (1.0) —
+	# eski kod alpha'yi hic degistirmezdi (hep 1.0 ve tint ezilirdi).
+	assert_true(c.sprite.modulate.a == 0.55 or c.sprite.modulate.a == 1.0,
+		"i-frame goz kirpmasi modulate.a uzerinde")
+
+
 func test_samurai_boss_slash_and_parry() -> void:
 	var b := SamuraiBoss.new()
 	b.arena_left = -200
