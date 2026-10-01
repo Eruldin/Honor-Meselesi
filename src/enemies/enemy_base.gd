@@ -28,6 +28,7 @@ var _contact_managed := false
 var using_real_sprite := false
 var _anim_lock := 0.0                ## attack/hurt/die oynarken otomatik animi durdurur
 var _flash_timer: float = 0.0
+var _pre_flash := Color.WHITE       ## flas oncesi modulate — bitince geri yuklenir
 var _kb_vel := Vector2.ZERO          ## vurus geri tepmesi — pozisyon itkisi
 
 
@@ -164,9 +165,16 @@ func _process(delta: float) -> void:
 	if _flash_timer > 0.0:
 		_flash_timer -= delta
 		if _flash_timer <= 0.0:
-			sprite.modulate = Color.WHITE
-			if anims != null:
-				anims.modulate = Color.WHITE
+			_restore_modulate()
+
+
+## Hasar/parry flasi bitince flas oncesi rengi geri yukler (placeholder
+## tinti, faz rengi vb. korunur). Alt siniflar ozel mantik icin override
+## edebilir (orn. Unit0 zirh/faz tonlari).
+func _restore_modulate() -> void:
+	sprite.modulate = _pre_flash
+	if anims != null:
+		anims.modulate = _pre_flash
 
 
 func is_staggered() -> bool:
@@ -177,6 +185,8 @@ func take_damage(info: DamageInfo) -> void:
 	if not health.is_alive():
 		return
 	health.take(info.damage)
+	if _flash_timer <= 0.0:
+		_pre_flash = sprite.modulate
 	sprite.modulate = Color(2.0, 2.0, 2.0)
 	if anims != null:
 		anims.modulate = Color(2.0, 2.0, 2.0)
@@ -192,6 +202,8 @@ func take_damage(info: DamageInfo) -> void:
 
 func on_parried() -> void:
 	stagger_timer = tuning.parry_stagger
+	if _flash_timer <= 0.0:
+		_pre_flash = sprite.modulate
 	sprite.modulate = Color(1.0, 0.9, 0.3)
 	if anims != null:
 		anims.modulate = Color(1.0, 0.9, 0.3)

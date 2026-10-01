@@ -28,9 +28,20 @@ func _init() -> void:
 	phase_thresholds = [0.5]
 
 
+func _phase_color() -> Color:
+	return Color(0.55, 0.65, 0.8) if phase == 0 else Color(0.9, 0.5, 0.5)
+
+
+func _restore_modulate() -> void:
+	var c := Color(0.3, 1.0, 0.6) if armor_broken else _phase_color()
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
+
+
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.55, 0.65, 0.8)
+	sprite.modulate = _phase_color()
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 	punch_hitbox = Hitbox.new()
 	punch_hitbox.collision_layer = 32
@@ -64,7 +75,7 @@ func on_reset() -> void:
 	armor_broken = false
 	_armor_timer = 0.0
 	_hint_shown = false
-	sprite.modulate = Color(0.55, 0.65, 0.8)
+	sprite.modulate = _phase_color()
 	if punch_hitbox != null:
 		punch_hitbox.deactivate()
 
@@ -84,7 +95,7 @@ func _physics_process(delta: float) -> void:
 	_armor_timer = maxf(_armor_timer - delta, 0.0)
 	if _armor_timer <= 0.0 and armor_broken:
 		armor_broken = false
-		sprite.modulate = Color(0.55, 0.65, 0.8) if phase == 0 else Color(0.9, 0.5, 0.5)
+		sprite.modulate = _phase_color()
 
 	var speed := tuning.unit0_p2_speed if phase >= 1 else tuning.unit0_hp_p1_speed
 	var gap := tuning.unit0_attack_gap_p2 if phase >= 1 else tuning.unit0_attack_gap
@@ -100,7 +111,7 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0:
 				bstate = State.PUNCH
 				_t = 0.22
-				sprite.modulate = Color(0.55, 0.65, 0.8)
+				sprite.modulate = _phase_color()
 				punch_hitbox.activate(DamageInfo.make(2, self,
 					Vector2(facing * 220, -60), true, false))
 				velocity.x = facing * tuning.unit0_punch_speed
