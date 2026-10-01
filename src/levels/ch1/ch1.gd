@@ -1227,6 +1227,8 @@ func _boss_intro() -> void:
 
 
 func _on_boss_defeated() -> void:
+	# Bos bar dusme isini bitirdi — temizlenen arenada bos bar kalmasin.
+	_boss_root.visible = false
 	GameState.unlock_form(&"tavuk")
 	GameState.set_flag(&"ch1_boss_dead")
 	SaveSystem.save_game()

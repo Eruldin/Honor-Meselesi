@@ -252,6 +252,8 @@ func _run_intro() -> void:
 
 
 func _on_boss_defeated() -> void:
+	# Bos bar dusme isini bitirdi — temizlenen arenada bos bar kalmasin.
+	_boss_root.visible = false
 	GameState.set_flag(&"ch7_boss_dead")
 	SaveSystem.save_game()
 	AudioManager.play_sfx(&"sfx/gameover")

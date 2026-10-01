@@ -341,6 +341,8 @@ func _on_arena_entered(area: Area2D) -> void:
 
 
 func _on_boss_defeated() -> void:
+	# Bos bar dusme isini bitirdi — temizlenen arenada bos bar kalmasin.
+	_boss_root.visible = false
 	GameState.set_flag(&"ch6_boss_dead")
 	SaveSystem.save_game()
 	await get_tree().create_timer(1.6, true).timeout
