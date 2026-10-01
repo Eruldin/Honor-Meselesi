@@ -120,6 +120,23 @@ func test_robot_breaks_cracked_ground() -> void:
 
 # --- Ayar kaliciligi ---
 
+func test_sovalye_expiry_waits_out_of_cutscene() -> void:
+	# Gecici form suresi cutscene/olum sirasinda dolarsa transformi erteler —
+	# cutscene ortasinda oyuncu kontrolu acilmamali.
+	GameState.unlock_form(&"sovalye")
+	sam.equip_form(&"sovalye")
+	await _frames(30)
+	assert_eq(sam.form.id, &"sovalye")
+	sam.sm.change_to(Samurai.S_CUTSCENE, true)
+	sam.form_time_left = 0.01
+	await _frames(10)
+	assert_eq(sam.sm.current_name, Samurai.S_CUTSCENE,
+		"cutscene sirasinda expiry transforma zorlamamali")
+	sam.sm.change_to(Samurai.S_IDLE, true)
+	await _frames(40)
+	assert_eq(sam.form.id, &"samurai", "cutscene bitince expiry transform uygulamali")
+
+
 func test_settings_roundtrip() -> void:
 	Settings.set_fx_intensity(0.35)
 	Settings.set_shake_scale(0.5)

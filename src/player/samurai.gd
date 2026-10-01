@@ -281,7 +281,7 @@ func _physics_process(delta: float) -> void:
 	# Gecici form suresi: dolunca samuraya geri don ve kilidi kaldir.
 	if form != null and form.duration > 0.0:
 		form_time_left -= delta
-		if form_time_left <= 0.0 and sm.current_name != S_TRANSFORM:
+		if form_time_left <= 0.0 and sm.current_name not in [S_TRANSFORM, S_CUTSCENE, S_DEAD]:
 			var expired := form.id
 			pending_form = &"samurai"
 			sm.change_to(S_TRANSFORM, true)
