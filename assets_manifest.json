@@ -1332,6 +1332,10 @@
    "pack": "AI Sheet",
    "path": "generated/ai/j_weary.png"
   },
+  "prop/player_katana_inspect": {
+   "pack": "AI Sheet",
+   "path": "generated/ai/j_katana_inspect.png"
+  },
   "prop/house_main": {
    "path": "generated/ai/j_house_main.png",
    "pack": "AI Sheet"
