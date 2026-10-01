@@ -335,6 +335,9 @@ func _emit_scene_change(path: String) -> void:
 ## secenek sunar — "SAPKAYI VER" uzerinde imlec durunca buton glitchlenip
 ## imleci "SAVAS"a kaydirir. Barisin yolu yok — Ouroboros temasi.
 func _fight_choice() -> void:
+	# Secim ekrani bir menu anidir — yaratik donar: uyuyan boss'a
+	# bolt atarak bedava hasar (hatta erken oldurme) kapatilir.
+	creature.frozen = true
 	var layer := CanvasLayer.new()
 	layer.layer = 50
 	add_child(layer)
@@ -412,6 +415,8 @@ func _choice_decide() -> void:
 	if is_instance_valid(layer):
 		layer.queue_free()
 	AudioManager.play_sfx(&"sfx/reward")
+	if is_instance_valid(creature):
+		creature.frozen = false
 	boss.activate()
 	AudioManager.play_music(&"music/final_boss")
 
