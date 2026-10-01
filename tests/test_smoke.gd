@@ -252,3 +252,32 @@ func test_all_audio_ids_in_manifest() -> void:
 	assert_gt(seen.size(), 30, "en az 30 ses id'si kodda gecmeli")
 	for id in seen.keys():
 		assert_true(keys.has(id), "manifest'te olmayan ses id'si: " + id)
+
+
+func test_all_ext_resource_paths_exist() -> void:
+	# Kontrat: .tscn/.tres icindeki ext_resource path="res://..." referanslari
+	# diskte var olmali — kaynak dosyasi silinirse sahne sessizce bozulur.
+	var seen: Dictionary = {}
+	var stack: Array[String] = ["res://src", "res://tools", "res://config"]
+	var re := RegEx.create_from_string(r'path="(res://[^"]+)"')
+	while not stack.is_empty():
+		var dpath: String = stack.pop_back()
+		var d := DirAccess.open(dpath)
+		if d == null:
+			continue
+		d.list_dir_begin()
+		var name := d.get_next()
+		while name != "":
+			if d.current_is_dir() and name != "." and name != "..":
+				stack.append(dpath + "/" + name)
+			elif name.ends_with(".tscn") or name.ends_with(".tres"):
+				var src := FileAccess.get_file_as_string(dpath + "/" + name)
+				for m in re.search_all(src):
+					seen[m.get_string(1)] = true
+			name = d.get_next()
+		d.list_dir_end()
+	assert_gt(seen.size(), 5, "en az 6 ext_resource yolu gecmeli")
+	for path in seen.keys():
+		var fs_path := (path as String).trim_prefix("res://")
+		assert_true(FileAccess.file_exists(path),
+			"ext_resource hedefi yok: " + path + " (" + fs_path + ")")
