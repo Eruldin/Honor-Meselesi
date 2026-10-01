@@ -10,6 +10,7 @@ var gstate := GState.APPROACH
 var _t := 0.0
 var _player: Node2D
 var facing := -1
+var _hint_shown := false
 
 
 func _init() -> void:
@@ -91,5 +92,9 @@ func take_damage(info: DamageInfo) -> void:
 		FX.spark(hurtbox.global_position + Vector2(facing * 6, -4))
 		FX.hitstop(0.04)
 		AudioManager.play_sfx(&"sfx/clang", global_position, -6.0)
+		# Seken vurus cozumu ogretir: kalkan piktogrami = parry et
+		if not _hint_shown:
+			_hint_shown = true
+			Pictogram.show_on(self, &"shield", 2.2, Vector2(0, -28))
 		return
 	super.take_damage(info)
