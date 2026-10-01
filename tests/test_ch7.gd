@@ -68,11 +68,26 @@ func test_creature_inverted_controls() -> void:
 	assert_lt(c.global_position.x, 0.0, "ters kontrolde saga tusa sola gider")
 
 
+func test_ch7_forced_choice_glitches_to_fight() -> void:
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(10)
+	assert_false(scene.boss.active, "boss secim oncesi uyur")
+	scene._choice.idx = 0  # imlec SAPKAYI VER ustunde
+	await _frames(25)      # >0.35s ustunde durma
+	assert_eq(scene._choice.idx, 1, "buton glitchlenir, imlec SAVAS'a kayar")
+	scene._choice_decide()
+	assert_true(scene.boss.active, "secimden sonra boss aktif")
+
+
 func test_ch7_meta_assault_inverts_then_restores() -> void:
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	scene.auto_advance = false
 	add_child_autofree(scene)
 	await _frames(10)
+	scene._choice_decide()  # zorunlu secimi gec — boss aktif
+	await _frames(2)
 	# Boss'u %55'in altina indir — meta saldiri tetiklenir
 	scene.boss.health.take(int(scene.boss.health.max_health * 0.5))
 	await _frames(3)
