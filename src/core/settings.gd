@@ -185,6 +185,7 @@ func load_settings() -> void:
 					if ser is Dictionary:
 						list.append(ser)
 				bind_overrides[StringName(k)] = list
+	_apply_bindings()
 	_apply_bus_volume()
 	_apply_window()
 	changed.emit()

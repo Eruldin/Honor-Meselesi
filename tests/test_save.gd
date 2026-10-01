@@ -53,6 +53,29 @@ func test_settings_volume_persists() -> void:
 	Settings.set_music_volume(old_music)
 
 
+func test_binding_persists_across_load() -> void:
+	# Kaydedilen rebind restart'ta InputMap'e geri uygulanmali.
+	var old_binds: Dictionary = Settings.bind_overrides.duplicate(true)
+	Settings.bind_overrides = {}
+	InputMap.add_action(&"test_bind_action")
+	InputMap.action_erase_events(&"test_bind_action")
+	var ev := InputEventKey.new()
+	ev.physical_keycode = KEY_G
+	InputMap.action_add_event(&"test_bind_action", ev)
+	Settings.set_binding(&"test_bind_action")
+	# Simule edilen restart: event silinir, load geri yukler
+	InputMap.action_erase_events(&"test_bind_action")
+	Settings.load_settings()
+	var restored := InputMap.action_get_events(&"test_bind_action")
+	var found := false
+	for e in restored:
+		if e is InputEventKey and e.physical_keycode == KEY_G:
+			found = true
+	assert_true(found, "kaydedilen tusa atama restart'ta geri yuklenir")
+	Settings.bind_overrides = old_binds
+	InputMap.erase_action(&"test_bind_action")
+
+
 func test_death_mark_cycle() -> void:
 	GameState.current_chapter = &"ch3"
 	GameState.soul = 7
