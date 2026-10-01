@@ -252,6 +252,9 @@ func test_werewolf_telegraph_tints_anims() -> void:
 func test_ch3_moon_right_edge_fades() -> void:
 	# Regresyon: opak ay gokyuzu sprite'i x=480'de sert bitiyordu — manor
 	# parallax'i dikey bir dikisle aniden beliriyordu. Sag ~90px alfa-fade.
+	if not AssetLoader.has_asset(&"bg/moon"):
+		pending("bg/moon yok (CI) — atlaniyor")
+		return
 	var ch3: Node2D = load(CH3_PATH).instantiate()
 	add_child_autofree(ch3)
 	await get_tree().process_frame
