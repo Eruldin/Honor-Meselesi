@@ -59,9 +59,9 @@ func _physics_process(delta: float) -> void:
 				_stem.visible = true
 				_t = 0.5
 				position.y -= 16
+				if _asp != null:
+					_asp.play(&"attack")
 		1:
-			if _asp != null:
-				_asp.play(&"attack")
 			if _t <= 0.0:
 				_spit()
 				_phase = 0

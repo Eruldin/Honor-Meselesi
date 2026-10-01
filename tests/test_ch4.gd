@@ -197,3 +197,21 @@ func test_tyrant_cues_tint_visible() -> void:
 	assert_eq(b.bstate, RedTyrant.State.TELL)
 	assert_gt(vis.modulate.r, 1.0,
 		"sarartma telegraph gorunur gorselde de gorunmeli")
+
+
+func test_flower_attack_anim_progresses() -> void:
+	# Regresyon: play("attack") her frame'de cagrilinca anim kare 0'da
+	# donuyordu — sadece phase gecisinde bir kez oynatilmali.
+	var ff := FireFlower.new()
+	add_child_autofree(ff)
+	if ff._asp == null:
+		pending("attack bankasi yok (CI) — atlaniyor")
+		return
+	ff._t = 0.0  # cikisi tetikle
+	var progressed := false
+	for i in 20:
+		await get_tree().physics_frame
+		if ff._asp.frame > 0:
+			progressed = true
+			break
+	assert_true(progressed, "attack animi kare ilerletir — restart edilmez")
