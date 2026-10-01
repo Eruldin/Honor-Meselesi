@@ -61,3 +61,26 @@ func test_save_roundtrip() -> void:
 	assert_eq(GameState.get_flag(&"test_flag"), 42.0)
 	SaveSystem.wipe()
 	GameState.reset()
+
+func test_music_director_combat_layer() -> void:
+	var sam := Samurai.new()
+	add_child_autofree(sam)
+	var md := MusicDirector.new()
+	md.player = sam
+	md.calm_track = &"music/ch5"
+	add_child_autofree(md)
+	AudioManager.play_music(&"music/ch5")
+	var e := CryptSkeleton.new()
+	e.global_position = Vector2(60, 0)
+	add_child_autofree(e)
+	await get_tree().process_frame  # enemies grubuna katilsin
+	md._process(0.5)               # tick — tehdit yakin
+	assert_eq(AudioManager._current_music, &"music/combat",
+		"yakin dusman combat katmanina gecirir")
+	e.queue_free()
+	await get_tree().process_frame
+	for i in 10:                  # leave_delay 2.5s / 0.35 tick ~ 8 adim
+		md._process(0.5)
+	assert_eq(AudioManager._current_music, &"music/ch5",
+		"tehdit bitince sakin parcaya doner")
+	AudioManager.stop_music()

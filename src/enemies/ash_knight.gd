@@ -30,6 +30,7 @@ func _ready() -> void:
 		tuning.hurt_invuln_time = 0.5
 	super._ready()
 	remove_from_group(&"player")
+	add_to_group(&"enemies")
 	# Savas katmanlari dusmana cevrilir: govde/hurtbox dusman,
 	# saldiri hitbox'lari oyuncu hurtbox'unu vurur.
 	collision_layer = 64
