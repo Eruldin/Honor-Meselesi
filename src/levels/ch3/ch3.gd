@@ -220,6 +220,12 @@ func _build_entities() -> void:
 	w2.global_position = Vector2(560, 160)
 	add_child(w2)
 
+	# Mezardan yukselen iskeletler — mezarlik zeminine gomulu pusular
+	for sk_x in [210.0, 640.0, 900.0]:
+		var sk := CryptSkeleton.new()
+		sk.global_position = Vector2(sk_x, FLOOR_Y - 9)
+		add_child(sk)
+
 	var rest := RestPoint.new()
 	rest.checkpoint_id = &"ch3_shrine"
 	rest.global_position = Vector2(1000, FLOOR_Y - 12)
