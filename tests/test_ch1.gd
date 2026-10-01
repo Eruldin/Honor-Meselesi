@@ -62,6 +62,25 @@ func test_staggered_villager_contact_disarmed() -> void:
 		"sersemleme bitince temas geri kurulur")
 
 
+func test_dead_player_ignores_further_hits() -> void:
+	# Regresyon: olu oyuncuya carpan ikinci bir vurus damage_dealt +
+	# actor_died'i tekrar emit ediyordu (cift olum sirasi riski).
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	await wait_seconds(0.1)
+	var deaths := [0]
+	var tally := func(_a) -> void: deaths[0] += 1
+	EventBus.actor_died.connect(tally)
+	s.take_damage(DamageInfo.make(99, null, Vector2.ZERO, false, true))
+	assert_false(s.health.is_alive(), "vurus oldurmeli")
+	s.take_damage(DamageInfo.make(5, null, Vector2.ZERO, false, true))
+	s.take_damage(DamageInfo.make(5, null, Vector2.ZERO, false, true))
+	await wait_seconds(0.1)
+	assert_eq(deaths[0], 1, "actor_died tek kez emit edilmeli")
+	EventBus.actor_died.disconnect(tally)
+
+
 func test_guard_blocks_frontal_damage() -> void:
 	_flat_ground()
 	var s := _make_samurai()
