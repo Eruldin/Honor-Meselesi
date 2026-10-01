@@ -182,3 +182,52 @@ func test_tv_spores_emit_three_wisps() -> void:
 	_prolog._tv_spores()
 	var after := _prolog.find_children("*", "Sprite2D", true, false).size()
 	assert_eq(after - before, 3, "uc glitch tohumu cikar")
+
+
+func test_epilog_returns_hat_and_reaches_credits() -> void:
+	# M10 spec: genc samuray sapkayi alir (yaratik geri verir),
+	# dikey glitch kesme, jenerik.
+	var scene: Node2D = load("res://src/levels/prolog/Epilog.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	var handed := false
+	for i in 320:
+		await get_tree().physics_frame
+		if is_instance_valid(scene.hat) and scene.hat.get_parent() == scene.samurai:
+			handed = true
+			break
+	assert_true(handed, "yaratik sapkayi genc samuraya birakir")
+	var credits: Credits = null
+	for i in 300:
+		await get_tree().physics_frame
+		for c in scene.get_children():
+			if c is Credits:
+				credits = c
+		if credits != null:
+			break
+	assert_not_null(credits, "dikey kesme sonrasi jenerik baslar")
+	if credits != null:
+		credits._finish()
+		await wait_process_frames(3)
+		assert_true(GameState.get_flag(&"epilog_done"),
+			"jenerik bitince epilog_done flag'i kurulur")
+
+
+func test_epilog_skip_safety() -> void:
+	# Skip her anda: sapka samurayda + jenerik baslamali (end_state).
+	var scene: Node2D = load("res://src/levels/prolog/Epilog.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	for i in 60:
+		await get_tree().physics_frame
+		if scene.cutscene != null and scene.cutscene.playing:
+			break
+	scene.cutscene.request_skip()
+	await wait_process_frames(5)
+	assert_eq(scene.hat.get_parent(), scene.samurai,
+		"skip'te de sapka genc samurayin basinda")
+	var seen := false
+	for c in scene.get_children():
+		if c is Credits:
+			seen = true
+	assert_true(seen, "skip'te de jenerik baslar")
