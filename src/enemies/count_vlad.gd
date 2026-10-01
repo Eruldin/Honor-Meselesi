@@ -61,7 +61,7 @@ func on_activated() -> void:
 
 func on_phase_changed(_p: int) -> void:
 	# Faz 2: karanlik ortu — stereo ses alternatifi olarak gozler parlar.
-	sprite.modulate = _phase_color()
+	_restore_modulate()
 	FX.glitch(0.7, 0.6)
 	FX.shake(3.0, 0.4)
 	AudioManager.play_sfx(&"sfx/ghost", global_position, -4.0, 0.7)
@@ -90,6 +90,8 @@ func on_reset() -> void:
 	_atk_idx = 0
 	if not using_real_sprite:
 		sprite.modulate = _phase_color()
+	elif anims != null:
+		anims.modulate = Color.WHITE
 	if darkness != null:
 		darkness.get_parent().queue_free()
 		darkness = null
@@ -124,11 +126,14 @@ func _physics_process(delta: float) -> void:
 				_t = gap
 		State.LUNGE_TELL:
 			velocity.x = 0.0
-			sprite.modulate = Color(1.3, 0.4, 0.4)
+			var c := Color(1.3, 0.4, 0.4)
+			sprite.modulate = c
+			if anims != null:
+				anims.modulate = c
 			if _t <= 0.0:
 				bstate = State.LUNGE
 				_t = 0.25
-				sprite.modulate = _phase_color()
+				_restore_modulate()
 				velocity.x = facing * tuning.vlad_lunge_speed
 				contact_hitbox.activate(DamageInfo.make(1, self,
 					Vector2(facing * 180, -50), true, false))

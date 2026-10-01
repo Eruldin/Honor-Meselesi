@@ -197,3 +197,30 @@ func test_ch3_flow_boss_to_ch4_golge() -> void:
 			child.request_skip()
 	await wait_seconds(0.3)
 	assert_eq(GameState.current_chapter, &"ch4")
+
+
+func test_ghost_dim_cue_reaches_anims() -> void:
+	_flat_ground()
+	var g := Ghost.new()
+	g.global_position = Vector2(300, 240)
+	add_child_autofree(g)
+	assert_true(g.anims != null, "ghost banki anims'i kurmali")
+	assert_lt(g.anims.modulate.a, 0.5, "soluk hayalet karartilmis gorunmeli")
+	g.reveal()
+	assert_gt(g.anims.modulate.a, 0.9, "aciga cikan hayalet parlak gorunmeli")
+
+
+func test_werewolf_telegraph_tints_anims() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	var w := Werewolf.new()
+	w.global_position = Vector2(350, 240)
+	add_child_autofree(w)
+	await wait_seconds(0.1)  # _player cozumlesin
+	assert_true(w.anims != null, "hellcat banki anims'i kurmali")
+	w._t = 0.0
+	w._physics_process(0.016)
+	assert_eq(w.wstate, Werewolf.WState.TELEGRAPH)
+	assert_gt(w.anims.modulate.r, 1.0,
+		"kirmizi goz telegraphi anims'te de gorunmeli")

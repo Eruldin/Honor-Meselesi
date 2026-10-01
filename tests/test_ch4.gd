@@ -176,3 +176,23 @@ func test_fire_flower_pops_and_spits() -> void:
 	assert_true(found, "cicek disari cikip ates topu tukurur")
 	if AssetLoader.has_frames(&"enemy/flower/attack"):
 		assert_not_null(ff._asp, "attack animi sprite'i kurulur")
+
+
+func test_tyrant_cues_tint_anims() -> void:
+	var b := RedTyrant.new()
+	b.global_position = Vector2(400, 240)
+	add_child_autofree(b)
+	assert_true(b.anims != null, "tyrant banki anims'i kurmali")
+	b.on_phase_changed(1)
+	assert_lt(b.anims.modulate.b, 0.2, "faz 2 anims de turuncuya donmeli")
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	b.activate()
+	await wait_seconds(0.2)
+	b._atk_idx = 0
+	b._choose()
+	b._physics_process(0.016)
+	b._physics_process(0.016)
+	assert_eq(b.bstate, RedTyrant.State.TELL)
+	assert_gt(b.anims.modulate.r, 1.0,
+		"sarartma telegraph anims'de de gorunmeli")

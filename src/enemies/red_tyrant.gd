@@ -53,7 +53,10 @@ func on_activated() -> void:
 
 
 func on_phase_changed(_p: int) -> void:
-	sprite.modulate = Color(0.95, 0.35, 0.1)
+	var c := Color(0.95, 0.35, 0.1)
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
 	FX.glitch(0.8, 0.7)
 	FX.shake(3.0, 0.4)
 
@@ -67,6 +70,8 @@ func on_reset() -> void:
 	_flip_timer = 0.0
 	if not using_real_sprite:
 		sprite.modulate = Color(0.85, 0.2, 0.2)
+	elif anims != null:
+		anims.modulate = Color.WHITE
 
 
 func _restore_gravity() -> void:
@@ -102,7 +107,10 @@ func _physics_process(delta: float) -> void:
 				_choose()
 		State.TELL:
 			velocity.x = 0.0
-			sprite.modulate = Color(1.3, 1.3, 0.4)  # sarartma telegraph
+			var c := Color(1.3, 1.3, 0.4)  # sarartma telegraph
+			sprite.modulate = c
+			if anims != null:
+				anims.modulate = c
 			if _t <= 0.0:
 				_do_attack()
 		State.POUND_RISE:
@@ -148,7 +156,10 @@ func _choose() -> void:
 
 func _do_attack() -> void:
 	# TELL sonrasi tek gercek saldiri: pound
-	sprite.modulate = Color(0.85, 0.2, 0.2) if phase == 0 else Color(0.95, 0.35, 0.1)
+	var c := Color(0.85, 0.2, 0.2) if phase == 0 else Color(0.95, 0.35, 0.1)
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
 	bstate = State.POUND_RISE
 	_t = 0.45
 

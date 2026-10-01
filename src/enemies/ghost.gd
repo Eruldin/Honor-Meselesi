@@ -17,7 +17,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	sprite.modulate = Color(0.6, 0.7, 1.0, 0.25)  # soluk
+	_set_dim()
 	EventBus.spark_emitted.connect(_on_spark)
 	EventBus.parry_succeeded.connect(_on_spark)
 
@@ -32,7 +32,17 @@ func reveal() -> void:
 		AudioManager.play_sfx(&"sfx/ghost", global_position, -6.0)
 	revealed = true
 	_reveal_timer = tuning.ghost_reveal_time
-	sprite.modulate = Color(0.7, 0.85, 1.0, 0.95)
+	var c := Color(0.7, 0.85, 1.0, 0.95)
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
+
+
+func _set_dim() -> void:
+	var c := Color(0.6, 0.7, 1.0, 0.25)
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
 
 
 func _physics_process(delta: float) -> void:
@@ -43,7 +53,7 @@ func _physics_process(delta: float) -> void:
 		_reveal_timer -= delta
 		if _reveal_timer <= 0.0:
 			revealed = false
-			sprite.modulate = Color(0.6, 0.7, 1.0, 0.25)
+			_set_dim()
 	if _player == null:
 		_player = get_tree().get_first_node_in_group(&"player")
 		return
@@ -55,5 +65,8 @@ func _physics_process(delta: float) -> void:
 ## Solukken hasar almaz — once kivilcimla aciga cikmali.
 func take_damage(info: DamageInfo) -> void:
 	if not revealed:
+		# Soluk bedenden vurus gecer — sessiz kalmaz, hayalet bir suzultu
+		# dondurur (oyuncu 'vurdu ama olmadi' hissini gorur).
+		AudioManager.play_sfx(&"sfx/ghost", global_position, -14.0, 0.7)
 		return
 	super.take_damage(info)
