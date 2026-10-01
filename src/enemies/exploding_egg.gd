@@ -74,6 +74,11 @@ func _physics_process(delta: float) -> void:
 		State.REFLECTED:
 			velocity = Vector2(_reflect_dir * _tuning.egg_reflect_speed, -40)
 			move_and_slide()
+			# Fitil yansitmada da isler — patronu iskalayan yumurta ekran
+			# disinda sonsuza ucmaz; duvara carpinca da patlar.
+			_fuse -= delta
+			if _fuse <= 0.0 or is_on_wall():
+				_explode()
 
 
 ## Oyuncu vurusu: patrona geri yolla.

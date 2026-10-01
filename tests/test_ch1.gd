@@ -273,6 +273,21 @@ func test_egg_reflect_flies_to_boss() -> void:
 	assert_lt(egg.global_position.x, 500.0, "patrona (sola) ucmali")
 
 
+func test_reflected_egg_explodes_on_fuse_end() -> void:
+	# Regresyon: yansiyan yumurta fuse'i duruyordu — patronu iskalayan
+	# yumurta duvara tirmanip sonsuza ucmadan patlamaliydi.
+	_flat_ground()
+	var egg := ExplodingEgg.new()
+	egg.global_position = Vector2(500, 200)
+	add_child_autofree(egg)
+	var s := _make_samurai()
+	egg.take_damage(DamageInfo.make(1, s))
+	assert_eq(egg.state, ExplodingEgg.State.REFLECTED)
+	egg._fuse = 0.05
+	await wait_seconds(0.3)
+	assert_false(is_instance_valid(egg), "fitil bitince yansiyan yumurta da patlar")
+
+
 func test_egg_explodes_on_fuse() -> void:
 	_flat_ground()
 	var egg := ExplodingEgg.new()
