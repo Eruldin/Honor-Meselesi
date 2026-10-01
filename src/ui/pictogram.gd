@@ -12,6 +12,8 @@ const ICONS: Array[StringName] = [
 	&"heart", &"eye", &"skull", &"dash", &"up",
 ]
 
+const BUBBLE_Z := 20
+
 var icon: StringName = &"alarm"
 var hold_time: float = 1.4
 
@@ -23,6 +25,9 @@ static func show_on(host: Node2D, icon_id: StringName,
 	p.icon = icon_id
 	p.hold_time = dur
 	p.position = offset
+	# Balon dunya ortulerinin ustunde kalmali: portal (z=7) ve Vlad'in
+	# faz-2 karanlik rect'i (z=5) altinda balon gorunmez olurdu.
+	p.z_index = BUBBLE_Z
 	host.add_child(p)
 	return p
 
