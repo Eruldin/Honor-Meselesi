@@ -3,9 +3,20 @@ extends BossBase
 ## Bolum 6 boss'u — Glitch Amalgam (big_zombie sprite'lari, cyan glitch
 ## tonu). Onceki boss'larin bellek yankilari: sok dalgasi (Cluck),
 ## kan-dikeni serisi (Vlad), gudumlu fuzeler (Unit-0), piksel yagmuru
-## (Tiran). F2'de araliklar kisalir, iki saldiri karisabilir.
+## (Tiran). M9 spec: 4 faz — her faz bir formla kirilir
+## (Robot → Tavuk → Golge → Piksel/havadaki vurus); yanlis vurus clang
+## + swap piktogrami (gargoyle/terminal ile ayni dil). Beyaz patlamayla
+## bitis.
 
 enum AState { SLEEP, APPROACH, TELL, SLAM_RISE, SLAM_FALL, CAST, GAP }
+
+const PHASE_FORMS: Array[StringName] = [&"robot", &"tavuk", &"golge", &"piksel"]
+const PHASE_TINTS: Array[Color] = [
+	Color(0.72, 0.78, 0.92),   # robot — celik bellek
+	Color(1.15, 0.95, 0.55),   # tavuk — kanat bellegi
+	Color(0.55, 0.4, 0.95),    # golge — karanlik bellek
+	Color(1.1, 0.6, 1.3),      # piksel — kirilgan bellek
+]
 
 var bstate := AState.SLEEP
 var _t := 0.0
@@ -24,15 +35,23 @@ func _init() -> void:
 	body_size = Vector2(24, 27)
 	contact_damage = true
 	asset_key = &"glitch_amalgam"
-	phase_thresholds = [0.5]
+	phase_thresholds = [0.75, 0.5, 0.25]
+
+
+func _phase_tint() -> Color:
+	return PHASE_TINTS[mini(phase, PHASE_TINTS.size() - 1)]
+
+
+func required_form() -> StringName:
+	return PHASE_FORMS[mini(phase, PHASE_FORMS.size() - 1)]
 
 
 func _ready() -> void:
 	super._ready()
-	# Glitch tonu — her zaman cyan-magenta kaymali
-	sprite.modulate = Color(0.6, 1.1, 1.2)
+	# Glitch tonu — fazin form-bellek renginde
+	sprite.modulate = _phase_tint()
 	if anims != null:
-		anims.modulate = Color(0.6, 1.1, 1.2)
+		anims.modulate = _phase_tint()
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 	_rain = PixelRain.new()
 	if get_parent() != null:
@@ -58,20 +77,56 @@ func on_reset() -> void:
 	_t = 0.0
 	_player = null
 	_atk_idx = 0
-	sprite.modulate = Color(0.6, 1.1, 1.2)
+	sprite.modulate = _phase_tint()
 	if anims != null:
-		anims.modulate = Color(0.6, 1.1, 1.2)
+		anims.modulate = _phase_tint()
 	if _rain != null and is_instance_valid(_rain):
 		_rain.active = false
 
 
 func on_phase_changed(_p: int) -> void:
-	var c := Color(1.1, 0.6, 1.3)
+	var c := _phase_tint()
 	sprite.modulate = c
 	if anims != null:
 		anims.modulate = c
 	FX.glitch(1.0, 0.9)
 	FX.shake(3.5, 0.5)
+	# Yeni faz = yeni form sarti — kelimesiz ipucu
+	Pictogram.show_on(self, &"swap", 1.4, Vector2(0, -body_size.y - 12))
+
+
+## M9 form kapisi: yanlis form/yerde vurus seker (clang + swap ipucu).
+## Oyuncu gerekli forma sahip degilse kapi kalkar (guvenlik agi —
+## normal akista ch6'da hepsi acik olur). Piksel fazinda yerdeki
+## vurus seker; havada olan her vurus sayilir.
+func _gate_blocks(info: DamageInfo) -> bool:
+	var sam := info.source as Samurai
+	if sam == null or sam.form == null:
+		return false
+	var req := required_form()
+	if req == &"piksel":
+		return sam.is_on_floor()
+	if not GameState.unlocked_forms.has(req):
+		return false
+	return sam.form.id != req
+
+
+func take_damage(info: DamageInfo) -> void:
+	if not active or not health.is_alive():
+		return
+	if _gate_blocks(info):
+		AudioManager.play_sfx(&"sfx/clang", global_position)
+		FX.spark(global_position + Vector2(0, -body_size.y * 0.4))
+		Pictogram.show_on(self, &"swap", 0.9, Vector2(0, -body_size.y - 12))
+		return
+	super.take_damage(info)
+
+
+func _on_died() -> void:
+	# M9 spec: beyaz patlamayla bitis — CRT beyazla karar
+	FX.glitch(1.6, 1.4)
+	FX.shake(4.0, 0.5)
+	super._on_died()
 
 
 func _physics_process(delta: float) -> void:
@@ -95,15 +150,16 @@ func _physics_process(delta: float) -> void:
 				_choose()
 		AState.TELL:
 			velocity.x = 0.0
-			sprite.modulate = Color(1.4, 0.9, 1.4)
+			var tell := _phase_tint() * 1.4
+			sprite.modulate = tell
 			if anims != null:
-				anims.modulate = Color(1.4, 0.9, 1.4)
+				anims.modulate = tell
 			if _t <= 0.0:
 				bstate = AState.SLAM_RISE
 				_t = 0.45
-				sprite.modulate = Color(0.6, 1.1, 1.2)
+				sprite.modulate = _phase_tint()
 				if anims != null:
-					anims.modulate = Color(0.6, 1.1, 1.2)
+					anims.modulate = _phase_tint()
 		AState.SLAM_RISE:
 			velocity.x = facing * 30.0
 			velocity.y = -240.0

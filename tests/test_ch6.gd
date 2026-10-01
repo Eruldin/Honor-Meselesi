@@ -43,7 +43,7 @@ func test_amalgam_phase_and_attacks() -> void:
 	await _frames(10)
 	g.take_damage(DamageInfo.make(g.health.max_health / 2 + 1, sam))
 	await _frames(5)
-	assert_eq(g.phase, 1, "yari candan sonra faz 2")
+	assert_eq(g.phase, 2, "yari candan iki esik birden — faz 2")
 
 
 func test_amalgam_defeat_signal() -> void:
@@ -55,6 +55,79 @@ func test_amalgam_defeat_signal() -> void:
 	g.take_damage(DamageInfo.make(999, sam))
 	await _frames(2)
 	assert_signal_emitted(g, "defeated")
+
+
+func _unlock_forms(ids: Array[StringName]) -> void:
+	for id in ids:
+		GameState.unlock_form(id)
+
+
+func _make_floor(center: Vector2, size: Vector2) -> StaticBody2D:
+	var body := StaticBody2D.new()
+	body.collision_layer = 1
+	body.collision_mask = 0
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = size
+	col.shape = rect
+	body.add_child(col)
+	body.global_position = center
+	return body
+
+
+func test_amalgam_form_gated_phases() -> void:
+	var g := GlitchAmalgam.new()
+	g.floor_y = 0.0
+	g.global_position = Vector2(0, 0)
+	var ground := _make_floor(Vector2(15, 12), Vector2(120, 8))
+	add_child_autofree(ground)
+	var sam := _make_samurai(Vector2(30, 0))
+	add_child_autofree(g)
+	g.activate()
+	_unlock_forms([&"robot", &"tavuk", &"golge"])
+	await _frames(10)
+	assert_true(sam.is_on_floor(), "kurulum: samurai zeminde")
+	# P0 robot: samurai vurusu seker, robot girer
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_eq(g.health.current, g.health.max_health, "faz 0 samurai vurusu seker")
+	sam.equip_form(&"robot")
+	sam.apply_pending_form()
+	g.take_damage(DamageInfo.make(6, sam))
+	assert_lt(g.health.current, g.health.max_health, "robot vurusu kirar")
+	assert_eq(g.phase, 1, "75%% esigi — faz 1'e gecti")
+	# P1 tavuk: baska form seker
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_eq(g.health.current, 16, "faz 1 robot vurusu seker")
+	sam.equip_form(&"tavuk")
+	sam.apply_pending_form()
+	g.take_damage(DamageInfo.make(6, sam))
+	assert_eq(g.phase, 2, "50%% esigi — faz 2'ye gecti")
+	# P2 golge
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_eq(g.health.current, 10, "faz 2 tavuk vurusu seker")
+	sam.equip_form(&"golge")
+	sam.apply_pending_form()
+	g.take_damage(DamageInfo.make(6, sam))
+	assert_eq(g.phase, 3, "25%% esigi — faz 3'e gecti")
+	# P3 piksel: yerdeki vurus seker (form ne olursa olsun)
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_eq(g.health.current, 4, "faz 3 yerdeki golge vurusu seker")
+	sam.global_position.y -= 60
+	await _frames(2)
+	assert_false(sam.is_on_floor(), "kurulum: samurai havada")
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_eq(g.health.current, 2, "havadaki vurus girer — piksel sarti")
+
+
+func test_amalgam_gate_opens_without_unlock() -> void:
+	# Gerekli forma sahip degilse kapi kalkar (guvenlik agi)
+	var g := GlitchAmalgam.new()
+	var sam := _make_samurai()
+	add_child_autofree(g)
+	g.activate()
+	g.take_damage(DamageInfo.make(2, sam))
+	assert_lt(g.health.current, g.health.max_health,
+		"robot kilitliyken samurai da hasar verir")
 
 
 func test_ch6_scene_builds() -> void:
@@ -115,3 +188,23 @@ func test_boss_defeat_survives_scene_free_during_wait() -> void:
 	scene.free()
 	await get_tree().create_timer(1.8).timeout
 	assert_true(true, "free yarisi beklemeyi sessizce keser — hata yok")
+
+
+func test_memory_chimera_mixed_components() -> void:
+	var c := MemoryChimera.new()
+	c.global_position = Vector2(0, 0)
+	add_child_autofree(c)
+	_make_samurai(Vector2(80, 0))
+	await _frames(5)
+	# bilesen karisimi: ustte gezen drone parcasi var
+	assert_true(is_instance_valid(c._drone_bit), "melez drone bileseni")
+	assert_gt(c.health.max_health, 4,
+		"melez can bilesenlerin toplami gibi (husk 4)")
+	# spit bileseni: yakinda ara ara glitch tukurusu atar
+	c._spit_t = 0.05
+	await _frames(8)
+	var found := false
+	for n in get_children():
+		if n is Projectile:
+			found = true
+	assert_true(found, "melez spit bileseni mermi atar")
