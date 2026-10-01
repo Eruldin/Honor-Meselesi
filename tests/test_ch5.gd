@@ -146,6 +146,31 @@ func test_guardian_slam_shockwave_is_heavy() -> void:
 	assert_eq(tuning.chapter_damage(&"ch5", 3), 3, "carpan 1.0'da degismez")
 
 
+func test_guardian_phase2_embers() -> void:
+	# M8: faz 2 alevli kilic — kor tanecikleri agiz bolgesinden yukselir
+	if not AssetLoader.has_asset(&"fx/spark"):
+		pending("fx/spark yok (CI) — atlaniyor")
+		return
+	var g := AshGuardian.new()
+	g.floor_y = 0.0
+	_make_samurai(Vector2(30, 0))
+	add_child_autofree(g)
+	g.activate()
+	await _frames(int(tuning.guardian5_salute_dur * 60.0) + 8)
+	var embers := 0
+	for n in g._root().get_children():
+		if n.name == &"guardian_ember":
+			embers += 1
+	assert_eq(embers, 0, "faz 0'da kor tanecigi yok")
+	g.phase = 1
+	await _frames(25)
+	embers = 0
+	for n in g._root().get_children():
+		if n.name == &"guardian_ember":
+			embers += 1
+	assert_gt(embers, 0, "faz 2'de alevli kilic korlari gorunur")
+
+
 func test_guardian_defeat_fires_signal() -> void:
 	var g := AshGuardian.new()
 	var sam := _make_samurai()
