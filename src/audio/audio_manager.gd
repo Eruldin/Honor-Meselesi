@@ -55,7 +55,7 @@ func _ready() -> void:
 
 ## Seviye muzigi. Ayni parca tekrar istenirse dokunmaz.
 ## Degisim 1s crossfade ile olur — dinlenme/boss gecisleri yumusak.
-func play_music(logical_id: StringName) -> void:
+func play_music(logical_id: StringName, resume_id: StringName = &"") -> void:
 	if logical_id == _current_music:
 		return
 	var prev := _current_music
@@ -70,7 +70,7 @@ func play_music(logical_id: StringName) -> void:
 		# Tek-calar parcalar (zafer sting'i gibi): bitince onceki
 		# bolge muzigine donulur; yoksa kisa fanfar sonsuz donguye girer.
 		if not loops:
-			_sting_resume = prev
+			_sting_resume = resume_id if resume_id != &"" else prev
 	_active_music = 2 if _active_music == 1 else 1
 	var next_p := _music_a if _active_music == 1 else _music_b
 	next_p.stream = stream

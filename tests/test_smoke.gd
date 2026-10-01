@@ -122,7 +122,7 @@ func test_victory_sting_resumes_zone_music() -> void:
 	AudioManager._sting_resume = &"music/ch1"
 	AudioManager._on_music_finished()
 	assert_eq(AudioManager._current_music, &"music/ch1",
-		"sting bitince bolge muzigi geri gelir")
+		"sting bitince boss muzigi degil bolge muzigi doner")
 	assert_eq(AudioManager._sting_resume, &"",
 		"resume tek seferlik")
 	AudioManager.stop_music()
