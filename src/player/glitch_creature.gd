@@ -21,6 +21,7 @@ var _coyote := 0.0
 ## Son zemin temasi — bosluk dususu olumunde golgenin isaret yeri.
 var last_ground_pos := Vector2.ZERO
 var _jbuf := 0.0
+var _hurt_t := 0.0
 var _tuning: Tuning
 var dead := false
 ## Sinema anlarinda girdi donar (final kesigi) — fizik surer.
@@ -121,6 +122,7 @@ func _physics_process(delta: float) -> void:
 	_dash_cd = maxf(_dash_cd - delta, 0.0)
 	_bolt_cd = maxf(_bolt_cd - delta, 0.0)
 	_iframes = maxf(_iframes - delta, 0.0)
+	_hurt_t = maxf(_hurt_t - delta, 0.0)
 
 	# Ucan: hafif yercekimi + dusuk maks dusus
 	velocity.y = minf(velocity.y + 500.0 * delta, 90.0)
@@ -140,7 +142,9 @@ func _physics_process(delta: float) -> void:
 	var blink := _iframes > 0.0 and not dead \
 		and int(Time.get_ticks_msec() / 70) % 2 == 0
 	var want_a := 0.55 if blink else 1.0
-	sprite.modulate = Color(0.05, 0.05, 0.12 + 0.08 * absf(sin(_flicker * 13.0)))
+	# Hasar kizilligi _hurt_t boyunca korunur — tek frame'de ezilmez
+	sprite.modulate = Color(2.0, 0.6, 0.6) if _hurt_t > 0.0 else \
+		Color(0.05, 0.05, 0.12 + 0.08 * absf(sin(_flicker * 13.0)))
 	sprite.modulate.a = want_a
 	if anims != null:
 		anims.modulate = sprite.modulate + Color(0.35, 0.35, 0.4)
@@ -186,17 +190,20 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	_iframes = 0.8
+	_hurt_t = 0.28
 	EventBus.damage_dealt.emit(self, info)
 	FX.hitstop(0.06)
 	FX.shake(2.0, 0.2)
 	AudioManager.play_sfx(&"sfx/hurt", global_position)
-	sprite.modulate = Color(2.0, 0.6, 0.6)
 	if anims != null:
 		anims.play(&"hurt")
 
 
 func _on_died() -> void:
 	dead = true
+	# Olu beden vurulamaz/vuramaz — dusmanlarla ayni kural (#100)
+	hurtbox.set_deferred(&"monitorable", false)
+	hurtbox.set_deferred(&"monitoring", false)
 	EventBus.actor_died.emit(self)
 	died.emit()
 	sprite.modulate = Color(1.0, 0.2, 0.2)

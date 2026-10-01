@@ -414,3 +414,24 @@ func test_ch7_choice_skipped_on_reload() -> void:
 	await _frames(6)
 	assert_true(scene._choice.is_empty(), "secim ekrani bir daha gosterilmez")
 	assert_true(scene.boss.active, "boss dogrudan aktif — HK retry")
+
+
+func test_creature_hurt_flash_lingers() -> void:
+	# Hasar kizilligi her frame modulate sifirlamasiyla eziliyordu —
+	# _hurt_t ile gorunur bir pencere korunur.
+	var c := GlitchCreature.new()
+	c.set_input_source(AIInputSource.new())
+	add_child_autofree(c)
+	c.take_damage(DamageInfo.make(1, null))
+	await _frames(4)
+	assert_gt(c.sprite.modulate.r, 1.0, "kizil tint birkac frame surer")
+
+
+func test_creature_death_disables_hurtbox() -> void:
+	# Olu yaratik vurulamaz — dusmanlarla ayni kural (#100 tutarliligi).
+	var c := GlitchCreature.new()
+	c.set_input_source(AIInputSource.new())
+	add_child_autofree(c)
+	c.take_damage(DamageInfo.make(999, null))
+	await _frames(3)
+	assert_false(c.hurtbox.monitorable, "olu yaratik vurulamaz")
