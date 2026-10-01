@@ -225,6 +225,31 @@ func test_locked_current_form_falls_back() -> void:
 		"kilitli olmayan forma dogus engellenir")
 
 
+func test_out_of_range_settings_clamp_on_load() -> void:
+	# settings.json plaintext — elle sisirilmis degerler load'da setter
+	# kelepçeleriyle sinirlanir (9x glitch puls, dev pencere yok).
+	var saved_fx := Settings.fx_intensity
+	var saved_win := Settings.window_scale
+	var saved_music := Settings.music_volume
+	var f := FileAccess.open(Settings.PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"fx_intensity": 9.0,
+		"shake_scale": -2.0,
+		"music_volume": 4.0,
+		"window_scale": 50,
+	}))
+	f.close()
+	Settings.load_settings()
+	assert_eq(Settings.fx_intensity, 1.0, "fx ust sinir 1")
+	assert_eq(Settings.shake_scale, 0.0, "sarsinti alt sinir 0")
+	assert_eq(Settings.music_volume, 1.0, "muzik ust sinir 1")
+	assert_eq(Settings.window_scale, 6, "pencere ust sinir 6")
+	Settings.fx_intensity = saved_fx
+	Settings.window_scale = saved_win
+	Settings.music_volume = saved_music
+	Settings.save_settings()
+
+
 func test_garbage_save_json_fails_cleanly() -> void:
 	# Gecerli JSON ama Dictionary degil — devam etmeye calismak parse hatasi
 	# uretir, title _on_new_game'e duser.
