@@ -223,6 +223,21 @@ func test_ch7_forced_choice_glitches_to_fight() -> void:
 	assert_false(scene.creature.frozen, "savas acilinca kontrol geri gelir")
 
 
+func test_ch7_forced_choice_labels_localized() -> void:
+	# Regresyon: etiketler Turkce sabitti — EN dilde de Turkce gorunurdu.
+	var prev := Settings.language
+	Settings.language = "en"
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(10)
+	Settings.language = prev
+	assert_eq((scene._choice.give as Label).text, "GIVE HAT",
+		"EN dilde sapkayi ver etiketi Ingilizce")
+	assert_eq((scene._choice.fight as Label).text, "FIGHT",
+		"EN dilde savas etiketi Ingilizce")
+
+
 func test_ch7_meta_assault_inverts_then_restores() -> void:
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	scene.auto_advance = false
