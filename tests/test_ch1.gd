@@ -66,6 +66,22 @@ func test_guard_blocks_frontal_damage() -> void:
 	assert_lt(g.health.current, hp_before, "arkadan vurus hasar vermeli")
 
 
+func test_guard_blocked_hit_shows_shield_pictogram() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(200, 240)
+	var g := Guard.new()
+	g.global_position = Vector2(340, 240)
+	add_child_autofree(g)
+	await wait_seconds(0.1)
+	g.take_damage(DamageInfo.make(1, s))
+	var found := false
+	for c in g.get_children():
+		if c is Pictogram:
+			found = true
+	assert_true(found, "bloklanan ilk vurus parry ipucu gosterir")
+
+
 func test_heavy_knight_drops_sovalye_form() -> void:
 	_flat_ground()
 	var s := _make_samurai()
