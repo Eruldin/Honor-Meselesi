@@ -4,6 +4,7 @@ extends Node2D
 ## Parry'lenebilir (kirmizi degil) — plan M4.
 
 @export var direction: int = 1
+@export var damage: int = 1
 
 var hitbox: Hitbox
 var _travelled := 0.0
@@ -26,7 +27,7 @@ func _ready() -> void:
 	col.shape = rect
 	hitbox.add_child(col)
 	add_child(hitbox)
-	hitbox.activate(DamageInfo.make(1, self, Vector2(direction * 100, -60), true, true))
+	hitbox.activate(DamageInfo.make(damage, self, Vector2(direction * 100, -60), true, true))
 
 
 func _physics_process(delta: float) -> void:

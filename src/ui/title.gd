@@ -32,6 +32,8 @@ func _ready() -> void:
 	# Bolumden gelen ambiyans (ruzgar/magara) baslikta kalmasin — bos istek
 	# aktif katmani crossfade ile sessize indirir.
 	AudioManager.play_ambience(&"")
+	if not Settings.seen_flash_warning:
+		call_deferred(&"_show_flash_warning")
 
 
 func _build_scenery() -> void:
@@ -172,6 +174,43 @@ func _build_menu() -> void:
 	vbox.add_child(_btn("AYARLAR" if is_tr else "SETTINGS", _on_settings))
 	if not OS.has_feature("web"):
 		vbox.add_child(_btn("CIKIS" if is_tr else "QUIT", func() -> void: get_tree().quit()))
+
+
+## M11 erisilebilirlik: isiga duyarlilik uyarisi — ilk acilista bir kez
+## (settings.json'a kayit; ayarlar menusunden yogunluk dusurulebilir).
+func _show_flash_warning() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 30
+	add_child(layer)
+	var dim := ColorRect.new()
+	dim.color = Color(0.02, 0.01, 0.03, 0.88)
+	dim.size = Vector2(480, 270)
+	layer.add_child(dim)
+	var is_tr := Settings.language == "tr"
+	var lab := Label.new()
+	lab.text = ("Bu oyun yanip sonen goruntuler ve parlak isik efektleri icerir.\n"
+			+ "Ayarlar > Efekt/Flas kaydiricilari ile yogunluk azaltilabilir."
+		if is_tr else
+			"This game contains flashing images and bright light effects.\n"
+			+ "Intensity can be reduced via Settings > FX/Flash sliders.")
+	lab.add_theme_font_size_override("font_size", 9)
+	lab.add_theme_color_override("font_color", Color(0.95, 0.85, 0.75))
+	lab.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lab.size = Vector2(360, 60)
+	lab.position = Vector2(60, 96)
+	layer.add_child(lab)
+	var ok := Button.new()
+	ok.text = "ANLADIM" if is_tr else "GOT IT"
+	ok.custom_minimum_size = Vector2(90, 16)
+	ok.position = Vector2(195, 168)
+	layer.add_child(ok)
+	ok.pressed.connect(func() -> void:
+		AudioManager.play_sfx(&"sfx/ui", null, -6.0)
+		Settings.seen_flash_warning = true
+		Settings.save_settings()
+		layer.queue_free())
+	ok.grab_focus()
 
 
 func _process(delta: float) -> void:
