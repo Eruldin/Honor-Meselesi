@@ -149,6 +149,35 @@ func test_rest_point_saves_and_heals() -> void:
 	assert_true(GameState.get_flag(&"respawn_pos") is Vector2)
 
 
+func test_loot_chest_opens_on_hitbox_hit() -> void:
+	# Regresyon: hurtbox collision_layer set edilmiyordu — sandik
+	# vurusla hic acilmiyordu (layer 1 vs hitbox mask 16).
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	s.health.take(2)
+	var c := LootChest.new()
+	c.chest_id = &"chest_test_ch1"
+	c.global_position = Vector2(300, 240)
+	add_child_autofree(c)
+	await wait_seconds(0.1)
+	var hb := Hitbox.new()
+	hb.collision_layer = 8
+	hb.collision_mask = 16
+	var col := CollisionShape2D.new()
+	var r := RectangleShape2D.new()
+	r.size = Vector2(20, 20)
+	col.shape = r
+	hb.add_child(col)
+	hb.global_position = c.global_position
+	add_child_autofree(hb)
+	hb.activate(DamageInfo.make(1, s))
+	await wait_seconds(0.15)
+	assert_true(GameState.get_flag(&"chest_chest_test_ch1"),
+		"vurus sandigi acar")
+	assert_eq(s.health.current, s.health.max_health, "tam iyilestirir")
+
+
 func test_checkpoint_respawn_grants_spawn_grace() -> void:
 	# Olum respawn'i checkpoint'ten dogar — kisa dokunulmazlik verilir
 	# (spawn uzerinde duran dusman ani hasar veremesin).

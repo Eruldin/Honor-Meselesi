@@ -19,7 +19,14 @@ func _ready() -> void:
 	_sprite.texture = AssetLoader.texture(&"prop/chest", Vector2i(20, 16))
 	add_child(_sprite)
 	var hb := Hurtbox.new()
+	hb.collision_layer = 16   # enemy hurtbox katmani — saldiri vurur
+	hb.collision_mask = 8     # player hitbox katmani
 	hb.pogoable = true
+	var col := CollisionShape2D.new()
+	var r := RectangleShape2D.new()
+	r.size = Vector2(22, 16)
+	col.shape = r
+	hb.add_child(col)
 	add_child(hb)
 	hb.hit_received.connect(_on_hit)
 	if GameState.get_flag(_flag(), false):
