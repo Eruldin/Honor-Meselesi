@@ -76,6 +76,7 @@ func _physics_process(delta: float) -> void:
 		return
 	var dx: float = _player.global_position.x - global_position.x
 	facing = 1 if dx > 0 else -1
+	sprite.flip_h = facing < 0
 	_t -= delta
 	var speed := 42.0 if phase >= 1 else 32.0
 
@@ -126,6 +127,9 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0:
 				bstate = BState.APPROACH
 				_t = 1.2
+	# Arena sinirlari ch7'de atanir — dash/approach onlari asmaz
+	if arena_right > arena_left:
+		global_position.x = clampf(global_position.x, arena_left, arena_right)
 
 
 func _choose(dx: float) -> void:
