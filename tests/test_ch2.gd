@@ -51,6 +51,30 @@ func test_ninja_dodges_single_hits_combo3_lands() -> void:
 	assert_lt(n.health.current, hp0, "3. kombo vurusu gecmeli")
 
 
+func test_ninja_blink_stops_at_wall() -> void:
+	# Isinlanma fiziksel hareket — duvar arkasina gecmemeli.
+	var wall := StaticBody2D.new()
+	wall.collision_layer = 1
+	var wc := CollisionShape2D.new()
+	var wr := RectangleShape2D.new()
+	wr.size = Vector2(20, 60)
+	wc.shape = wr
+	wall.add_child(wc)
+	wall.position = Vector2(300, 240)  # ninja'dan ~30px solda, 20px kalin
+	add_child_autofree(wall)
+	var s := _make_samurai()
+	s.global_position = Vector2(400, 240)  # sagda kaynak — blink sola
+	var n := CyberNinja.new()
+	n.global_position = Vector2(330, 240)
+	add_child_autofree(n)
+	await wait_seconds(0.1)
+	var pre := n.global_position.x
+	s.combo_index = 1
+	n.take_damage(DamageInfo.make(1, s))
+	assert_gt(n.global_position.x, pre - 30.0,
+		"blink duvari asmamaliydi — tunel bug'i")
+
+
 # --- Ucus drone ---
 
 func test_drone_fires_vertical_projectile() -> void:
