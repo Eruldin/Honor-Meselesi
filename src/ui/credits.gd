@@ -40,6 +40,8 @@ func _init() -> void:
 func _ready() -> void:
 	# Liste boyu ilk karede olculur (VBox layout deferred).
 	await get_tree().process_frame
+	if not is_instance_valid(_scroll):
+		return  # bekleme sirasinda sahne free'lendi
 	var dist := _scroll.size.y + 300.0
 	var tw := create_tween()
 	tw.tween_property(_scroll, "position:y",
