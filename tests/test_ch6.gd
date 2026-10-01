@@ -9,6 +9,17 @@ func before_each() -> void:
 	GameState.reset()
 
 
+func after_each() -> void:
+	# _awaiter GUT'un kendi cocugu — serbest birakma; diger kayit-disiz
+	# cocuklari (dusman mermi/fx'i test dugumune ekler) elle temizle.
+	for c in get_children():
+		if c == _awaiter:
+			continue
+		if is_instance_valid(c) and not c.is_queued_for_deletion():
+			c.queue_free()
+	await wait_process_frames(2)  # queue_free bosaltsin
+
+
 func _frames(n: int) -> void:
 	for i in n:
 		await get_tree().physics_frame

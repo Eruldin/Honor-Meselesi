@@ -9,6 +9,14 @@ const CH3_PATH := "res://src/levels/ch3/Ch3.tscn"
 func after_each() -> void:
 	GameState.reset()
 	SaveSystem.wipe()
+	# _awaiter GUT'un kendi cocugu — serbest birakma; diger kayit-disiz
+	# cocuklari (dusman mermi/fx'i test dugumune ekler) elle temizle.
+	for c in get_children():
+		if c == _awaiter:
+			continue
+		if is_instance_valid(c) and not c.is_queued_for_deletion():
+			c.queue_free()
+	await wait_process_frames(2)  # queue_free bosaltsin
 
 
 func _make_samurai() -> Samurai:

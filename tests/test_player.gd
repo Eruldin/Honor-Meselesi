@@ -41,6 +41,14 @@ func before_each() -> void:
 func after_each() -> void:
 	Engine.time_scale = 1.0
 	GameState.soul = 0
+	# _awaiter GUT'un kendi cocugu — serbest birakma; diger kayit-disiz
+	# cocuklari (dusman mermi/fx'i test dugumune ekler) elle temizle.
+	for c in get_children():
+		if c == _awaiter:
+			continue
+		if is_instance_valid(c) and not c.is_queued_for_deletion():
+			c.queue_free()
+	await wait_process_frames(2)  # queue_free bosaltsin
 
 
 # --- Hareket ---
