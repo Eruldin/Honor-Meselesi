@@ -29,6 +29,23 @@ func test_glitch_creature_moves_and_shoots() -> void:
 	assert_true(found, "glitch tanesi firlatilir")
 
 
+func test_creature_hit_iframes_and_blink() -> void:
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	add_child_autofree(c)
+	await _frames(3)
+	c._on_hit_info(DamageInfo.make(1, c))
+	assert_gt(c._iframes, 0.0, "vurusta dokunulmazlik")
+	# i-frame goz kirpmasi: 70ms'lik desen ~12 fizik karesinde en az bir
+	# 0.55 penceresi yakalar — eski kod alpha'yi hic degistirmezdi.
+	var min_a := 1.0
+	for i in 12:
+		await _frames(1)
+		min_a = minf(min_a, c.sprite.modulate.a)
+	assert_lt(min_a, 0.7, "i-frame goz kirpmasi alpha'yi dusurmeli")
+
+
 func test_samurai_boss_slash_and_parry() -> void:
 	var b := SamuraiBoss.new()
 	b.arena_left = -200
