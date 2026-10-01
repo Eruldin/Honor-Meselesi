@@ -53,6 +53,19 @@ func test_settings_volume_persists() -> void:
 	Settings.set_music_volume(old_music)
 
 
+func test_flash_warning_ack_persists() -> void:
+	# M11: isiga duyarlilik uyari onayi settings.json'da saklanir —
+	# ikinci acilista tekrar sormaz.
+	var old := Settings.seen_flash_warning
+	Settings.seen_flash_warning = true
+	Settings.save_settings()
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(Settings.PATH))
+	assert_true(bool(data.get("seen_flash_warning", false)),
+		"uyari onayi settings.json'a yazilir")
+	Settings.seen_flash_warning = old
+	Settings.save_settings()
+
+
 func test_binding_persists_across_load() -> void:
 	# Kaydedilen rebind restart'ta InputMap'e geri uygulanmali.
 	var old_binds: Dictionary = Settings.bind_overrides.duplicate(true)
