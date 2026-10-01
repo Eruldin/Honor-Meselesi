@@ -92,6 +92,13 @@ func _physics_process(delta: float) -> void:
 	var speed := tuning.guardian5_p2_speed if phase >= 1 else tuning.guardian5_speed
 	var gap := tuning.guardian5_attack_gap_p2 if phase >= 1 else tuning.guardian5_attack_gap
 
+	# M8 faz 2: alevli kilic — agiz bolgesinden yukselen kor tanecikleri.
+	if phase >= 1:
+		_ember_t -= delta
+		if _ember_t <= 0.0:
+			_ember_t = 0.14
+			_spawn_ember()
+
 	match bstate:
 		GState.SALUTE:
 			velocity.x = 0.0
@@ -186,6 +193,29 @@ func _cast_geysers() -> void:
 		# Kul rengi: uyari ve sivri kule boyanir (_ready cocuklari hazir)
 		sp.get_node("warn").color = Color(0.7, 0.6, 0.45, 0.55)
 		sp.get_node("spike").modulate = Color(0.55, 0.5, 0.45)
+
+
+var _ember_t := 0.0
+
+## M8 faz 2 alevli kilic: spark dokusunun kor tonunda tanecigi agiz
+## hizasindan yukselip soner — WeatherFx ile ayni kendi-kendini
+## temizleyen desen.
+func _spawn_ember() -> void:
+	if not AssetLoader.has_asset(&"fx/spark"):
+		return
+	var e := Sprite2D.new()
+	e.name = &"guardian_ember"
+	e.texture = AssetLoader.texture(&"fx/spark", Vector2i(4, 4))
+	e.modulate = Color(1.0, 0.55, 0.25, 0.9)
+	e.global_position = global_position + Vector2(facing * 9.0, -20.0)
+	e.z_index = 6
+	_root().add_child(e)
+	var tw := e.create_tween()
+	tw.tween_property(e, "global_position",
+		e.global_position + Vector2(facing * randf_range(2.0, 10.0),
+			-randf_range(8.0, 18.0)), 0.5)
+	tw.parallel().tween_property(e, "modulate:a", 0.0, 0.5)
+	tw.finished.connect(e.queue_free)
 
 
 func _root() -> Node:
