@@ -37,5 +37,6 @@ girer. Temel mekanik: yenilen boss'ların formuna bürünme
 | Saldırı | J | X |
 | Parry | K | RB |
 | Dash | L / Shift | B |
-| Form | Q / E | LB / LT |
+| Odak (iyileşme) | F | Y |
+| Form önceki/sonraki | Q / E | LB / Sağ çubuk → |
 | Duraklat | Esc | Start |
