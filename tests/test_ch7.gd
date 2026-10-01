@@ -105,6 +105,25 @@ func test_bolt_damages_samurai_boss() -> void:
 		"glitch tanesi boss'u yaralar")
 
 
+func test_bolt_dies_on_wall() -> void:
+	# Glitch tanesi terrain govdesinde silinir — duvar arkasindan vurmaz.
+	var wall := StaticBody2D.new()
+	wall.collision_layer = 1
+	var wc := CollisionShape2D.new()
+	var wr := RectangleShape2D.new()
+	wr.size = Vector2(12, 80)
+	wc.shape = wr
+	wall.add_child(wc)
+	wall.position = Vector2(100, 0)
+	add_child_autofree(wall)
+	var bolt := GlitchBolt.new()
+	bolt.vel = Vector2(150, 0)
+	bolt.global_position = Vector2(60, 0)
+	add_child_autofree(bolt)
+	await _frames(20)
+	assert_false(is_instance_valid(bolt), "glitch tanesi duvarla yok olmali")
+
+
 func test_ch7_scene_builds_fight() -> void:
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	scene.auto_advance = false  # intro cutscene'i atla, dogrudan savas
