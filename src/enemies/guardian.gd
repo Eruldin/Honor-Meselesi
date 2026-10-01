@@ -75,6 +75,8 @@ class WeakBattery:
 			position.x = behind * 14.0
 
 	func take_damage(info: DamageInfo) -> void:
+		if not g.health.is_alive():
+			return
 		# Pil vurulunca hasar guardian'a gecer (x1.5 zayif nokta bonusu)
 		var boosted := DamageInfo.make(int(ceil(info.damage * 1.5)),
 			info.source, info.knockback, info.parryable, info.pogoable)

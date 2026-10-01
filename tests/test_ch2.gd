@@ -107,6 +107,22 @@ func test_guardian_blocks_all_but_battery() -> void:
 	assert_lt(g.health.current, hp0, "pil vurusu hasar vermeli")
 
 
+func test_guardian_dead_battery_no_soul_farm() -> void:
+	# Regresyon: olu guardian'in pili vurulabilirdi — damage_dealt
+	# kosulsuz emit ile her vurus +1 ruh farm'i veriyordu.
+	_flat_ground()
+	var s := _make_samurai()
+	var g := Guardian.new()
+	g.global_position = Vector2(400, 230)
+	add_child_autofree(g)
+	await wait_seconds(0.1)
+	g.health.take(99)
+	await wait_seconds(0.05)
+	var soul0: int = GameState.soul
+	g.battery.take_damage(DamageInfo.make(2, s))
+	assert_eq(GameState.soul, soul0, "olu bedende vurus ruh vermez")
+
+
 # --- Unit-0 ---
 
 func test_unit0_armor_blocks_until_parried() -> void:
