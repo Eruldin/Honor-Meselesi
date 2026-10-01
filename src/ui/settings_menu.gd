@@ -154,15 +154,29 @@ func _tab_graphics() -> void:
 	row.add_child(opt)
 	_content.add_child(row)
 
-	_content.add_child(_slider_row("Sinematik Glitch", Settings.fx_intensity, Settings.set_fx_intensity))
-	_content.add_child(_slider_row("Sarsinti", Settings.shake_scale, Settings.set_shake_scale))
-	_content.add_child(_slider_row("Flas", Settings.flash_scale, Settings.set_flash_scale))
+	var is_tr := Settings.language == "tr"
+	_content.add_child(_slider_row(
+		"Sinematik Glitch" if is_tr else "Cinematic Glitch",
+		Settings.fx_intensity, Settings.set_fx_intensity))
+	_content.add_child(_slider_row(
+		"Sarsinti" if is_tr else "Screen Shake",
+		Settings.shake_scale, Settings.set_shake_scale))
+	_content.add_child(_slider_row(
+		"Flas" if is_tr else "Flash",
+		Settings.flash_scale, Settings.set_flash_scale))
 
 
 func _tab_audio() -> void:
-	_content.add_child(_slider_row("Ana Ses", Settings.master_volume, Settings.set_master_volume))
-	_content.add_child(_slider_row("Muzik", Settings.music_volume, Settings.set_music_volume))
-	_content.add_child(_slider_row("Efektler", Settings.sfx_volume, Settings.set_sfx_volume))
+	var is_tr := Settings.language == "tr"
+	_content.add_child(_slider_row(
+		"Ana Ses" if is_tr else "Master",
+		Settings.master_volume, Settings.set_master_volume))
+	_content.add_child(_slider_row(
+		"Muzik" if is_tr else "Music",
+		Settings.music_volume, Settings.set_music_volume))
+	_content.add_child(_slider_row(
+		"Efektler" if is_tr else "SFX",
+		Settings.sfx_volume, Settings.set_sfx_volume))
 
 
 func _tab_language() -> void:
