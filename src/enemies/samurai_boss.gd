@@ -175,7 +175,8 @@ func _start_dash() -> void:
 	AudioManager.play_sfx(&"sfx/dash", global_position)
 
 
-## Parry durusu sirasinda onden gelen vuruslar kivilcimlanir.
+## Parry durusu sirasinda onden gelen vuruslar kivilcimlanir —
+## M10 spec: oyuncunun kombolari karsilanir, parry ani kontraya doner.
 func take_damage(info: DamageInfo) -> void:
 	if bstate == BState.PARRY_STANCE and info.source != null:
 		var dx := info.source.global_position.x - global_position.x
@@ -183,5 +184,6 @@ func take_damage(info: DamageInfo) -> void:
 			FX.spark(hurtbox.global_position + Vector2(facing * 6, -4))
 			FX.hitstop(0.05)
 			AudioManager.play_sfx(&"sfx/parry", global_position)
+			_do_slash()
 			return
 	super.take_damage(info)
