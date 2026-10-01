@@ -23,6 +23,8 @@ class Parry:
 
 	func exit() -> void:
 		sam.parry_timer = 0.0
+		if not sam.parry_succeeded and sam.health.is_alive():
+			EventBus.parry_whiffed.emit(sam)
 
 
 class Hurt:
