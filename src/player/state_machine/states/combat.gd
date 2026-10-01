@@ -10,7 +10,7 @@ class Attack:
 		# Her kombo vurusuna kendi kesik efekti + savrus sesi;
 		# 3. vurus agir sheet + daha guclu hasar (finisher).
 		sam._spawn_slash(sam.combo_index >= 3)
-		AudioManager.play_sfx(&"sfx/attack", sam.global_position)
+		AudioManager.play_sfx(&"sfx/attack", sam.global_position, 0.0, randf_range(0.92, 1.08))
 		if sam.combo_index >= 2:
 			# Zincir vurusu: her yeni vurus hafif ileri tasir — kombo
 			# sabit durmak yerine dusmani takip eder.
@@ -52,7 +52,7 @@ class UpAttack:
 		super.enter()
 		sam.sprite_flash(Color(0.7, 0.9, 1.0))
 		sam._spawn_slash(false, true)
-		AudioManager.play_sfx(&"sfx/attack", sam.global_position)
+		AudioManager.play_sfx(&"sfx/attack", sam.global_position, 0.0, randf_range(0.92, 1.08))
 
 	func physics_process(delta: float) -> StringName:
 		var tun: Tuning = sam.tuning
@@ -78,7 +78,7 @@ class AirAttack:
 		super.enter()
 		sam.sprite_flash(Color(1.0, 0.55, 0.35))
 		sam._spawn_slash(false)
-		AudioManager.play_sfx(&"sfx/attack", sam.global_position)
+		AudioManager.play_sfx(&"sfx/attack", sam.global_position, 0.0, randf_range(0.92, 1.08))
 
 	func physics_process(delta: float) -> StringName:
 		var tun: Tuning = sam.tuning
