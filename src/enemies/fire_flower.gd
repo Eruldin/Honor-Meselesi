@@ -6,13 +6,31 @@ extends Node2D
 var _t := 0.0
 var _phase := 0  # 0 gizli, 1 disarida
 var _stem: CanvasItem
+var _asp: AnimatedSprite2D
 var _tuning: Tuning
 
 
 func _ready() -> void:
 	_tuning = load("res://config/tuning.tres")
 	_t = _tuning.flower_interval * 0.6
-	if AssetLoader.has_asset(&"enemy/flower"):
+	if AssetLoader.has_frames(&"enemy/flower/attack"):
+		var asp := AnimatedSprite2D.new()
+		var fr := SpriteFrames.new()
+		fr.add_animation(&"attack")
+		var src := AssetLoader.frames(&"enemy/flower/attack")
+		fr.set_animation_speed(&"attack", src.get_animation_speed(&"default"))
+		fr.set_animation_loop(&"attack", false)
+		for i in src.get_frame_count(&"default"):
+			fr.add_frame(&"attack", src.get_frame_texture(&"default", i))
+		asp.sprite_frames = fr
+		var fs := src.get_frame_texture(&"default", 0).get_size()
+		asp.scale = Vector2(14, 18) / fs
+		asp.position = Vector2(0, -4)
+		asp.visible = false
+		add_child(asp)
+		_stem = asp
+		_asp = asp
+	elif AssetLoader.has_asset(&"enemy/flower"):
 		var spr := Sprite2D.new()
 		spr.texture = AssetLoader.texture(&"enemy/flower")
 		var ts := spr.texture.get_size()
@@ -42,6 +60,8 @@ func _physics_process(delta: float) -> void:
 				_t = 0.5
 				position.y -= 16
 		1:
+			if _asp != null:
+				_asp.play(&"attack")
 			if _t <= 0.0:
 				_spit()
 				_phase = 0
