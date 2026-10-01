@@ -55,6 +55,14 @@
 >   son sabit Türkçe metin (başlık tagline'ı) çift dilli yapıldı.
 >   Grup-üyelik, connect-çoğaltma, autoload-state, await-guard,
 >   call_deferred ve crossfade denetimleri temiz çıktı.
+> - #319–#322 kapanışlar: settings.json/save.json şişirilmiş-değer
+>   kelepçeleri (fx_intensity/volume 0–1, window_scale 1–6, soul
+>   SOUL_MAX, hp_bonus ≥0 — plaintext JSON elle düzenlenebilir),
+>   credits._ready free-guard. Canlı yakalama: kayıt AI'sı ölürse
+>   sahne reload'u betiği öldürüp Godot'u sessizce askıda bırakıyordu —
+>   tüm kayıtlara 99-can jabı; RecordCh1-7/Prolog/Demo uçtan uca temiz.
+>   Denetim aileleri temiz: InputMap çift yön, döngü sınırları, ölü
+>   script/sahne, hurtbox→take_damage kontratı, per-frame allokasyon.
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
 >   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca
 >   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu,
