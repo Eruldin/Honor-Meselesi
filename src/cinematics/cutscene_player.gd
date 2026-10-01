@@ -60,6 +60,9 @@ func _input(event: InputEvent) -> void:
 
 
 func _advance() -> void:
+	# SceneTreeTimer/tween'ler bu node'dan bagimsiz yasar — sahne free'sinde
+	# resume `playing` gibi freed uylere erisir; ref kontrolu koyar.
+	var self_ref: WeakRef = weakref(self)
 	while playing:
 		_idx += 1
 		if _idx >= _steps.size():
@@ -67,6 +70,8 @@ func _advance() -> void:
 			return
 		step_started.emit(_idx)
 		await _run_step(_steps[_idx])
+		if not is_instance_valid(self_ref.get_ref()):
+			return
 		# Skip sirasinda await icinde durdurulmus olabiliriz.
 		if not playing:
 			return
@@ -110,6 +115,8 @@ func _run_step(s: Dictionary) -> void:
 				n._anims.speed_scale = clampf(speed / 130.0, 0.6, 1.3)
 			_walk_sfx(n, dur)
 			await _move(n, Vector2(target_x, n.global_position.y), dur, 0.0)
+			if not is_instance_valid(n):
+				return
 			if n is Samurai:
 				# _anim_name sifirlaninca _sync_anim sonraki frame idle'a doner.
 				n._anim_name = &""
@@ -127,6 +134,8 @@ func _run_step(s: Dictionary) -> void:
 				n._anim_name = &"idle"
 			await _move(n, s.get("to", Vector2.ZERO), dur,
 				float(s.get("arc", 26.0)))
+			if not is_instance_valid(n):
+				return
 			if n is Samurai:
 				n._anim_name = &""
 		"picto":
@@ -155,6 +164,7 @@ func _walk_sfx(n: Node2D, dur: float) -> void:
 	if not (n is Samurai):
 		return
 	var t := 0.0
+	var self_ref: WeakRef = weakref(self)
 	# Skip ile kesilen yuruyus sonrasi adimlar yeni sahneye sizmaz.
 	while t < dur and playing:
 		AudioManager.play_sfx(
@@ -163,6 +173,8 @@ func _walk_sfx(n: Node2D, dur: float) -> void:
 		t += 0.30
 		if t < dur:
 			await _timer(0.30)
+			if not is_instance_valid(self_ref.get_ref()):
+				return
 
 
 func _move(n: Node2D, to: Vector2, dur: float, arc: float) -> void:

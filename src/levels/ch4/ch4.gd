@@ -337,7 +337,12 @@ func _on_boss_defeated() -> void:
 		tw.tween_property(boss, "position:y", boss.position.y + 320.0, 1.2)
 		tw.parallel().tween_property(boss, "rotation", PI * 2.0, 1.2)
 
+	# SceneTreeTimer sahne free'sinden bagimsiz yasar — BASLIGA DON ile
+	# bolum degisirse devami freed node'a cagri dusurur.
+	var self_ref: WeakRef = weakref(self)
 	await get_tree().create_timer(1.6, false).timeout
+	if not is_instance_valid(self_ref.get_ref()):
+		return
 	_gameover.visible = false
 
 	var portal := PortalFx.make()

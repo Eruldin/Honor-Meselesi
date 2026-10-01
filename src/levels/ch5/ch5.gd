@@ -327,8 +327,15 @@ func _on_boss_defeated() -> void:
 			e.stagger_timer = maxf(e.stagger_timer, 4.0)
 	GameState.set_flag(&"ch5_boss_dead")
 	SaveSystem.save_game()
+	# SceneTreeTimer/fade sahne free'sinden bagimsiz yasar — BASLIGA DON
+	# yarisi icin devaminda ref kontrolu.
+	var self_ref: WeakRef = weakref(self)
 	await SceneRouter.fade_to(1.0, 0.7)
+	if not is_instance_valid(self_ref.get_ref()):
+		return
 	await get_tree().create_timer(0.3, false).timeout
+	if not is_instance_valid(self_ref.get_ref()):
+		return
 	var portal := PortalFx.make(Vector2(38, 62), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)

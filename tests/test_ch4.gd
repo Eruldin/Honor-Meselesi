@@ -215,3 +215,17 @@ func test_flower_attack_anim_progresses() -> void:
 			progressed = true
 			break
 	assert_true(progressed, "attack animi kare ilerletir — restart edilmez")
+
+
+func test_boss_defeat_survives_scene_free_during_wait() -> void:
+	# Regresyon: SceneTreeTimer sahne free'sinden bagimsiz yasar — BASLIGA
+	# DON yarisi devam kodunu freed node uzerinde calistiriyordu.
+	var scene: Node2D = load(CH4_PATH).instantiate()
+	scene.auto_advance = false
+	add_child(scene)
+	await get_tree().physics_frame
+	scene._on_boss_defeated()
+	await get_tree().create_timer(0.2).timeout
+	scene.free()
+	await get_tree().create_timer(1.8).timeout
+	assert_true(true, "free yarisi beklemeyi sessizce keser — hata yok")

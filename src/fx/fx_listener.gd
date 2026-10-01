@@ -40,7 +40,12 @@ func _slow_time(scale: float, duration: float) -> void:
 	var my := _ts_token
 	_ts_reqs[my] = [Time.get_ticks_msec() + int(duration * 1000.0), scale]
 	_apply_time_scale()
+	var self_ref: WeakRef = weakref(self)
 	await get_tree().create_timer(duration, true, false, true).timeout
+	# _exit_tree istekleri zaten temizledi — sahne free'si sonrasi
+	# _ts_reqs erisimi freed uye olur.
+	if not is_instance_valid(self_ref.get_ref()):
+		return
 	_ts_reqs.erase(my)
 	_apply_time_scale()
 

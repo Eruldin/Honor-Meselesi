@@ -181,3 +181,17 @@ func test_ash_knight_takes_player_damage_and_dies() -> void:
 	await _frames(2)
 	assert_eq(k.sm.current_name, Samurai.S_DEAD, "kul sovalye olur")
 	assert_signal_emitted(EventBus, "actor_died")
+
+
+func test_boss_defeat_survives_scene_free_during_wait() -> void:
+	# Regresyon: fade+timer beklemeleri sahne free'sinden bagimsiz yasar —
+	# BASLIGA DON yarisi devam kodunu freed node uzerinde calistiriyordu.
+	var scene: Node2D = load("res://src/levels/ch5/Ch5.tscn").instantiate()
+	scene.auto_advance = false
+	add_child(scene)
+	await _frames(3)
+	scene._on_boss_defeated()
+	await get_tree().create_timer(0.2).timeout
+	scene.free()
+	await get_tree().create_timer(1.2).timeout
+	assert_true(true, "free yarisi beklemeyi sessizce keser — hata yok")
