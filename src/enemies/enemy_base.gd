@@ -92,14 +92,18 @@ func _physics_process(delta: float) -> void:
 	# Sersemlemis temas dusmani dokunusla hasar veremez — parry/sersemletme
 	# guvenli ceza penceresi acar. Sadece base'in kurdugu hitbox yonetilir
 	# (Guard lunge hitbox'i kendi kontrol eder).
+	_manage_contact_hitbox()
+	velocity.y = minf(velocity.y + 800.0 * delta, 320.0)
+	move_and_slide()
+
+
+func _manage_contact_hitbox() -> void:
 	if _contact_managed and contact_hitbox != null:
 		if is_staggered() and contact_hitbox.monitoring:
 			contact_hitbox.deactivate()
 		elif not is_staggered() and not contact_hitbox.monitoring \
 				and health.is_alive():
 			contact_hitbox.activate(_contact_info)
-	velocity.y = minf(velocity.y + 800.0 * delta, 320.0)
-	move_and_slide()
 
 
 ## enemy/<key>/<idle|walk|attack|hurt|die|sleep|wake> manifest girdilerinden
