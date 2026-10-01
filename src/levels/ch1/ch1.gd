@@ -646,6 +646,13 @@ func _build_terrain() -> void:
 	merchant.picto_icon = &"dots"
 	merchant.position = Vector2(800.0, FLOOR_Y - 8)
 	add_child(merchant)
+	# Kiraz agacinin dibinde gozcu koylu + sus kusu
+	var watcher := AmbientNpc.new()
+	watcher.npc_key = &"villager"
+	watcher.picto_icon = &"arrow_right"
+	watcher.position = Vector2(1140.0, FLOOR_Y - 8)
+	add_child(watcher)
+	_add_deco_ground(&"npc/peacock", 1180, FLOOR_Y, 0.85, Color.WHITE, true, 2)
 	# === GİZLİ KUYU ODASI ===
 	# Kuyu altinda platform merdiveni — asagi iner, gizli oda, geri donus yolu var
 	# Cukur giris: x=460-500 boslugu (zemin A iki parca). Oda tabani FLOOR_Y+86.
