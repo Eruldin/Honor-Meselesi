@@ -280,27 +280,35 @@ func _unhandled_input(event: InputEvent) -> void:
 				_rebuild_tab()
 				get_viewport().set_input_as_handled()
 				return
-			InputMap.action_erase_events(_rebinding)
-			InputMap.action_add_event(_rebinding, event)
-			Settings.set_binding(_rebinding)
-			_rebinding = &""
-			_rebuild_tab()
-			get_viewport().set_input_as_handled()
+			_apply_rebind(event)
 		elif event is InputEventMouseButton and event.pressed:
-			InputMap.action_add_event(_rebinding, event)
-			Settings.set_binding(_rebinding)
-			_rebinding = &""
-			_rebuild_tab()
-			get_viewport().set_input_as_handled()
+			_apply_rebind(event)
 		elif event is InputEventJoypadButton and event.pressed:
-			InputMap.action_add_event(_rebinding, event)
-			Settings.set_binding(_rebinding)
-			_rebinding = &""
-			_rebuild_tab()
-			get_viewport().set_input_as_handled()
+			_apply_rebind(event)
 		return
 	if event.is_action_pressed(&"pause"):
 		toggle()
+
+
+## Atama: eski binding'i siler, ayrica ayni input'u tasiyan diger
+## aksiyonlardan da kaldirir — tek tusa iki aksiyon atanamaz.
+## Calinan aksiyonun yeni hali de kaydedilir; yoksa restart'ta
+## varsayilan binding geri gelip cakisma tekrar olusurdu.
+func _apply_rebind(event: InputEvent) -> void:
+	for action in REBINDABLE:
+		if action == _rebinding:
+			continue
+		for ev: InputEvent in InputMap.action_get_events(action):
+			if ev.is_match(event):
+				InputMap.action_erase_event(action, ev)
+				Settings.set_binding(action)
+				break
+	InputMap.action_erase_events(_rebinding)
+	InputMap.action_add_event(_rebinding, event)
+	Settings.set_binding(_rebinding)
+	_rebinding = &""
+	_rebuild_tab()
+	get_viewport().set_input_as_handled()
 
 
 func toggle() -> void:

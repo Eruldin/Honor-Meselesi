@@ -77,6 +77,37 @@ func test_binding_persists_across_load() -> void:
 	InputMap.erase_action(&"test_bind_action")
 
 
+func test_rebind_steals_conflicting_key() -> void:
+	# Regresyon: mouse/joypad yollari eski binding'i silmiyordu ve ayni
+	# tus iki aksiyonda kalabiliyordu; ayrica calinan aksiyonun yeni
+	# hali kaydedilmiyordu — restart'ta cakisma geri donerdi.
+	var old_binds: Dictionary = Settings.bind_overrides.duplicate(true)
+	var saved: Dictionary = {}
+	for a in SettingsMenu.REBINDABLE:
+		saved[a] = InputMap.action_get_events(a).duplicate()
+	Settings.bind_overrides = {}
+	var ev := InputEventKey.new()
+	ev.physical_keycode = KEY_G
+	InputMap.action_erase_events(&"jump")
+	InputMap.action_add_event(&"jump", ev)
+	var menu := SettingsMenu.new()
+	add_child_autofree(menu)
+	menu._rebinding = &"attack"
+	menu._apply_rebind(ev)
+	assert_eq(InputMap.action_get_events(&"jump").size(), 0,
+		"tus kaynaktan calinir")
+	assert_eq(InputMap.action_get_events(&"attack").size(), 1,
+		"tus hedefe atanir")
+	assert_true(Settings.bind_overrides.has(&"jump"),
+		"calinan aksiyonun bos hali de kaydedilir")
+	for a in saved:
+		InputMap.action_erase_events(a)
+		for e in saved[a]:
+			InputMap.action_add_event(a, e)
+	Settings.bind_overrides = old_binds
+	Settings.save_settings()
+
+
 func test_death_mark_cycle() -> void:
 	GameState.current_chapter = &"ch3"
 	GameState.soul = 7
