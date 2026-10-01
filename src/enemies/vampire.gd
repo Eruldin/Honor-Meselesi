@@ -63,5 +63,9 @@ func _strike() -> void:
 	var dx: float = _player.global_position.x - global_position.x
 	if absf(dx) < 30.0 and _player.has_method("apply_bleed"):
 		_player.take_damage(DamageInfo.make(0, self, Vector2.ZERO, true, false))
-		_player.apply_bleed(tuning.vampire_bleed_ticks, tuning.vampire_bleed_interval)
-		Pictogram.show_on(_player, &"alarm", 0.8, Vector2(0, -30))
+		var parried: bool = "parry_succeeded" in _player \
+			and _player.parry_succeeded
+		if not parried:
+			_player.apply_bleed(tuning.vampire_bleed_ticks,
+				tuning.vampire_bleed_interval)
+			Pictogram.show_on(_player, &"alarm", 0.8, Vector2(0, -30))
