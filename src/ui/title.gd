@@ -145,7 +145,7 @@ func _build_menu() -> void:
 		add_child(title)
 
 		var sub := Label.new()
-		sub.text = "~ onurunu geri al ~"
+		sub.text = "~ onurunu geri al ~" if Settings.language == "tr" else "~ reclaim your honor ~"
 		sub.add_theme_font_size_override("font_size", 8)
 		sub.add_theme_color_override("font_color", Color(0.8, 0.65, 0.6, 0.85))
 		var sw := sub.get_theme_default_font().get_string_size(
