@@ -51,13 +51,15 @@ func _apply_time_scale() -> void:
 func _on_shake(strength: float, duration: float) -> void:
 	var cam := get_node_or_null(camera_path)
 	if cam != null and cam.has_method("shake"):
-		cam.shake(strength, duration)
+		cam.shake(strength * Settings.shake_scale, duration)
 
 
 func _on_spark(pos: Vector2) -> void:
 	var spark := Sprite2D.new()
 	spark.texture = AssetLoader.texture(&"fx/spark", Vector2i(10, 10))
 	spark.modulate = Color(1.0, 0.95, 0.4)
+	# Flas ayari: kivilcim soluklasir ama vurus geri bildirimi kaybolmaz
+	spark.modulate.a = lerpf(0.2, 1.0, Settings.flash_scale)
 	spark.global_position = pos
 	var parent := get_tree().current_scene
 	if parent == null:
@@ -100,7 +102,8 @@ func _hurt_vignette() -> void:
 		_hurt_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
 		_hurt_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_hurt_layer.add_child(_hurt_rect)
-	_hurt_rect.modulate.a = 0.3
+	# Flas ayari: soluk vignette kalir ama tam kaybolmaz (hasar geri bildirimi)
+	_hurt_rect.modulate.a = 0.3 * lerpf(0.35, 1.0, Settings.flash_scale)
 	var tw := _hurt_rect.create_tween()
 	tw.set_ignore_time_scale(true)
 	tw.tween_property(_hurt_rect, "modulate:a", 0.0, 0.4)

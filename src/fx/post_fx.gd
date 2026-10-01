@@ -34,8 +34,10 @@ func glitch_pulse(strength: float, duration: float = 0.6) -> void:
 		return
 	var tw := create_tween()
 	tw.set_ignore_time_scale(true)
-	material.set_shader_parameter("master", 1.0)
-	material.set_shader_parameter("glitch", strength * Settings.fx_intensity)
+	# master/glitch tepe parlakligi flas ayarina bagli (fotosensitivite)
+	material.set_shader_parameter("master", Settings.flash_scale)
+	material.set_shader_parameter("glitch",
+		strength * Settings.fx_intensity * Settings.flash_scale)
 	tw.parallel().tween_property(material, "shader_parameter/glitch", 0.12, duration)
 	tw.parallel().tween_property(material, "shader_parameter/master", 0.0, duration)
 
