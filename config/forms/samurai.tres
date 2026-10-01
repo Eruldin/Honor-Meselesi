@@ -5,6 +5,5 @@
 [resource]
 script = ExtResource("1_fd")
 id = &"samurai"
-display_name = "Samuray"
 sprite_color = Color(0.55, 0.95, 0.65, 1)
 body_size = Vector2(12, 18)

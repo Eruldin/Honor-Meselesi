@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_fd")
 id = &"tavuk"
-display_name = "Tavuk"
 sprite_asset = &"enemy/rooster"
 sprite_color = Color(1, 1, 1, 1)
 body_size = Vector2(8, 10)
