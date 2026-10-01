@@ -286,6 +286,22 @@ func test_sleeping_cave_bat_wakes_on_approach() -> void:
 		assert_ne(bat.anims.animation, &"sleep", "uyku animi birakilir")
 
 
+func test_imp_hops_while_chasing() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(260, 240)
+	var imp := ImpRed.new()
+	imp.global_position = Vector2(350, 240)
+	add_child_autofree(imp)
+	var hopped := false
+	for i in 60:
+		await get_tree().physics_frame
+		if imp.velocity.y < -40.0:
+			hopped = true
+			break
+	assert_true(hopped, "fark eden imp arada hoplar")
+
+
 func test_crow_dive_uses_jump_anim() -> void:
 	if not AssetLoader.has_frames(&"enemy/crow/jump"):
 		pending("crow/jump yok (CI) — atlaniyor")
