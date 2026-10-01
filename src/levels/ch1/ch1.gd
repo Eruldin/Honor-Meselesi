@@ -221,6 +221,30 @@ func _add_deco_ground(id: StringName, x: float, floor_y := FLOOR_Y,
 	return s
 
 
+var _glow_tex: ImageTexture
+
+func _add_glow(pos: Vector2, radius: float, col: Color) -> void:
+	## Sicak isik halesi: radyal gradyan tek-tanecik — gece fenerleri icin.
+	if _glow_tex == null:
+		var img := Image.create(24, 24, false, Image.FORMAT_RGBA8)
+		for y in 24:
+			for x in 24:
+				var d := Vector2(x - 11.5, y - 11.5).length() / 11.5
+				var a := clampf(1.0 - d, 0.0, 1.0)
+				img.set_pixel(x, y, Color(1.0, 1.0, 1.0, a * a))
+		_glow_tex = ImageTexture.create_from_image(img)
+	var s := Sprite2D.new()
+	s.texture = _glow_tex
+	s.scale = Vector2.ONE * (radius / 12.0)
+	s.position = pos
+	s.modulate = col
+	s.z_index = 3
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	s.material = mat
+	add_child(s)
+
+
 func _add_sign(pos: Vector2, icon: StringName) -> void:
 	## Ogretici tabela: oyuncu yaklasinca balonla ikon gosterir.
 	var sign := _add_deco_ground(&"prop/sign", pos.x, pos.y, 0.5,
@@ -609,14 +633,16 @@ func _build_terrain() -> void:
 		Color(0.75, 0.62, 0.62))
 	_add_deco_ground(&"prop/house_main", 905, FLOOR_Y + 4, 0.74,
 		Color(0.82, 0.66, 0.58))
-	# Tas pagoda fenerler — sokak aydinlatmasi
+	# Tas pagoda fenerler — sokak aydinlatmasi + sicak hale
 	for x in [300.0, 660.0, 1010.0]:
 		_add_deco_ground(&"prop/stone_lamp", x, FLOOR_Y, 0.55,
 			Color(0.9, 0.85, 0.8))
+		_add_glow(Vector2(x, FLOOR_Y - 14), 16.0, Color(1.0, 0.8, 0.45, 0.4))
 	# Asili kagit fenerler — ev girislerinin saçaklari altinda
 	for x in [150.0, 210.0, 492.0, 552.0, 875.0, 940.0]:
 		_add_deco(&"prop/lantern_hang", Vector2(x, FLOOR_Y - 52), 0.42,
 			Color(1.0, 0.85, 0.65), false, 1)
+		_add_glow(Vector2(x, FLOOR_Y - 50), 13.0, Color(1.0, 0.75, 0.4, 0.45))
 	# Ahsap citler — bahce sinirlari
 	_add_deco_ground(&"prop/j_fence", 385, FLOOR_Y, 0.8, Color(0.7, 0.55, 0.45))
 	_add_deco_ground(&"prop/j_fence", 620, FLOOR_Y, 0.8,
