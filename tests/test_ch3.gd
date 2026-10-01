@@ -107,6 +107,24 @@ func test_golge_dash_iframes() -> void:
 	assert_true(s.form.dash_iframes, "golge dash'i i-frame tasir")
 
 
+# --- Mezar iskeleti ---
+
+func test_skeleton_rises_when_player_near() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(1000, 240)   # rise_range disi
+	var sk := CryptSkeleton.new()
+	sk.global_position = Vector2(400, 241)
+	add_child_autofree(sk)
+	await wait_seconds(0.15)
+	assert_false(sk._risen, "uzak oyuncu — iskelet gomulu kalir")
+	assert_false(sk.hurtbox.monitoring, "gomulu iskelet vurulamaz")
+	s.global_position = Vector2(380, 240)    # rise_range (70) icine
+	await wait_seconds(1.2)
+	assert_true(sk._risen, "yakin oyuncuda iskelet yukselir")
+	assert_true(sk.hurtbox.monitoring, "yukselen iskelet vurulabilir")
+
+
 # --- Ch3 akisi ---
 
 func test_ch3_flow_boss_to_ch4_golge() -> void:

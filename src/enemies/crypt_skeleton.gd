@@ -72,12 +72,15 @@ func _physics_process(delta: float) -> void:
 func _rise() -> void:
 	_rising = true
 	visible = true
-	_anim_lock = 0.6   # yukselis sirasinda otomatik anim degismesin
 	if anims != null and anims.sprite_frames.has_animation(&"rise"):
+		# Kilit animasyonu kapsamali — auto-anim rise'i keserse finished sinyali gelmez.
+		var sp := maxf(anims.sprite_frames.get_animation_speed(&"rise"), 1.0)
+		_anim_lock = anims.sprite_frames.get_frame_count(&"rise") / sp + 0.05
 		anims.play(&"rise")
 		await anims.animation_finished
 	else:
 		# gercek kareler yoksa yerden hafif yukselme efekti
+		_anim_lock = 0.4
 		var tw := create_tween()
 		tw.tween_property(self, "position:y", position.y - 6.0, 0.35)
 		await tw.finished
