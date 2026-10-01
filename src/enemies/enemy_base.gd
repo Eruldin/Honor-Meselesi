@@ -101,7 +101,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-## enemy/<key>/<idle|walk|attack|hurt|die> manifest girdilerinden
+## enemy/<key>/<idle|walk|attack|hurt|die|sleep|wake> manifest girdilerinden
 ## animasyon bankasi kurar; hicbiri yoksa statik sprite kalir.
 func _build_anims() -> void:
 	if asset_key == &"":
@@ -109,7 +109,7 @@ func _build_anims() -> void:
 	var bank := SpriteFrames.new()
 	var first_anim := StringName()
 	for anim in [&"idle", &"walk", &"attack", &"hurt", &"die",
-			&"summon", &"appear", &"rise"]:
+			&"summon", &"appear", &"rise", &"sleep", &"wake"]:
 		var id := StringName("enemy/%s/%s" % [asset_key, anim])
 		if not AssetLoader.has_frames(id):
 			continue
@@ -118,7 +118,8 @@ func _build_anims() -> void:
 			continue
 		bank.add_animation(anim)
 		bank.set_animation_speed(anim, src.get_animation_speed(&"default"))
-		bank.set_animation_loop(anim, anim == &"idle" or anim == &"walk")
+		bank.set_animation_loop(anim,
+			anim in [&"idle", &"walk", &"sleep"])
 		for i in src.get_frame_count(&"default"):
 			bank.add_frame(anim, src.get_frame_texture(&"default", i))
 		if first_anim.is_empty():

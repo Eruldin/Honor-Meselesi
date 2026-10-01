@@ -181,8 +181,8 @@ func _build_anims() -> void:
 		return
 	_anims = AnimatedSprite2D.new()
 	var bank := SpriteFrames.new()
-	for anim in [&"idle", &"run", &"attack", &"hurt", &"jump", &"dead",
-			&"air_attack", &"interact"]:
+	for anim in [&"idle", &"run", &"attack", &"hurt", &"jump", &"fall",
+			&"dead", &"air_attack", &"interact"]:
 		var id := StringName("player/samurai/" + String(anim))
 		var src := AssetLoader.frames(id)
 		if src == null or src.get_frame_count(&"default") == 0:
@@ -212,8 +212,10 @@ func _sync_anim() -> void:
 	match sm.current_name:
 		S_RUN, S_DASH:
 			want = &"run"
-		S_JUMP, S_FALL:
+		S_JUMP:
 			want = &"jump"
+		S_FALL:
+			want = &"fall"
 		S_AIR_ATTACK:
 			want = &"air_attack"
 		S_ATTACK, S_DOWN_ATTACK, S_PARRY, S_UP_ATTACK:

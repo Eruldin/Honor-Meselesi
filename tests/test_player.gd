@@ -274,3 +274,14 @@ func test_focus_noop_at_full_health() -> void:
 	ai.tap(&"focus")
 	await _frames(2)
 	assert_eq(GameState.soul, 12, "tam canda ruh korunur")
+
+
+func test_fall_state_uses_fall_anim() -> void:
+	if not AssetLoader.has_frames(&"player/samurai/fall"):
+		pending("fall sprite'i yok (CI) — atlaniyor")
+		return
+	sam.global_position = Vector2(0, -150)
+	sam.velocity = Vector2(0, 80)
+	await _frames(10)
+	assert_eq(sam.sm.current_name, Samurai.S_FALL, "kurulum: dusme durumu")
+	assert_eq(sam._anims.animation, &"fall", "dusus animi ayri oynar")

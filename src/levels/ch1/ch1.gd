@@ -555,9 +555,15 @@ func _build_terrain() -> void:
 
 	# Gecit Ust Rota (Harabe Surlar)
 	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3765, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3880, 140), &"terrain/pf_slab", 85)
+	_add_platform(Vector2(3765, 140), &"terrain/pf_dirt_slab", 85)
+	_add_platform(Vector2(3880, 140), &"terrain/pf_moss", 85)
 	_add_platform(Vector2(3995, 140), &"terrain/pf_slab", 85)
+	# Sacak altinda asili uyuyan yarasalar — yaklasinca uyanir
+	for bx in [3650.0, 3880.0]:
+		var sbat := CaveBat.new()
+		sbat.sleeping_start = true
+		sbat.global_position = Vector2(bx, 156)
+		add_child(sbat)
 	
 	var bb_sur := BreakableBlock.new()
 	bb_sur.size = Vector2(16, 50)
@@ -649,7 +655,7 @@ func _build_terrain() -> void:
 	# Orta koyde yasli koylu — agaca yaslanip geceni izler
 	var elder := AmbientNpc.new()
 	elder.npc_key = &"peasant2"
-	elder.position = Vector2(1010.0, FLOOR_Y - 8)
+	elder.position = Vector2(952.0, FLOOR_Y - 8)
 	add_child(elder)
 	# Kiraz agacinin dibinde gozcu koylu + sus kusu
 	var watcher := AmbientNpc.new()
@@ -949,7 +955,7 @@ func _build_entities() -> void:
 	add_child(druid)
 
 	# Magara yarasa + ucan kilic (Dark Fantasy / Legacy Vania)
-	for x in [2560.0, 3060.0]:
+	for x in [2560.0, 3060.0]:  # acikta ucuyor
 		var bat := CaveBat.new()
 		bat.global_position = Vector2(x, FLOOR_Y - 80)
 		add_child(bat)
