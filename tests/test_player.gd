@@ -119,6 +119,26 @@ func test_combo_reaches_three_and_resets() -> void:
 	assert_eq(sam.combo_index, 0)
 
 
+func test_dash_cancels_attack_recovery() -> void:
+	ai.tap(&"attack")
+	await _frames(2)
+	assert_eq(sam.sm.current_name, Samurai.S_ATTACK)
+	await _frames(14)  # aktif pencere bitti (0.3*0.7=0.21s ~ 13 frame)
+	ai.tap(&"dash")
+	await _frames(2)
+	assert_eq(sam.sm.current_name, Samurai.S_DASH,
+		"toparlanma penceresi dash ile iptal edilir")
+
+
+func test_dash_does_not_cancel_active_swing() -> void:
+	ai.tap(&"attack")
+	await _frames(4)   # hala aktif pencerede
+	ai.tap(&"dash")
+	await _frames(2)
+	assert_eq(sam.sm.current_name, Samurai.S_ATTACK,
+		"savrusun kendisi iptal edilemez")
+
+
 # --- Parry ---
 
 func _spawn_projectile_toward_player() -> Projectile:

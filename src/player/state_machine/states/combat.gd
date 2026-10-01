@@ -28,6 +28,11 @@ class Attack:
 			sam.ensure_attack_hitbox()
 		if not sam.is_on_floor():
 			return Samurai.S_FALL  # kenardan dustu: saldiri iptal
+		# Savrus bittikten sonra kalan toparlanma dash ile iptal edilebilir
+		# (HK recovery cancel) — vurus taahhudu korunur, kacis hissi keskin.
+		if t >= active_end and sam.input.dash_just_pressed() and sam.dash_cooldown <= 0.0:
+			sam.start_dash()
+			return Samurai.S_DASH
 		if t >= tun.attack_duration:
 			if sam.combo_queued and sam.combo_index < 3:
 				sam.combo_index += 1
@@ -63,6 +68,9 @@ class UpAttack:
 			sam.apply_gravity(delta)
 		if t >= tun.air_attack_duration * tun.attack_active_start and t <= tun.air_attack_duration * tun.attack_active_end:
 			sam.ensure_up_hitbox()
+		if t >= tun.air_attack_duration * tun.attack_active_end and sam.input.dash_just_pressed() and sam.dash_cooldown <= 0.0:
+			sam.start_dash()
+			return Samurai.S_DASH
 		if t >= tun.air_attack_duration:
 			return Samurai.S_IDLE if sam.is_on_floor() else Samurai.S_FALL
 		return &""
@@ -88,6 +96,9 @@ class AirAttack:
 			sam.ensure_attack_hitbox()
 		if sam.is_on_floor():
 			return Samurai.S_IDLE
+		if t >= tun.air_attack_duration * tun.attack_active_end and sam.input.dash_just_pressed() and sam.dash_cooldown <= 0.0:
+			sam.start_dash()
+			return Samurai.S_DASH
 		if t >= tun.air_attack_duration:
 			return Samurai.S_FALL
 		return &""
