@@ -1310,5 +1310,7 @@ func _on_actor_died(actor: Node) -> void:
 	await SceneRouter.fade_to(1.0, 0.7)
 	# HK tarzi: olumde sahne yeniden kurulur — dusmanlar geri doner,
 	# checkpoint GameState'ten okunur, tum bayraklar korunur.
-	GameState.mark_death(samurai.global_position)
+	GameState.mark_death(
+		samurai.last_ground_pos if samurai.last_ground_pos != Vector2.ZERO
+		else samurai.global_position)
 	SceneRouter.reload()

@@ -18,6 +18,8 @@ var _bolt_cd := 0.0
 var _iframes := 0.0
 var _flicker := 0.0
 var _coyote := 0.0
+## Son zemin temasi — bosluk dususu olumunde golgenin isaret yeri.
+var last_ground_pos := Vector2.ZERO
 var _jbuf := 0.0
 var _tuning: Tuning
 var dead := false
@@ -138,6 +140,8 @@ func _physics_process(delta: float) -> void:
 		_jbuf = _tuning.jump_buffer_time
 	_jbuf = maxf(_jbuf - delta, 0.0)
 	_coyote = _tuning.coyote_time if is_on_floor() else maxf(_coyote - delta, 0.0)
+	if is_on_floor():
+		last_ground_pos = global_position
 	if _jbuf > 0.0 and (is_on_floor() or _coyote > 0.0):
 		_jbuf = 0.0
 		_coyote = 0.0
