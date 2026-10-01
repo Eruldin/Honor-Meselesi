@@ -39,7 +39,13 @@ func _ready() -> void:
 		GameState.unlock_form(&"drone")
 		if was_new:
 			SaveSystem.save_game()
-			get_tree().create_timer(1.2).timeout.connect(_reveal_drone)
+			# SceneTreeTimer sahne free'sinden bagimsiz yasar — bolum yeniden
+			# kurulursa timeout freed node'a cagri dusurur; ref kontrol et.
+			var self_ref := weakref(self)
+			get_tree().create_timer(1.2).timeout.connect(
+				func() -> void:
+					if is_instance_valid(self_ref.get_ref()):
+						_reveal_drone())
 	_build_terrain()
 	_build_entities()
 	_build_fx()
