@@ -153,6 +153,24 @@ func test_ash_knight_mirrors_player_attacks() -> void:
 	assert_true(saw_attack, "ayna sovalye menzilde saldirir")
 
 
+func test_ash_knight_idles_during_cutscene() -> void:
+	# Regresyon: hedef kesik-sahnedeyken ayna hala kovalayip savruluyordu —
+	# hasar yok ama sinema sirasinda vucut hareket eder.
+	var sam := _make_samurai(Vector2(0, 0))
+	var k := AshKnight.new()
+	k.global_position = Vector2(22, 0)
+	add_child_autofree(k)
+	sam.sm.change_to(Samurai.S_CUTSCENE, true)
+	for i in 90:
+		await get_tree().physics_frame
+		if k.sm.current_name in [Samurai.S_ATTACK, Samurai.S_AIR_ATTACK,
+				Samurai.S_DOWN_ATTACK, Samurai.S_UP_ATTACK]:
+			break
+	assert_false(k.sm.current_name in [Samurai.S_ATTACK, Samurai.S_AIR_ATTACK,
+			Samurai.S_DOWN_ATTACK, Samurai.S_UP_ATTACK],
+		"cutscene'deki hedefe saldiri yok")
+
+
 func test_ash_knight_takes_player_damage_and_dies() -> void:
 	var k := AshKnight.new()
 	k.global_position = Vector2(0, 0)
