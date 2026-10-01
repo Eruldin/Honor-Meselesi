@@ -60,10 +60,10 @@ func play_music(logical_id: StringName, resume_id: StringName = &"") -> void:
 		return
 	var prev := _current_music
 	_current_music = logical_id
+	_sting_resume = &""
 	var stream := AssetLoader.audio(logical_id)
 	if stream == null:
 		return
-	_sting_resume = &""
 	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
 		var loops := bool(AssetLoader.entry(logical_id).get("loop", true))
 		stream.loop = loops
