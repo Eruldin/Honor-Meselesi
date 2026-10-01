@@ -374,3 +374,19 @@ func test_glide_normal_fall_still_caps() -> void:
 	await _frames(3)
 	assert_lte(sam.velocity.y, sam.form.glide_fall_speed + 1.0,
 		"normal suzulme dusme hizini sinirlar")
+
+
+func test_reflected_projectile_flies_back() -> void:
+	# Regresyon: parry hem direction'i hem travel'i tersliyordu —
+	# cift negasyon mermiyi ayni yonde ucuruyordu.
+	var p := Projectile.new()
+	p.direction = -1
+	p.speed = 110.0
+	p.global_position = sam.global_position + Vector2(70, -2)
+	add_child_autofree(p)
+	p.on_parried()
+	var pre := p.global_position.x
+	for _i in 10:
+		await get_tree().physics_frame
+	assert_gt(p.global_position.x, pre,
+		"yansiyan mermi atana geri donmeli (saga ucarmali)")

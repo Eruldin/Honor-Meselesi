@@ -40,7 +40,8 @@ func _physics_process(delta: float) -> void:
 	if vertical:
 		position.y += (-step if reflected else step)
 	else:
-		position.x += (direction if not reflected else -direction) * step
+		# direction her zaman ucus yonu: parry bir kez tersler.
+		position.x += direction * step
 	_travelled += step
 	if _travelled >= max_range:
 		queue_free()
@@ -56,6 +57,10 @@ func on_parried() -> void:
 	# dusman hurtbox'lari (mask=8) onu hic goremez.
 	hitbox.collision_layer = 8
 	hitbox.collision_mask = 16 | 1  # artik dusman hurtbox'lari (+ duvar)
+	# Vurus bilgisi yeni yonle kurulur — itme geri donus yonunde olsun.
+	hitbox.activate(DamageInfo.make(1, self,
+		Vector2(direction * 60, 0) if not vertical else Vector2(0, -60),
+		true, false))
 	modulate_self()
 
 
