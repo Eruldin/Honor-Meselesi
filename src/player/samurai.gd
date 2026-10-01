@@ -266,8 +266,9 @@ func _physics_process(delta: float) -> void:
 		if combo_grace_t <= 0.0 and combo_index > 0:
 			combo_index = 0
 
-	# Kanama DoT: i-frame'i asmaz ama state degistirmez.
-	if bleed_ticks > 0:
+	# Kanama DoT: i-frame'i asmaz ama state degistirmez. Olumde/kesik-sahnede
+	# duraklar — actor_died cift emit'i ve cutscene senkron kaybi onlenir.
+	if bleed_ticks > 0 and sm.current_name not in [S_DEAD, S_CUTSCENE]:
 		_bleed_timer -= delta
 		if _bleed_timer <= 0.0:
 			_bleed_timer = bleed_interval

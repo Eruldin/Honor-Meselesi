@@ -253,6 +253,22 @@ func test_damage_to_death() -> void:
 	assert_signal_emitted(EventBus, "actor_died")
 
 
+func test_bleed_stops_on_death() -> void:
+	# Regresyon: kanama tikleri olum sonrasi da actor_died emit ediyordu —
+	# S_DEAD/S_CUTSCENE sirasinda duraklar.
+	var src: Node2D = add_child_autofree(Node2D.new())
+	sam.bleed_ticks = 3
+	sam._bleed_timer = 0.01
+	for i in sam.tuning.max_health:
+		sam.invuln_timer = 0.0
+		sam.take_damage(DamageInfo.make(1, src))
+	assert_eq(sam.sm.current_name, Samurai.S_DEAD)
+	var ticks_before := sam.bleed_ticks
+	await _frames(10)
+	assert_eq(sam.bleed_ticks, ticks_before,
+		"olumde kanama tikleri duraklar")
+
+
 func test_invuln_blocks_repeat_hits() -> void:
 	var src: Node2D = add_child_autofree(Node2D.new())
 	sam.take_damage(DamageInfo.make(1, src))
