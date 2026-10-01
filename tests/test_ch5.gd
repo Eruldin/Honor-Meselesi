@@ -64,6 +64,20 @@ func test_guardian_phase_and_geyser() -> void:
 		AshGuardian.GState.SLAM_RISE, AshGuardian.GState.GAP, AshGuardian.GState.APPROACH])
 
 
+func test_guardian_parry_freezes_behavior() -> void:
+	var g := AshGuardian.new()
+	g.floor_y = 0.0
+	var sam := _make_samurai(Vector2(20, 0))
+	add_child_autofree(g)
+	g.activate()
+	await _frames(4)
+	g.on_parried()
+	assert_true(g.is_staggered(), "parry sersemletmeye girer")
+	var t0: float = g._t
+	await _frames(12)
+	assert_eq(g._t, t0, "parry penceresinde durum saati donar")
+
+
 func test_guardian_defeat_fires_signal() -> void:
 	var g := AshGuardian.new()
 	var sam := _make_samurai()
