@@ -13,6 +13,9 @@ func _ready() -> void:
 	_ai = AIInputSource.new()
 	super._ready()
 	creature.set_input_source(_ai)
+	# Yaratik olurse sahne reload'u kayit betigini oldurur; kaydi sag tut.
+	creature.health.max_health = 99
+	creature.health.reset()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_frames_dir))
 	_run_script()
 

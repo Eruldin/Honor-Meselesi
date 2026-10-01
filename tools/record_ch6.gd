@@ -13,6 +13,9 @@ func _ready() -> void:
 	super._ready()
 	_ai = AIInputSource.new()
 	samurai.set_input_source(_ai)
+	# Oyuncu olurse sahne reloadu kayit betigini oldurur; kaydi sag tut.
+	samurai.health.max_health = 99
+	samurai.health.reset()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_frames_dir))
 	_run_script()
 
