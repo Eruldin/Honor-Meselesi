@@ -532,7 +532,13 @@ func _build_terrain() -> void:
 
 	# Alt Mahzen Zemini ve Duvarlari
 	var crypt_y := FLOOR_Y + 160.0
-	_add_ground(Vector2(3780, crypt_y + 13), Vector2(300, 26), &"terrain/edge_dirt")
+	_add_ground(Vector2(3780, crypt_y + 13), Vector2(300, 26),
+		&"terrain/edge_dirt", &"terrain/ground_face_b")
+	# Mahzen icini tas tugla kapli goster — arka duvar panelleri
+	_add_deco(&"terrain/pf_rock_l", Vector2(3695, crypt_y - 78),
+		0.62, Color(0.45, 0.42, 0.5), false, -1)
+	_add_deco(&"terrain/pf_rock_r", Vector2(3865, crypt_y - 78),
+		0.62, Color(0.45, 0.42, 0.5), false, -1)
 	for wx in [3630.0, 3930.0]:
 		var cw := StaticBody2D.new()
 		cw.collision_layer = 1
@@ -691,6 +697,11 @@ func _build_terrain() -> void:
 	# Cikis basamagi: boslugun altinda — dustukten sonra geri tirmanis kolay
 	# (rest point cukurde checkpoint birakir; zor cikis respawn tuzagi olur)
 	_add_platform(Vector2(494.0, FLOOR_Y + 14), &"terrain/pf_block", 20)
+	# Kuyu icini tasla kapla — iki yana ince kaya seridi
+	_add_deco_ground(&"terrain/pf_rock_l", pit_x - 60, pit_floor,
+		0.3, Color(0.7, 0.7, 0.75), false, -1)
+	_add_deco_ground(&"terrain/pf_rock_r", pit_x + 60, pit_floor,
+		0.3, Color(0.7, 0.7, 0.75), true, -1)
 	# Gizli oda kristal dekor (magara hissi)
 	_add_deco_ground(&"terrain/cave_crystal", pit_x - 14, pit_floor,
 		0.8, Color(0.8, 0.7, 1.0))
