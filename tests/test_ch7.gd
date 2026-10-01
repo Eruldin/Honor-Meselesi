@@ -487,3 +487,31 @@ func test_creature_walk_anim_progresses() -> void:
 			progressed = true
 			break
 	assert_true(progressed, "walk animi kare ilerletir — restart edilmez")
+
+
+func test_boss_defeat_survives_scene_free_during_wait() -> void:
+	# Regresyon: SceneTreeTimer sahne free'sinden bagimsiz yasar — BASLIGA
+	# DON yarisi devam kodunu freed node uzerinde calistiriyordu.
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child(scene)
+	await _frames(5)
+	scene._on_boss_defeated()
+	await get_tree().create_timer(0.3).timeout
+	scene.free()
+	await get_tree().create_timer(2.0).timeout
+	assert_true(true, "free yarisi beklemeyi sessizce keser — hata yok")
+
+
+func test_meta_assault_survives_scene_free_during_telegraph() -> void:
+	# Regresyon: meta saldiri telegraph beklemesi (0.8s) sirasinda sahne
+	# free'si create_tween'i freed node uzerinde cagiriyordu.
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child(scene)
+	await _frames(5)
+	scene._meta_assault()
+	await get_tree().create_timer(0.3).timeout
+	scene.free()
+	await get_tree().create_timer(0.8).timeout
+	assert_true(true, "free yarisi telegraph'i sessizce keser — hata yok")

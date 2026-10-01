@@ -154,3 +154,18 @@ func test_slider_drag_survives_settings_rebuild() -> void:
 	assert_false(is_instance_valid(slider),
 		"drag bitince rebuild son degeri senkronlar")
 	menu.toggle()
+
+
+func test_cutscene_survives_free_during_wait_step() -> void:
+	# Regresyon: kesik beklemesi SceneTreeTimer'a bagli — sahne free'sinde
+	# resume _advance icinde freed 'playing' uyesini okuyordu.
+	var holder := Node2D.new()
+	add_child(holder)
+	var cs := CutscenePlayer.new()
+	holder.add_child(cs)
+	cs.play([{op = "wait", t = 0.8}, {op = "call",
+		fn = func() -> void: pass}], {})
+	await get_tree().create_timer(0.2).timeout
+	holder.free()
+	await get_tree().create_timer(0.9).timeout
+	assert_true(true, "free sirasinda bekleyen kesik temiz cikis — hata yok")

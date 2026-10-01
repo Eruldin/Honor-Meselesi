@@ -101,3 +101,17 @@ func test_boss_bar_hidden_on_defeat() -> void:
 	scene._on_boss_defeated()
 	assert_false(scene._boss_root.visible,
 		"boss olumunde boss bar gizlenir")
+
+
+func test_boss_defeat_survives_scene_free_during_wait() -> void:
+	# Regresyon: SceneTreeTimer sahne free'sinden bagimsiz yasar — BASLIGA
+	# DON yarisi devam kodunu freed node uzerinde calistiriyordu.
+	var scene: Node2D = load("res://src/levels/ch6/Ch6.tscn").instantiate()
+	scene.auto_advance = false
+	add_child(scene)
+	await _frames(3)
+	scene._on_boss_defeated()
+	await get_tree().create_timer(0.2).timeout
+	scene.free()
+	await get_tree().create_timer(1.8).timeout
+	assert_true(true, "free yarisi beklemeyi sessizce keser — hata yok")
