@@ -26,10 +26,21 @@ func _init() -> void:
 	phase_thresholds = [0.5]
 
 
+func _phase_color() -> Color:
+	return Color(0.6, 0.3, 0.6) if phase == 0 else Color(0.4, 0.2, 0.45)
+
+
+func _restore_modulate() -> void:
+	var c := _phase_color()
+	sprite.modulate = c
+	if anims != null:
+		anims.modulate = c
+
+
 func _ready() -> void:
 	super._ready()
 	if not using_real_sprite:
-		sprite.modulate = Color(0.6, 0.3, 0.6)
+		sprite.modulate = _phase_color()
 	contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
 	# Karanlikta gorunen gozler
 	eyes = Node2D.new()
@@ -50,7 +61,7 @@ func on_activated() -> void:
 
 func on_phase_changed(_p: int) -> void:
 	# Faz 2: karanlik ortu — stereo ses alternatifi olarak gozler parlar.
-	sprite.modulate = Color(0.4, 0.2, 0.45)
+	sprite.modulate = _phase_color()
 	FX.glitch(0.7, 0.6)
 	FX.shake(3.0, 0.4)
 	AudioManager.play_sfx(&"sfx/ghost", global_position, -4.0, 0.7)
@@ -78,7 +89,7 @@ func on_reset() -> void:
 	_player = null
 	_atk_idx = 0
 	if not using_real_sprite:
-		sprite.modulate = Color(0.6, 0.3, 0.6)
+		sprite.modulate = _phase_color()
 	if darkness != null:
 		darkness.get_parent().queue_free()
 		darkness = null
@@ -117,7 +128,7 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0:
 				bstate = State.LUNGE
 				_t = 0.25
-				sprite.modulate = Color(0.6, 0.3, 0.6) if phase == 0 else Color(0.4, 0.2, 0.45)
+				sprite.modulate = _phase_color()
 				velocity.x = facing * tuning.vlad_lunge_speed
 				contact_hitbox.activate(DamageInfo.make(1, self,
 					Vector2(facing * 180, -50), true, false))

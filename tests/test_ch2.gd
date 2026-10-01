@@ -130,6 +130,26 @@ func test_unit0_missile_parry_reflects() -> void:
 	assert_eq(m.hitbox.collision_mask, 16, "geriye donen fuze dusmana vurur")
 
 
+func test_unit0_phase2_punch_keeps_phase_color() -> void:
+	var s := _make_samurai()
+	s.global_position = Vector2(500, 240)
+	var b := Unit0.new()
+	b.global_position = Vector2(560, 240)
+	add_child_autofree(b)
+	b.activate()
+	b.on_parried()
+	# cani yarinin altina indir → faz 1 (kirmizi modulate)
+	b.take_damage(DamageInfo.make(9, null))
+	assert_eq(b.phase, 1)
+	b.armor_broken = false  # armor timer beklemeyiz
+	b.bstate = Unit0.State.PUNCH_TELL
+	b._t = 0.01
+	await wait_seconds(0.1)
+	assert_eq(b.bstate, Unit0.State.PUNCH, "tell sonrasi punch baslar")
+	assert_eq(b.sprite.modulate, Color(0.9, 0.5, 0.5),
+		"faz 2 punch'i faz-0 rengine dondurmemeli")
+
+
 func test_unit0_defeated_signal() -> void:
 	var b := Unit0.new()
 	add_child_autofree(b)
