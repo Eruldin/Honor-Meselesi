@@ -20,6 +20,8 @@ var _respawn_pending := false
 var _hat_prop: Sprite2D
 var _black: ColorRect
 var _motes: Array[Sprite2D] = []
+var _hud_layer: CanvasLayer
+var _meta_done := false
 
 
 func _ready() -> void:
@@ -46,6 +48,11 @@ func _process(_delta: float) -> void:
 	if boss != null and is_instance_valid(boss) and boss.active:
 		_boss_root.visible = true
 		HudBars.drain(_boss_bars, float(boss.health.current) / maxf(boss.health.max_health, 1), 160.0, _delta)
+		# MetaDirector: boss %55 cana dusunce oyun kendisi saldiri yapar —
+		# kontroller tersine doner + goruntu 4:3 bantlariyla daralir.
+		if not _meta_done and boss.health.current <= boss.health.max_health * 0.55:
+			_meta_done = true
+			_meta_assault()
 	# Bosluk dususu: platform kenarindan dusen yaratik 1 can kaybedip geri doner
 	if creature != null and not _respawn_pending \
 			and (creature.global_position.y > 430.0 \
@@ -264,6 +271,44 @@ func _finish() -> void:
 		EventBus.scene_change_requested.emit(PROLOG_PATH)
 
 
+## MetaDirector saldirisi: glitch pulsu + swap isaretiyle uyarilir,
+## sonra ~6s boyunca kontroller ters doner ve ust/alt siyah bantlar
+## goruntuyu 4:3'e kisitlar. Sure bitince her sey geri acilir.
+func _meta_assault() -> void:
+	FX.glitch(1.0, 0.6)
+	AudioManager.play_sfx(&"sfx/glitch")
+	Pictogram.show_on(creature, &"swap", 2.0, Vector2(0, -18))
+	await get_tree().create_timer(0.8, true).timeout
+	if not is_instance_valid(creature):
+		return
+	creature.controls_inverted = true
+	var top := ColorRect.new()
+	top.color = Color.BLACK
+	top.size = Vector2(480, 0)
+	top.position = Vector2(0, 0)
+	_hud_layer.add_child(top)
+	var bottom := ColorRect.new()
+	bottom.color = Color.BLACK
+	bottom.size = Vector2(480, 0)
+	bottom.position = Vector2(0, 270)
+	_hud_layer.add_child(bottom)
+	var tw := create_tween().set_parallel()
+	tw.tween_property(top, "size:y", 38.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(bottom, "size:y", 38.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(bottom, "position:y", 232.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	await get_tree().create_timer(5.5, true).timeout
+	FX.glitch(1.0, 0.5)
+	if is_instance_valid(creature):
+		creature.controls_inverted = false
+	var tw2 := create_tween().set_parallel()
+	tw2.tween_property(top, "size:y", 0.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw2.tween_property(bottom, "size:y", 0.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw2.tween_property(bottom, "position:y", 270.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw2.chain().tween_callback(func() -> void:
+		top.queue_free()
+		bottom.queue_free())
+
+
 func _on_actor_died(actor: Node) -> void:
 	if actor != creature or _respawn_pending:
 		return
@@ -297,6 +342,7 @@ func _build_fx() -> void:
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
+	_hud_layer = layer
 	add_child(layer)
 	var bb := HudBars.make(160, 6, Color(0.9, 0.4, 0.3), true)
 	bb.root.position = Vector2(160, 250)

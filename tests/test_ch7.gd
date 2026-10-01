@@ -55,3 +55,31 @@ func test_ch7_scene_builds_fight() -> void:
 	assert_not_null(scene.creature, "yaratik oyuncu var")
 	assert_not_null(scene.boss, "samurai boss var")
 	assert_eq(GameState.current_chapter, &"ch7")
+
+
+func test_creature_inverted_controls() -> void:
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	add_child_autofree(c)
+	c.controls_inverted = true
+	ai.axis(1.0)  # saga basiliyor ama ters doner — yaratik sola kayar
+	await _frames(20)
+	assert_lt(c.global_position.x, 0.0, "ters kontrolde saga tusa sola gider")
+
+
+func test_ch7_meta_assault_inverts_then_restores() -> void:
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(10)
+	# Boss'u %55'in altina indir — meta saldiri tetiklenir
+	scene.boss.health.take(int(scene.boss.health.max_health * 0.5))
+	await _frames(3)
+	assert_true(scene._meta_done, "meta saldiri tetiklendi")
+	# Telegraph ~0.8s sonra kontrol tersine doner
+	await get_tree().create_timer(1.0).timeout
+	assert_true(scene.creature.controls_inverted, "kontroller ters dondu")
+	# ~5.5s pencere + acilma tween'i: bitince kontrol eski haline doner
+	await get_tree().create_timer(6.0).timeout
+	assert_false(scene.creature.controls_inverted, "pencere bitince kontrol duzelir")
