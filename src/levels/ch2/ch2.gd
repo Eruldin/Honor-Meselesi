@@ -16,6 +16,7 @@ const ARENA_R := 1580.0
 @export var grant_drone_to_player := true
 @export var auto_advance := true
 
+var _spawn_grace := false
 var samurai: Samurai
 var camera: ScreenShake
 var _look_x := 0.0
@@ -139,6 +140,9 @@ func _build_entities() -> void:
 	var cp: Vector2 = GameState.respawn_point(Vector2(-10000, -10000))
 	if cp.x > -5000.0:
 		spawn = cp + Vector2(0, -14)
+		_spawn_grace = true
+	if _spawn_grace:
+		samurai.invuln_timer = maxf(samurai.invuln_timer, 1.0)
 	samurai.global_position = spawn
 	add_child(samurai)
 
