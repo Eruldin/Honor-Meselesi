@@ -143,6 +143,11 @@ func test_vlad_phase2_darkness_and_eyes() -> void:
 	add_child_autofree(s)
 	assert_gt(s.z_index, b.darkness.z_index,
 		"kazik telegraph'i karanlik ortusunun ustunde kalmali")
+	# Ayni aile: balonlar z=0 host cocugu — portal (z=7) ya da karanlik
+	# (z=5) altinda kalan ikon gorunmez olurdu.
+	var p := Pictogram.show_on(b, &"alarm")
+	assert_gt(p.z_index, b.darkness.z_index,
+		"piktogram balonu dunya ortulerinin ustunde kalmali")
 
 
 func test_blood_spike_telegraph_then_hit() -> void:
