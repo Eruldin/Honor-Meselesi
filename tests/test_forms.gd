@@ -137,6 +137,16 @@ func test_sovalye_expiry_waits_out_of_cutscene() -> void:
 	assert_eq(sam.form.id, &"samurai", "cutscene bitince expiry transform uygulamali")
 
 
+func test_sovalye_form_id_not_knight() -> void:
+	# Regresyon: adim-sesi dali '&"knight"' aradi ama form id '&"sovalye"' —
+	# zirhli adim sesi hic calmiyordu. Kaynakta yanlis id kalmasin.
+	var src := FileAccess.get_file_as_string("res://src/player/samurai.gd")
+	assert_false(src.contains('&"knight"'),
+		'form id "&"knight" gecersiz — dogru id: &"sovalye"')
+	var f := FormLibrary.get_form(&"sovalye")
+	assert_not_null(f, "sovalye formu kayitli olmali")
+
+
 func test_settings_roundtrip() -> void:
 	Settings.set_fx_intensity(0.35)
 	Settings.set_shake_scale(0.5)
