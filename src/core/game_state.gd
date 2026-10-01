@@ -134,14 +134,19 @@ func from_dict(data: Dictionary) -> void:
 	soul = int(data.get("soul", 0))
 	max_health_bonus = int(data.get("hp_bonus", 0))
 	flags.clear()
-	for k in data.get("flags", {}):
-		var v: Variant = data["flags"][k]
-		if v is Dictionary and v.has("__v2"):
-			var arr: Array = v["__v2"]
-			v = Vector2(float(arr[0]), float(arr[1]))
-		flags[k] = v
+	var raw_flags: Variant = data.get("flags", {})
+	if raw_flags is Dictionary:
+		for k in raw_flags:
+			var v: Variant = raw_flags[k]
+			if v is Dictionary and v.has("__v2"):
+				var arr: Variant = v["__v2"]
+				if arr is Array and arr.size() >= 2:
+					v = Vector2(float(arr[0]), float(arr[1]))
+			flags[k] = v
 	unlocked_forms.clear()
-	for f in data.get("unlocked_forms", ["samurai"]):
-		unlocked_forms.append(StringName(f))
+	var raw_forms: Variant = data.get("unlocked_forms", ["samurai"])
+	if raw_forms is Array:
+		for f in raw_forms:
+			unlocked_forms.append(StringName(f))
 	if unlocked_forms.is_empty():
 		unlocked_forms.append(&"samurai")
