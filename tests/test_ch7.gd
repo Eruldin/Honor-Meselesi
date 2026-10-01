@@ -29,13 +29,35 @@ func test_glitch_creature_moves_and_shoots() -> void:
 	assert_true(found, "glitch tanesi firlatilir")
 
 
+func test_creature_hurtbox_takes_hitbox_damage() -> void:
+	# Regresyon: can_be_hit() owner'da take_damage arar — creature'da
+	# _on_hit_info diye adlandirildigi icin butun hitbox yolu olu idi.
+	var c := GlitchCreature.new()
+	c.set_input_source(AIInputSource.new())
+	add_child_autofree(c)
+	assert_true(c.hurtbox.can_be_hit(), "creature hurtbox can_be_hit")
+	var hb := Hitbox.new()
+	hb.collision_layer = 32
+	hb.collision_mask = 4
+	var col := CollisionShape2D.new()
+	var r := RectangleShape2D.new()
+	r.size = Vector2(20, 20)
+	col.shape = r
+	hb.add_child(col)
+	hb.global_position = c.global_position
+	add_child_autofree(hb)
+	hb.activate(DamageInfo.make(1, null, Vector2.ZERO, true, true))
+	await _frames(3)
+	assert_lt(c.health.current, c.health.max_health, "hitbox yaratici hasar verir")
+
+
 func test_creature_hit_iframes_and_blink() -> void:
 	var c := GlitchCreature.new()
 	var ai := AIInputSource.new()
 	c.set_input_source(ai)
 	add_child_autofree(c)
 	await _frames(3)
-	c._on_hit_info(DamageInfo.make(1, c))
+	c.take_damage(DamageInfo.make(1, c))
 	assert_gt(c._iframes, 0.0, "vurusta dokunulmazlik")
 	# i-frame goz kirpmasi: 70ms'lik desen ~12 fizik karesinde en az bir
 	# 0.55 penceresi yakalar — eski kod alpha'yi hic degistirmezdi.

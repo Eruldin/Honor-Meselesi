@@ -76,7 +76,7 @@ func _process(_delta: float) -> void:
 		creature.global_position = Vector2(150, FLOOR_Y - 10)
 		creature.velocity = Vector2.ZERO
 		FX.glitch(0.4, 0.3)
-		creature._on_hit_info(DamageInfo.make(1, null, Vector2.ZERO, true, true))
+		creature.take_damage(DamageInfo.make(1, null, Vector2.ZERO, true, true))
 	# Zerrecik suzulmesi: yavas yukari + hafif yalpa, ustte sarilir
 	for m in _motes:
 		m.position.y -= 7.0 * _delta

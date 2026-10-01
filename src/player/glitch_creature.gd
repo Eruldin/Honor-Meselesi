@@ -66,7 +66,6 @@ func _ready() -> void:
 	hb.shape = hr
 	hurtbox.add_child(hb)
 	add_child(hurtbox)
-	hurtbox.hit_received.connect(_on_hit_info)
 
 
 func set_input_source(src: InputSource) -> void:
@@ -168,7 +167,7 @@ func _fire_bolt() -> void:
 	AudioManager.play_sfx(&"sfx/attack", global_position, -6.0)
 
 
-func _on_hit_info(info: DamageInfo) -> void:
+func take_damage(info: DamageInfo) -> void:
 	if _iframes > 0.0 or dead:
 		return
 	health.take(info.damage)
