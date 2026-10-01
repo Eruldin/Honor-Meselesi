@@ -302,6 +302,22 @@ func test_imp_hops_while_chasing() -> void:
 	assert_true(hopped, "fark eden imp arada hoplar")
 
 
+func test_demon_axe_leap_attack() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(240, 240)
+	var d := DemonAxe.new()
+	d.global_position = Vector2(350, 240)
+	add_child_autofree(d)
+	var leapt := false
+	for i in 90:
+		await get_tree().physics_frame
+		if d.velocity.y < -40.0:
+			leapt = true
+			break
+	assert_true(leapt, "orta menzilde atilim sicrayisi yapar")
+
+
 func test_crow_dive_uses_jump_anim() -> void:
 	if not AssetLoader.has_frames(&"enemy/crow/jump"):
 		pending("crow/jump yok (CI) — atlaniyor")
