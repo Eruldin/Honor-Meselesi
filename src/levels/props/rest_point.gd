@@ -4,6 +4,8 @@ extends Area2D
 ## durumu, tam can + tam ruh, checkpoint_id set edilir ve oyun kaydedilir.
 ## Metinsiz geri bildirim: sleep piktogrami + mavi parilti.
 
+const GlowSprite := preload("res://src/levels/props/glow_sprite.gd")
+
 @export var checkpoint_id: StringName = &"cp"
 
 var _used := false
@@ -46,6 +48,12 @@ func _ready() -> void:
 	sprite.name = "sprite"
 	sprite.position.y = -6
 	add_child(sprite)
+
+	# Guvenli liman pariltisi — dinlenme noktasi karanlikta da okunur.
+	var glow := GlowSprite.new(20.0, Color(0.45, 0.75, 1.0, 0.35))
+	glow.position.y = -8
+	glow.z_index = -1
+	add_child(glow)
 
 	area_entered.connect(_on_area_entered)
 
