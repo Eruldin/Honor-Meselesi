@@ -98,13 +98,37 @@ func _run_step(s: Dictionary) -> void:
 			var speed: float = maxf(float(s.get("speed", 55.0)), 1.0)
 			_face(n, 1 if target_x > n.global_position.x else -1)
 			var dur := absf(target_x - n.global_position.x) / speed
+			# Tween tasisir: oyuncunun kendi _process'i adim hissi uretmez —
+			# kosu animi ve ritmik ayak sesi kesik sahneye taslanir.
+			if n is Samurai and n._anims != null:
+				n._anims.play(&"run")
+				# _sync_anim want'u _anim_name ile karsilastirir; takip
+				# degiskeni o anki want'a sabitlenmezse sonraki frame
+				# kosu animini idle ile ezer.
+				n._anim_name = &"idle"
+				# Yavas yaklasma kosu adimi gibi gorunmesin.
+				n._anims.speed_scale = clampf(speed / 130.0, 0.6, 1.3)
+			_walk_sfx(n, dur)
 			await _move(n, Vector2(target_x, n.global_position.y), dur, 0.0)
+			if n is Samurai:
+				# _anim_name sifirlaninca _sync_anim sonraki frame idle'a doner.
+				n._anim_name = &""
+				if n._anims != null:
+					n._anims.speed_scale = 1.0
 		"move_to":
 			await _move(_node(s) as Node2D, s.get("to", Vector2.ZERO),
 				float(s.get("dur", 0.5)), 0.0)
 		"hop_to":
-			await _move(_node(s) as Node2D, s.get("to", Vector2.ZERO),
-				float(s.get("dur", 0.5)), float(s.get("arc", 26.0)))
+			var n := _node(s) as Node2D
+			var dur := float(s.get("dur", 0.5))
+			if n is Samurai and n._anims != null:
+				# Ark bir sicrayis — idle kayma yerine ziplama pozu.
+				n._anims.play(&"jump")
+				n._anim_name = &"idle"
+			await _move(n, s.get("to", Vector2.ZERO), dur,
+				float(s.get("arc", 26.0)))
+			if n is Samurai:
+				n._anim_name = &""
 		"picto":
 			var n := _node(s)
 			var p := Pictogram.show_on(n, StringName(s.get("icon", &"alarm")),
@@ -123,6 +147,21 @@ func _run_step(s: Dictionary) -> void:
 				await tw.finished
 		_:
 			push_warning("CutscenePlayer: bilinmeyen op '%s'" % s.get("op"))
+
+
+## Kesik-sahne yuruyusunde ritmik ayak sesi — oyuncunun kendi adim
+## mekanigi S_CUTSCENE'de calismadigindan burada sayilir.
+func _walk_sfx(n: Node2D, dur: float) -> void:
+	if not (n is Samurai):
+		return
+	var t := 0.0
+	while t < dur:
+		AudioManager.play_sfx(
+			StringName("sfx/step_dirt_" + str(randi() % 4 + 1)),
+			n.global_position, -13.0, randf_range(0.9, 1.1))
+		t += 0.30
+		if t < dur:
+			await _timer(0.30)
 
 
 func _move(n: Node2D, to: Vector2, dur: float, arc: float) -> void:

@@ -72,6 +72,25 @@ func test_cutscene_walk_to_moves_node() -> void:
 	assert_almost_eq(n.global_position.x, 60.0, 2.0)
 
 
+func test_walk_to_plays_run_then_resyncs_idle() -> void:
+	if not AssetLoader.has_frames(&"player/samurai/run"):
+		pending("samurai sheet'i yok (CI) — atlaniyor")
+		return
+	var sam := Samurai.new()
+	sam.global_position = Vector2(0, 60)
+	add_child_autofree(sam)
+	await wait_process_frames(2)
+	sam.sm.change_to(Samurai.S_CUTSCENE, true)
+	var cs := CutscenePlayer.new()
+	add_child_autofree(cs)
+	cs.play([{op = "walk_to", node = "s", x = 70.0, speed = 60.0}],
+		{"s": sam})
+	await wait_seconds(0.2)
+	assert_eq(sam._anims.animation, &"run", "yuruyus animi oynar")
+	await wait_seconds(1.5)
+	assert_eq(sam._anims.animation, &"idle", "yuruyus bitince idle'a doner")
+
+
 # --- Pictogram ---
 
 func test_pictogram_shows_and_frees() -> void:
