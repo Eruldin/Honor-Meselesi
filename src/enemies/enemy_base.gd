@@ -200,8 +200,8 @@ func on_parried() -> void:
 
 func _on_died() -> void:
 	EventBus.actor_died.emit(self)
-	AudioManager.play_sfx(&"sfx/slime_death", global_position, -6.0,
-		randf_range(0.92, 1.08))
+	AudioManager.play_sfx(&"sfx/death_squish" if randf() < 0.5 else &"sfx/slime_death",
+		global_position, -6.0, randf_range(0.92, 1.08))
 	_death_debris()
 	# Olu beden artik zarar vermez/vurulamaz — solma suresince hayalet
 	# temas hasari ve lutfen pogo yok.
