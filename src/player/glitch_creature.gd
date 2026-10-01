@@ -17,12 +17,16 @@ var _dash_cd := 0.0
 var _bolt_cd := 0.0
 var _iframes := 0.0
 var _flicker := 0.0
+var _coyote := 0.0
+var _jbuf := 0.0
+var _tuning: Tuning
 var dead := false
 
 signal died
 
 
 func _ready() -> void:
+	_tuning = load("res://config/tuning.tres")
 	add_to_group(&"player")
 	collision_layer = 4
 	collision_mask = 1 | 32
@@ -132,6 +136,12 @@ func _physics_process(delta: float) -> void:
 		anims.modulate.a = want_a
 
 	if input.jump_just_pressed():
+		_jbuf = _tuning.jump_buffer_time
+	_jbuf = maxf(_jbuf - delta, 0.0)
+	_coyote = _tuning.coyote_time if is_on_floor() else maxf(_coyote - delta, 0.0)
+	if _jbuf > 0.0 and (is_on_floor() or _coyote > 0.0):
+		_jbuf = 0.0
+		_coyote = 0.0
 		velocity.y = -160.0  # hafif hop
 	if input.jump_just_released() and velocity.y < -60.0:
 		velocity.y = -60.0  # erken birakilan hop kisa kalir
