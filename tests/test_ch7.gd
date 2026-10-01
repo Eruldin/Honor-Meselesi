@@ -364,4 +364,41 @@ func test_ch7_boss_dead_rebuilds_epilogue() -> void:
 				if c is Label and c.text == "15 YIL SONRA...":
 					found = true
 	assert_true(found, "epilog karti yeniden gosterilir")
+
+
+func test_samurai_boss_sprite_flips_with_facing() -> void:
+	# Facing hesaplaniyor ama sprite'a hic uygulanmiyordu — final boss
+	# savrulus yonune gore gorsel donmuyordu.
+	var b := SamuraiBoss.new()
+	b.arena_left = -200
+	b.arena_right = 200
+	b.global_position = Vector2(0, 0)
+	var c := GlitchCreature.new()
+	c.global_position = Vector2(-40, 0)
+	add_child_autofree(b)
+	add_child_autofree(c)
+	b.activate()
+	await _frames(4)
+	assert_eq(b.facing, -1, "oyuncu solda -> facing -1")
+	assert_true(b.sprite.flip_h, "sola bakan boss sprite ters doner")
+	c.global_position = Vector2(40, 0)
+	await _frames(4)
+	assert_eq(b.facing, 1, "oyuncu sagda -> facing 1")
+	assert_false(b.sprite.flip_h, "saga bakan boss sprite duz durur")
+
+
+func test_samurai_boss_clamped_to_arena() -> void:
+	# arena_left/right ch7'de ataniyor ama hic uygulanmiyordu — boss
+	# dash/approach ile arena sinirini asabiliyordu.
+	var b := SamuraiBoss.new()
+	b.arena_left = 10
+	b.arena_right = 50
+	b.global_position = Vector2(120, 0)
+	var c := GlitchCreature.new()
+	c.global_position = Vector2(200, 0)
+	add_child_autofree(b)
+	add_child_autofree(c)
+	b.activate()
+	await _frames(4)
+	assert_lte(b.global_position.x, 50.0, "arena disina cikamaz")
 	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
