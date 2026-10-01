@@ -169,3 +169,15 @@ func test_cutscene_survives_free_during_wait_step() -> void:
 	holder.free()
 	await get_tree().create_timer(0.9).timeout
 	assert_true(true, "free sirasinda bekleyen kesik temiz cikis — hata yok")
+
+
+func test_fx_slowmo_survives_listener_free() -> void:
+	# Regresyon: slow-mo beklemesi SceneTreeTimer'a bagli — listener free'si
+	# sonrasi _ts_reqs erase freed uye erisimiydi.
+	var fl := FxListener.new()
+	add_child(fl)
+	fl._slow_time(0.5, 0.6)
+	await get_tree().create_timer(0.2).timeout
+	fl.free()
+	await get_tree().create_timer(0.6).timeout
+	assert_true(true, "free yarisi slow-mo beklemesini sessizce keser")
