@@ -148,7 +148,7 @@ func _physics_process(delta: float) -> void:
 		_dash_cd = 0.7
 		_iframes = 0.25
 		FX.glitch(0.35, 0.2)
-		position.x += facing * 26.0
+		move_and_collide(Vector2(facing * 26.0, 0))  # duvar icine isinlanmaz
 		AudioManager.play_sfx(&"sfx/dash", global_position)
 	if input.attack_just_pressed() and _bolt_cd <= 0.0:
 		_bolt_cd = 0.32

@@ -105,6 +105,30 @@ func test_bolt_damages_samurai_boss() -> void:
 		"glitch tanesi boss'u yaralar")
 
 
+func test_creature_dash_stops_at_wall() -> void:
+	# Glitch dash fiziksel hareket — 26px'lik kayma duvar arkasina gecmemeli.
+	var wall := StaticBody2D.new()
+	wall.collision_layer = 1
+	var wc := CollisionShape2D.new()
+	var wr := RectangleShape2D.new()
+	wr.size = Vector2(20, 60)
+	wc.shape = wr
+	wall.add_child(wc)
+	wall.global_position = Vector2(50, 0)
+	add_child_autofree(wall)
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	c.global_position = Vector2(0, 0)
+	c.facing = 1
+	add_child_autofree(c)
+	await _frames(3)
+	ai.tap(&"dash")
+	await _frames(3)
+	assert_lt(c.global_position.x, 40.0,
+		"dash duvarin arkasina gecmemeliydi")
+
+
 func test_bolt_dies_on_wall() -> void:
 	# Glitch tanesi terrain govdesinde silinir — duvar arkasindan vurmaz.
 	var wall := StaticBody2D.new()
