@@ -192,15 +192,17 @@ func load_settings() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	if not data is Dictionary:
 		return
-	fx_intensity = float(data.get("fx_intensity", 0.75))
-	shake_scale = float(data.get("shake_scale", 1.0))
-	flash_scale = float(data.get("flash_scale", 1.0))
-	music_volume = float(data.get("music_volume", 1.0))
-	sfx_volume = float(data.get("sfx_volume", 1.0))
-	master_volume = float(data.get("master_volume", 1.0))
+	# settings.json plaintext — elle bozulan buyuk/kucuk degerler
+	# setter kelepçelerinin aynisiyla sinirlanir.
+	fx_intensity = clampf(float(data.get("fx_intensity", 0.75)), 0.0, 1.0)
+	shake_scale = clampf(float(data.get("shake_scale", 1.0)), 0.0, 1.0)
+	flash_scale = clampf(float(data.get("flash_scale", 1.0)), 0.0, 1.0)
+	music_volume = clampf(float(data.get("music_volume", 1.0)), 0.0, 1.0)
+	sfx_volume = clampf(float(data.get("sfx_volume", 1.0)), 0.0, 1.0)
+	master_volume = clampf(float(data.get("master_volume", 1.0)), 0.0, 1.0)
 	language = String(data.get("language", "tr"))
 	fullscreen = bool(data.get("fullscreen", false))
-	window_scale = int(data.get("window_scale", 3))
+	window_scale = clampi(int(data.get("window_scale", 3)), 1, 6)
 	seen_flash_warning = bool(data.get("seen_flash_warning", false))
 	difficulty = clampi(int(data.get("difficulty", 1)), 0, 2)
 	var raw_binds: Variant = data.get("binds", {})
