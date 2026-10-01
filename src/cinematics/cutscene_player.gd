@@ -115,8 +115,16 @@ func _run_step(s: Dictionary) -> void:
 			await _move(_node(s) as Node2D, s.get("to", Vector2.ZERO),
 				float(s.get("dur", 0.5)), 0.0)
 		"hop_to":
-			await _move(_node(s) as Node2D, s.get("to", Vector2.ZERO),
-				float(s.get("dur", 0.5)), float(s.get("arc", 26.0)))
+			var n := _node(s) as Node2D
+			var dur := float(s.get("dur", 0.5))
+			if n is Samurai and n._anims != null:
+				# Ark bir sicrayis — idle kayma yerine ziplama pozu.
+				n._anims.play(&"jump")
+				n._anim_name = &"idle"
+			await _move(n, s.get("to", Vector2.ZERO), dur,
+				float(s.get("arc", 26.0)))
+			if n is Samurai:
+				n._anim_name = &""
 		"picto":
 			var n := _node(s)
 			var p := Pictogram.show_on(n, StringName(s.get("icon", &"alarm")),
