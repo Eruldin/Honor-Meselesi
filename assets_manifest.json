@@ -1328,6 +1328,10 @@
    "pack": "AI Sheet",
    "path": "generated/ai/j_sit.png"
   },
+  "prop/player_weary": {
+   "pack": "AI Sheet",
+   "path": "generated/ai/j_weary.png"
+  },
   "prop/house_main": {
    "path": "generated/ai/j_house_main.png",
    "pack": "AI Sheet"

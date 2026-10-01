@@ -130,6 +130,37 @@ func test_amalgam_gate_opens_without_unlock() -> void:
 		"robot kilitliyken samurai da hasar verir")
 
 
+func test_weary_pose_only_in_ch6_rest() -> void:
+	# M9: bellek dunyasi checkpoint'i — basini ellerine alma pozu
+	if not AssetLoader.has_asset(&"prop/player_weary"):
+		pending("player_weary yok (CI) — atlaniyor")
+		return
+	var sam := _make_samurai()
+	await _frames(5)
+	GameState.current_chapter = &"ch6"
+	sam.sm.change_to(Samurai.S_REST, true)
+	await _frames(2)
+	assert_not_null(sam._weary, "ch6 rest'te yorgun poz sprite'i dogar")
+	assert_true(sam._weary.visible, "yorgun poz gorunur")
+	assert_true(sam._anims == null or not sam._anims.visible,
+		"ayakta animasyon gizli")
+	sam.sm.change_to(Samurai.S_IDLE, true)
+	await _frames(2)
+	assert_false(sam._weary.visible, "dinlenme bitince poz gizlenir")
+	assert_true(sam._anims == null or sam._anims.visible or sam.sprite.visible,
+		"normal gorsel geri gelir")
+
+
+func test_weary_pose_off_in_other_chapters() -> void:
+	var sam := _make_samurai()
+	await _frames(5)
+	GameState.current_chapter = &"ch1"
+	sam.sm.change_to(Samurai.S_REST, true)
+	await _frames(2)
+	assert_true(sam._weary == null or not sam._weary.visible,
+		"ch1'de yorgun poz yok — normal interact animi")
+
+
 func test_ch6_scene_builds() -> void:
 	var scene: Node2D = load("res://src/levels/ch6/Ch6.tscn").instantiate()
 	scene.auto_advance = false
