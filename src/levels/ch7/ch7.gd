@@ -276,7 +276,7 @@ func _finish() -> void:
 	# kasayi takacak olan genc samurayin dongusu. Sonra jenerik + Prolog.
 	await get_tree().create_timer(1.0, true).timeout
 	var card := Label.new()
-	card.text = "15 YIL SONRA..."
+	card.text = "15 YIL SONRA..." if Settings.language == "tr" else "15 YEARS LATER..."
 	card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	card.set_anchors_preset(Control.PRESET_FULL_RECT)

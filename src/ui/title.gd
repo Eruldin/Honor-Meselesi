@@ -154,9 +154,10 @@ func _build_menu() -> void:
 	vbox.position = Vector2(190, 174)
 	vbox.z_index = 10
 	add_child(vbox)
+	var is_tr := Settings.language == "tr"
 	if SaveSystem.has_save():
-		vbox.add_child(_btn("DEVAM ET", _on_continue))
-	_new_game_btn = _btn("YENI OYUN", func() -> void:
+		vbox.add_child(_btn("DEVAM ET" if is_tr else "CONTINUE", _on_continue))
+	_new_game_btn = _btn("YENI OYUN" if is_tr else "NEW GAME", func() -> void:
 		# Kayit varsa tek tikla silinmesin — ikinci tik onaylar
 		if _new_game_armed or not SaveSystem.has_save():
 			_on_new_game()
@@ -165,9 +166,9 @@ func _build_menu() -> void:
 		_new_game_btn.text = "EMIN MISIN?" if Settings.language == "tr" else "SURE?"
 		_new_game_btn.modulate = Color(1.0, 0.5, 0.5))
 	vbox.add_child(_new_game_btn)
-	vbox.add_child(_btn("AYARLAR", _on_settings))
+	vbox.add_child(_btn("AYARLAR" if is_tr else "SETTINGS", _on_settings))
 	if not OS.has_feature("web"):
-		vbox.add_child(_btn("CIKIS", func() -> void: get_tree().quit()))
+		vbox.add_child(_btn("CIKIS" if is_tr else "QUIT", func() -> void: get_tree().quit()))
 
 
 func _process(delta: float) -> void:
