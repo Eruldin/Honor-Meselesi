@@ -247,28 +247,14 @@ func _on_boss_defeated() -> void:
 
 
 func _finish() -> void:
-	# Dongu kapanir — jenerik yazisi sonra Prolog'a don
+	# Dongu kapanir — jenerik (CREDITS.md'den) sonra Prolog'a don
 	AudioManager.play_music(&"music/credits")
-	var layer := CanvasLayer.new()
-	add_child(layer)
-	if AssetLoader.has_asset(&"ui/logo"):
-		var logo := Sprite2D.new()
-		logo.texture = AssetLoader.texture(&"ui/logo")
-		logo.centered = true
-		logo.scale = Vector2.ONE * (240.0 / logo.texture.get_width())
-		logo.position = Vector2(240, 135)
-		layer.add_child(logo)
-	else:
-		var label := Label.new()
-		label.text = "HONOR MESELESI"
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.set_anchors_preset(Control.PRESET_CENTER)
-		label.add_theme_font_size_override("font_size", 14)
-		label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
-		layer.add_child(label)
-	await get_tree().create_timer(3.0, true).timeout
-	if auto_advance:
-		EventBus.scene_change_requested.emit(PROLOG_PATH)
+	var credits := Credits.new()
+	add_child(credits)
+	credits.finished.connect(func() -> void:
+		if auto_advance:
+			EventBus.scene_change_requested.emit(PROLOG_PATH),
+		CONNECT_ONE_SHOT)
 
 
 ## MetaDirector saldirisi: glitch pulsu + swap isaretiyle uyarilir,
