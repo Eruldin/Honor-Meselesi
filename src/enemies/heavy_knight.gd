@@ -24,8 +24,9 @@ func _ready() -> void:
 	super._ready()
 	if not using_real_sprite:
 		sprite.modulate = Color(0.6, 0.6, 0.75)
-	# Agir temas = 2 hasar
-	contact_hitbox.activate(DamageInfo.make(2, self, Vector2.ZERO, true, true))
+	# Agir temas = 2 hasar — sersemleme sonrasi re-aktivasyon da bunu kullanir
+	_contact_info = DamageInfo.make(2, self, Vector2.ZERO, true, true)
+	contact_hitbox.activate(_contact_info)
 
 
 func _physics_process(delta: float) -> void:

@@ -123,6 +123,22 @@ func test_guardian_dead_battery_no_soul_farm() -> void:
 	assert_eq(GameState.soul, soul0, "olu bedende vurus ruh vermez")
 
 
+func test_guardian_contact_damage_survives_stagger() -> void:
+	# Regresyon: sersemleme sonrasi temas-hitbox re-aktivasyonu base'in
+	# 1-hasarlik varsayilanini kullaniyordu — guardian temasi 2'den 1'e
+	# dusuyordu.
+	_flat_ground()
+	var g := Guardian.new()
+	g.global_position = Vector2(400, 230)
+	add_child_autofree(g)
+	await wait_seconds(0.1)
+	assert_eq(g.contact_hitbox.damage_info.damage, 2, "temas hasari 2")
+	g.stagger_timer = 0.3
+	await wait_seconds(0.4)
+	assert_eq(g.contact_hitbox.damage_info.damage, 2,
+		"sersemleme sonrasi da 2")
+
+
 # --- Unit-0 ---
 
 func test_unit0_armor_blocks_until_parried() -> void:

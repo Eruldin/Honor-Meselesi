@@ -18,7 +18,10 @@ func _ready() -> void:
 	super._ready()
 	if not using_real_sprite:
 		sprite.modulate = Color(0.4, 0.5, 0.7)
-	contact_hitbox.activate(DamageInfo.make(2, self, Vector2.ZERO, true, true))
+	# Temas hasari bilgisini degistir — sersemleme sonrasi otomatik
+	# yeniden-aktivasyon da ayni bilgiyi kullanir.
+	_contact_info = DamageInfo.make(2, self, Vector2.ZERO, true, true)
+	contact_hitbox.activate(_contact_info)
 	battery = WeakBattery.new(self)
 	add_child(battery)
 
@@ -37,6 +40,8 @@ func _physics_process(delta: float) -> void:
 
 ## Ana govde her zaman bloklar — pil haric hicbir vurus gecmez.
 func take_damage(_info: DamageInfo) -> void:
+	if not health.is_alive():
+		return
 	FX.spark(hurtbox.global_position + Vector2(0, -10))
 	FX.hitstop(0.03)
 	AudioManager.play_sfx(&"sfx/clang", global_position, -4.0)
