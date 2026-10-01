@@ -4,6 +4,7 @@ extends Node2D
 
 var _scene
 var _cleared := false
+var _rest := false
 
 
 func _ready() -> void:
@@ -20,6 +21,8 @@ func _ready() -> void:
 			death = true
 		if a == "--cleared":
 			cleared = true
+		if a == "--rest":
+			_rest = true
 	_cleared = cleared
 	var path := "res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)]
 	if ch == "prolog" or ch == "test_room":
@@ -68,19 +71,40 @@ func _shoot(ch: String, spot: float) -> void:
 		if cam != null:
 			cam.global_position.x = clampf(
 				sam.global_position.x, 240.0, lw - 240.0)
+		# Rest modu: ch6 dinlenme vignette'i — ilk kare yorgunluk
+		# pozunu, ikinci kare katana-inceleme pozunu yakar.
+		if _rest:
+			GameState.current_chapter = StringName(ch)
+			sam.sm.change_to(Samurai.S_REST, true)
+			await get_tree().create_timer(1.2).timeout
+			var img_r := await _snap()
+			if img_r != null:
+				img_r.save_png(
+					"res://.probe_out/%s_%.0f_rest1.png" % [ch, spot * 100])
+			await get_tree().create_timer(1.0).timeout
+			var img_r2 := await _snap()
+			if img_r2 != null:
+				img_r2.save_png(
+					"res://.probe_out/%s_%.0f_rest2.png" % [ch, spot * 100])
+			get_tree().quit()
+			return
 	await get_tree().create_timer(1.2).timeout
-	var img: Image = null
-	for i in 10:
-		RenderingServer.force_draw(true)
-		await get_tree().process_frame
-		var tex := get_viewport().get_texture()
-		if tex != null:
-			img = tex.get_image()
-		if img != null:
-			break
+	var img := await _snap()
 	if img == null:
 		push_error("probe: no frame rendered")
 		get_tree().quit(1)
 		return
 	img.save_png("res://.probe_out/%s_%.0f.png" % [ch, spot * 100])
 	get_tree().quit()
+
+
+func _snap() -> Image:
+	for i in 10:
+		RenderingServer.force_draw(true)
+		await get_tree().process_frame
+		var tex := get_viewport().get_texture()
+		if tex != null:
+			var img := tex.get_image()
+			if img != null:
+				return img
+	return null
