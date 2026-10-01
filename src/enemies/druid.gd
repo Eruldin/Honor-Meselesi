@@ -20,3 +20,19 @@ func _physics_process(delta: float) -> void:
 		if absf(dx) < 30.0 and _anim_lock <= 0.0:
 			play_anim(&"attack", 0.7)
 			AudioManager.play_sfx(&"sfx/swipe", global_position, -10.0, 0.9)
+			_earth_burst(signf(dx))
+
+
+## Saldiri aninda onundeki zeminde yer-patlama efekti — buyucu imzasi.
+func _earth_burst(dir: float) -> void:
+	if not AssetLoader.has_frames(&"fx/druid_earth"):
+		return
+	var fx := AnimatedSprite2D.new()
+	fx.sprite_frames = AssetLoader.frames(&"fx/druid_earth")
+	var ts: Vector2 = fx.sprite_frames.get_frame_texture(&"default", 0).get_size()
+	fx.scale = Vector2.ONE * (46.0 / ts.y)
+	fx.position = Vector2(dir * 18.0, -ts.y * fx.scale.y * 0.5)
+	fx.z_index = 2
+	add_child(fx)
+	fx.play(&"default")
+	fx.animation_finished.connect(fx.queue_free, CONNECT_ONE_SHOT)
