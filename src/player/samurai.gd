@@ -303,12 +303,19 @@ func _process(delta: float) -> void:
 		if _step_timer <= 0.0:
 			_step_timer = 0.28
 			var is_dash = sm.current_name == S_DASH
-			var prefix = "sfx/run_dirt_" if is_dash else "sfx/step_dirt_"
-			var rand_idx = randi() % 4 + 1
-			AudioManager.play_sfx(
-				StringName(prefix + str(rand_idx)),
-				global_position, -14.0, randf_range(0.9, 1.1)
-			)
+			if form != null and form.id == &"knight":
+				# Zirhli form: agir adim sesi — govde agirligi duyulur.
+				AudioManager.play_sfx(
+					&"sfx/footstep2" if _step_alt else &"sfx/footstep",
+					global_position, -12.0, randf_range(0.9, 1.1))
+				_step_alt = not _step_alt
+			else:
+				var prefix = "sfx/run_dirt_" if is_dash else "sfx/step_dirt_"
+				var rand_idx = randi() % 4 + 1
+				AudioManager.play_sfx(
+					StringName(prefix + str(rand_idx)),
+					global_position, -14.0, randf_range(0.9, 1.1)
+				)
 			WeatherFx.puff(get_parent(), global_position + Vector2(0, -2))
 	else:
 		_step_timer = 0.05
