@@ -155,7 +155,8 @@ func _walk_sfx(n: Node2D, dur: float) -> void:
 	if not (n is Samurai):
 		return
 	var t := 0.0
-	while t < dur:
+	# Skip ile kesilen yuruyus sonrasi adimlar yeni sahneye sizmaz.
+	while t < dur and playing:
 		AudioManager.play_sfx(
 			StringName("sfx/step_dirt_" + str(randi() % 4 + 1)),
 			n.global_position, -13.0, randf_range(0.9, 1.1))
