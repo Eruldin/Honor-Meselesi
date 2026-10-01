@@ -237,6 +237,10 @@ func _build_entities() -> void:
 		trigger.global_position = Vector2(ARENA_X, 170)
 		trigger.area_entered.connect(_on_arena_entered)
 		add_child(trigger)
+	elif not GameState.get_flag(&"ch2_done", false):
+		# Boss olmus ama bolum-gecisi hic oynanmamis (quit/crash/olum):
+		# odul yazili, epilog yok — arena cikisina portal dogur.
+		_make_cleared_exit(&"fx/portal_dark")
 
 	# Olum golgesi — olumde birakilan ruh vurunca geri alinir
 	if GameState.has_death_mark():
@@ -343,6 +347,26 @@ func _go_ch3() -> void:
 	SaveSystem.save_game()
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH3_PATH)
+
+
+## Boss odasi temizlenmis ama bolum-gecisi oynanmamis durumda: arena
+## cikisina portal + giris tetigi — oyuncu yuruyerek sonraki bolume gecer.
+func _make_cleared_exit(portal_key: StringName) -> void:
+	var portal := PortalFx.make(Vector2(24, 40), portal_key)
+	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
+	add_child(portal)
+	var trig := Area2D.new()
+	trig.collision_layer = 0
+	trig.collision_mask = 4
+	var c := CollisionShape2D.new()
+	var r := RectangleShape2D.new()
+	r.size = Vector2(30, 140)
+	c.shape = r
+	trig.add_child(c)
+	trig.global_position = portal.global_position
+	trig.area_entered.connect(
+		func(_a: Area2D) -> void: _go_ch3(), CONNECT_ONE_SHOT)
+	add_child(trig)
 
 
 func _on_thief_cameo(area: Area2D) -> void:

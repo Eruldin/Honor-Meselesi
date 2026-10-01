@@ -1053,6 +1053,10 @@ func _build_entities() -> void:
 		add_child(boss)
 		_boss_home = boss.global_position
 		boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
+	elif not GameState.get_flag(&"ch1_done", false):
+		# Boss olmus ama bolum-gecisi hic oynanmamis (quit/crash/olum):
+		# odul yazili, epilog yok — arena cikisina portal dogur.
+		_make_cleared_exit(&"fx/portal")
 
 	# Arena tetigi duvarin ICINDE — oyuncu tamamen girince kapanir
 	if not GameState.get_flag(&"ch1_boss_dead", false):
@@ -1275,6 +1279,26 @@ func _go_ch2() -> void:
 	SaveSystem.save_game()
 	if auto_advance:
 		EventBus.scene_change_requested.emit(CH2_PATH)
+
+
+## Boss odasi temizlenmis ama bolum-gecisi oynanmamis durumda: arena
+## cikisina portal + giris tetigi — oyuncu yuruyerek sonraki bolume gecer.
+func _make_cleared_exit(portal_key: StringName) -> void:
+	var portal := PortalFx.make(Vector2(24, 40), portal_key)
+	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
+	add_child(portal)
+	var trig := Area2D.new()
+	trig.collision_layer = 0
+	trig.collision_mask = 4
+	var c := CollisionShape2D.new()
+	var r := RectangleShape2D.new()
+	r.size = Vector2(30, 140)
+	c.shape = r
+	trig.add_child(c)
+	trig.global_position = portal.global_position
+	trig.area_entered.connect(
+		func(_a: Area2D) -> void: _go_ch2(), CONNECT_ONE_SHOT)
+	add_child(trig)
 
 
 func _on_actor_died(actor: Node) -> void:

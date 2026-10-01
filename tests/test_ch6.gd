@@ -65,3 +65,26 @@ func test_ch6_scene_builds() -> void:
 	assert_not_null(scene.samurai)
 	assert_not_null(scene.boss)
 	assert_eq(GameState.current_chapter, &"ch6")
+
+
+func test_ch6_cleared_exit_portal_completes_chapter() -> void:
+	# Regresyon: boss-oldu bayragi yazili ama gecis yarida kesilmis
+	# (quit/crash/olum) — reload'da boss dogmaz; arena cikisindaki
+	# portal tetigi bolumu tamamlar (soft-lock onlemi).
+	GameState.set_flag(&"ch6_boss_dead")
+	var scene: Node2D = load("res://src/levels/ch6/Ch6.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(10)
+	assert_null(scene.boss, "olu boss dogmaz")
+	var trig: Area2D = null
+	for c in scene.get_children():
+		if c is Area2D and c.collision_mask == 4 \
+				and c.global_position.x > 1500.0:
+			trig = c
+	assert_not_null(trig, "cikis portal tetigi var")
+	var stub := Area2D.new()
+	add_child_autofree(stub)
+	trig.area_entered.emit(stub)
+	assert_true(GameState.get_flag(&"ch6_done", false),
+		"portal gecisi bolumu tamamlar")
