@@ -37,6 +37,11 @@ func _ready() -> void:
 	_build_hud()
 	SceneRouter.fade_to(0.0, 0.45)
 	EventBus.actor_died.connect(_on_actor_died)
+	# M10: sakin/savas muzik katmani — yakin dusman combat temaya gecirir
+	var md := MusicDirector.new()
+	md.player = samurai
+	md.calm_track = &"music/ch5"
+	add_child(md)
 
 
 func _process(delta: float) -> void:

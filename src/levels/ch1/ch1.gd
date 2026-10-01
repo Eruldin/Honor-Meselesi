@@ -36,6 +36,7 @@ var _boss_root: Control
 var _boss_started := false
 var _respawn_pending := false
 var _music_zone := 0
+var md: MusicDirector
 var _gate_body: StaticBody2D
 var _gate_sprite: Sprite2D
 
@@ -52,6 +53,11 @@ func _ready() -> void:
 	# yeni sahnenin acilmasi icin burada acilir.
 	SceneRouter.fade_to(0.0, 0.45)
 	EventBus.actor_died.connect(_on_actor_died)
+	# M10: sakin/savas muzik katmani — yakin dusman combat temaya gecirir
+	md = MusicDirector.new()
+	md.player = samurai
+	md.calm_track = &"music/ch1"
+	add_child(md)
 
 
 func _process(delta: float) -> void:
@@ -73,6 +79,7 @@ func _process(delta: float) -> void:
 		while _music_zone < ZONE_MUSIC.size() \
 				and samurai.global_position.x >= ZONE_MUSIC[_music_zone].x:
 			AudioManager.play_music(ZONE_MUSIC[_music_zone].id)
+			md.calm_track = ZONE_MUSIC[_music_zone].id
 			if ZONE_MUSIC[_music_zone].has("amb"):
 				AudioManager.play_ambience(ZONE_MUSIC[_music_zone].amb)
 			_music_zone += 1

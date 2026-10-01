@@ -31,6 +31,7 @@ func _ready() -> void:
 	tuning = load("res://config/tuning.tres")
 	collision_layer = 64
 	collision_mask = 1
+	add_to_group(&"enemies")
 
 	var col := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
