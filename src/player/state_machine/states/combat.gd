@@ -10,7 +10,8 @@ class Attack:
 		# Her kombo vurusuna kendi kesik efekti + savrus sesi;
 		# 3. vurus agir sheet + daha guclu hasar (finisher).
 		sam._spawn_slash(sam.combo_index >= 3)
-		AudioManager.play_sfx(&"sfx/attack", sam.global_position, 0.0, randf_range(0.92, 1.08))
+		var swing := &"sfx/attack_heavy" if sam.combo_index >= 3 else &"sfx/attack"
+		AudioManager.play_sfx(swing, sam.global_position, 0.0, randf_range(0.92, 1.08))
 		if sam.combo_index >= 2:
 			# Zincir vurusu: her yeni vurus hafif ileri tasir — kombo
 			# sabit durmak yerine dusmani takip eder.
