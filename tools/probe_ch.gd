@@ -27,6 +27,8 @@ func _ready() -> void:
 	var path := "res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)]
 	if ch == "prolog" or ch == "test_room":
 		path = "res://src/levels/%s/%s.tscn" % [ch, ch.capitalize().replace("_", "")]
+	elif ch == "epilog":
+		path = "res://src/levels/prolog/Epilog.tscn"
 	var scn := load(path)
 	if scn == null:
 		push_error("no scene for " + ch)
