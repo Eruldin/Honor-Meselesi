@@ -550,7 +550,9 @@ func _on_down_struck(hb: Hurtbox) -> void:
 
 
 func take_damage(info: DamageInfo) -> void:
-	if sm.current_name == S_DEAD:
+	# Olumde ve kesik-sahne oynarken gelen vurus (gecikmeli mermi, gecis
+	# fade'inde arta kalan temas) senkronu bozmaz — sahne kontrolu scriptte.
+	if sm.current_name in [S_DEAD, S_CUTSCENE]:
 		return
 	# Parry penceresi: parryable vurus hasar yerine kivilcim + sersemletme.
 	if sm.current_name == S_PARRY and parry_timer > 0.0 and info.parryable:
