@@ -83,3 +83,15 @@ func test_ch7_meta_assault_inverts_then_restores() -> void:
 	# ~5.5s pencere + acilma tween'i: bitince kontrol eski haline doner
 	await get_tree().create_timer(6.0).timeout
 	assert_false(scene.creature.controls_inverted, "pencere bitince kontrol duzelir")
+
+
+func test_credits_feeds_from_credits_md() -> void:
+	var c := Credits.new()
+	add_child_autofree(c)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_gt(c._scroll.get_child_count(), 10,
+		"CREDITS.md paket satirlari jenerige donustu")
+	watch_signals(c)
+	c._finish()
+	assert_signal_emitted(c, "finished")
