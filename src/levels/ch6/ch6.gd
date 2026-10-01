@@ -27,6 +27,7 @@ var _boss_started := false
 var _boss_home := Vector2.ZERO
 var _respawn_pending := false
 var _glitch_t := 6.0
+var _flicker_t := 4.0
 
 
 func _ready() -> void:
@@ -61,6 +62,14 @@ func _process(delta: float) -> void:
 	if _glitch_t <= 0.0:
 		_glitch_t = randf_range(5.0, 9.0)
 		FX.glitch(0.25, 0.5)
+	# M9: bellek dunyasi oyuncunun sprite'ini da bozar — ara ara kisa
+	# cyan glitch parlamasi (ortalama sallantidan bagimsiz, oyuncuyu
+	# dunyanin kirilganliginin parcasi gosterir).
+	if samurai != null and is_instance_valid(samurai):
+		_flicker_t -= delta
+		if _flicker_t <= 0.0:
+			_flicker_t = randf_range(4.5, 10.0)
+			samurai.sprite_flash(Color(0.7, 1.2, 1.5))
 
 	# Bosluk dususu: asama disina dusen 1 can kaybedip checkpoint'e doner
 	if samurai != null and not _respawn_pending 			and (samurai.global_position.y > 430.0 				or samurai.global_position.y < -80.0):
