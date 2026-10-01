@@ -29,6 +29,9 @@ func _ready() -> void:
 	_settings = SettingsMenu.new()
 	add_child(_settings)
 	AudioManager.play_music(&"music/title")
+	# Bolumden gelen ambiyans (ruzgar/magara) baslikta kalmasin — bos istek
+	# aktif katmani crossfade ile sessize indirir.
+	AudioManager.play_ambience(&"")
 
 
 func _build_scenery() -> void:
