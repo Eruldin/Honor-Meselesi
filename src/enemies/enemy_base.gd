@@ -19,6 +19,10 @@ var sprite: Sprite2D
 var anims: AnimatedSprite2D          ## enemy/<key>/<durum> sheet'leri varsa
 var contact_hitbox: Hitbox
 var stagger_timer: float = 0.0
+## Base'in kurdugu temas hitbox'i icin saklanan hasar bilgisi —
+## sersemleme bitince ayni payload ile yeniden kurulur.
+var _contact_info: DamageInfo
+var _contact_managed := false
 ## Vurus geri tepmesi direnci: 0 = tam tepme, 1 = yerinden kipirdamaz (agir dusmanlar).
 @export var knockback_resist: float = 0.0
 var using_real_sprite := false
@@ -77,11 +81,22 @@ func _ready() -> void:
 		ch_col.shape = ch_rect
 		contact_hitbox.add_child(ch_col)
 		add_child(contact_hitbox)
-		contact_hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, true))
+		_contact_info = DamageInfo.make(1, self, Vector2.ZERO, true, true)
+		contact_hitbox.activate(_contact_info)
+		_contact_managed = true
 
 
 func _physics_process(delta: float) -> void:
 	stagger_timer = maxf(stagger_timer - delta, 0.0)
+	# Sersemlemis temas dusmani dokunusla hasar veremez — parry/sersemletme
+	# guvenli ceza penceresi acar. Sadece base'in kurdugu hitbox yonetilir
+	# (Guard lunge hitbox'i kendi kontrol eder).
+	if _contact_managed and contact_hitbox != null:
+		if is_staggered() and contact_hitbox.monitoring:
+			contact_hitbox.deactivate()
+		elif not is_staggered() and not contact_hitbox.monitoring \
+				and health.is_alive():
+			contact_hitbox.activate(_contact_info)
 	velocity.y = minf(velocity.y + 800.0 * delta, 320.0)
 	move_and_slide()
 

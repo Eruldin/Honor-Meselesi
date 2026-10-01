@@ -43,6 +43,25 @@ func test_villager_approaches_player() -> void:
 	assert_lt(v.global_position.x, 400.0, "koylu oyuncuya yaklasmali")
 
 
+func test_staggered_villager_contact_disarmed() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	var v := Villager.new()
+	v.global_position = Vector2(400, 240)
+	add_child_autofree(v)
+	await wait_seconds(0.2)
+	assert_true(v.contact_hitbox.monitoring, "temas hitbox'i silahli")
+	v.on_parried()
+	await wait_seconds(0.2)
+	assert_true(v.is_staggered(), "parry'de sersemler")
+	assert_false(v.contact_hitbox.monitoring,
+		"sersemleme temas hasarini kapatir")
+	await wait_seconds(1.4)
+	assert_true(v.contact_hitbox.monitoring,
+		"sersemleme bitince temas geri kurulur")
+
+
 func test_guard_blocks_frontal_damage() -> void:
 	_flat_ground()
 	var s := _make_samurai()
