@@ -61,6 +61,20 @@ func test_slowmo_short_request_does_not_clip_longer() -> void:
 	Engine.time_scale = 1.0
 
 
+func test_fx_free_resets_time_scale() -> void:
+	# Regresyon: aktif slow-mo istegi acikken FxListener free'lenirse
+	# Engine.time_scale dusuk siziyor — yeni sahne agir cekimde kaliyordu.
+	var fx: FxListener = FxListener.new()
+	add_child(fx)
+	fx._slow_time(0.22, 0.55)
+	assert_almost_eq(Engine.time_scale, 0.22, 0.0001, "slow-mo aktif")
+	fx.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_eq(Engine.time_scale, 1.0, "sahne free'si time_scale'i birakir")
+	Engine.time_scale = 1.0
+
+
 func test_save_roundtrip() -> void:
 	GameState.set_flag(&"test_flag", 42)
 	GameState.checkpoint_id = &"cp_test"
