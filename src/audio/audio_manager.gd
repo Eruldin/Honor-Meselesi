@@ -23,15 +23,18 @@ var _sfx_2d_pool: Array[AudioStreamPlayer2D] = []
 var _sfx_idx := 0
 var _sfx2d_idx := 0
 var _current_music: StringName = &""
+var _sting_resume: StringName = &""  ## tek-calar parca bitince donecek bolge muzigi
 
 
 func _ready() -> void:
 	_music_a = AudioStreamPlayer.new()
 	_music_a.bus = &"Music"
 	add_child(_music_a)
+	_music_a.finished.connect(_on_music_finished)
 	_music_b = AudioStreamPlayer.new()
 	_music_b.bus = &"Music"
 	add_child(_music_b)
+	_music_b.finished.connect(_on_music_finished)
 	_amb1 = AudioStreamPlayer.new()
 	_amb1.bus = &"Music"
 	add_child(_amb1)
@@ -55,12 +58,19 @@ func _ready() -> void:
 func play_music(logical_id: StringName) -> void:
 	if logical_id == _current_music:
 		return
+	var prev := _current_music
 	_current_music = logical_id
 	var stream := AssetLoader.audio(logical_id)
 	if stream == null:
 		return
+	_sting_resume = &""
 	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
-		stream.loop = true
+		var loops := bool(AssetLoader.entry(logical_id).get("loop", true))
+		stream.loop = loops
+		# Tek-calar parcalar (zafer sting'i gibi): bitince onceki
+		# bolge muzigine donulur; yoksa kisa fanfar sonsuz donguye girer.
+		if not loops:
+			_sting_resume = prev
 	_active_music = 2 if _active_music == 1 else 1
 	var next_p := _music_a if _active_music == 1 else _music_b
 	next_p.stream = stream
@@ -69,8 +79,17 @@ func play_music(logical_id: StringName) -> void:
 	_music_fade = 1.0
 
 
+func _on_music_finished() -> void:
+	if _sting_resume == &"":
+		return
+	var resume := _sting_resume
+	_sting_resume = &""
+	play_music(resume)
+
+
 func stop_music() -> void:
 	_current_music = &""
+	_sting_resume = &""
 	_music_a.stop()
 	_music_b.stop()
 	_music_fade = 0.0

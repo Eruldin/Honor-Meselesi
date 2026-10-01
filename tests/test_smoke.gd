@@ -111,3 +111,18 @@ func test_music_director_combat_layer() -> void:
 	assert_eq(AudioManager._current_music, &"music/ch5",
 		"tehdit bitince sakin parcaya doner")
 	AudioManager.stop_music()
+
+
+func test_victory_sting_resumes_zone_music() -> void:
+	# Regresyon: victory fanfari loop=true ile sonsuz caliyordu —
+	# manifest "loop": false ve bitis sinyali onceki bolgeye dondurur.
+	assert_eq(AssetLoader.entry(&"music/victory").get("loop"), false,
+		"victory tek-calar isaretli")
+	AudioManager._current_music = &"music/victory"
+	AudioManager._sting_resume = &"music/ch1"
+	AudioManager._on_music_finished()
+	assert_eq(AudioManager._current_music, &"music/ch1",
+		"sting bitince bolge muzigi geri gelir")
+	assert_eq(AudioManager._sting_resume, &"",
+		"resume tek seferlik")
+	AudioManager.stop_music()

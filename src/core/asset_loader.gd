@@ -37,6 +37,12 @@ func reload_manifest() -> void:
 	_cache.clear()
 
 
+## Giris meta verisi (or. "loop": false gibi istege bagli bayraklar).
+func entry(logical_id: StringName) -> Dictionary:
+	var e: Variant = _manifest.get(logical_id)
+	return e if e is Dictionary else {}
+
+
 ## Manifest'te tanimli ve dis dosyasi mevcut mu?
 ## Dis dosyalar EditorFileSystem import'una guvenmez — diskte varsa sayilir
 ## (res:// editor'da proje kokune, export'ta exe yanina cozulur).

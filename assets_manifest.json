@@ -257,7 +257,8 @@
   },
   "music/victory": {
    "path": "itch/extracted/16-bit-fantasy-adventure-music-pack/xDeviruchi - 16 bit Fantasy & Adventure (2025)/Loopable + one shots/ogg/06 - Victory!.ogg",
-   "pack": "itch"
+   "pack": "itch",
+   "loop": false
   },
   "music/test_room": {
    "path": "itch/extracted/16-bit-fantasy-adventure-music-pack/xDeviruchi - 16 bit Fantasy & Adventure (2025)/Loopable + one shots/ogg/04 - Silent Forest.ogg",
