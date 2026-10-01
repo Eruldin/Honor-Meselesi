@@ -119,6 +119,51 @@ func test_amalgam_form_gated_phases() -> void:
 	assert_eq(g.health.current, 2, "havadaki vurus girer — piksel sarti")
 
 
+func test_amalgam_piksel_phase_hovers() -> void:
+	# M9 spec: piksel fazi cift ziplamayi zorunlu kilar — boss suzulur.
+	var g := GlitchAmalgam.new()
+	g.floor_y = 0.0
+	g.global_position = Vector2(0, -13)
+	var ground := _make_floor(Vector2(0, 8), Vector2(300, 8))
+	add_child_autofree(ground)
+	_make_samurai(Vector2(60, -13))
+	GameState.set_flag(&"piksel_sicramasi", true)
+	add_child_autofree(g)
+	g.activate()
+	await _frames(10)
+	g.phase = 3
+	var y0 := g.global_position.y
+	for i in 120:
+		await get_tree().physics_frame
+		if g.bstate == GlitchAmalgam.AState.TELL \
+				or g.bstate == GlitchAmalgam.AState.SLAM_RISE:
+			break
+	assert_lt(g.global_position.y, y0 - 55.0,
+		"piksel fazinda boss tek ziplama erisiminin ustune cikar")
+
+
+func test_amalgam_no_hover_without_piksel_flag() -> void:
+	# Guvenlik agi: piksel yoksa boss yerde kalir — soft-lock yok.
+	var g := GlitchAmalgam.new()
+	g.floor_y = 0.0
+	g.global_position = Vector2(0, -13)
+	var ground := _make_floor(Vector2(0, 8), Vector2(300, 8))
+	add_child_autofree(ground)
+	_make_samurai(Vector2(60, -13))
+	add_child_autofree(g)
+	g.activate()
+	await _frames(10)
+	g.phase = 3
+	var y0 := g.global_position.y
+	for i in 60:
+		await get_tree().physics_frame
+		if g.bstate == GlitchAmalgam.AState.TELL \
+				or g.bstate == GlitchAmalgam.AState.SLAM_RISE:
+			break
+	assert_gt(g.global_position.y, y0 - 20.0,
+		"piksel flag'i yoksa boss suzulmez")
+
+
 func test_amalgam_gate_opens_without_unlock() -> void:
 	# Gerekli forma sahip degilse kapi kalkar (guvenlik agi)
 	var g := GlitchAmalgam.new()

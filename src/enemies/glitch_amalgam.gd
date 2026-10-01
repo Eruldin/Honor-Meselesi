@@ -4,11 +4,16 @@ extends BossBase
 ## tonu). Onceki boss'larin bellek yankilari: sok dalgasi (Cluck),
 ## kan-dikeni serisi (Vlad), gudumlu fuzeler (Unit-0), piksel yagmuru
 ## (Tiran). M9 spec: 4 faz — her faz bir formla kirilir
-## (Robot → Tavuk → Golge → Piksel/havadaki vurus); yanlis vurus clang
-## + swap piktogrami (gargoyle/terminal ile ayni dil). Beyaz patlamayla
-## bitis.
+## (Robot → Tavuk → Golge → Piksel); yanlis vurus clang + swap
+## piktogrami (gargoyle/terminal ile ayni dil). Piksel fazinda boss
+## slam disinda suzulur — cift ziplama (piksel sicramasi) zorunlu.
+## Beyaz patlamayla bitis.
 
 enum AState { SLEEP, APPROACH, TELL, SLAM_RISE, SLAM_FALL, CAST, GAP }
+
+## Piksel fazinda boss suzulur — tek ziplama (~56px) erisemez,
+## piksel sicramasi (cift ziplama ~112px) zorunlu olur.
+const PIKSEL_HOVER := 90.0
 
 const PHASE_FORMS: Array[StringName] = [&"robot", &"tavuk", &"golge", &"piksel"]
 const PHASE_TINTS: Array[Color] = [
@@ -142,6 +147,15 @@ func _physics_process(delta: float) -> void:
 	_t -= delta
 	var speed := 24.0 if phase >= 1 else 18.0
 	var gap := 0.9 if phase >= 1 else 1.3
+
+	# M9 piksel fazi: boss slam disindaki tum pencerelerde havada
+	# suzulur — hava vurusu sarti tek ziplamayla asilamaz, cift
+	# ziplama gerekir. Slam sirasinda yere iner.
+	if phase >= 3 and GameState.get_flag(&"piksel_sicramasi") \
+			and bstate in [AState.APPROACH, AState.GAP, AState.CAST]:
+		var hover_y := floor_y - body_size.y / 2.0 - PIKSEL_HOVER
+		velocity.y = clampf((hover_y - global_position.y) * 8.0,
+			-260.0, 260.0)
 
 	match bstate:
 		AState.APPROACH:
