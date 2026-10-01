@@ -376,7 +376,7 @@ func _go_ch7() -> void:
 ## Boss odasi temizlenmis ama bolum-gecisi oynanmamis durumda: arena
 ## cikisina portal + giris tetigi — oyuncu yuruyerek sonraki bolume gecer.
 func _make_cleared_exit(portal_key: StringName) -> void:
-	var portal := PortalFx.make(Vector2(24, 40), portal_key)
+	var portal := PortalFx.make(Vector2(38, 62), portal_key)
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	var trig := Area2D.new()

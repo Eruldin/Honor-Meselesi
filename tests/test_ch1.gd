@@ -300,11 +300,19 @@ func test_ch1_cleared_exit_portal_completes_chapter() -> void:
 	await get_tree().physics_frame
 	assert_null(scene.boss, "olu boss dogmaz")
 	var trig: Area2D = null
+	var portal: Node2D = null
 	for c in scene.get_children():
 		if c is Area2D and c.collision_mask == 4 \
 				and c.global_position.x > 5500.0:
 			trig = c
+		elif c is Node2D and c.get_class() == "Node2D" \
+				and c.global_position.x > 5500.0:
+			portal = c
 	assert_not_null(trig, "cikis portal tetigi var")
+	assert_not_null(portal, "cikis portal gorseli var")
+	# Portal sahne dekorunun (z<=6) ustunde cizilir — karanlik sahnede
+	# oyuncunun kacis kapisini gorebilmesi gorunurluk garantisi.
+	assert_gt(portal.z_index, 0, "portal dekor katmaninin ustunde")
 	var stub := Area2D.new()
 	add_child_autofree(stub)
 	trig.area_entered.emit(stub)
