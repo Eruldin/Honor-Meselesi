@@ -182,7 +182,14 @@ func test_ch3_flow_boss_to_ch4_golge() -> void:
 	ch3._on_arena_entered(ch3.samurai.hurtbox)
 	await wait_seconds(1.4)   # intro ~1.15s sonra boss aktif olur
 	assert_true(ch3.boss.active)
+	# Kesik sirasinda sahneyi kirpan kalan adds testi: boss olumunde
+	# tum canli dusmanlar sersemler.
+	var bat := CaveBat.new()
+	bat.global_position = ch3.samurai.global_position + Vector2(0, -20)
+	ch3.add_child(bat)
 	ch3.boss.health.take(99)
+	assert_gt(bat.stagger_timer, 0.0,
+		"boss olumunde kalan adds sersemler")
 	assert_has(GameState.unlocked_forms, &"golge", "Vlad olumu Golge acar")
 	await wait_seconds(0.3)
 	for child in ch3.get_children():

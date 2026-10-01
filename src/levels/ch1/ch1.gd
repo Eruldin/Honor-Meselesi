@@ -1229,6 +1229,11 @@ func _boss_intro() -> void:
 func _on_boss_defeated() -> void:
 	# Bos bar dusme isini bitirdi — temizlenen arenada bos bar kalmasin.
 	_boss_root.visible = false
+	# Kesik boyunca kalan dusmanlar sersemleyerek durur — dalis
+	# artik sinemayi kirpmaz.
+	for e in get_tree().get_nodes_in_group(&"enemies"):
+		if e is EnemyBase and e.health.is_alive():
+			e.stagger_timer = maxf(e.stagger_timer, 4.0)
 	GameState.unlock_form(&"tavuk")
 	GameState.set_flag(&"ch1_boss_dead")
 	SaveSystem.save_game()
