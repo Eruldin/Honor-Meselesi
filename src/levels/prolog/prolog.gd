@@ -373,6 +373,8 @@ func _steps() -> Array:
 	return [
 		# Yaratik CRT'den sizar
 		{op = "glitch", strength = 1.0, dur = 1.2},
+		{op = "call", fn = _tv_spores},
+		{op = "wait", t = 0.5},
 		{op = "call", fn = func() -> void: creature.visible = true},
 		{op = "wait", t = 0.4},
 		{op = "picto", node = "samurai", icon = &"alarm", t = 1.0, wait = true},
@@ -409,6 +411,23 @@ func _steps() -> Array:
 		{op = "flag", key = &"prolog_done", value = true},
 		{op = "fade", node = "black", to_a = 1.0, dur = 0.6},
 	]
+
+
+# Ana yaratik belirmeden once CRT ekranindan uc kucuk glitch tohumu
+# suzulur — sizinti onceden hissettirilir.
+func _tv_spores() -> void:
+	for i in 3:
+		var sp := Sprite2D.new()
+		sp.texture = AssetLoader.texture(&"enemy/glitch_small", Vector2i(9, 7))
+		sp.modulate = Color(0.5 + i * 0.15, 1.0, 0.85, 0.0)
+		sp.global_position = Vector2(122 + i * 6.0, FLOOR_Y - 42 + i * 4.0)
+		add_child(sp)
+		var tw := sp.create_tween()
+		tw.tween_property(sp, "modulate:a", 0.85, 0.22)
+		tw.parallel().tween_property(sp, "global_position",
+			sp.global_position + Vector2(48 + i * 12.0, -46 - i * 10.0), 0.85 + i * 0.12)
+		tw.tween_property(sp, "modulate:a", 0.0, 0.28)
+		tw.finished.connect(sp.queue_free)
 
 
 func _steal_hat() -> void:
