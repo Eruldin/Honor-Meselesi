@@ -10,6 +10,7 @@ var _prolog: Node2D
 
 func after_each() -> void:
 	GameState.reset()
+	await wait_process_frames(2)  # queue_free'li input kaynagi bosaltsin (orphan)
 
 
 func _make_prolog() -> Node2D:
