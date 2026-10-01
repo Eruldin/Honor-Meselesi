@@ -132,6 +132,9 @@ func test_amalgam_gate_opens_without_unlock() -> void:
 
 func test_weary_pose_only_in_ch6_rest() -> void:
 	# M9: bellek dunyasi checkpoint'i — basini ellerine alma pozu
+	if not AssetLoader.has_asset(&"prop/player_weary"):
+		pending("player_weary yok (CI) — atlaniyor")
+		return
 	var sam := _make_samurai()
 	await _frames(5)
 	GameState.current_chapter = &"ch6"
