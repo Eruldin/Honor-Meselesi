@@ -4,6 +4,10 @@ extends Node2D
 ## zone_ranges: [{x0, x1, kind}] — kind: "petals" | "rain" | "ash" | "motes" | "fog" | "static".
 ## Parcaciklar kameranin gordugu alana duser, ekran disinda silinir.
 
+# Ambiyans katmani: dekorun (z<=3) ustunde, oynanis ortulerinin (Vlad
+# karanligi z=5, portal z=7, spike telegraph z=6) altinda — karanlik
+# fazda hava da kararir, telegraph'lar sis ustunde okunur.
+const PARTICLE_Z := 4
 const PETAL_FALL := 22.0
 const PETAL_SWAY := 14.0
 const RAIN_FALL := 190.0
@@ -88,7 +92,7 @@ func _spawn_petal(vx: float) -> void:
 	var px := vx + randf_range(-230.0, 230.0)
 	p.position = Vector2(px, _cam.get_screen_center_position().y - 140.0)
 	p.modulate = Color(1.0, 0.8, 0.9, 0.65)
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var sway := randf_range(-PETAL_SWAY, PETAL_SWAY)
 	var dur := randf_range(4.0, 6.5)
@@ -109,7 +113,7 @@ func _spawn_rain(vx: float) -> void:
 		p.position = Vector2(vx + randf_range(-240.0, 240.0),
 			_cam.get_screen_center_position().y - 150.0)
 		p.modulate = Color(0.7, 0.8, 1.0, 0.75)
-		p.z_index = 6
+		p.z_index = PARTICLE_Z
 		add_child(p)
 		var drop_h := 300.0
 		var dur := drop_h / RAIN_FALL
@@ -127,7 +131,7 @@ func _splash(drop: Sprite2D) -> void:
 	s.texture = _tex[&"vfx/rainsplash"]
 	s.position = pos
 	s.modulate = Color(0.7, 0.8, 1.0, 0.6)
-	s.z_index = 6
+	s.z_index = PARTICLE_Z
 	add_child(s)
 	var tw := s.create_tween()
 	tw.tween_property(s, "modulate:a", 0.0, 0.25)
@@ -143,7 +147,7 @@ func _spawn_ash(vx: float) -> void:
 	var px := vx + randf_range(-240.0, 240.0)
 	p.position = Vector2(px, _cam.get_screen_center_position().y - 145.0)
 	p.modulate = Color(0.62, 0.58, 0.55, randf_range(0.35, 0.6))
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var dur := randf_range(8.0, 13.0)
 	var tw := p.create_tween().set_parallel(true)
@@ -163,7 +167,7 @@ func _spawn_ember(vx: float) -> void:
 	var px := vx + randf_range(-240.0, 240.0)
 	p.position = Vector2(px, _cam.get_screen_center_position().y + 150.0)
 	p.modulate = Color(1.0, 0.45, 0.15, randf_range(0.5, 0.8))
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var dur := randf_range(4.0, 6.0)
 	var tw := p.create_tween().set_parallel(true)
@@ -183,7 +187,7 @@ func _spawn_mote(vx: float) -> void:
 	var px := vx + randf_range(-240.0, 240.0)
 	p.position = Vector2(px, _cam.get_screen_center_position().y + randf_range(-130.0, 130.0))
 	p.modulate = Color(0.45 + randf() * 0.25, 0.75, 1.0, randf_range(0.25, 0.5))
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var dur := randf_range(7.0, 11.0)
 	var tw := p.create_tween().set_parallel(true)
@@ -203,7 +207,7 @@ func _spawn_fog(vx: float) -> void:
 	# Zemin hizasinda alcak tabaka — ayaklari sis icinde birakir
 	p.position = Vector2(px, _cam.get_screen_center_position().y + randf_range(40.0, 105.0))
 	p.modulate = Color(0.5, 0.56, 0.58, 0.0)
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var dur := randf_range(11.0, 17.0)
 	var peak := randf_range(0.10, 0.18)
@@ -223,7 +227,7 @@ func _spawn_static(vx: float) -> void:
 	var tones := [Color(0.4, 0.9, 1.0), Color(1.0, 0.35, 0.5), Color(0.9, 1.0, 0.5)]
 	p.color = tones[randi() % tones.size()]
 	p.color.a = randf_range(0.25, 0.55)
-	p.z_index = 6
+	p.z_index = PARTICLE_Z
 	add_child(p)
 	var dur := randf_range(0.5, 1.3)
 	var tw := p.create_tween().set_parallel(true)

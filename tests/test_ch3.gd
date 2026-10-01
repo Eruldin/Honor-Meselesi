@@ -148,6 +148,10 @@ func test_vlad_phase2_darkness_and_eyes() -> void:
 	var p := Pictogram.show_on(b, &"alarm")
 	assert_gt(p.z_index, b.darkness.z_index,
 		"piktogram balonu dunya ortulerinin ustunde kalmali")
+	# Ters yonlu sozlesme: ambiyans havasi (mezarlik sisi) karanligin
+	# ALTINDA kalmali — yoksa "karanlik" fazda soluk sis parlar.
+	assert_lt(WeatherFx.PARTICLE_Z, b.darkness.z_index,
+		"ambiyans parcaciklar karanlik ortusuyle birlikte kararir")
 
 
 func test_blood_spike_telegraph_then_hit() -> void:
