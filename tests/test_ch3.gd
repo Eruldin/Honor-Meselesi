@@ -89,6 +89,23 @@ func test_vampire_strike_parried_no_bleed() -> void:
 	assert_eq(s.bleed_ticks, 0, "parry'lenen isirik kanama birakmaz")
 
 
+func test_vampire_strike_bleeds_after_old_parry() -> void:
+	# Regresyon: parry_succeeded hic sifirlanmiyordu — eski parry izi
+	# sonraki isiriklari parry'li saydiriyordu (kanama hic uygulanamazdi).
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	s.parry_succeeded = true   # cok onceki parry'den kalan bayrak
+	var v := Vampire.new()
+	v.global_position = Vector2(290, 240)
+	v._player = s
+	add_child_autofree(v)
+	await wait_seconds(0.05)
+	v._strike()
+	assert_false(s.parry_succeeded, "bayrak vurusa ait sonuca sifirlanir")
+	assert_gt(s.bleed_ticks, 0, "eski parry kanamayi engellemez")
+
+
 # --- Kurtadam ---
 
 func test_werewolf_attack_not_parryable() -> void:

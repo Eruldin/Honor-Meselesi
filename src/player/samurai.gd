@@ -551,6 +551,9 @@ func _on_down_struck(hb: Hurtbox) -> void:
 
 
 func take_damage(info: DamageInfo) -> void:
+	# Bayrak bu cagri icin taze tutulur — onceki parry'lerin izi kalmasin
+	# (vampir isirigi gibi okuyucular bu vurusa ait sonucu gorur).
+	parry_succeeded = false
 	# Olumde ve kesik-sahne oynarken gelen vurus (gecikmeli mermi, gecis
 	# fade'inde arta kalan temas) senkronu bozmaz — sahne kontrolu scriptte.
 	if sm.current_name in [S_DEAD, S_CUTSCENE]:
