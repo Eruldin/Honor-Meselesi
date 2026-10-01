@@ -144,6 +144,7 @@ func _soul_wisp(pos: Vector2) -> void:
 func _on_actor_died(actor: Node) -> void:
 	if actor is Node2D:
 		var boss := actor is BossBase
+		var player := actor.is_in_group(&"player")
 		_anim_burst((actor as Node2D).global_position,
 			&"fx/explosion" if boss else &"fx/puff", 72.0 if boss else 40.0)
 		if boss:
@@ -151,8 +152,15 @@ func _on_actor_died(actor: Node) -> void:
 			_anim_burst((actor as Node2D).global_position, &"fx/eldenring", 110.0)
 			# kill beat: darbe ani yavaslar — zafer hissi
 			_slow_time(0.22, 0.55)
+		var col := Color(1.0, 0.85, 0.45)
+		if player:
+			# olumde ruh sacilir — golgede birakilan ruhun gorsel hikayesi
+			col = Color(0.45, 1.0, 0.9)
 		_burst((actor as Node2D).global_position, 9 if not boss else 14,
-			Color(1.0, 0.85, 0.45), 48.0 if not boss else 64.0, 0.4)
+			col, 48.0 if not boss else 64.0, 0.4)
+		if player:
+			_burst((actor as Node2D).global_position, 5,
+				Color(0.8, 1.0, 0.95), 72.0, 0.55)
 
 
 ## Tek atimlik VFX animasyonu (codemanu paketi). Kare yoksa sessizce gecer.
