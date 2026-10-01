@@ -66,7 +66,7 @@ func _physics_process(delta: float) -> void:
 				sprite.modulate = Color.WHITE
 				if anims != null:
 					anims.modulate = Color.WHITE
-				play_anim(&"attack", 0.5)
+				play_anim(&"attack", 0.75)
 				_swipe_hitbox.position.x = facing * 9.0
 				_swipe_hitbox.activate(DamageInfo.make(
 					1, self, Vector2(facing * 110.0, -50.0), true, true))

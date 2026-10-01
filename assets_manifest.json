@@ -3229,6 +3229,15 @@
   "sfx/glitch": {
    "path": "itch/extracted/400-sounds-pack/Other/white_noise_short.wav",
    "pack": "400 Sounds Retro"
+  },
+  "enemy/ash_bat/jump": {
+   "path": "env/postapoc/Character/Bat/Bat_down_attack-Sheet4.png",
+   "frame": [
+    20,
+    25
+   ],
+   "fps": 8,
+   "pack": "PostApocalypse"
   }
  },
  "music/combat": {
