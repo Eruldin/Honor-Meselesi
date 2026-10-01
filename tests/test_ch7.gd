@@ -184,6 +184,31 @@ func test_ch7_scene_builds_fight() -> void:
 	assert_eq(GameState.current_chapter, &"ch7")
 
 
+func test_ch7_intro_skip_spawns_fight() -> void:
+	# Regresyon: intro'nun atlanmasi takas adimlarini kosmadan birakirdi
+	# (soft-lock + 180° kamera sizintisi). end_state her kosulda
+	# savasi kurmali ve kamerayi dik konuma getirmeli.
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	# auto_advance true kalir — intro cutscene'i calisir
+	add_child_autofree(scene)
+	var cs: CutscenePlayer = null
+	for i in 90:
+		await get_tree().physics_frame
+		for c in scene.get_children():
+			if c is CutscenePlayer and (c as CutscenePlayer).playing:
+				cs = c
+		if cs != null:
+			break
+	if cs == null:
+		pending("intro cutscene'i baslamadi (asset'siz ortam) — atlaniyor")
+		return
+	cs.request_skip()
+	await _frames(15)
+	assert_not_null(scene.creature, "skip sonrasi yaratik oyuncu kurulur")
+	assert_not_null(scene.boss, "skip sonrasi samurai boss kurulur")
+	assert_eq(scene.camera.rotation, 0.0, "kamera dik — flip sizmez")
+
+
 func test_creature_inverted_controls() -> void:
 	var c := GlitchCreature.new()
 	var ai := AIInputSource.new()
