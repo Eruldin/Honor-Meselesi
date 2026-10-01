@@ -83,3 +83,34 @@ func test_ch5_scene_builds() -> void:
 	assert_not_null(scene.samurai)
 	assert_not_null(scene.boss)
 	assert_eq(GameState.current_chapter, &"ch5")
+
+
+func test_ash_knight_mirrors_player_attacks() -> void:
+	var sam := _make_samurai(Vector2(0, 0))
+	var k := AshKnight.new()
+	k.global_position = Vector2(22, 0)
+	add_child_autofree(k)
+	# Dusman katmanlari: govde 64, hurtbox 16 (player 8 maskesiyle vurulur)
+	assert_eq(k.collision_layer, 64)
+	assert_eq(k.hurtbox.collision_layer, 16)
+	assert_eq(k.attack_hitbox.collision_mask, 4,
+		"saldiri hitbox'i oyuncu hurtbox'ini hedefler")
+	var saw_attack := false
+	for i in 120:
+		await get_tree().physics_frame
+		if k.sm.current_name in [Samurai.S_ATTACK, Samurai.S_AIR_ATTACK]:
+			saw_attack = true
+			break
+	assert_true(saw_attack, "ayna sovalye menzilde saldirir")
+
+
+func test_ash_knight_takes_player_damage_and_dies() -> void:
+	var k := AshKnight.new()
+	k.global_position = Vector2(0, 0)
+	add_child_autofree(k)
+	await _frames(5)
+	watch_signals(EventBus)
+	k.take_damage(DamageInfo.make(999, null))
+	await _frames(2)
+	assert_eq(k.sm.current_name, Samurai.S_DEAD, "kul sovalye olur")
+	assert_signal_emitted(EventBus, "actor_died")
