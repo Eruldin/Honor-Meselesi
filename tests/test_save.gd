@@ -225,6 +225,20 @@ func test_locked_current_form_falls_back() -> void:
 		"kilitli olmayan forma dogus engellenir")
 
 
+func test_out_of_range_save_fields_clamp() -> void:
+	# Elle sisirilmis save: ruh ust sinira, negatif can bonusu sifira iner.
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"version": 1,
+		"soul": 999,
+		"hp_bonus": -5,
+	}))
+	f.close()
+	assert_eq(SaveSystem.load_game(), OK)
+	assert_eq(GameState.soul, GameState.SOUL_MAX, "ruh ust sinira kelepçeli")
+	assert_eq(GameState.max_health_bonus, 0, "negatif hp_bonus sifirlanir")
+
+
 func test_out_of_range_settings_clamp_on_load() -> void:
 	# settings.json plaintext — elle sisirilmis degerler load'da setter
 	# kelepçeleriyle sinirlanir (9x glitch puls, dev pencere yok).

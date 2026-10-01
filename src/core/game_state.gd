@@ -131,8 +131,8 @@ func from_dict(data: Dictionary) -> void:
 	current_form = StringName(data.get("current_form", "samurai"))
 	checkpoint_id = StringName(data.get("checkpoint", ""))
 	play_time = float(data.get("play_time", 0.0))
-	soul = int(data.get("soul", 0))
-	max_health_bonus = int(data.get("hp_bonus", 0))
+	soul = clampi(int(data.get("soul", 0)), 0, SOUL_MAX)
+	max_health_bonus = maxi(int(data.get("hp_bonus", 0)), 0)
 	flags.clear()
 	var raw_flags: Variant = data.get("flags", {})
 	if raw_flags is Dictionary:
