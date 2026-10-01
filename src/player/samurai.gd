@@ -516,7 +516,7 @@ func spawn_dash_ghost() -> void:
 func _on_attack_struck(_hurtbox: Hurtbox) -> void:
 	FX.hitstop(tuning.hitstop_normal)
 	FX.shake(tuning.shake_light, tuning.shake_duration)
-	AudioManager.play_sfx(&"sfx/hit", global_position)
+	AudioManager.play_sfx(&"sfx/hit", global_position, 0.0, randf_range(0.92, 1.08))
 
 
 func _on_down_struck(hb: Hurtbox) -> void:
@@ -544,7 +544,7 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	invuln_timer = tuning.hurt_invuln_time
-	AudioManager.play_sfx(&"sfx/hurt", global_position)
+	AudioManager.play_sfx(&"sfx/hurt", global_position, 0.0, randf_range(0.9, 1.1))
 	var kb_scale := 1.0 - form.knockback_resist
 	var dir := 1.0
 	if info.source != null:

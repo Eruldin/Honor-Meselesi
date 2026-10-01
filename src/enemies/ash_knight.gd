@@ -113,7 +113,7 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	invuln_timer = tuning.hurt_invuln_time
-	AudioManager.play_sfx(&"sfx/hit", global_position)
+	AudioManager.play_sfx(&"sfx/hit", global_position, 0.0, randf_range(0.92, 1.08))
 	var dir := 1.0
 	if info.source != null:
 		dir = signf(global_position.x - info.source.global_position.x)
