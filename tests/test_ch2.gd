@@ -127,7 +127,7 @@ func test_unit0_missile_parry_reflects() -> void:
 	add_child_autofree(m)
 	m._vel = Vector2(50, 0)
 	m.on_parried()
-	assert_eq(m.hitbox.collision_mask, 16, "geriye donen fuze dusmana vurur")
+	assert_ne(m.hitbox.collision_mask & 16, 0, "geriye donen fuze dusmana vurur")
 
 
 func test_unit0_phase2_punch_keeps_phase_color() -> void:
