@@ -72,14 +72,26 @@ func _process(delta: float) -> void:
 		samurai.take_damage(DamageInfo.make(1, null, Vector2.ZERO, true, true))
 
 func _build_terrain() -> void:
-	var bg := ColorRect.new()
-	bg.color = Color(0.09, 0.07, 0.16)  # derin bosluk moru
+	# Bosluk gokyuzu: derin mordan ufuk cizgisinde soluk magenta pariltiya
+	var grad := Gradient.new()
+	grad.set_color(0, Color(0.06, 0.05, 0.13))
+	grad.set_color(1, Color(0.3, 0.13, 0.38))
+	grad.add_point(0.55, Color(0.10, 0.08, 0.2))
+	grad.add_point(0.82, Color(0.2, 0.14, 0.34))
+	var gtex := GradientTexture2D.new()
+	gtex.gradient = grad
+	gtex.fill = GradientTexture2D.FILL_LINEAR
+	gtex.fill_from = Vector2(0.5, 0.0)
+	gtex.fill_to = Vector2(0.5, 1.0)
+	var bg := TextureRect.new()
+	bg.texture = gtex
 	bg.size = Vector2(LEVEL_W, 270)
+	bg.stretch_mode = TextureRect.STRETCH_SCALE
 	add_child(bg)
 	# Uzakta kirik boyut goruntuleri — ash_far katmani cyan-magenta'da
 	ParallaxBg.add(self, LEVEL_W, [
-		{id = &"bg/ash_far", scroll = 0.08, modulate = Color(0.5, 0.55, 0.95, 0.85)},
-		{id = &"bg/ash_sky", scroll = 0.2, modulate = Color(0.55, 0.6, 0.95, 0.7)},
+		{id = &"bg/ash_far", scroll = 0.08, modulate = Color(0.5, 0.55, 0.95, 0.55)},
+		{id = &"bg/ash_sky", scroll = 0.2, modulate = Color(0.55, 0.6, 0.95, 0.38)},
 	])
 
 	# Ana zemin parcalari — araliklarla (bellek boslugu): ucus tehlikesi
@@ -109,15 +121,22 @@ func _build_terrain() -> void:
 		add_child(s)
 
 	# Bellek monolitleri — boslukta yuzuce dev soluk veri saslaklari
-	for slab in [[330.0, 150.0, 34.0, 130.0, Color(0.5, 0.7, 1.0, 0.055)],
-			[890.0, 120.0, 44.0, 170.0, Color(0.9, 0.4, 0.8, 0.05)],
-			[1210.0, 145.0, 30.0, 150.0, Color(0.5, 0.7, 1.0, 0.065)],
-			[1660.0, 120.0, 52.0, 165.0, Color(0.6, 0.5, 1.0, 0.05)]]:
+	for slab in [[330.0, 150.0, 34.0, 130.0, Color(0.5, 0.7, 1.0, 0.11)],
+			[890.0, 120.0, 44.0, 170.0, Color(0.9, 0.4, 0.8, 0.10)],
+			[1210.0, 145.0, 30.0, 150.0, Color(0.5, 0.7, 1.0, 0.12)],
+			[1660.0, 120.0, 52.0, 165.0, Color(0.6, 0.5, 1.0, 0.10)]]:
 		var m := ColorRect.new()
 		m.size = Vector2(slab[2], slab[3])
 		m.color = slab[4]
 		m.position = Vector2(slab[0] - slab[2] / 2.0, slab[1] - slab[3] / 2.0)
 		add_child(m)
+		# kristal ust kenar — pariltili sath
+		var edge := ColorRect.new()
+		var c: Color = slab[4]
+		edge.color = Color(minf(c.r * 1.7, 1.0), minf(c.g * 1.7, 1.0), c.b, 0.4)
+		edge.size = Vector2(slab[2], 1.5)
+		edge.position = m.position
+		add_child(edge)
 
 	# Bellek yankisi prop'lar — onceki dunyalarin soluk hatiralari
 	for echo in [[300, &"prop/deco_pillar", Vector2i(20, 60), Color(0.45, 0.5, 0.9, 0.5)],
