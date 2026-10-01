@@ -188,6 +188,9 @@ func _face(n: Node, dir: int) -> void:
 	if n is Samurai:
 		n.facing = dir
 		n.sprite.flip_h = dir < 0
+		# Gercek anim node'u 'sprite' degil — ayri cevirilir.
+		if n._anims != null:
+			n._anims.flip_h = dir < 0
 	elif "facing" in n:
 		n.facing = dir
 	var spr := n.get_node_or_null("sprite") as Sprite2D
