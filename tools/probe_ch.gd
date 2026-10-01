@@ -3,6 +3,7 @@ extends Node2D
 ## Ornek: --path . tools/ProbeCh.tscn --probe=ch3 --spot=0.5
 
 var _scene
+var _cleared := false
 
 
 func _ready() -> void:
@@ -19,6 +20,7 @@ func _ready() -> void:
 			death = true
 		if a == "--cleared":
 			cleared = true
+	_cleared = cleared
 	var path := "res://src/levels/%s/Ch%s.tscn" % [ch, ch.substr(2)]
 	if ch == "prolog" or ch == "test_room":
 		path = "res://src/levels/%s/%s.tscn" % [ch, ch.capitalize().replace("_", "")]
@@ -54,7 +56,13 @@ func _shoot(ch: String, spot: float) -> void:
 	var fy: float = _scene.get("FLOOR_Y") if _scene.get("FLOOR_Y") != null else 250.0
 	var cam = _scene.get("camera")
 	if sam != null:
-		sam.global_position = Vector2(lerpf(200.0, lw - 200.0, spot), fy - 20)
+		var tx := lerpf(200.0, lw - 200.0, spot)
+		if _cleared:
+			# Cleared portalina girme — girerse sahne degisir ve probe'un
+			# viewport'u ile birlikte kare uretimi de olur (no frame rendered).
+			var ar: float = _scene.get("ARENA_R") if _scene.get("ARENA_R") != null else lw - 200.0
+			tx = ar - 130.0
+		sam.global_position = Vector2(tx, fy - 20)
 		# Kamera smoothing teleportu takip edemez — probe karesi icin
 		# kamerayi da oyuncuya kilitleriz.
 		if cam != null:
