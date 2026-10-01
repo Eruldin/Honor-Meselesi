@@ -247,3 +247,22 @@ func test_werewolf_telegraph_tints_anims() -> void:
 	assert_eq(w.wstate, Werewolf.WState.TELEGRAPH)
 	assert_gt(vis.modulate.r, 1.0,
 		"kirmizi goz telegraphi gorunur gorselde de gorunmeli")
+
+
+func test_ch3_moon_right_edge_fades() -> void:
+	# Regresyon: opak ay gokyuzu sprite'i x=480'de sert bitiyordu — manor
+	# parallax'i dikey bir dikisle aniden beliriyordu. Sag ~90px alfa-fade.
+	if not AssetLoader.has_asset(&"bg/moon"):
+		pending("bg/moon yok (CI) — atlaniyor")
+		return
+	var ch3: Node2D = load(CH3_PATH).instantiate()
+	add_child_autofree(ch3)
+	await get_tree().process_frame
+	var moon: Sprite2D = null
+	for c in ch3.get_children():
+		if c is Sprite2D and not c.centered and c.texture != null:
+			moon = c
+	assert_not_null(moon, "ay sprite'i kurulmus")
+	var img := moon.texture.get_image()
+	assert_gt(img.get_pixel(100, 135).a, 0.5, "ic bolge opak")
+	assert_lt(img.get_pixel(478, 135).a, 0.5, "sag kenar fade'li")
