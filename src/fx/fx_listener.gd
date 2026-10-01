@@ -17,6 +17,7 @@ func _ready() -> void:
 	EventBus.spark_emitted.connect(_on_spark)
 	EventBus.damage_dealt.connect(_on_damage_dealt)
 	EventBus.actor_died.connect(_on_actor_died)
+	EventBus.parry_whiffed.connect(_on_parry_whiffed)
 
 
 func _on_hitstop(duration: float) -> void:
@@ -52,6 +53,14 @@ func _on_shake(strength: float, duration: float) -> void:
 	var cam := get_node_or_null(camera_path)
 	if cam != null and cam.has_method("shake"):
 		cam.shake(strength * Settings.shake_scale, duration)
+
+
+## Tutmayan parry: basarinin parlak clang'i yerine soluk bosluk sesi —
+## zamanlama geri bildirimi kelimesiz duyulur.
+func _on_parry_whiffed(actor: Node) -> void:
+	if actor is Node2D:
+		AudioManager.play_sfx(&"sfx/swipe", (actor as Node2D).global_position,
+			-16.0, randf_range(0.85, 1.0))
 
 
 func _on_spark(pos: Vector2) -> void:

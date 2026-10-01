@@ -194,6 +194,14 @@ func test_parry_whiff_locks_recovery() -> void:
 	assert_ne(sam.sm.current_name, Samurai.S_PARRY, "recovery bitince serbest")
 
 
+func test_parry_whiff_emits_signal() -> void:
+	watch_signals(EventBus)
+	ai.tap(&"parry")
+	await _frames(40)
+	assert_signal_emitted(EventBus, &"parry_whiffed",
+		"tutmayan parry whiff sinyali firlatir")
+
+
 # --- Pogo ---
 
 func test_pogo_bounces_off_spike() -> void:
