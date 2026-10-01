@@ -69,7 +69,7 @@ func _process(delta: float) -> void:
 		samurai.velocity = Vector2.ZERO
 		samurai.set_gravity_flipped(false)
 		FX.glitch(0.4, 0.3)
-		samurai.take_damage(DamageInfo.make(1, null, Vector2.ZERO, true, true))
+		samurai.take_damage(DamageInfo.make(1, null, Vector2.ZERO, false, true))
 
 func _build_terrain() -> void:
 	# Bosluk gokyuzu: derin mordan ufuk cizgisinde soluk magenta pariltiya
