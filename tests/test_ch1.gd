@@ -288,6 +288,30 @@ func test_reflected_egg_explodes_on_fuse_end() -> void:
 	assert_false(is_instance_valid(egg), "fitil bitince yansiyan yumurta da patlar")
 
 
+func test_ch1_cleared_exit_portal_completes_chapter() -> void:
+	# Regresyon: boss-oldu bayragi yazili ama gecis yarida kesilmis
+	# (quit/crash/olum) — reload'da boss dogmaz; arena cikisindaki
+	# portal tetigi bolumu tamamlar (soft-lock onlemi).
+	GameState.set_flag(&"ch1_boss_dead")
+	var scene: Node2D = load("res://src/levels/ch1/Ch1.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	assert_null(scene.boss, "olu boss dogmaz")
+	var trig: Area2D = null
+	for c in scene.get_children():
+		if c is Area2D and c.collision_mask == 4 \
+				and c.global_position.x > 5500.0:
+			trig = c
+	assert_not_null(trig, "cikis portal tetigi var")
+	var stub := Area2D.new()
+	add_child_autofree(stub)
+	trig.area_entered.emit(stub)
+	assert_true(GameState.get_flag(&"ch1_done", false),
+		"portal gecisi bolumu tamamlar")
+
+
 func test_egg_explodes_on_fuse() -> void:
 	_flat_ground()
 	var egg := ExplodingEgg.new()
