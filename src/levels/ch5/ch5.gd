@@ -187,6 +187,11 @@ func _build_entities() -> void:
 	tur.fire_interval = 2.2
 	tur.global_position = Vector2(1010, FLOOR_Y - 10)
 	add_child(tur)
+	# Kul sovalyeleri — oyuncuyu taklit eden ayna dusmanlar (parry yapar)
+	for kx in [870.0, 1180.0]:
+		var k := AshKnight.new()
+		k.global_position = Vector2(kx, FLOOR_Y - 12)
+		add_child(k)
 
 	var rest := RestPoint.new()
 	rest.checkpoint_id = &"ch5_ruins"
