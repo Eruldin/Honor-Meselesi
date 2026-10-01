@@ -571,7 +571,9 @@ func _build_terrain() -> void:
 
 	# Gecit Ust Rota (Harabe Surlar)
 	_add_platform(Vector2(3650, 140), &"terrain/pf_slab", 85)
-	_add_platform(Vector2(3765, 140), &"terrain/pf_dirt_slab", 85)
+	# pf_dirt_slab 174x249 dikey sutun dokusu — w=85'e olceklenince 122px
+	# havada duran toprak duvari ciziyor; ust-rota satirina duz ledge uyar.
+	_add_platform(Vector2(3765, 140), &"terrain/pf_ledge", 85)
 	_add_platform(Vector2(3880, 140), &"terrain/pf_moss", 85)
 	_add_platform(Vector2(3995, 140), &"terrain/pf_slab", 85)
 	# Sacak altinda asili uyuyan yarasalar — yaklasinca uyanir
