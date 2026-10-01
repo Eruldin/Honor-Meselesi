@@ -265,3 +265,22 @@ func test_ch1_boss_death_flows_to_ch2() -> void:
 	await wait_seconds(0.3)
 	assert_eq(GameState.current_chapter, &"ch2")
 	assert_eq(spy[0], "", "auto_advance=false iken sahne degismez")
+
+
+func test_sleeping_cave_bat_wakes_on_approach() -> void:
+	var sam := _make_samurai()
+	sam.global_position = Vector2(600, 0)
+	var bat := CaveBat.new()
+	bat.sleeping_start = true
+	bat.global_position = Vector2(0, 0)
+	add_child_autofree(bat)
+	await wait_seconds(0.2)
+	assert_true(bat._asleep, "uzak oyuncuda uyku surer")
+	assert_lt(bat.velocity.length(), 0.1, "uyuyan yarasa kipirdamaz")
+	if AssetLoader.has_frames(&"enemy/bat/sleep"):
+		assert_eq(bat.anims.animation, &"sleep", "uyku animi oynar")
+	sam.global_position = Vector2(80, 20)
+	await wait_seconds(0.5)
+	assert_false(bat._asleep, "yaklasinca uyanir")
+	if AssetLoader.has_frames(&"enemy/bat/sleep"):
+		assert_ne(bat.anims.animation, &"sleep", "uyku animi birakilir")
