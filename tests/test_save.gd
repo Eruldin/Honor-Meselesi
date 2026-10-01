@@ -73,6 +73,7 @@ func test_binding_persists_across_load() -> void:
 			found = true
 	assert_true(found, "kaydedilen tusa atama restart'ta geri yuklenir")
 	Settings.bind_overrides = old_binds
+	Settings.save_settings()  # test kaydini diskten de temizle
 	InputMap.erase_action(&"test_bind_action")
 
 

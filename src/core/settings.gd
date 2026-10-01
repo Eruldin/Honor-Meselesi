@@ -81,6 +81,8 @@ func set_binding(action: StringName) -> void:
 
 func _apply_bindings() -> void:
 	for action in bind_overrides:
+		if not InputMap.has_action(action):
+			continue  # kalinti kayit: aksiyon silinmis/yeniden adlandirilmis
 		InputMap.action_erase_events(action)
 		for ser: Dictionary in bind_overrides[action]:
 			var ev := _deserialize_event(ser)
