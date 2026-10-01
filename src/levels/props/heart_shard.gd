@@ -6,6 +6,8 @@ extends Area2D
 ## Gorsel: ui/hud_heart (HUD kalbiyle ayni ikon = kelimesiz okunurluk),
 ## nazik yukari-asagi suzulme + kirmizi nabiz.
 
+const GlowSprite := preload("res://src/levels/props/glow_sprite.gd")
+
 @export var pickup_id: StringName = &"shard"
 
 var _sprite: Sprite2D
@@ -28,6 +30,11 @@ func _ready() -> void:
 	_sprite.texture = AssetLoader.texture(&"ui/hud_heart", Vector2i(10, 10))
 	_sprite.position.y = -8
 	add_child(_sprite)
+	# Kristal isigi — karanlik bolgelerde odul okunur.
+	var glow := GlowSprite.new(15.0, Color(1.0, 0.55, 0.7, 0.4))
+	glow.position.y = -8
+	glow.z_index = -1
+	add_child(glow)
 	area_entered.connect(_on_area_entered)
 
 
