@@ -560,6 +560,8 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	if sm.current_name == S_DASH and form.dash_iframes:
 		return
+	if not health.is_alive() or info.damage <= 0:
+		return
 	health.take(info.damage)
 	invuln_timer = tuning.hurt_invuln_time
 	AudioManager.play_sfx(&"sfx/hurt", global_position, 0.0, randf_range(0.9, 1.1))
