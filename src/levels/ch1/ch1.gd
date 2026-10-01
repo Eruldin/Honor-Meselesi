@@ -1221,7 +1221,7 @@ func _boss_intro() -> void:
 	BossIntro.play(boss)
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
-	await get_tree().create_timer(1.15).timeout
+	await get_tree().create_timer(1.15, false).timeout
 	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
 		boss.activate()
 

@@ -312,7 +312,7 @@ func _on_arena_entered(area: Area2D) -> void:
 	BossIntro.play(boss)
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
-	await get_tree().create_timer(1.15).timeout
+	await get_tree().create_timer(1.15, false).timeout
 	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
 		boss.activate()
 
@@ -328,7 +328,7 @@ func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch5_boss_dead")
 	SaveSystem.save_game()
 	await SceneRouter.fade_to(1.0, 0.7)
-	await get_tree().create_timer(0.3, true).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	var portal := PortalFx.make(Vector2(38, 62), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)

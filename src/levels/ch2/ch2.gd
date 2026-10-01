@@ -42,7 +42,7 @@ func _ready() -> void:
 			# SceneTreeTimer sahne free'sinden bagimsiz yasar — bolum yeniden
 			# kurulursa timeout freed node'a cagri dusurur; ref kontrol et.
 			var self_ref: WeakRef = weakref(self)
-			get_tree().create_timer(1.2).timeout.connect(
+			get_tree().create_timer(1.2, false).timeout.connect(
 				func() -> void:
 					if is_instance_valid(self_ref.get_ref()):
 						_reveal_drone())
@@ -307,7 +307,7 @@ func _on_arena_entered(area: Area2D) -> void:
 	BossIntro.play(boss)
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
-	await get_tree().create_timer(1.15).timeout
+	await get_tree().create_timer(1.15, false).timeout
 	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
 		boss.activate()
 

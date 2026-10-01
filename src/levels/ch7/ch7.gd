@@ -260,7 +260,7 @@ func _on_boss_defeated() -> void:
 	# Ouroboros sinemasi: oyuncu girdisi donar — yaratik kacip
 	# bolt atamaz (hop_to tween'i onu surer).
 	creature.frozen = true
-	await get_tree().create_timer(1.8, true).timeout
+	await get_tree().create_timer(1.8, false).timeout
 	# Ouroboros: yaratik kasayi birakip CRT isigina siner -> Prolog
 	var cs := CutscenePlayer.new()
 	add_child(cs)
@@ -286,7 +286,7 @@ func _on_boss_defeated() -> void:
 func _finish() -> void:
 	# Dongu kapanir: "15 YIL SONRA..." karti — prologdaki sabah, bu kez
 	# kasayi takacak olan genc samurayin dongusu. Sonra jenerik + Prolog.
-	await get_tree().create_timer(1.0, true).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	var card := Label.new()
 	card.text = "15 YIL SONRA..." if Settings.language == "tr" else "15 YEARS LATER..."
 	card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -413,7 +413,7 @@ func _meta_assault() -> void:
 	FX.glitch(1.0, 0.6)
 	AudioManager.play_sfx(&"sfx/glitch")
 	Pictogram.show_on(creature, &"swap", 2.0, Vector2(0, -18))
-	await get_tree().create_timer(0.8, true).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	if not is_instance_valid(creature):
 		return
 	creature.controls_inverted = true
@@ -431,7 +431,7 @@ func _meta_assault() -> void:
 	tw.tween_property(top, "size:y", 38.0, 0.45).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_property(bottom, "size:y", 38.0, 0.45).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_property(bottom, "position:y", 232.0, 0.45).set_trans(Tween.TRANS_CUBIC)
-	await get_tree().create_timer(5.5, true).timeout
+	await get_tree().create_timer(5.5, false).timeout
 	FX.glitch(1.0, 0.5)
 	if is_instance_valid(creature):
 		creature.controls_inverted = false
