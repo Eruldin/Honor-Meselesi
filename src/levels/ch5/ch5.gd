@@ -202,6 +202,39 @@ func _build_entities() -> void:
 		k.global_position = Vector2(kx, FLOOR_Y - 12)
 		add_child(k)
 
+	# M8 duman buyuculeri — uzaktan koz geyser patlatan kulsemsi hocalar
+	for mx in [560.0, 1070.0]:
+		var mg := SmokeMage.new()
+		mg.global_position = Vector2(mx, FLOOR_Y - 16)
+		add_child(mg)
+
+	# M8 gargoyle: tas kemerin altindaki yasayan heykel — sadece Robot
+	# formu kirabilir; kemerin alti heykel boyuna ozel olarak daraltildi
+	# (ustunden atlamak mumkun degil — gercek bir gecit).
+	var garg := Gargoyle.new()
+	garg.gargoyle_id = &"ch5_gate"
+	garg.global_position = Vector2(760, FLOOR_Y - 13)
+	add_child(garg)
+	var lintel := StaticBody2D.new()
+	lintel.collision_layer = 1
+	var lcol := CollisionShape2D.new()
+	var lr := RectangleShape2D.new()
+	lr.size = Vector2(26, 10)
+	lcol.shape = lr
+	lintel.add_child(lcol)
+	var ls := Sprite2D.new()
+	ls.texture = AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(26, 10))
+	ls.modulate = Color(0.5, 0.45, 0.45)
+	lintel.add_child(ls)
+	lintel.global_position = Vector2(760, FLOOR_Y - 31)
+	add_child(lintel)
+	for px in [743.0, 777.0]:
+		var pil := Sprite2D.new()
+		pil.texture = AssetLoader.tiled_texture(&"terrain/cave_bricks", Vector2i(12, 58))
+		pil.modulate = Color(0.5, 0.45, 0.45)
+		pil.global_position = Vector2(px, FLOOR_Y - 29)
+		add_child(pil)
+
 	var rest := RestPoint.new()
 	rest.checkpoint_id = &"ch5_ruins"
 	rest.global_position = Vector2(1230, FLOOR_Y - 12)
