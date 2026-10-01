@@ -9,13 +9,20 @@ signal scene_loaded(path: String)
 ## buraya ugramaz) bolum adini buyuk harfle gosterir. HK bolge adi gibi:
 ## dunya karartmadan acilirken yazi belirip kaybolur.
 const _CHAPTER_TITLES := {
-	"res://src/levels/ch1/Ch1.tscn": ["BÖLÜM I", "ÖFKELİ KÖY"],
-	"res://src/levels/ch2/Ch2.tscn": ["BÖLÜM II", "SİBERPUNK"],
-	"res://src/levels/ch3/Ch3.tscn": ["BÖLÜM III", "GOTİK MEZARLIK"],
-	"res://src/levels/ch4/Ch4.tscn": ["BÖLÜM IV", "RETRO PLATFORM"],
-	"res://src/levels/ch5/Ch5.tscn": ["BÖLÜM V", "KÜL DİYARI"],
-	"res://src/levels/ch6/Ch6.tscn": ["BÖLÜM VI", "PARÇALANMIŞ BELLEK"],
-	"res://src/levels/ch7/Ch7.tscn": ["BÖLÜM VII", "BOŞLUK"],
+	"res://src/levels/ch1/Ch1.tscn": {
+		"tr": ["BÖLÜM I", "ÖFKELİ KÖY"], "en": ["CHAPTER I", "ANGRY VILLAGE"]},
+	"res://src/levels/ch2/Ch2.tscn": {
+		"tr": ["BÖLÜM II", "SİBERPUNK"], "en": ["CHAPTER II", "CYBERPUNK"]},
+	"res://src/levels/ch3/Ch3.tscn": {
+		"tr": ["BÖLÜM III", "GOTİK MEZARLIK"], "en": ["CHAPTER III", "GOTHIC GRAVEYARD"]},
+	"res://src/levels/ch4/Ch4.tscn": {
+		"tr": ["BÖLÜM IV", "RETRO PLATFORM"], "en": ["CHAPTER IV", "RETRO PLATFORM"]},
+	"res://src/levels/ch5/Ch5.tscn": {
+		"tr": ["BÖLÜM V", "KÜL DİYARI"], "en": ["CHAPTER V", "ASH REALM"]},
+	"res://src/levels/ch6/Ch6.tscn": {
+		"tr": ["BÖLÜM VI", "PARÇALANMIŞ BELLEK"], "en": ["CHAPTER VI", "SHATTERED MEMORY"]},
+	"res://src/levels/ch7/Ch7.tscn": {
+		"tr": ["BÖLÜM VII", "BOŞLUK"], "en": ["CHAPTER VII", "THE VOID"]},
 }
 
 var _is_transitioning := false
@@ -69,7 +76,8 @@ func change_scene(path: String) -> void:
 ## biner, dunya acilirken belirir, sonra solarak yok olur. Olmusken
 ## respawn reload() kullandigi icin kart olumde tekrar etmez.
 func _show_chapter_title(path: String) -> void:
-	var entry: Array = _CHAPTER_TITLES.get(path, [])
+	var entry: Array = _CHAPTER_TITLES.get(path, {}).get(
+		Settings.language, [])
 	if entry.is_empty():
 		return
 	var wrap := CenterContainer.new()
