@@ -534,6 +534,41 @@ func set_weary_visual(on: bool) -> void:
 		if _anims != null:
 			_anims.visible = real
 			sprite.visible = not real
+
+
+var _katana_inspect: Sprite2D
+
+## M9: bellek dunyasinda yorgunlugun ikinci vurusu — dizcokup katinanin
+## catlagina bakma. ch6 Rest durumu ~1.6s sonra yorgunlugun yerine gecer.
+func set_katana_inspect_visual(on: bool) -> void:
+	if on:
+		if _katana_inspect == null:
+			if not AssetLoader.has_asset(&"prop/player_katana_inspect"):
+				return
+			_katana_inspect = Sprite2D.new()
+			_katana_inspect.texture = AssetLoader.texture(
+				&"prop/player_katana_inspect")
+			var ss := _katana_inspect.texture.get_size()
+			_katana_inspect.offset = Vector2(-ss.x / 2.0, -ss.y + 11.0)
+			_katana_inspect.scale = Vector2.ONE * (34.0 / ss.y)
+			add_child(_katana_inspect)
+		if _katana_inspect == null:
+			return
+		var use_anims := _anims != null and _anims.visible
+		_katana_inspect.flip_h = (_anims.flip_h if use_anims
+			else sprite.flip_h)
+		_katana_inspect.modulate = sprite.modulate
+		_katana_inspect.visible = true
+		sprite.visible = false
+		if _anims != null:
+			_anims.visible = false
+	else:
+		if _katana_inspect != null:
+			_katana_inspect.visible = false
+		var real := form == null or form.id == &"samurai"
+		if _anims != null:
+			_anims.visible = real
+			sprite.visible = not real
 		else:
 			sprite.visible = true
 

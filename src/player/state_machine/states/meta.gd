@@ -4,9 +4,11 @@ extends RefCounted
 
 class Rest:
 	extends PlayerState
+	var _inspect_done := false
 
 	func enter() -> void:
 		super.enter()
+		_inspect_done = false
 		sam.velocity = Vector2.ZERO
 		sam.sprite_flash(Color(0.4, 1.0, 0.6))
 		sam.health.reset()
@@ -16,9 +18,17 @@ class Rest:
 
 	func exit() -> void:
 		sam.set_weary_visual(false)
+		sam.set_katana_inspect_visual(false)
 
 	func physics_process(delta: float) -> StringName:
 		sam.apply_gravity(delta)
+		# M9 ikinci vurus: ~1.6s yorgunluktan sonra katananin
+		# catlagina bakma pozuna gecer.
+		if not _inspect_done and t > 1.6 \
+				and GameState.current_chapter == &"ch6":
+			_inspect_done = true
+			sam.set_weary_visual(false)
+			sam.set_katana_inspect_visual(true)
 		if sam.input.move_axis() != 0.0 or sam.input.jump_just_pressed():
 			return Samurai.S_IDLE
 		return &""

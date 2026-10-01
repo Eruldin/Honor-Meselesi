@@ -206,6 +206,28 @@ func test_weary_pose_off_in_other_chapters() -> void:
 		"ch1'de yorgun poz yok — normal interact animi")
 
 
+func test_katana_inspect_follows_weary_in_ch6() -> void:
+	# M9: yorgunluktan ~1.6s sonra katananin catlagina bakma pozu
+	if not AssetLoader.has_asset(&"prop/player_katana_inspect"):
+		pending("player_katana_inspect yok (CI) — atlaniyor")
+		return
+	var sam := _make_samurai()
+	await _frames(5)
+	GameState.current_chapter = &"ch6"
+	sam.sm.change_to(Samurai.S_REST, true)
+	await _frames(2)
+	assert_true(sam._weary.visible, "once yorgun poz")
+	await _frames(105)
+	assert_true(sam._katana_inspect != null and sam._katana_inspect.visible,
+		"~1.6s sonra katana-inceleme pozuna gecer")
+	assert_false(sam._weary.visible, "yorgun poz kapanir")
+	sam.sm.change_to(Samurai.S_IDLE, true)
+	await _frames(2)
+	assert_false(sam._katana_inspect.visible, "cikista poz gizlenir")
+	assert_true(sam._anims == null or sam._anims.visible or sam.sprite.visible,
+		"normal gorsel geri gelir")
+
+
 func test_ch6_scene_builds() -> void:
 	var scene: Node2D = load("res://src/levels/ch6/Ch6.tscn").instantiate()
 	scene.auto_advance = false
