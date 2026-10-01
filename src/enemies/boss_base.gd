@@ -83,5 +83,9 @@ func take_damage(info: DamageInfo) -> void:
 
 
 func _on_died() -> void:
+	# Havada kalan mermiler/dalgalar da olur — zafer kesiginde arta kalan
+	# boss_spawn uyesi hala samurai'yi vurabiliyordu.
+	for n in get_tree().get_nodes_in_group(&"boss_spawn"):
+		n.queue_free()
 	defeated.emit()
 	super._on_died()
