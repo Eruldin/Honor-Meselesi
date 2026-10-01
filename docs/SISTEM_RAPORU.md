@@ -1,7 +1,7 @@
 # Honor Meselesi — Mevcut Sistem Raporu
 
-> **Durum güncellemesi (2026-10-01, PR #16–#277):** Aşama 1'deki
-> tüm boşluklar kapandı — test sayısı 84 → 179, tamamı yeşil.
+> **Durum güncellemesi (2026-10-01, PR #16–#294):** Aşama 1'deki
+> tüm boşluklar kapandı — test sayısı 84 → 203, tamamı yeşil.
 > - §2.1 placeholder: 19 itch.io paketi + AI sheet'leri manifest'e
 >   bağlandı; sahnede placeholder sprite kalmadı.
 > - §2.3 Bölüm 1: ölü bahçe gauntlet, gizli odalar, mini-boss kapısı,
@@ -20,8 +20,18 @@
 >   ch7 zorunlu secimde uyuyan boss'a bedava hasar (menu'de
 >   creature.frozen), ayarlar atomik yazim + slider-drag kopmasi,
 >   parry'lenen vampir isiriginin kanamasi, olu dusman hitbox'lari.
+> - #278–#294 kapanışlar: DEVIN_PLAN milestone denetimi tamamlandı —
+>   M8 (gargoyle/duman büyücüsü/selam/bölüm-bazlı hasar çarpanı), M9
+>   (Amalgam form kapısı, melez düşmanlar, kod parçacıkları, yorgunluk
+>   pozu, beyaz patlama), M10 (perspektif kayması, zorunlu seçim,
+>   Ouroboros, epilog+jenerik) spec'e göre yerinde; M11 (asset
+>   entegrasyonu, rebind, zorluk, perf, Steam Deck integer-scale,
+>   itch.io export) doğrulandı. Ek: ilk açılışta ışığa duyarlılık
+>   uyarısı (settings'de kalıcı), z-katmanı düzeltmeleri (piktogram/
+>   hava/Vlad telegraph).
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
->   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca.
+>   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca
+>   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu.
 
 > Yol haritası Aşama 1 çıktısı (orijinal, 2026-09-30). Kaynaklar:
 > `Master_Gelistirme_Promptu`, `Devin_AI_Ultra_Master_Prompt`,
