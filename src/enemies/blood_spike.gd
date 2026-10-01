@@ -17,6 +17,9 @@ func _ready() -> void:
 func _tuning_ready() -> void:
 	var t: Tuning = load("res://config/tuning.tres")
 	telegraph = t.blood_spike_delay
+	# Faz 2 karanlik ortusunun (Vlad DARKNESS_Z=5) ustunde kal — yoksa
+	# uyarici isaret ve kazik karanlikta bogulur, parry penceresi okunamaz.
+	z_index = CountVlad.DARKNESS_Z + 1
 	# Uyarici isaret — yerde kirmizi daire
 	var warn := ColorRect.new()
 	warn.name = "warn"

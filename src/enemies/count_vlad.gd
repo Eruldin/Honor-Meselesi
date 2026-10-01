@@ -12,6 +12,8 @@ var bstate := State.SLEEP
 var _t := 0.0
 var _player: Node2D
 var facing := -1
+const DARKNESS_Z := 5          ## faz 2 ortusunun z katmani (telegraph'lar ustunde kalmali)
+
 var darkness: ColorRect        ## faz 2 karanlik ortusu
 var eyes: Node2D               ## karanlikta parlayan gozler
 var arena_root: Node2D
@@ -79,7 +81,7 @@ func _spawn_darkness() -> void:
 	darkness.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	darkness.size = Vector2(2400, 1400)
 	darkness.position = Vector2(-1200, -700)
-	darkness.z_index = 5
+	darkness.z_index = DARKNESS_Z
 	add_child(darkness)
 	# Gozler karanligin ustunde kalsin
 	eyes.z_index = 10
