@@ -364,6 +364,7 @@ func test_ch7_boss_dead_rebuilds_epilogue() -> void:
 				if c is Label and c.text == "15 YIL SONRA...":
 					found = true
 	assert_true(found, "epilog karti yeniden gosterilir")
+	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
 
 
 func test_samurai_boss_sprite_flips_with_facing() -> void:
@@ -401,4 +402,15 @@ func test_samurai_boss_clamped_to_arena() -> void:
 	b.activate()
 	await _frames(4)
 	assert_lte(b.global_position.x, 50.0, "arena disina cikamaz")
-	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
+
+
+func test_ch7_choice_skipped_on_reload() -> void:
+	# Zorunlu secim bir kez sorulur — olum sonrasi reload'da
+	# (ch7_choice_done flag'i) ekran gelmez, boss dogrudan uyanir.
+	GameState.set_flag(&"ch7_choice_done")
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(6)
+	assert_true(scene._choice.is_empty(), "secim ekrani bir daha gosterilmez")
+	assert_true(scene.boss.active, "boss dogrudan aktif — HK retry")

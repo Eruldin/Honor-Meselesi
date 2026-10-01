@@ -188,7 +188,13 @@ func _spawn_fight() -> void:
 	boss.global_position = Vector2(330, FLOOR_Y - 16)
 	add_child(boss)
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
-	_fight_choice()
+	if GameState.get_flag(&"ch7_choice_done", false):
+		# Olum sonrasi reload: zorunlu secim bir kez sorulur — deneme
+		# kosularinda boss dogrudan uyanir (HK tarzi retry).
+		boss.activate()
+		AudioManager.play_music(&"music/final_boss")
+	else:
+		_fight_choice()
 
 	if GameState.has_death_mark():
 		var shade := DeathShade.new()
@@ -402,6 +408,7 @@ func _choice_glitch_away() -> void:
 func _choice_decide() -> void:
 	var layer: CanvasLayer = _choice.layer
 	_choice = {}
+	GameState.set_flag(&"ch7_choice_done")
 	if is_instance_valid(layer):
 		layer.queue_free()
 	AudioManager.play_sfx(&"sfx/reward")
