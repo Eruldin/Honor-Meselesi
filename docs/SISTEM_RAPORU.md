@@ -1,7 +1,7 @@
 # Honor Meselesi — Mevcut Sistem Raporu
 
-> **Durum güncellemesi (2026-10-01, PR #16–#294):** Aşama 1'deki
-> tüm boşluklar kapandı — test sayısı 84 → 203, tamamı yeşil.
+> **Durum güncellemesi (2026-10-01, PR #16–#310):** Aşama 1'deki
+> tüm boşluklar kapandı — test sayısı 84 → 636 assert, tamamı yeşil.
 > - §2.1 placeholder: 19 itch.io paketi + AI sheet'leri manifest'e
 >   bağlandı; sahnede placeholder sprite kalmadı.
 > - §2.3 Bölüm 1: ölü bahçe gauntlet, gizli odalar, mini-boss kapısı,
@@ -37,6 +37,13 @@
 >   M6 karanlık fazda stereo yön ipucu + nabızlanan gözler, M5 arka pil
 >   zayıf nokta (vuruş yönü kontrolü), M11 zorluk ayarı (KOLAY +1 /
 >   ZOR -1 kalp, ayarlar menüsü + settings.json), probe epilog desteği.
+> - #307–#310 kapanışlar: derin audit aileleri tamamlandı — form id
+>   ölü dalı (şövalye zırhlı adım sesi), sahne-yolu kontrat testi
+>   (koddaki tüm res://*.tscn literal'ları var olmalı), ses-id kontrat
+>   testi (70+ `&"sfx|music|amb/…"` literal'ı manifest'te olmalı) —
+>   Memory Chimera'nın `sfx/whoosh` cue'su manifest'te yokmuş, hiç
+>   çalmıyordu. Uçtan-uca RecordCh1 (6272 kare) + RecordCh7 (955 kare,
+>   zorunlu seçim ekranına kadar) kayıtlı regresyon temiz.
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
 >   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca
 >   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu,
