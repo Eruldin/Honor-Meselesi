@@ -70,11 +70,22 @@ func _build_terrain() -> void:
 		{id = &"bg/gothic_mid", scroll = 0.25, modulate = Color(0.75, 0.65, 0.9)},
 	])
 	if AssetLoader.has_asset(&"bg/moon"):
+		# Opak gokyuzu x=480'de sert biter — sag kenara alfa-fade verip
+		# ay bolgesinin manor parallax'ina yumusak gecmesini sagla.
+		var mimg := AssetLoader.texture(&"bg/moon").get_image()
+		if mimg.get_format() != Image.FORMAT_RGBA8:
+			mimg.convert(Image.FORMAT_RGBA8)
+		mimg.resize(480, 270, Image.INTERPOLATE_NEAREST)
+		var fade_w := 90
+		for fx in range(480 - fade_w, 480):
+			var a := float(480 - fx) / fade_w
+			for fy in 270:
+				var c := mimg.get_pixel(fx, fy)
+				c.a *= a
+				mimg.set_pixel(fx, fy, c)
 		var moon := Sprite2D.new()
-		moon.texture = AssetLoader.texture(&"bg/moon")
+		moon.texture = ImageTexture.create_from_image(mimg)
 		moon.centered = false
-		var ms := moon.texture.get_size()
-		moon.scale = Vector2(480, 270) / ms
 		moon.modulate = Color(0.9, 0.8, 1.0, 0.9)
 		add_child(moon)
 
