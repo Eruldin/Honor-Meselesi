@@ -226,6 +226,8 @@ func _build_entities() -> void:
 		[Villager.new(), 300], [CyberNinja.new(), 540],
 		[Villager.new(), 830], [AshHusk.new(), 1050],
 		[FlyingSword.new(), 1100, -40], [Turtle.new(), 1190],
+		# M9 melezler: bilesen karisimi artik dusmanlar
+		[MemoryChimera.new(), 700], [MemoryChimera.new(), 1240],
 	]
 	for e in echoes:
 		var en: EnemyBase = e[0]
