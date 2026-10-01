@@ -225,6 +225,22 @@ func test_parried_missile_homes_to_sender() -> void:
 	assert_false(is_instance_valid(m), "vurusta fuze patlar")
 
 
+func test_boss_death_disables_attack_hitbox() -> void:
+	# Regresyon: ozel saldiri hitbox'lari (punch/leap/swipe/slash) olumde
+	# kapanmiyordu — solan ceset oyuncuyu vurabiliyordu (temas fix'i gibi).
+	_flat_ground()
+	var b := Unit0.new()
+	b.global_position = Vector2(300, 240)
+	add_child_autofree(b)
+	b.activate()
+	b.armor_broken = true  # zirhli: dogrudan vuruslar seker
+	b.punch_hitbox.activate(DamageInfo.make(1, b))
+	assert_true(b.punch_hitbox.monitoring)
+	b.take_damage(DamageInfo.make(99, null))
+	assert_false(b.punch_hitbox.monitoring,
+		"olu boss'un saldiri hitbox'i kapanir")
+
+
 func test_unit0_phase2_punch_keeps_phase_color() -> void:
 	var s := _make_samurai()
 	s.global_position = Vector2(500, 240)

@@ -221,9 +221,14 @@ func _on_died() -> void:
 		global_position, -6.0, randf_range(0.92, 1.08))
 	_death_debris()
 	# Olu beden artik zarar vermez/vurulamaz — solma suresince hayalet
-	# temas hasari ve lutfen pogo yok.
+	# temas hasari ve lutfen pogo yok. Ozel saldiri hitbox'lari da
+	# (punch/leap/swipe/slash) olum aninda kapanir — acik kalan hitbox
+	# solan ceset uzerinden oyuncuyu vurabilirdi.
 	if contact_hitbox != null:
 		contact_hitbox.deactivate()
+	for h in get_children():
+		if h is Hitbox:
+			(h as Hitbox).deactivate()
 	hurtbox.set_deferred(&"monitoring", false)
 	if anims != null and anims.sprite_frames.has_animation(&"die"):
 		_anim_lock = 10.0
