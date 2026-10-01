@@ -7,6 +7,7 @@ var hitbox: Hitbox
 var _vel := Vector2.ZERO
 var _tuning: Tuning
 var _life := 5.0
+var _dead := false
 
 
 func _ready() -> void:
@@ -18,7 +19,7 @@ func _ready() -> void:
 
 	hitbox = Hitbox.new()
 	hitbox.collision_layer = 32
-	hitbox.collision_mask = 4
+	hitbox.collision_mask = 4 | 1  # oyuncu hurtbox + duvar govdesi
 	var col := CollisionShape2D.new()
 	var c := CircleShape2D.new()
 	c.radius = 6.0
@@ -26,6 +27,7 @@ func _ready() -> void:
 	hitbox.add_child(col)
 	add_child(hitbox)
 	hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, true, false))
+	hitbox.body_entered.connect(func(_b: Node) -> void: _explode())
 	_vel = Vector2(-_tuning.missile_speed, -60)
 
 
@@ -45,12 +47,15 @@ func _physics_process(delta: float) -> void:
 ## Parry: fuze geri doner ve artik dusmanlara (Unit-0'a) vurur.
 func on_parried() -> void:
 	_vel = -_vel * 0.8
-	hitbox.collision_mask = 16
+	hitbox.collision_mask = 16 | 1
 	hitbox.struck.connect(func(_h: Hurtbox) -> void: _explode(), CONNECT_ONE_SHOT)
 	get_child(0).modulate = Color(0.3, 1.0, 1.0)
 
 
 func _explode() -> void:
+	if _dead:
+		return
+	_dead = true
 	var spr := get_child(0)
 	spr.scale = Vector2(3, 3)
 	spr.modulate = Color(1.0, 0.7, 0.2, 0.9)

@@ -22,7 +22,7 @@ func _ready() -> void:
 
 	hitbox = Hitbox.new()
 	hitbox.collision_layer = 32
-	hitbox.collision_mask = 4  # player hurtbox
+	hitbox.collision_mask = 4 | 1  # player hurtbox + duvar govdesi
 	var col := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
 	circle.radius = 4.0
@@ -31,6 +31,7 @@ func _ready() -> void:
 	add_child(hitbox)
 	hitbox.activate(DamageInfo.make(1, self,
 		Vector2(0, 60) if vertical else Vector2(direction * 60, 0), true, false))
+	hitbox.body_entered.connect(func(_b: Node) -> void: queue_free())
 	AudioManager.play_sfx(&"sfx/dash", global_position, -14.0, randf_range(1.15, 1.35))
 
 
@@ -51,7 +52,7 @@ func on_parried() -> void:
 	_travelled = 0.0
 	if not vertical:
 		direction = -direction
-	hitbox.collision_mask = 16  # artik dusman hurtbox'lari
+	hitbox.collision_mask = 16 | 1  # artik dusman hurtbox'lari (+ duvar)
 	modulate_self()
 
 
