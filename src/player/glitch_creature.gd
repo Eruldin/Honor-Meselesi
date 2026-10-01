@@ -195,7 +195,7 @@ func take_damage(info: DamageInfo) -> void:
 	FX.hitstop(0.06)
 	FX.shake(2.0, 0.2)
 	AudioManager.play_sfx(&"sfx/hurt", global_position)
-	if anims != null:
+	if anims != null and not dead:
 		anims.play(&"hurt")
 
 
