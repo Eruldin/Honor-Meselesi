@@ -5,7 +5,8 @@ extends BossBase
 ## F2 (%50): hizlanir + oyuncunun ustunde KUL GEYSERI serisi acar
 ## (BloodSpike'in kule boyali hali).
 
-enum GState { SLEEP, APPROACH, TELL, SLAM_RISE, SLAM_FALL, GEYSER, GAP }
+enum GState { SLEEP, SALUTE, APPROACH, TELL, SLAM_RISE, SLAM_FALL, GEYSER, GAP }
+const BOW_ANGLE := 0.22
 
 var bstate := GState.SLEEP
 var _t := 0.0
@@ -39,9 +40,21 @@ func _ready() -> void:
 
 
 func on_activated() -> void:
-	bstate = GState.APPROACH
-	_t = tuning.guardian5_attack_gap * 1.4
-	Pictogram.show_on(self, &"alarm", 1.0, Vector2(0, -34))
+	# M8: saygi selami sinematigi — savas oncesi oyuncuya dogru vucut egimi.
+	bstate = GState.SALUTE
+	_t = tuning.guardian5_salute_dur
+	_player = get_tree().get_first_node_in_group(&"player")
+	if _player != null:
+		facing = 1 if _player.global_position.x > global_position.x else -1
+		sprite.flip_h = facing < 0
+	_bow(true)
+
+
+func _bow(on: bool) -> void:
+	var r := BOW_ANGLE * facing if on else 0.0
+	sprite.rotation = r
+	if anims != null:
+		anims.rotation = r
 
 
 func on_reset() -> void:
@@ -49,6 +62,7 @@ func on_reset() -> void:
 	_t = 0.0
 	_player = null
 	_atk_idx = 0
+	_bow(false)
 	if using_real_sprite:
 		sprite.modulate = Color(0.75, 0.6, 0.55)
 		if anims != null:
@@ -79,6 +93,13 @@ func _physics_process(delta: float) -> void:
 	var gap := tuning.guardian5_attack_gap_p2 if phase >= 1 else tuning.guardian5_attack_gap
 
 	match bstate:
+		GState.SALUTE:
+			velocity.x = 0.0
+			if _t <= 0.0:
+				_bow(false)
+				bstate = GState.APPROACH
+				_t = tuning.guardian5_attack_gap * 1.4
+				Pictogram.show_on(self, &"alarm", 1.0, Vector2(0, -34))
 		GState.APPROACH:
 			velocity.x = facing * speed
 			if _t <= 0.0:
@@ -142,6 +163,8 @@ func _land_slam() -> void:
 	for d in [-1, 1]:
 		var w := Shockwave.new()
 		w.direction = d
+		# M8: bolum bazli hasar carpani — agir darbe ~%%70 can
+		w.damage = tuning.chapter_damage(&"ch5", tuning.guardian5_slam_damage)
 		w.global_position = global_position + Vector2(d * 12, 8)
 		w.add_to_group(&"boss_spawn")
 		_root().add_child(w)

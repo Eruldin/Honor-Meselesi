@@ -113,6 +113,39 @@ func test_guardian_parry_freezes_behavior() -> void:
 	assert_eq(g._t, t0, "parry penceresinde durum saati donar")
 
 
+func test_guardian_bows_before_fight() -> void:
+	# M8: saygi selami sinematigi — aktivasyonda yaklasma yerine selam
+	var g := AshGuardian.new()
+	g.floor_y = 0.0
+	_make_samurai(Vector2(30, 0))
+	add_child_autofree(g)
+	g.activate()
+	await _frames(4)
+	assert_eq(g.bstate, AshGuardian.GState.SALUTE,
+		"aktivasyonda selam durumu baslar")
+	assert_ne(g.sprite.rotation, 0.0, "selamda vucut egik")
+	await _frames(int(tuning.guardian5_salute_dur * 60.0) + 8)
+	assert_eq(g.bstate, AshGuardian.GState.APPROACH,
+		"selam bitince yaklasma baslar")
+	assert_eq(g.sprite.rotation, 0.0, "selam bitince durus duzelir")
+
+
+func test_guardian_slam_shockwave_is_heavy() -> void:
+	# M8: bolum bazli hasar carpani — agir darbe ~%70 can
+	var g := AshGuardian.new()
+	g.floor_y = 0.0
+	add_child_autofree(g)
+	g._land_slam()
+	await _frames(2)
+	var heavy := 0
+	for n in g.get_parent().get_children():
+		if n is Shockwave:
+			heavy = n.damage
+	assert_eq(heavy, tuning.guardian5_slam_damage,
+		"ch5'te slam sok dalgasi agir darbe (~%70)")
+	assert_eq(tuning.chapter_damage(&"ch5", 3), 3, "carpan 1.0'da degismez")
+
+
 func test_guardian_defeat_fires_signal() -> void:
 	var g := AshGuardian.new()
 	var sam := _make_samurai()

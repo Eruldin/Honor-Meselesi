@@ -143,6 +143,16 @@ extends Resource
 @export var guardian5_telegraph: float = 0.6
 @export var guardian5_attack_gap: float = 1.4
 @export var guardian5_attack_gap_p2: float = 0.9
+@export var guardian5_salute_dur: float = 1.4
+@export var guardian5_slam_damage: int = 3   ## agir darbe ~%70 (5 maskede)
+
+## M8 zorluk artisi: bolum bazli hasar carpani (1.0 = degismez).
+@export var chapter_damage_mult: Dictionary = {&"ch5": 1.0}
+
+
+func chapter_damage(ch: StringName, base: int) -> int:
+	var mult: float = chapter_damage_mult.get(ch, 1.0)
+	return maxi(1, roundi(base * mult))
 
 @export_group("Efekt")
 @export var hitstop_normal: float = 0.06
