@@ -155,3 +155,11 @@ func test_prolog_full_sequence_without_skip() -> void:
 		t += 0.25
 	assert_eq(_prolog._phase, &"done", "cutscene kendiliginden bitmeli")
 	assert_eq(GameState.current_chapter, &"ch1")
+
+
+func test_tv_spores_emit_three_wisps() -> void:
+	_prolog = _make_prolog()
+	var before := _prolog.find_children("*", "Sprite2D", true, false).size()
+	_prolog._tv_spores()
+	var after := _prolog.find_children("*", "Sprite2D", true, false).size()
+	assert_eq(after - before, 3, "uc glitch tohumu cikar")

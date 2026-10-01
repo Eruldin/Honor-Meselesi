@@ -1634,6 +1634,12 @@
   },
   "enemy/glitch_small": {
    "path": "generated/ai/glitch_small.png",
+   "region": [
+    16,
+    45,
+    32,
+    19
+   ],
    "pack": "AI Sheet"
   },
   "npc/villager": {
