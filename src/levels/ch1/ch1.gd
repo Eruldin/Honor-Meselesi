@@ -741,6 +741,14 @@ func _build_terrain() -> void:
 	for spec in [[Vector2(1640, 152)], [Vector2(1760, 172)], [Vector2(1455, 190)]]:
 		_add_deco(&"prop/moss", spec[0] + Vector2(0, 4), 0.7,
 			Color(0.55, 0.7, 0.5))
+	# Kucuk tapinak — gizli tapinak odasinin varligini onceki ekrandan hissettirir
+	_add_deco_ground(&"prop/shrine", 1950, FLOOR_Y, 0.4,
+		Color(0.55, 0.5, 0.66))
+	# Yosunlu kaya kumeleri — orman zemini ve gecit patikasi dokusu
+	_add_deco_ground(&"prop/stone_sml", 1590, FLOOR_Y, 0.28,
+		Color(0.5, 0.56, 0.5))
+	_add_deco_ground(&"prop/stone_sml", 3760, FLOOR_Y, 0.3,
+		Color(0.52, 0.46, 0.52), true)
 
 	# === MAGARA DEKORU ===
 	for x in [2350.0, 2520.0, 2900.0, 3150.0]:

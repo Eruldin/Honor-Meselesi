@@ -122,6 +122,11 @@ func _build_terrain() -> void:
 		Color(0.36, 0.3, 0.46), true)
 	_add_deco_ground(&"prop/fence", 300.0, 0.8, Color(0.5, 0.44, 0.58))
 	_add_deco_ground(&"prop/fence", 880.0, 0.8, Color(0.5, 0.44, 0.58), true)
+	# Kazan + uzun cali — mezarlik cadisi izleri
+	_add_deco_ground(&"prop/cauldron", 1210.0, 0.32, Color(0.5, 0.44, 0.55))
+	_add_deco_ground(&"prop/bush_large", 560.0, 0.55, Color(0.4, 0.42, 0.5))
+	_add_deco_ground(&"prop/bush_large", 1240.0, 0.5,
+		Color(0.36, 0.38, 0.46), true)
 
 
 func _add_deco_ground(id: StringName, x: float, scale := 1.0,
