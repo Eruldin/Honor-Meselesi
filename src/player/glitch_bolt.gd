@@ -13,7 +13,7 @@ var _tex: Texture2D
 
 func _ready() -> void:
 	collision_layer = 8
-	collision_mask = 16
+	collision_mask = 16 | 1  # dusman hurtbox + duvar govdesi
 	var bc := CollisionShape2D.new()
 	var br := RectangleShape2D.new()
 	br.size = Vector2(6, 4)
@@ -25,6 +25,7 @@ func _ready() -> void:
 	bs.modulate = Color(0.4, 1.0, 0.9)
 	add_child(bs)
 	area_entered.connect(_on_hit)
+	body_entered.connect(_on_wall)
 
 
 func _physics_process(delta: float) -> void:
@@ -59,4 +60,9 @@ func _on_hit(area: Area2D) -> void:
 		owner.take_damage(DamageInfo.make(
 			dmg, s, Vector2(signf(vel.x) * 60.0, -20.0), false, false))
 	FX.hitstop(0.04)
+	queue_free()
+
+
+## Duvar/terrain govdesine carpinca silinir — duvar arkasindan gecmez.
+func _on_wall(_body: Node) -> void:
 	queue_free()
