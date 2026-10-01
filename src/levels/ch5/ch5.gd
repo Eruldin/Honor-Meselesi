@@ -322,7 +322,7 @@ func _on_boss_defeated() -> void:
 	SaveSystem.save_game()
 	await SceneRouter.fade_to(1.0, 0.7)
 	await get_tree().create_timer(0.3, true).timeout
-	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_dark")
+	var portal := PortalFx.make(Vector2(38, 62), &"fx/portal_dark")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	AudioManager.play_music(&"music/victory")
@@ -354,7 +354,7 @@ func _go_ch6() -> void:
 ## Boss odasi temizlenmis ama bolum-gecisi oynanmamis durumda: arena
 ## cikisina portal + giris tetigi — oyuncu yuruyerek sonraki bolume gecer.
 func _make_cleared_exit(portal_key: StringName) -> void:
-	var portal := PortalFx.make(Vector2(24, 40), portal_key)
+	var portal := PortalFx.make(Vector2(38, 62), portal_key)
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	var trig := Area2D.new()

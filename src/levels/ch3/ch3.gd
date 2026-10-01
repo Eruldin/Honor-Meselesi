@@ -349,7 +349,7 @@ func _on_boss_defeated() -> void:
 	SaveSystem.save_game()
 	if boss.darkness != null:
 		boss.darkness.create_tween().tween_property(boss.darkness, "modulate:a", 0.0, 0.8)
-	var portal := PortalFx.make(Vector2(24, 40), &"fx/portal_grey")
+	var portal := PortalFx.make(Vector2(38, 62), &"fx/portal_grey")
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	AudioManager.play_music(&"music/victory")
@@ -385,7 +385,7 @@ func _go_ch4() -> void:
 ## Boss odasi temizlenmis ama bolum-gecisi oynanmamis durumda: arena
 ## cikisina portal + giris tetigi — oyuncu yuruyerek sonraki bolume gecer.
 func _make_cleared_exit(portal_key: StringName) -> void:
-	var portal := PortalFx.make(Vector2(24, 40), portal_key)
+	var portal := PortalFx.make(Vector2(38, 62), portal_key)
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
 	var trig := Area2D.new()
