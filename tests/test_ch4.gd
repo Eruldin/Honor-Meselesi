@@ -160,3 +160,19 @@ func test_ch4_flow_boss_to_ch5() -> void:
 			child.request_skip()
 	await wait_seconds(0.3)
 	assert_eq(GameState.current_chapter, &"ch5")
+
+
+func test_fire_flower_pops_and_spits() -> void:
+	var ff := FireFlower.new()
+	ff.global_position = Vector2(100, 200)
+	add_child_autofree(ff)
+	var t: Tuning = load("res://config/tuning.tres")
+	# pop: interval*0.6 + disarida 0.5s sonra _spit
+	await wait_seconds(t.flower_interval * 0.6 + 0.7)
+	var found := false
+	for c in ff.get_parent().get_children():
+		if c is Projectile:
+			found = true
+	assert_true(found, "cicek disari cikip ates topu tukurur")
+	if AssetLoader.has_frames(&"enemy/flower/attack"):
+		assert_not_null(ff._asp, "attack animi sprite'i kurulur")
