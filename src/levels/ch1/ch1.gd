@@ -5,6 +5,7 @@ extends Node2D
 ## Ogretici tamamen cevresel: tabela-piktogramlar, guvenli deneme alanlari.
 
 const CH2_PATH := "res://src/levels/ch2/Ch2.tscn"
+const GlowSprite := preload("res://src/levels/props/glow_sprite.gd")
 const FLOOR_Y := 250.0
 const LEVEL_W := 5600.0
 const ZONE_MUSIC := [  # x sinirlari — soldan girince gecis
@@ -221,28 +222,13 @@ func _add_deco_ground(id: StringName, x: float, floor_y := FLOOR_Y,
 	return s
 
 
-var _glow_tex: ImageTexture
-
-func _add_glow(pos: Vector2, radius: float, col: Color) -> void:
-	## Sicak isik halesi: radyal gradyan tek-tanecik — gece fenerleri icin.
-	if _glow_tex == null:
-		var img := Image.create(24, 24, false, Image.FORMAT_RGBA8)
-		for y in 24:
-			for x in 24:
-				var d := Vector2(x - 11.5, y - 11.5).length() / 11.5
-				var a := clampf(1.0 - d, 0.0, 1.0)
-				img.set_pixel(x, y, Color(1.0, 1.0, 1.0, a * a))
-		_glow_tex = ImageTexture.create_from_image(img)
-	var s := Sprite2D.new()
-	s.texture = _glow_tex
-	s.scale = Vector2.ONE * (radius / 12.0)
+func _add_glow(pos: Vector2, radius: float, col: Color) -> Sprite2D:
+	## Sicak isik halesi — gece fenerleri icin.
+	var s := GlowSprite.new(radius, col)
 	s.position = pos
-	s.modulate = col
 	s.z_index = 3
-	var mat := CanvasItemMaterial.new()
-	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	s.material = mat
 	add_child(s)
+	return s
 
 
 func _add_sign(pos: Vector2, icon: StringName) -> void:
@@ -826,6 +812,7 @@ func _build_terrain() -> void:
 	for x in [5130.0, 5180.0]:
 		_add_deco_ground(&"prop/stone_lamp", x, FLOOR_Y, 0.5,
 			Color(0.9, 0.8, 0.75))
+		_add_glow(Vector2(x, FLOOR_Y - 13), 15.0, Color(1.0, 0.8, 0.45, 0.4))
 
 	# Mahzen Ici Dekoru
 	var decor_crypt_y := FLOOR_Y + 160.0
