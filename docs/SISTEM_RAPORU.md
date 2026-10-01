@@ -1,7 +1,7 @@
 # Honor Meselesi — Mevcut Sistem Raporu
 
-> **Durum güncellemesi (2026-10-01, PR #16–#310):** Aşama 1'deki
-> tüm boşluklar kapandı — test sayısı 84 → 636 assert, tamamı yeşil.
+> **Durum güncellemesi (2026-10-01, PR #16–#318):** Aşama 1'deki
+> tüm boşluklar kapandı — test sayısı 84 → 689 assert, tamamı yeşil.
 > - §2.1 placeholder: 19 itch.io paketi + AI sheet'leri manifest'e
 >   bağlandı; sahnede placeholder sprite kalmadı.
 > - §2.3 Bölüm 1: ölü bahçe gauntlet, gizli odalar, mini-boss kapısı,
@@ -44,6 +44,17 @@
 >   Memory Chimera'nın `sfx/whoosh` cue'su manifest'te yokmuş, hiç
 >   çalmıyordu. Uçtan-uca RecordCh1 (6272 kare) + RecordCh7 (955 kare,
 >   zorunlu seçim ekranına kadar) kayıtlı regresyon temiz.
+> - #311–#318 kapanışlar: test hijyeni tamamlandı — 'unfreed children'
+>   uyarıları gerçek sızıntıymış (düşman-spawn mermi/fx'ler test düğümüne
+>   autofree-dışı çocuk ekliyor); `_awaiter` korumalı stray-free döngüsü
+>   ile 6 dosyada 0 uyarı (filtresiz döngü GUT'un awaiter'ını da free'leyip
+>   run'u kilitliyordu). save.json sağlamlaştırma: flags/unlocked_forms
+>   tip guard'ı (elle bozulan save crash üretmez), current_form'un
+>   unlocked_forms'a kelepçesi, ölü tuning.dash_iframes kaldırıldı.
+>   Yeni kontrat: load()/preload() literal yolları. UI metin taraması:
+>   son sabit Türkçe metin (başlık tagline'ı) çift dilli yapıldı.
+>   Grup-üyelik, connect-çoğaltma, autoload-state, await-guard,
+>   call_deferred ve crossfade denetimleri temiz çıktı.
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
 >   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca
 >   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu,
