@@ -284,3 +284,20 @@ func test_sleeping_cave_bat_wakes_on_approach() -> void:
 	assert_false(bat._asleep, "yaklasinca uyanir")
 	if AssetLoader.has_frames(&"enemy/bat/sleep"):
 		assert_ne(bat.anims.animation, &"sleep", "uyku animi birakilir")
+
+
+func test_crow_dive_uses_jump_anim() -> void:
+	if not AssetLoader.has_frames(&"enemy/crow/jump"):
+		pending("crow/jump yok (CI) — atlaniyor")
+		return
+	var sam := _make_samurai()
+	sam.global_position = Vector2(40, -20)
+	var crow := Crow.new()
+	crow.global_position = Vector2(0, -50)
+	add_child_autofree(crow)
+	await wait_seconds(0.15)
+	assert_true(crow.anims.sprite_frames.has_animation(&"jump"),
+		"bankada jump animi var")
+	sam.global_position = Vector2(60, -30)
+	await wait_seconds(0.3)
+	assert_eq(crow.anims.animation, &"jump", "dalista jump pozu oynar")
