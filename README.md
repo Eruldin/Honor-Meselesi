@@ -28,6 +28,20 @@ girer. Temel mekanik: yenilen boss'ların formuna bürünme
 - CI: GitHub Actions — import + GUT + Linux/Windows export.
 - Kilometre taşları planın 5. bölümünde; her biri ayrı branch + PR.
 
+## Paketleme / Dağıtım
+
+- Export: `build/windows/HonorMeselesi.exe` (preset `Windows`) ve
+  `build/linux/honor-meselesi.x86_64` (preset `Linux`).
+- **`assets_external/` klasörü çalıştırılabilir dosyanın yanında olmalı** —
+  export filtresi onu paket dışında tutar (~2.5 GB ham paket yerine
+  yalnız manifest'in gösterdiği dosyalar kopyalanır, ~120 MB).
+  Olmazsa oyun yine açılır ama tüm sprite'lar placeholder'a düşer.
+- `build/windows/` bu oturumda hazır: exe + pck + `assets_external/` birlikte
+  çalışır durumda (dizini olduğu gibi kopyalayabilirsin).
+- CI artifact'ı sadece exe+pck üretir — gerçek asset'ler repoda/git'te
+  olmadığı için CI zip'i placeholder çalıştırır; dağıtım için yukarıdaki
+  klasör gereklidir.
+
 ## Kontroller (varsayılan)
 
 | Eylem | Klavye | Gamepad |
