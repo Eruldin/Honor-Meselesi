@@ -53,5 +53,5 @@ func _spit() -> void:
 	p.global_position = global_position + Vector2(facing * 7.0, -13)
 	p.modulate = Color(0.7, 1.1, 1.3)
 	get_parent().add_child(p)
-	AudioManager.play_sfx(&"sfx/whoosh", global_position, -8.0, 1.15)
+	AudioManager.play_sfx(&"sfx/swipe", global_position, -8.0, 1.15)
 	FX.glitch(0.12, 0.2)
