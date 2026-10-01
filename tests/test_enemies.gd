@@ -112,3 +112,15 @@ func test_smoke_mage_wider_range_than_druid() -> void:
 	assert_gt(m.attack_range, d.attack_range,
 		"duman buyucusu uzaktan patlatir — menzil druid'i asar")
 	assert_true(m.is_in_group(&"enemies"))
+
+
+func after_each() -> void:
+	# Dusman-spawn mermi/fx get_parent() altina eklenir — test dugumunun
+	# kayit-disiz cocuklari olarak autofree'ye dusmez; elle temizle.
+	# _awaiter GUT'un kendi cocugu: onu serbest birakmak await'i kilitler.
+	for c in get_children():
+		if c == _awaiter:
+			continue
+		if is_instance_valid(c) and not c.is_queued_for_deletion():
+			c.queue_free()
+	await wait_process_frames(2)

@@ -6,6 +6,10 @@ func before_each() -> void:
 	GameState.reset()
 
 
+func after_each() -> void:
+	await wait_process_frames(2)  # queue_free bosaltsin
+
+
 func _frames(n: int) -> void:
 	for i in n:
 		await get_tree().physics_frame
