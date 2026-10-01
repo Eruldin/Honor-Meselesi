@@ -13,6 +13,7 @@ var samurai: Samurai            ## giris cutscene'i icin (sonra boss'a cevrilir)
 var creature: GlitchCreature    ## oyuncu — perspektif kaymasi sonrasi
 var boss: SamuraiBoss
 var camera: ScreenShake
+var _flip_tw: Tween
 var _boss_bar: Control
 var _boss_bars: Dictionary
 var _boss_root: Control
@@ -244,17 +245,39 @@ func _run_intro() -> void:
 			samurai.add_child(_hat_prop)
 			_hat_prop.position = Vector2(0, -24)},
 		{op = "wait", t = 0.4},
+		# M10 spec: kamera 180° donusu — dunya kelimesi kelimesine
+		# kafamizin ustune ters doner; karartma altinda takas yapilir.
+		{op = "call", fn = func() -> void:
+			_flip_tw = create_tween()
+			_flip_tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			_flip_tw.tween_property(camera, "rotation", PI, 1.15)},
 		{op = "glitch", strength = 1.4, dur = 1.4},
 		{op = "fade", node = "black", to_a = 1.0, dur = 0.5},
 		{op = "call", fn = func() -> void:
 			# Perspektif kaymasi: samuray sahneden boss'a donusur,
-			# oyuncu yaratigi kontrol eder
+			# oyuncu yaratigi kontrol eder. Kamera karartma altinda
+			# dik konuma alinir — yaratigin dunyasi duz baslar.
+			camera.rotation = 0.0
 			samurai.queue_free()
 			blob.queue_free()
 			_spawn_fight()},
 		{op = "wait", t = 0.3},
 		{op = "fade", node = "black", to_a = 0.0, dur = 0.8},
-	], {"samurai": samurai, "HatCreature": blob, "black": _black})
+	], {"samurai": samurai, "HatCreature": blob, "black": _black},
+	func() -> void:
+		# Skip guvenligi: atlama her an gelebilir — kamera dik,
+		# karartma acik, takas tamamlanmis olmali (yoksa soft-lock
+		# + ters kamera sizintisi).
+		if _flip_tw != null and _flip_tw.is_valid():
+			_flip_tw.kill()
+		camera.rotation = 0.0
+		_black.modulate.a = 0.0
+		if is_instance_valid(samurai):
+			samurai.queue_free()
+		if is_instance_valid(blob):
+			blob.queue_free()
+		if creature == null:
+			_spawn_fight())
 
 
 func _on_boss_defeated() -> void:
