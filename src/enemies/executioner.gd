@@ -54,7 +54,7 @@ func _summon() -> void:
 	stagger_timer = 1.1
 	play_anim(&"summon", 0.4)
 	var h := health
-	await get_tree().create_timer(0.55).timeout
+	await get_tree().create_timer(0.55, false).timeout
 	# Oyuncu olup sahne yeniden kurulursa bu node free'lenir — await
 	# bosa cikmasin diye govde yerine cocuk node gecerliligi sorulur.
 	if not is_instance_valid(h) or not h.is_alive():

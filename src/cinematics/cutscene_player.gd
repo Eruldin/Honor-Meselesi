@@ -173,4 +173,4 @@ func _new_tween() -> Tween:
 func _timer(t: float) -> void:
 	if t <= 0.0:
 		return
-	await get_tree().create_timer(t).timeout
+	await get_tree().create_timer(t, false).timeout

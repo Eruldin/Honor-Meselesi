@@ -314,7 +314,7 @@ func _on_arena_entered(area: Area2D) -> void:
 	BossIntro.play(boss)
 	_boss_root.visible = true
 	_boss_bar.size.x = 160.0
-	await get_tree().create_timer(1.15).timeout
+	await get_tree().create_timer(1.15, false).timeout
 	if is_instance_valid(boss) and boss.health.is_alive() and _boss_started:
 		boss.activate()
 
@@ -337,7 +337,7 @@ func _on_boss_defeated() -> void:
 		tw.tween_property(boss, "position:y", boss.position.y + 320.0, 1.2)
 		tw.parallel().tween_property(boss, "rotation", PI * 2.0, 1.2)
 
-	await get_tree().create_timer(1.6, true).timeout
+	await get_tree().create_timer(1.6, false).timeout
 	_gameover.visible = false
 
 	var portal := PortalFx.make()

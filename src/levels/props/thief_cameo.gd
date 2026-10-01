@@ -38,7 +38,7 @@ static func spawn(parent: Node, pos: Vector2) -> void:
 
 
 static func _sequence(n: AnimatedSprite2D) -> void:
-	await n.get_tree().create_timer(1.3).timeout
+	await n.get_tree().create_timer(1.3, false).timeout
 	if not is_instance_valid(n):
 		return
 	n.play(&"walk")

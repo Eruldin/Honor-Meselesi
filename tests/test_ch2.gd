@@ -254,3 +254,38 @@ func test_ch2_flow_grants_drone_and_boss_to_ch3() -> void:
 			child.request_skip()
 	await wait_seconds(0.3)
 	assert_eq(GameState.current_chapter, &"ch3")
+
+
+class RealTimer:
+	extends Node
+	## Pause altinda da isleyen gercek-zaman sayaci (GUT awaiter pause'da durur).
+	var _left := 0.0
+	var done := false
+	func _init(sec: float) -> void:
+		_left = sec
+		process_mode = Node.PROCESS_MODE_ALWAYS
+	func _process(delta: float) -> void:
+		_left -= delta
+		if _left <= 0.0:
+			done = true
+			set_process(false)
+
+
+func test_boss_intro_timer_frozen_while_paused() -> void:
+	# Regresyon: create_timer process_always=true — pause'da da isliyordu;
+	# oyuncu menu acinca boss intro'su perde arkasi bitiyordu.
+	var ch2: Node2D = load(CH2_PATH).instantiate()
+	ch2.auto_advance = false
+	add_child_autofree(ch2)
+	await wait_seconds(0.2)
+	ch2._on_arena_entered(ch2.samurai.hurtbox)
+	await wait_seconds(0.2)
+	get_tree().paused = true
+	var rt := RealTimer.new(1.3)   # intro 1.15s — pause'da donmus olmali
+	add_child_autofree(rt)
+	while not rt.done:
+		await get_tree().process_frame
+	get_tree().paused = false
+	assert_false(ch2.boss.active, "pause sirasinda boss aktive olmamali")
+	await wait_seconds(1.3)
+	assert_true(ch2.boss.active, "pause kalkinca intro tamamlanir")
