@@ -181,3 +181,39 @@ func test_fx_slowmo_survives_listener_free() -> void:
 	fl.free()
 	await get_tree().create_timer(0.6).timeout
 	assert_true(true, "free yarisi slow-mo beklemesini sessizce keser")
+
+
+func test_all_scene_paths_exist() -> void:
+	# Kontrat: kodda gecen tum res://*.tscn yollari diskte var olmali —
+	# yanlis yazilmis sahne yolu run-time'a kadar sessiz kalir.
+	var seen: Dictionary = {}
+	var dir := DirAccess.open("res://src")
+	if dir == null:
+		pending("src dir yok")
+		return
+	var stack: Array[String] = ["res://src", "res://tools"]
+	while not stack.is_empty():
+		var dpath: String = stack.pop_back()
+		var d := DirAccess.open(dpath)
+		if d == null:
+			continue
+		d.list_dir_begin()
+		var name := d.get_next()
+		while name != "":
+			if d.current_is_dir() and name != "." and name != "..":
+				stack.append(dpath + "/" + name)
+			elif name.ends_with(".gd"):
+				var src := FileAccess.get_file_as_string(dpath + "/" + name)
+				var re := RegEx.create_from_string(r"res://[A-Za-z0-9_./-]+\.tscn")
+				for m in re.search_all(src):
+					seen[m.get_string()] = true
+			name = d.get_next()
+		d.list_dir_end()
+	assert_gt(seen.size(), 5, "en az 6 sahne yolu kodda gecmeli")
+	for path in seen.keys():
+		assert_true(ResourceLoader.exists(path), "sahne yolu var olmali: " + path)
+
+
+func test_main_scene_exists() -> void:
+	var main: String = ProjectSettings.get_setting("application/run/main_scene", "")
+	assert_true(ResourceLoader.exists(main), "main_scene var olmali: " + main)
