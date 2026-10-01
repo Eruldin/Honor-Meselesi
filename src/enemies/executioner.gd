@@ -52,8 +52,11 @@ func _physics_process(delta: float) -> void:
 func _summon() -> void:
 	stagger_timer = 1.1
 	play_anim(&"summon", 0.4)
+	var h := health
 	await get_tree().create_timer(0.55).timeout
-	if not health.is_alive():
+	# Oyuncu olup sahne yeniden kurulursa bu node free'lenir — await
+	# bosa cikmasin diye govde yerine cocuk node gecerliligi sorulur.
+	if not is_instance_valid(h) or not h.is_alive():
 		return
 	for dx in [-22.0, 22.0]:
 		if get_tree().get_nodes_in_group(&"summonling").size() >= SUMMON_CAP:
