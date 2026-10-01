@@ -176,3 +176,44 @@ func test_death_mark_survives_save_load() -> void:
 	assert_eq(SaveSystem.load_game(), OK)
 	assert_true(GameState.has_death_mark(), "olum izi kayit sonrasi korunur")
 	assert_eq(GameState.clear_death_mark(), 9)
+
+
+func test_corrupt_save_fields_recover() -> void:
+	# save.json plaintext — elle bozulan/kusurlu turler oyuna crash degil
+	# guvenli varsayilan uretmeli.
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"version": 1,
+		"chapter": "ch2",
+		"flags": "bozuk",
+		"unlocked_forms": 42,
+		"soul": "degil",
+	}))
+	f.close()
+	assert_eq(SaveSystem.load_game(), OK)
+	assert_eq(GameState.current_chapter, &"ch2")
+	assert_true(GameState.unlocked_forms.has(&"samurai"),
+		"bozuk form listesi samurai'a doner")
+	assert_eq(GameState.flags.size(), 0, "bozuk flags sozlugu yutulur")
+
+
+func test_corrupt_save_flag_vector_recover() -> void:
+	# Bozuk __v2 flag'i (dizi degil) Dictionary olarak saklanir — cokmez.
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"version": 1,
+		"flags": {"respawn_pos": {"__v2": "nan"}},
+	}))
+	f.close()
+	assert_eq(SaveSystem.load_game(), OK)
+	var pos: Variant = GameState.get_flag(&"respawn_pos")
+	assert_true(pos is Dictionary, "bozuk Vector2 girdisi ham kalir — crash yok")
+
+
+func test_garbage_save_json_fails_cleanly() -> void:
+	# Gecerli JSON ama Dictionary degil — devam etmeye calismak parse hatasi
+	# uretir, title _on_new_game'e duser.
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.WRITE)
+	f.store_string("[1, 2, 3]")
+	f.close()
+	assert_eq(SaveSystem.load_game(), ERR_PARSE_ERROR)

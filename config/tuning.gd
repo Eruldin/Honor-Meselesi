@@ -19,7 +19,6 @@ extends Resource
 @export var dash_speed: float = 390.0         ## ~64px / 150ms
 @export var dash_time: float = 0.15
 @export var dash_cooldown: float = 0.35
-@export var dash_iframes: bool = false        ## Golge formunda true
 
 @export_group("Saldiri")
 @export var attack_duration: float = 0.3     ## tek vurus suresi
