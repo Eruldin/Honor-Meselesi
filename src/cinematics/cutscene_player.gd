@@ -106,11 +106,15 @@ func _run_step(s: Dictionary) -> void:
 				# degiskeni o anki want'a sabitlenmezse sonraki frame
 				# kosu animini idle ile ezer.
 				n._anim_name = &"idle"
+				# Yavas yaklasma kosu adimi gibi gorunmesin.
+				n._anims.speed_scale = clampf(speed / 130.0, 0.6, 1.3)
 			_walk_sfx(n, dur)
 			await _move(n, Vector2(target_x, n.global_position.y), dur, 0.0)
 			if n is Samurai:
 				# _anim_name sifirlaninca _sync_anim sonraki frame idle'a doner.
 				n._anim_name = &""
+				if n._anims != null:
+					n._anims.speed_scale = 1.0
 		"move_to":
 			await _move(_node(s) as Node2D, s.get("to", Vector2.ZERO),
 				float(s.get("dur", 0.5)), 0.0)
