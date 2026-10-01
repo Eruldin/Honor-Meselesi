@@ -50,6 +50,9 @@ func take_damage(info: DamageInfo) -> void:
 			info.source.global_position.x - global_position.x))) \
 			if info.source != null else -1
 		sprite.modulate = Color(0.3, 0.9, 1.0, 0.3)
-		global_position.x += dir * tuning.ninja_blink_dist
+		var pre := global_position
+		move_and_collide(Vector2(dir * tuning.ninja_blink_dist, 0.0))
+		if absf(global_position.x - pre.x) < 4.0:
+			global_position = pre  # duvar sardigi neredeyse yerinde blink
 		var tw := create_tween()
 		tw.tween_property(sprite, "modulate:a", 1.0, 0.15)
