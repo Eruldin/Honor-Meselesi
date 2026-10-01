@@ -71,14 +71,16 @@ func on_phase_changed(_p: int) -> void:
 func _spawn_darkness() -> void:
 	if darkness != null:
 		return
+	# CanvasLayer kullanilamaz: dunya-uzayi dugumlerinin z_index'i layer'i
+	# asamaz — gozler karanlikta kaybolurdu. Buyuk dunya rect'i Vlad'la
+	# hareket eder; gozler z=10 ile ustte kalir (yon ipucu).
 	darkness = ColorRect.new()
 	darkness.color = Color(0, 0, 0, 0.82)
-	darkness.set_anchors_preset(Control.PRESET_FULL_RECT)
 	darkness.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var layer := CanvasLayer.new()
-	layer.layer = 40
-	add_child(layer)
-	layer.add_child(darkness)
+	darkness.size = Vector2(2400, 1400)
+	darkness.position = Vector2(-1200, -700)
+	darkness.z_index = 5
+	add_child(darkness)
 	# Gozler karanligin ustunde kalsin
 	eyes.z_index = 10
 
@@ -93,7 +95,7 @@ func on_reset() -> void:
 	elif anims != null:
 		anims.modulate = Color.WHITE
 	if darkness != null:
-		darkness.get_parent().queue_free()
+		darkness.queue_free()
 		darkness = null
 	eyes.z_index = 0
 
