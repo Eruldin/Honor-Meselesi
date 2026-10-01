@@ -24,8 +24,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Ucan dusman: EnemyBase'in gravity'sini atla ama stagger sayacini koru
+	# Ucan dusman: EnemyBase'in gravity'sini atla ama stagger sayacini
+	# ve temas-hitbox pencere yonetimini koru.
 	stagger_timer = maxf(stagger_timer - delta, 0.0)
+	_manage_contact_hitbox()
 	if _player == null:
 		_player = get_tree().get_first_node_in_group(&"player")
 	if is_staggered() or not health.is_alive():
