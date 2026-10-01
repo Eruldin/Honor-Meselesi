@@ -70,6 +70,9 @@ func _brain(delta: float) -> void:
 	if _target == null or not (_target is Samurai and (_target as Samurai).health.is_alive()):
 		_ai.axis(0.0)
 		return
+	if (_target as Samurai).sm.current_name == Samurai.S_CUTSCENE:
+		_ai.axis(0.0)
+		return
 	var dx: float = _target.global_position.x - global_position.x
 	var dist := absf(dx)
 	if dist > AGGRO_RANGE:
