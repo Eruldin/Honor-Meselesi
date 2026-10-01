@@ -39,7 +39,14 @@ func _ready() -> void:
 	EventBus.actor_died.connect(_on_actor_died)
 	if auto_advance:
 		if GameState.get_flag(&"ch7_boss_dead", false):
-			pass  # final tamamlandi — bos arena
+			if GameState.get_flag(&"ouroboros_done", false):
+				# Oyun tamamlanmis — dongu kapandi; Continue dogrudan
+				# Prolog'a doner (Ouroboros: basa sar).
+				call_deferred(&"_emit_scene_change", PROLOG_PATH)
+			else:
+				# Final oynandi ama epilog yarida kesildi (quit/crash):
+				# jenerik zincirini yeniden kur — soft-lock onlemi.
+				call_deferred(&"_finish")
 		elif GameState.get_flag(&"ch7_intro_done", false):
 			_spawn_fight()  # olum sonrasi reload: giris atlanir
 		else:
@@ -304,6 +311,10 @@ func _finish() -> void:
 		if auto_advance:
 			EventBus.scene_change_requested.emit(PROLOG_PATH),
 		CONNECT_ONE_SHOT)
+
+
+func _emit_scene_change(path: String) -> void:
+	EventBus.scene_change_requested.emit(path)
 
 
 ## MetaDirector saldirisi: glitch pulsu + swap isaretiyle uyarilir,
