@@ -313,6 +313,8 @@ func _on_arena_entered(area: Area2D) -> void:
 
 
 func _on_boss_defeated() -> void:
+	# Bos bar dusme isini bitirdi — temizlenen arenada bos bar kalmasin.
+	_boss_root.visible = false
 	GameState.unlock_form(&"robot")
 	GameState.set_flag(&"ch2_boss_dead")
 	SaveSystem.save_game()

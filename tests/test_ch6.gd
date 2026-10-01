@@ -88,3 +88,16 @@ func test_ch6_cleared_exit_portal_completes_chapter() -> void:
 	trig.area_entered.emit(stub)
 	assert_true(GameState.get_flag(&"ch6_done", false),
 		"portal gecisi bolumu tamamlar")
+
+
+func test_boss_bar_hidden_on_defeat() -> void:
+	# Regresyon: boss olurken _boss_root acik kaliyordu — bos bar
+	# temizlenen arenada ekrana yapismis duruyordu.
+	var scene: Node2D = load("res://src/levels/ch6/Ch6.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(5)
+	scene._boss_root.visible = true   # savas ortasi taklidi
+	scene._on_boss_defeated()
+	assert_false(scene._boss_root.visible,
+		"boss olumunde boss bar gizlenir")
