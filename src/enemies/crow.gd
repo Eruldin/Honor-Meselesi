@@ -15,5 +15,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	# Elit temas = 2 hasar
-	contact_hitbox.activate(DamageInfo.make(2, self, Vector2.ZERO, true, true))
+	# Elit temas = 2 hasar — sersemleme sonrasi re-aktivasyon da bunu kullanir
+	_contact_info = DamageInfo.make(2, self, Vector2.ZERO, true, true)
+	contact_hitbox.activate(_contact_info)
