@@ -945,6 +945,12 @@ func _build_entities() -> void:
 	sword.global_position = Vector2(3260, FLOOR_Y - 90)
 	add_child(sword)
 
+	# Acik gokyuzu: dovadan once dalgic kartallar (SunnyLand)
+	for x in [2830.0, 3180.0]:
+		var eg := Eagle.new()
+		eg.global_position = Vector2(x, FLOOR_Y - 78)
+		add_child(eg)
+
 	# Gecit yaklasimi: mezara gomulu iskeletler (yaklasinca yukselir)
 	for x in [3450.0, 3630.0, 3900.0, 4320.0]:
 		var gsk := CryptSkeleton.new()
