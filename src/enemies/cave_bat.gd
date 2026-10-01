@@ -49,4 +49,4 @@ func _wake() -> void:
 	_asleep = false
 	_t = 0.0
 	_home = global_position
-	play_anim(&"wake", 0.45)
+	play_anim(&"wake", 1.65)
