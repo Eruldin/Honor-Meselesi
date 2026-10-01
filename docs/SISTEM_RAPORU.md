@@ -29,9 +29,18 @@
 >   itch.io export) doğrulandı. Ek: ilk açılışta ışığa duyarlılık
 >   uyarısı (settings'de kalıcı), z-katmanı düzeltmeleri (piktogram/
 >   hava/Vlad telegraph).
+> - #295–#306 kapanışlar: M9 piksel fazında Amalgam süzülmesi (çift
+>   zıplama zorunlu), dinlenmenin katana-çatlağı pozu, ch5 faz-2 alevli
+>   kılıç kor tanecikleri, ch7 parry→kontra (M10), probe --rest, kamera
+>   180° dönüşü + intro-skip soft-lock güvenliği, M10 epilog (şapka
+>   iadesi + dikey glitch kesme + jenerik, EPILOG/PROLOG flag zinciri),
+>   M6 karanlık fazda stereo yön ipucu + nabızlanan gözler, M5 arka pil
+>   zayıf nokta (vuruş yönü kontrolü), M11 zorluk ayarı (KOLAY +1 /
+>   ZOR -1 kalp, ayarlar menüsü + settings.json), probe epilog desteği.
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
 >   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca
->   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu.
+>   (Amalgam form kapısı dahil), yorgunluk pozunun 480×270'de okunurluğu,
+>   epilog akış hissi, kamera-flip hissi.
 
 > Yol haritası Aşama 1 çıktısı (orijinal, 2026-09-30). Kaynaklar:
 > `Master_Gelistirme_Promptu`, `Devin_AI_Ultra_Master_Prompt`,
