@@ -646,6 +646,11 @@ func _build_terrain() -> void:
 	merchant.picto_icon = &"dots"
 	merchant.position = Vector2(800.0, FLOOR_Y - 8)
 	add_child(merchant)
+	# Orta koyde yasli koylu — agaca yaslanip geceni izler
+	var elder := AmbientNpc.new()
+	elder.npc_key = &"peasant2"
+	elder.position = Vector2(1010.0, FLOOR_Y - 8)
+	add_child(elder)
 	# Kiraz agacinin dibinde gozcu koylu + sus kusu
 	var watcher := AmbientNpc.new()
 	watcher.npc_key = &"villager"
