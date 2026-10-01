@@ -17,7 +17,7 @@ func _init() -> void:
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
-	if is_staggered():
+	if is_staggered() or not health.is_alive():
 		return
 	_fire_timer -= delta
 	if _fire_timer <= 0.0:

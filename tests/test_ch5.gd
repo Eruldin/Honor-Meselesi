@@ -60,6 +60,25 @@ func test_bat_dive_ends_without_wall_hit() -> void:
 	assert_false(b._diving, "dalis duvarsiz da 1.2s sonra biter")
 
 
+func test_turret_stops_firing_when_dead() -> void:
+	var t := Turret.new()
+	t.fire_interval = 0.1
+	add_child_autofree(t)
+	await _frames(4)
+	t.take_damage(DamageInfo.make(99, null))
+	var before := _projectile_count()
+	await _frames(15)  # ates araliginin cok ustu
+	assert_eq(_projectile_count(), before, "olu kule mermi atmaz")
+
+
+func _projectile_count() -> int:
+	var n := 0
+	for c in get_children():
+		if c is Projectile:
+			n += 1
+	return n
+
+
 func test_guardian_phase_and_geyser() -> void:
 	var g := AshGuardian.new()
 	g.floor_y = 0.0
