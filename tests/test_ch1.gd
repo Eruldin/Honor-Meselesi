@@ -439,3 +439,27 @@ func test_crow_dive_uses_jump_anim() -> void:
 	sam.global_position = Vector2(60, -30)
 	await wait_seconds(0.3)
 	assert_eq(crow.anims.animation, &"jump", "dalista jump pozu oynar")
+
+
+func test_death_mark_uses_last_ground_pos() -> void:
+	# Regresyon: bosluk dususu olumunde golge marki olicen pozisyona
+	# (havada/boslukta) yaziliyordu — erisilmez golge; artik son zemin.
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(400, 240)
+	await wait_seconds(0.2)  # zemine indi
+	assert_true(s.is_on_floor(), "zemin temasi")
+	var floor_x: float = s.global_position.x
+	# Havada olunce mark son zemin olmali — global_position'i elle bosluga tasi.
+	s.velocity.y = -300.0
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	assert_false(s.is_on_floor(), "havada")
+	GameState.mark_death(
+		s.last_ground_pos if s.last_ground_pos != Vector2.ZERO
+		else s.global_position)
+	var mark: Vector2 = GameState.get_flag(&"death_mark_pos")
+	assert_almost_eq(mark.x, floor_x, 8.0, "mark son zemin pozisyonunda")
+	assert_lt(mark.y, 300.0, "mark boslukta degil")

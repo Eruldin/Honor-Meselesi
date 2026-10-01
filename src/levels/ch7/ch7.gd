@@ -473,7 +473,9 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", creature.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
-	GameState.mark_death(creature.global_position)
+	GameState.mark_death(
+		creature.last_ground_pos if creature.last_ground_pos != Vector2.ZERO
+		else creature.global_position)
 	SceneRouter.reload()  # dusmanlar + boss sifirlanir (intro atlanir)
 
 

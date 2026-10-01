@@ -54,6 +54,8 @@ var combo_grace_t: float = 0.0  ## saldiri bitince zincir icin kisa pencere
 
 var coyote_timer: float = 0.0
 var jump_buffer_timer: float = 0.0
+## Son zemin temasi — bosluk dususu olumunde golgenin isaret yeri.
+var last_ground_pos := Vector2.ZERO
 var dash_cooldown: float = 0.0
 var dash_dir: int = 1
 var invuln_timer: float = 0.0
@@ -257,6 +259,7 @@ func _physics_process(delta: float) -> void:
 	coyote_timer = tuning.coyote_time if is_on_floor() else maxf(coyote_timer - delta, 0.0)
 	if is_on_floor():
 		jumps_used = 0
+		last_ground_pos = global_position
 	invuln_timer = maxf(invuln_timer - delta, 0.0)
 	dash_cooldown = maxf(dash_cooldown - delta, 0.0)
 	# Grace sayaci sadece saldiri disi durumlarda isler — zincir

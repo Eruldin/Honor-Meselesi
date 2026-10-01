@@ -410,6 +410,8 @@ func _on_actor_died(actor: Node) -> void:
 	AudioManager.play_sfx(&"sfx/gameover", samurai.global_position)
 	FX.glitch(0.6, 0.5)
 	await SceneRouter.fade_to(1.0, 0.7)
-	GameState.mark_death(samurai.global_position)
+	GameState.mark_death(
+		samurai.last_ground_pos if samurai.last_ground_pos != Vector2.ZERO
+		else samurai.global_position)
 	SceneRouter.reload()
 
