@@ -136,6 +136,7 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0:
 				var m := HomingMissile.new()
 				m.global_position = global_position + Vector2(facing * 10, -20)
+				m.sender = self
 				m.add_to_group(&"boss_spawn")
 				_root().add_child(m)
 				bstate = State.GAP

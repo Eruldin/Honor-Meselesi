@@ -200,6 +200,29 @@ func test_unit0_missile_parry_reflects() -> void:
 	m._vel = Vector2(50, 0)
 	m.on_parried()
 	assert_ne(m.hitbox.collision_mask & 16, 0, "geriye donen fuze dusmana vurur")
+	assert_eq(m.hitbox.collision_layer, 8,
+		"yansiyan fuze oyuncu-saldiri katmanina gecer — yoksa hurtbox goremez")
+
+
+func test_parried_missile_homes_to_sender() -> void:
+	# Parry geri donusu: homing oyuncuya kenetliydi — fuze icinden
+	# gecip boss'a hic ulasamiyordu. Artik sender'a kilitlenir.
+	_flat_ground()
+	var b := Unit0.new()
+	b.global_position = Vector2(300, 240)
+	add_child_autofree(b)
+	var hit := [false]
+	b.hurtbox.hit_received.connect(func(_i: DamageInfo) -> void: hit[0] = true)
+	await wait_seconds(0.05)  # zemine otur
+	var m := HomingMissile.new()
+	m.sender = b
+	m.global_position = Vector2(480, 240)
+	add_child_autofree(m)
+	m.on_parried()
+	m._vel = Vector2(-80, 0)  # boss'a dogru baslar (soru: sadece homing)
+	await wait_seconds(3.0)
+	assert_true(hit[0], "parry fuze sender'a doner ve hurtbox'ini vurur")
+	assert_false(is_instance_valid(m), "vurusta fuze patlar")
 
 
 func test_unit0_phase2_punch_keeps_phase_color() -> void:

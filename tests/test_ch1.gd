@@ -269,6 +269,8 @@ func test_egg_reflect_flies_to_boss() -> void:
 	egg.take_damage(DamageInfo.make(1, s))
 	assert_eq(egg.state, ExplodingEgg.State.REFLECTED)
 	assert_eq(egg.hitbox.collision_mask, 16, "yansiyan yumurta dusman katmanina vurur")
+	assert_eq(egg.hitbox.collision_layer, 8,
+		"yansiyan yumurta oyuncu-saldiri katmaninda — yoksa hurtbox goremez")
 	await wait_seconds(0.5)
 	assert_lt(egg.global_position.x, 500.0, "patrona (sola) ucmali")
 

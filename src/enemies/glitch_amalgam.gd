@@ -180,6 +180,7 @@ func _cast_volley() -> void:
 	for i in 3:
 		var m := HomingMissile.new()
 		m.global_position = global_position + Vector2(0, -30 - i * 16)
+		m.sender = self
 		m.add_to_group(&"boss_spawn")
 		_root().add_child(m)
 	FX.glitch(0.4, 0.3)

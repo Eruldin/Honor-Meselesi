@@ -8,6 +8,9 @@ var _vel := Vector2.ZERO
 var _tuning: Tuning
 var _life := 5.0
 var _dead := false
+## Fuzeni atan (Unit0/Amalgam) — parry'de ona geri kenetlenir.
+var sender: Node2D
+var _target: Node2D
 
 
 func _ready() -> void:
@@ -36,7 +39,8 @@ func _physics_process(delta: float) -> void:
 	if _life <= 0.0:
 		_explode()
 		return
-	var p := get_tree().get_first_node_in_group(&"player")
+	var p: Node2D = _target if is_instance_valid(_target) else \
+		get_tree().get_first_node_in_group(&"player")
 	if p != null:
 		var want: Vector2 = (p.global_position - global_position).normalized() * _tuning.missile_speed
 		_vel = _vel.lerp(want, _tuning.missile_turn * delta)
@@ -47,7 +51,14 @@ func _physics_process(delta: float) -> void:
 ## Parry: fuze geri doner ve artik dusmanlara (Unit-0'a) vurur.
 func on_parried() -> void:
 	_vel = -_vel * 0.8
+	# Yansiyan mermi oyuncunun saldirisi sayilir: katman 8'e gecmezse
+	# dusman hurtbox'lari (mask=8) onu fiziksel olarak goremez.
+	hitbox.collision_layer = 8
 	hitbox.collision_mask = 16 | 1
+	# Geri donus hedefi: atana kenetlen — yoksa homing oyuncuyu kovalar
+	# ve mask=16 yuzunden icinden gecip boss'a hic ulasamaz.
+	_target = sender if is_instance_valid(sender) else \
+		get_tree().get_first_node_in_group(&"enemies")
 	hitbox.struck.connect(func(_h: Hurtbox) -> void: _explode(), CONNECT_ONE_SHOT)
 	get_child(0).modulate = Color(0.3, 1.0, 1.0)
 

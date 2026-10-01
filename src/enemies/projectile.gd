@@ -52,6 +52,9 @@ func on_parried() -> void:
 	_travelled = 0.0
 	if not vertical:
 		direction = -direction
+	# Yansiyan mermi oyuncunun saldirisi sayilir — katman 8'de kalmazsa
+	# dusman hurtbox'lari (mask=8) onu hic goremez.
+	hitbox.collision_layer = 8
 	hitbox.collision_mask = 16 | 1  # artik dusman hurtbox'lari (+ duvar)
 	modulate_self()
 
