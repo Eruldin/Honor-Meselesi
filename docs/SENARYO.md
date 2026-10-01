@@ -1,12 +1,77 @@
-# SAMSARA GLITCH — Senaryo (KANONİK)
+# SAMSARA GLITCH (HONOR MESELESİ) — Senaryo (KANONİK)
 
-> **DURUM: KAYNAK BEKLİYOR.** Plan `DEVIN_PLAN.md`'ye göre kanonik senaryo
-> kullanıcının `message.txt` dosyasıdır ve repoya bu isimle eklenecekti.
-> Dosya henüz teslim edilmedi — bu sayfa o zamana kadar plan içindeki
-> kanonik özetle geçici olarak doldurulmuştur. `Honor meselesi.pdf/.docx`
-> eski taslaktır; çelişki durumunda bu dosya (ve plan) geçerlidir.
+> **Kaynak:** kullanıcının teslim ettiği *"Honor Meselesi — Epik Hikaye ve
+> Dünya Tasarım Dokümanı"* (PDF). Aşağıdaki "Vizyon"dan "Kalite Hedefi"ne
+> kadar olan bölümler o belgenin metnidir; altındaki tablolar plan
+> (`DEVIN_PLAN.md`) ile uyumlu kanonik özettir. `Honor meselesi.pdf/.docx`
+> eski taslaktır; çelişki durumunda bu dosya geçerlidir. Planın
+> beklediği ham `message.txt` hiç teslim edilmedi — gelirse tekrar
+> eşitlenecek.
 
-## Logline
+## Vizyon
+
+Honor Meselesi, Hollow Knight benzeri keşif, parkur, atmosfer ve boss
+savaşları hedefleyen karanlık fantastik bir metroidvania deneyimidir.
+Oyuncu yalnızca düşman yenmez; kayıp bir geçmişin izlerini takip eder,
+gizli bölgeleri keşfeder ve dünyanın trajedisini öğrenir.
+
+## Tema
+
+Temel temalar onur, kayıp, kimlik, yaşlanma ve geçmişe bağlı kalmanın
+sonuçlarıdır. Hasır şapka fiziksel bir eşya değil; kahramanın gençliği,
+gururu ve kaybettiği hayatının sembolüdür.
+
+## Prolog — Çalınan Şapka
+
+Eski Japon kulübesinde yaşayan yaşlı samuray sessiz bir hayat
+sürmektedir. CRT televizyonundaki bozulma ile gerçeklik kırılır. Glitch
+varlığı ortaya çıkar, samurayın şapkasını alır ve boyut kapısından
+kaçar. Samuray katanasını alarak peşine düşer.
+
+## Bölüm 1 — Unutulmuş Köy
+
+İlk bölüm yaklaşık bir saatlik deneyim olmalıdır. Oyuncu terk edilmiş
+köyler, ormanlar, mağaralar ve tapınak kalıntıları arasında ilerler.
+Parkurlar hassas zıplamalar, gizli yollar, hareketli platformlar ve
+çevresel bulmacalar içermelidir.
+
+## Savaş Sistemi
+
+Kontroller anlık tepki vermelidir. Kılıç saldırıları, parry, pogo
+saldırısı, kaçış mekanikleri ve düşman davranışlarını okuma sistemi
+temel oynanışın merkezinde olmalıdır.
+
+## Boss Tasarımı
+
+Bosslar yalnızca büyük düşmanlar değildir. Her boss bir karakter ve
+hikaye anlatımıdır. Saldırılar önceden okunabilir olmalı, farklı fazlara
+sahip olmalı ve oyuncunun öğrendiği mekanikleri sınamalıdır.
+
+### Lord Cluck Boss
+
+İlk boss komik görünüm ile trajik geçmişi birleştirir. Dev tavuk;
+yumurta saldırıları, hızlı hücumlar, hava saldırıları ve son fazda
+kontrolden çıkmış hareketlerle oyuncuyu test eder.
+
+## Dünya Tasarımı
+
+Her bölge kendine özgü mimariye, müziğe, düşmanlara ve oynanış ritmine
+sahip olmalıdır. Glitch sürekli kullanılan bir efekt değil, hikayede
+anlam taşıyan özel bir bozulma olmalıdır.
+
+## Final
+
+Son bölümde oyuncu glitch varlığının da döngünün kurbanı olduğunu
+öğrenir. Final yalnızca fiziksel bir zafer değil, geçmişle yüzleşme ve
+döngüyü kırma hikayesidir.
+
+## Kalite Hedefi
+
+Her alan profesyonel bir oyun stüdyosu kalitesinde hazırlanmalıdır.
+Assetler kullanılmalı, placeholder tasarımlar kaldırılmalı, animasyonlar,
+sesler, müzikler ve seviyeler bütünlük içinde çalışmalıdır.
+
+## Logline (plan özeti)
 
 Emekli samurayın hasır şapkası, CRT televizyonundan gerçekliğe sızan
 Glitch Yaratık tarafından çalınır. Boyutlar arası kovalamaca, finalde
