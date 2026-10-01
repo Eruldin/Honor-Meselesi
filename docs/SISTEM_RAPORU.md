@@ -1,7 +1,7 @@
 # Honor Meselesi — Mevcut Sistem Raporu
 
-> **Durum güncellemesi (2026-10-01, PR #16–#246):** Aşama 1'deki
-> tüm boşluklar kapandı — test sayısı 84 → 151, tamamı yeşil.
+> **Durum güncellemesi (2026-10-01, PR #16–#277):** Aşama 1'deki
+> tüm boşluklar kapandı — test sayısı 84 → 179, tamamı yeşil.
 > - §2.1 placeholder: 19 itch.io paketi + AI sheet'leri manifest'e
 >   bağlandı; sahnede placeholder sprite kalmadı.
 > - §2.3 Bölüm 1: ölü bahçe gauntlet, gizli odalar, mini-boss kapısı,
@@ -14,6 +14,12 @@
 >   time_scale/ambiyans), post-boss soft-lock (cleared-exit portal +
 >   ch7 epilog yeniden kurulumu), anim-kilit uyuşmazlığı, mermi-duvar
 >   geçişi, i-frame/temas-hasarı uçları, test-izolasyon zehirlemesi.
+> - #247–#277 ek kapanışlar: parry yansima (mermi geri donmuyordu +
+>   itme yonu), anim-restart donmasi (walk/attack kare 0'da
+>   kisiliyordu), Vlad faz-2 gozleri (CanvasLayer z_index eziyordu),
+>   ch7 zorunlu secimde uyuyan boss'a bedava hasar (menu'de
+>   creature.frozen), ayarlar atomik yazim + slider-drag kopmasi,
+>   parry'lenen vampir isiriginin kanamasi, olu dusman hitbox'lari.
 > - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
 >   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca.
 
