@@ -263,7 +263,31 @@ func _on_boss_defeated() -> void:
 
 
 func _finish() -> void:
-	# Dongu kapanir — jenerik (CREDITS.md'den) sonra Prolog'a don
+	# Dongu kapanir: "15 YIL SONRA..." karti — prologdaki sabah, bu kez
+	# kasayi takacak olan genc samurayin dongusu. Sonra jenerik + Prolog.
+	await get_tree().create_timer(1.0, true).timeout
+	var card := Label.new()
+	card.text = "15 YIL SONRA..."
+	card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	card.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	card.set_anchors_preset(Control.PRESET_FULL_RECT)
+	card.modulate.a = 0.0
+	card.add_theme_font_size_override("font_size", 18)
+	card.add_theme_color_override("font_color", Color(0.9, 0.85, 0.7))
+	card.add_theme_color_override("font_shadow_color", Color(0.2, 0.05, 0.08))
+	card.add_theme_constant_override("shadow_offset_x", 2)
+	card.add_theme_constant_override("shadow_offset_y", 2)
+	var cl := CanvasLayer.new()
+	cl.layer = 125
+	add_child(cl)
+	cl.add_child(card)
+	var tw := create_tween()
+	tw.tween_property(card, "modulate:a", 1.0, 0.8)
+	tw.tween_interval(2.0)
+	tw.tween_property(card, "modulate:a", 0.0, 0.8)
+	await tw.finished
+	cl.queue_free()
+	# Jenerik (CREDITS.md'den) sonra Prolog'a don
 	AudioManager.play_music(&"music/credits")
 	var credits := Credits.new()
 	add_child(credits)
