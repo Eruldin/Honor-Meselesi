@@ -473,3 +473,33 @@ func test_death_mark_uses_last_ground_pos() -> void:
 	var mark: Vector2 = GameState.get_flag(&"death_mark_pos")
 	assert_almost_eq(mark.x, floor_x, 8.0, "mark son zemin pozisyonunda")
 	assert_lt(mark.y, 300.0, "mark boslukta degil")
+
+
+func test_platform_sprites_not_pillar_textures() -> void:
+	# Regresyon: ust-rota platformuna pf_dirt_slab (174x249 dikey sutun)
+	# verilmisti — w=85 olceginde 122px'lik toprak duvari havada duruyordu.
+	# Platform sprite'lari organik parca olmali; 100px'i asan gorsel yukseklik
+	# sutun dokusu isaretidir (duvar destek spriteleri centered=false — ayikla).
+	var scene: Node2D = load("res://src/levels/ch1/Ch1.tscn").instantiate()
+	add_child_autofree(scene)
+	await get_tree().process_frame
+	var bad := []
+	for b in scene.find_children("*", "StaticBody2D", true, false):
+		# Platform adayi: _add_platform'in 8px'lik collision'i (kapi/duvar
+		# govdesi kasitli uzun — kapsam disi).
+		var plat := false
+		for c in b.get_children():
+			if c is CollisionShape2D and c.shape is RectangleShape2D \
+					and c.shape.size.y <= 12.0:
+				plat = true
+		if not plat:
+			continue
+		for c in b.get_children():
+			if c is Sprite2D and c.centered and c.texture != null:
+				var h: float = c.texture.get_height() * c.scale.y
+				if h > 100.0:
+					bad.append("%s@%.0f,%.0f h=%.0f" % [
+						c.texture.resource_path.get_file(),
+						b.global_position.x, b.global_position.y, h])
+	assert_true(bad.is_empty(),
+		"platforma sutun dokusu: %s" % str(bad))
