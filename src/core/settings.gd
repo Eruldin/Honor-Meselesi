@@ -6,7 +6,7 @@ signal changed
 
 const PATH := "user://settings.json"
 
-var fx_intensity: float = 0.0      ## CRT/glitch — sadece senaryo anlarinda (glitch_pulse)
+var fx_intensity: float = 0.75     ## CRT/glitch — sadece senaryo anlarinda (glitch_pulse)
 var shake_scale: float = 1.0       ## ekran sarsintisi carpani
 var flash_scale: float = 1.0       ## flas/kivilcim parlakligi carpani
 var music_volume: float = 1.0      ## muzik bus seviyesi (0-1)
@@ -169,7 +169,7 @@ func load_settings() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	if not data is Dictionary:
 		return
-	fx_intensity = float(data.get("fx_intensity", 0.0))
+	fx_intensity = float(data.get("fx_intensity", 0.75))
 	shake_scale = float(data.get("shake_scale", 1.0))
 	flash_scale = float(data.get("flash_scale", 1.0))
 	music_volume = float(data.get("music_volume", 1.0))
