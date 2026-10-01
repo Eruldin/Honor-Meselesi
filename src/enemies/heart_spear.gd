@@ -68,7 +68,7 @@ func _on_body(body: Node2D) -> void:
 	if _done or _returning:
 		return
 	if body == _target:
-		body._on_hit_info(DamageInfo.make(1, null,
+		body.take_damage(DamageInfo.make(1, null,
 			(global_position - body.global_position).normalized() * 140.0,
 			false, true))
 		_start_return()
