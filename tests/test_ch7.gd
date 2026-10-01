@@ -37,11 +37,13 @@ func test_creature_hit_iframes_and_blink() -> void:
 	await _frames(3)
 	c._on_hit_info(DamageInfo.make(1, c))
 	assert_gt(c._iframes, 0.0, "vurusta dokunulmazlik")
-	await _frames(2)
-	# i-frame goz kirpmasi: alfa ya yanip sonme (0.55) ya tam (1.0) —
-	# eski kod alpha'yi hic degistirmezdi (hep 1.0 ve tint ezilirdi).
-	assert_true(c.sprite.modulate.a == 0.55 or c.sprite.modulate.a == 1.0,
-		"i-frame goz kirpmasi modulate.a uzerinde")
+	# i-frame goz kirpmasi: 70ms'lik desen ~12 fizik karesinde en az bir
+	# 0.55 penceresi yakalar — eski kod alpha'yi hic degistirmezdi.
+	var min_a := 1.0
+	for i in 12:
+		await _frames(1)
+		min_a = minf(min_a, c.sprite.modulate.a)
+	assert_lt(min_a, 0.7, "i-frame goz kirpmasi alpha'yi dusurmeli")
 
 
 func test_samurai_boss_slash_and_parry() -> void:
