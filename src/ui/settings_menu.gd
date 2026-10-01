@@ -164,6 +164,24 @@ func _tab_graphics() -> void:
 	row.add_child(opt)
 	_content.add_child(row)
 
+	# M11 zorluk ayari: can havuzuna yansir (KOLAY +1 kalp, ZOR -1 kalp).
+	var drow := HBoxContainer.new()
+	var dlbl := Label.new()
+	var is_tr0 := Settings.language == "tr"
+	dlbl.text = ("Zorluk" if is_tr0 else "Difficulty") + ": "
+	dlbl.add_theme_font_size_override("font_size", 9)
+	drow.add_child(dlbl)
+	var dopt := OptionButton.new()
+	dopt.add_theme_font_size_override("font_size", 9)
+	for d in ["KOLAY" if is_tr0 else "EASY", "NORMAL", "ZOR" if is_tr0 else "HARD"]:
+		dopt.add_item(d)
+	dopt.select(clampi(Settings.difficulty, 0, 2))
+	dopt.item_selected.connect(func(idx: int) -> void:
+		AudioManager.play_sfx(&"sfx/ui", null, -6.0)
+		Settings.set_difficulty(idx))
+	drow.add_child(dopt)
+	_content.add_child(drow)
+
 	var is_tr := Settings.language == "tr"
 	_content.add_child(_slider_row(
 		"Sinematik Glitch" if is_tr else "Cinematic Glitch",

@@ -122,7 +122,10 @@ func _build_nodes() -> void:
 	_build_anims()
 
 	health = Health.new()
-	health.max_health = tuning.max_health + GameState.max_health_bonus
+	# M11 zorluk: KOLAY +1 kalp, ZOR -1 kalp (minimum 1).
+	health.max_health = maxi(1,
+		tuning.max_health + GameState.max_health_bonus
+		+ Settings.difficulty_health_delta())
 	health.name = "Health"
 	add_child(health)
 

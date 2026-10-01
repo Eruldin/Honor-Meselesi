@@ -66,6 +66,20 @@ func test_flash_warning_ack_persists() -> void:
 	Settings.save_settings()
 
 
+func test_difficulty_persists_and_clamps() -> void:
+	# M11 zorluk ayari: settings.json'da saklanir, 0-2 araligina kelepçeli.
+	var old := Settings.difficulty
+	Settings.set_difficulty(0)
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(Settings.PATH))
+	assert_eq(int(data.get("difficulty", -1)), 0, "zorluk kaydedilir")
+	Settings.set_difficulty(9)
+	assert_eq(Settings.difficulty, 2, "ust sinir 2")
+	assert_eq(Settings.difficulty_health_delta(), -1, "ZOR: -1 kalp")
+	Settings.set_difficulty(0)
+	assert_eq(Settings.difficulty_health_delta(), 1, "KOLAY: +1 kalp")
+	Settings.set_difficulty(old)
+
+
 func test_binding_persists_across_load() -> void:
 	# Kaydedilen rebind restart'ta InputMap'e geri uygulanmali.
 	var old_binds: Dictionary = Settings.bind_overrides.duplicate(true)
