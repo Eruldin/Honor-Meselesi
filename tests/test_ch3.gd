@@ -130,6 +130,13 @@ func test_vlad_phase2_darkness_and_eyes() -> void:
 	assert_eq(b.phase, 1)
 	assert_not_null(b.darkness, "faz 2 karanlik ortu kurulmali")
 	assert_eq(b.eyes.z_index, 10, "gozler karanligin ustunde (gorsel ipucu)")
+	# Regresyon: karanlik CanvasLayer'deydi — dunya dugumu z_index'i
+	# asamaz, gozler karanlikta kayboluyordu. Artik ikisi de dunya
+	# dugumu; gozler karanligin ustunde cizilir.
+	assert_eq(b.darkness.get_parent(), b,
+		"karanlik Vlad'in cocugu — CanvasLayer degil (gozleri ezmez)")
+	assert_gt(b.eyes.z_index, b.darkness.z_index,
+		"ayni ebeveyn altinda goz z'i karanlik z'inden buyuk")
 
 
 func test_blood_spike_telegraph_then_hit() -> void:
