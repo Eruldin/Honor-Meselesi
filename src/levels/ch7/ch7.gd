@@ -257,6 +257,9 @@ func _on_boss_defeated() -> void:
 	GameState.set_flag(&"ch7_boss_dead")
 	SaveSystem.save_game()
 	AudioManager.play_sfx(&"sfx/gameover")
+	# Ouroboros sinemasi: oyuncu girdisi donar — yaratik kacip
+	# bolt atamaz (hop_to tween'i onu surer).
+	creature.frozen = true
 	await get_tree().create_timer(1.8, true).timeout
 	# Ouroboros: yaratik kasayi birakip CRT isigina siner -> Prolog
 	var cs := CutscenePlayer.new()

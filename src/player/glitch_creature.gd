@@ -23,6 +23,8 @@ var last_ground_pos := Vector2.ZERO
 var _jbuf := 0.0
 var _tuning: Tuning
 var dead := false
+## Sinema anlarinda girdi donar (final kesigi) — fizik surer.
+var frozen := false
 
 signal died
 
@@ -105,7 +107,15 @@ func _build_anims() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if dead or input == null:
+	if dead:
+		return
+	if frozen:
+		# Sinema sirasinda girdi donar; yercekimi ve suzulme surer.
+		velocity.y = minf(velocity.y + 500.0 * delta, 90.0)
+		velocity.x = move_toward(velocity.x, 0.0, 500.0 * delta)
+		move_and_slide()
+		return
+	if input == null:
 		return
 	input.poll()
 	_dash_cd = maxf(_dash_cd - delta, 0.0)
