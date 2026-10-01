@@ -146,7 +146,9 @@ func _commit() -> void:
 
 
 func save_settings() -> void:
-	var f := FileAccess.open(PATH, FileAccess.WRITE)
+	# SaveSystem ile ayni desen: tmp'ye yaz + atomik rename — orta-yazim
+	# cokmede settings.json bozulmaz (load'da da parse guard'i var).
+	var f := FileAccess.open(PATH + ".tmp", FileAccess.WRITE)
 	if f == null:
 		return
 	f.store_string(JSON.stringify({
@@ -161,6 +163,11 @@ func save_settings() -> void:
 		"window_scale": window_scale,
 		"binds": bind_overrides,
 	}))
+	f.close()
+	# Windows'ta hedef varken rename basarisiz — once silinir.
+	if FileAccess.file_exists(PATH):
+		DirAccess.remove_absolute(PATH)
+	DirAccess.rename_absolute(PATH + ".tmp", PATH)
 
 
 func load_settings() -> void:
