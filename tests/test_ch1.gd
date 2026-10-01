@@ -114,6 +114,21 @@ func test_rest_point_saves_and_heals() -> void:
 	assert_true(GameState.get_flag(&"respawn_pos") is Vector2)
 
 
+func test_checkpoint_respawn_grants_spawn_grace() -> void:
+	# Olum respawn'i checkpoint'ten dogar — kisa dokunulmazlik verilir
+	# (spawn uzerinde duran dusman ani hasar veremesin).
+	GameState.set_flag(&"respawn_ch", &"ch1")
+	GameState.set_flag(&"respawn_pos", Vector2(500, 200))
+	var ch1: Node2D = load(CH1_PATH).instantiate()
+	ch1.auto_advance = false
+	add_child_autofree(ch1)
+	await wait_seconds(0.15)
+	assert_gt(ch1.samurai.invuln_timer, 0.0,
+		"checkpoint respawn'inda spawn grace")
+	assert_almost_eq(ch1.samurai.global_position.x, 500.0, 0.5,
+		"checkpoint x pozisyonunda dogar")
+
+
 # --- BossBase / Lord Cluck ---
 
 func test_boss_phase_threshold() -> void:
