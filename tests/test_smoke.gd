@@ -214,6 +214,34 @@ func test_all_scene_paths_exist() -> void:
 		assert_true(ResourceLoader.exists(path), "sahne yolu var olmali: " + path)
 
 
+func test_all_load_preload_paths_exist() -> void:
+	# Kontrat: load("res://...")/preload("res://...") literal yollari diskte
+	# var olmali — load() silinen dosyada null doner ve sessizce kirilir.
+	var seen: Dictionary = {}
+	var stack: Array[String] = ["res://src", "res://tools"]
+	var re := RegEx.create_from_string(r'(?:pre)?load\("(res://[^"]+)"\)')
+	while not stack.is_empty():
+		var dpath: String = stack.pop_back()
+		var d := DirAccess.open(dpath)
+		if d == null:
+			continue
+		d.list_dir_begin()
+		var name := d.get_next()
+		while name != "":
+			if d.current_is_dir() and name != "." and name != "..":
+				stack.append(dpath + "/" + name)
+			elif name.ends_with(".gd"):
+				var src := FileAccess.get_file_as_string(dpath + "/" + name)
+				for m in re.search_all(src):
+					seen[m.get_string(1)] = true
+			name = d.get_next()
+		d.list_dir_end()
+	assert_gt(seen.size(), 3, "en az 4 load/preload yolu gecmeli")
+	for path in seen.keys():
+		assert_true(FileAccess.file_exists(path),
+			"load/preload hedefi yok: " + path)
+
+
 func test_main_scene_exists() -> void:
 	var main: String = ProjectSettings.get_setting("application/run/main_scene", "")
 	assert_true(ResourceLoader.exists(main), "main_scene var olmali: " + main)
