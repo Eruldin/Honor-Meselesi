@@ -86,6 +86,32 @@ func test_samurai_boss_slash_and_parry() -> void:
 	assert_signal_emitted(b, "defeated")
 
 
+func test_samurai_boss_parry_ripostes() -> void:
+	# M10: parry durusu onden vurusu kontra kesige cevirir
+	var b := SamuraiBoss.new()
+	b.arena_left = -200
+	b.arena_right = 200
+	b.global_position = Vector2(50, 0)
+	var c := GlitchCreature.new()
+	c.global_position = Vector2(20, 0)  # boss'un solunda
+	add_child_autofree(b)
+	add_child_autofree(c)
+	b.activate()
+	await _frames(6)
+	b.bstate = SamuraiBoss.BState.PARRY_STANCE
+	b.facing = -1  # yaratik tarafla karsi karsiya
+	var hp0 := b.health.current
+	b.take_damage(DamageInfo.make(2, c))
+	assert_eq(b.health.current, hp0, "onden vurus parry'lenir — hasar yok")
+	assert_eq(b.bstate, SamuraiBoss.BState.SLASH,
+		"parry ani kontra kesige doner")
+	# Arkadan gelen vurus parry'lenmez
+	b.bstate = SamuraiBoss.BState.PARRY_STANCE
+	b.facing = 1  # sirti yaratiga donuk
+	b.take_damage(DamageInfo.make(2, c))
+	assert_lt(b.health.current, hp0, "arkadan vurus normal hasar girer")
+
+
 func test_bolt_damages_samurai_boss() -> void:
 	# Yaratik'in tek saldirisi aktif boss'a erismeli — hurtbox dusman
 	# katmaninda, take_damage aktiflige bagli (BossBase).
