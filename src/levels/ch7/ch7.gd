@@ -22,6 +22,8 @@ var _black: ColorRect
 var _motes: Array[Sprite2D] = []
 var _hud_layer: CanvasLayer
 var _meta_done := false
+## Zorunlu secim ekrani durumu: {give, fight, idx, timer, layer}
+var _choice: Dictionary = {}
 
 
 func _ready() -> void:
@@ -53,6 +55,12 @@ func _process(_delta: float) -> void:
 		if not _meta_done and boss.health.current <= boss.health.max_health * 0.55:
 			_meta_done = true
 			_meta_assault()
+	# Zorunlu secim: "SAPKAYI VER" ustunde 0.35s duran imlec glitchle
+	# SAVAS'a kaydirilir — baris secenegi asla secemeyiz.
+	if not _choice.is_empty() and _choice.idx == 0:
+		_choice.timer += _delta
+		if _choice.timer > 0.35:
+			_choice_glitch_away()
 	# Bosluk dususu: platform kenarindan dusen yaratik 1 can kaybedip geri doner
 	if creature != null and not _respawn_pending \
 			and (creature.global_position.y > 430.0 \
@@ -155,8 +163,7 @@ func _spawn_fight() -> void:
 	boss.global_position = Vector2(330, FLOOR_Y - 16)
 	add_child(boss)
 	boss.defeated.connect(_on_boss_defeated, CONNECT_ONE_SHOT)
-	boss.activate()
-	AudioManager.play_music(&"music/final_boss")
+	_fight_choice()
 
 	if GameState.has_death_mark():
 		var shade := DeathShade.new()
@@ -260,6 +267,90 @@ func _finish() -> void:
 ## MetaDirector saldirisi: glitch pulsu + swap isaretiyle uyarilir,
 ## sonra ~6s boyunca kontroller ters doner ve ust/alt siyah bantlar
 ## goruntuyu 4:3'e kisitlar. Sure bitince her sey geri acilir.
+## Zorunlu secim: perspektif kaymasindan sonra oyun oyuncuya iki
+## secenek sunar — "SAPKAYI VER" uzerinde imlec durunca buton glitchlenip
+## imleci "SAVAS"a kaydirir. Barisin yolu yok — Ouroboros temasi.
+func _fight_choice() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 50
+	add_child(layer)
+	var box := HBoxContainer.new()
+	box.add_theme_constant_override("separation", 64)
+	var give := _choice_label("SAPKAYI VER")
+	var fight := _choice_label("SAVAS")
+	box.add_child(give)
+	box.add_child(fight)
+	layer.add_child(box)
+	box.position = Vector2(240, 206)
+	box.set_pivot_offset(Vector2.ZERO)
+	await get_tree().process_frame
+	box.position.x = 240 - box.size.x * 0.5
+	_choice = {give = give, fight = fight, idx = 1,
+		timer = 0.0, layer = layer}
+	_choice_highlight()
+
+
+func _choice_label(text: String) -> Label:
+	var l := Label.new()
+	l.text = text
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_font_size_override("font_size", 11)
+	return l
+
+
+func _choice_highlight() -> void:
+	if _choice.is_empty():
+		return
+	var on := Color(0.95, 0.85, 0.55)
+	var off := Color(0.55, 0.5, 0.6, 0.7)
+	(_choice.give as Label).add_theme_color_override("font_color",
+		on if _choice.idx == 0 else off)
+	(_choice.fight as Label).add_theme_color_override("font_color",
+		on if _choice.idx == 1 else off)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _choice.is_empty():
+		return
+	if event.is_action_pressed(&"move_left") or event.is_action_pressed(&"move_right"):
+		_choice.idx = 1 - _choice.idx
+		_choice.timer = 0.0
+		AudioManager.play_sfx(&"sfx/ui")
+		_choice_highlight()
+	elif event.is_action_pressed(&"attack") or event.is_action_pressed(&"jump") \
+			or event.is_action_pressed(&"ui_accept"):
+		if _choice.idx == 0:
+			_choice_glitch_away()  # "VER" secilemez — imlec SAVAS'a kayar
+		else:
+			_choice_decide()
+
+
+## "SAPKAYI VER" butonu glitchlenir ve secim SAVAS'a kaydirilir —
+## plan'daki 'zorunlu secim': hareketle de ustunde durmak mumkun degil.
+func _choice_glitch_away() -> void:
+	AudioManager.play_sfx(&"sfx/glitch")
+	FX.glitch(0.7, 0.35)
+	var give := _choice.give as Label
+	var tw := create_tween()
+	tw.tween_property(give, "modulate:a", 0.2, 0.06)
+	tw.tween_property(give, "modulate:a", 1.0, 0.06)
+	tw.tween_property(give, "modulate:a", 0.2, 0.06)
+	tw.tween_property(give, "modulate:a", 1.0, 0.06)
+	_choice.idx = 1
+	_choice.timer = 0.0
+	_choice_highlight()
+
+
+func _choice_decide() -> void:
+	var layer: CanvasLayer = _choice.layer
+	_choice = {}
+	if is_instance_valid(layer):
+		layer.queue_free()
+	AudioManager.play_sfx(&"sfx/reward")
+	boss.activate()
+	AudioManager.play_music(&"music/final_boss")
+
+
 func _meta_assault() -> void:
 	FX.glitch(1.0, 0.6)
 	AudioManager.play_sfx(&"sfx/glitch")
