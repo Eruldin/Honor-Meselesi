@@ -9,7 +9,7 @@ const BUBBLE_SIZE := Vector2(20, 16)
 const ICONS: Array[StringName] = [
 	&"alarm", &"question", &"hat", &"sword", &"anger", &"note", &"sleep", &"dots",
 	&"jump", &"move", &"mouse", &"shield", &"down", &"arrow_right", &"swap",
-	&"heart", &"eye", &"skull", &"dash",
+	&"heart", &"eye", &"skull", &"dash", &"up",
 ]
 
 var icon: StringName = &"alarm"
@@ -121,6 +121,13 @@ func _draw_icon() -> void:
 				Vector2(-5.5, 0), Vector2(-3, 3), Vector2(-0.5, 0)]), c, 1.8)
 			draw_polyline(PackedVector2Array([
 				Vector2(1, 0), Vector2(4, 4), Vector2(7, 0)]), c, 1.8)
+			draw_line(Vector2(4, -4), Vector2(4, 4), c, 1.6)
+		&"up":  # yukari kilic + ok (yukari+saldiri — ucan dusmanlar)
+			draw_line(Vector2(-3, 5), Vector2(-3, -2), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(-5.5, 0), Vector2(-3, -3), Vector2(-0.5, 0)]), c, 1.8)
+			draw_polyline(PackedVector2Array([
+				Vector2(1, 0), Vector2(4, -4), Vector2(7, 0)]), c, 1.8)
 			draw_line(Vector2(4, -4), Vector2(4, 4), c, 1.6)
 		&"swap":  # donusturme — dairesel iki ok (Q/E form degisimi)
 			draw_arc(Vector2(0, 0), 4.6, PI, TAU, 10, c, 1.7)
