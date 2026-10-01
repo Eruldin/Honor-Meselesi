@@ -68,3 +68,17 @@ func test_simple_roster_instantiates_alive() -> void:
 		add_child_autofree(e)
 		assert_true(e.health.is_alive(),
 			"%s canli dogar" % e.get_class())
+
+
+func test_boss_death_clears_boss_spawn_projectiles() -> void:
+	# Regresyon: boss olurken havada kalan mermiler (boss_spawn grubu)
+	# sahnede kaliyordu — zafer kesiginde samurai'yi vurabiliyorlardi.
+	var b := BossBase.new()
+	add_child_autofree(b)
+	b.activate()
+	var m := Node2D.new()
+	m.add_to_group(&"boss_spawn")
+	add_child_autofree(m)
+	b.health.take(999)
+	assert_true(m.is_queued_for_deletion() or not is_instance_valid(m),
+		"boss olumunde boss_spawn uyeleri temizlenir")
