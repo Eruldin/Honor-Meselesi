@@ -6,6 +6,7 @@ extends Node2D
 ## -> Golge/Yarasa formu -> Bolum 4.
 
 const CH4_PATH := "res://src/levels/ch4/Ch4.tscn"
+const GlowSprite := preload("res://src/levels/props/glow_sprite.gd")
 const FLOOR_Y := 250.0
 const LEVEL_W := 1500.0
 const ARENA_X := 1180.0
@@ -127,6 +128,14 @@ func _build_terrain() -> void:
 	_add_deco_ground(&"prop/bush_large", 560.0, 0.55, Color(0.4, 0.42, 0.5))
 	_add_deco_ground(&"prop/bush_large", 1240.0, 0.5,
 		Color(0.36, 0.38, 0.46), true)
+	# Gotik sokak lambalari — soluk sicak hale mezarlik yolunu isaretler
+	for lx in [340.0, 800.0, 1145.0]:
+		_add_deco_ground(&"prop/street_lamp", lx, 0.55,
+			Color(0.78, 0.75, 0.88))
+		var gl := GlowSprite.new(19.0, Color(1.0, 0.82, 0.5, 0.5))
+		gl.position = Vector2(lx, FLOOR_Y - 46)
+		gl.z_index = 3
+		add_child(gl)
 
 
 func _add_deco_ground(id: StringName, x: float, scale := 1.0,
