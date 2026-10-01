@@ -156,9 +156,10 @@ func play_anim(anim: StringName, lock_sec := 0.4) -> void:
 
 
 func _process(delta: float) -> void:
-	# vurus geri tepmesi: altsinif hareketinden bagimsiz pozisyon itkisi
+	# vurus geri tepmesi: altsinif hareketinden bagimsiz ama carpisma-
+	# sayan itkis — duvar icine gomulmez.
 	if _kb_vel.length() > 0.5:
-		position += _kb_vel * delta
+		move_and_collide(_kb_vel * delta)
 		_kb_vel = _kb_vel.move_toward(Vector2.ZERO, 900.0 * delta)
 	_anim_lock = maxf(_anim_lock - delta, 0.0)
 	if anims != null and _anim_lock <= 0.0 and health != null and health.is_alive():
