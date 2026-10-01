@@ -19,7 +19,7 @@ var _boss_root: Control
 var _respawn_pending := false
 var _hat_prop: Sprite2D
 var _black: ColorRect
-var _motes: Array[Sprite2D] = []
+var _motes: Array[Node2D] = []
 var _hud_layer: CanvasLayer
 var _hud: HudPlayer
 var _meta_done := false
@@ -119,8 +119,17 @@ func _build_terrain() -> void:
 		add_child(moon)
 	# Yuzan glitch zerrecikleri — CRT'den sizen kivilcim tozu
 	for i in 9:
-		var mt := Sprite2D.new()
-		mt.texture = AssetLoader.texture(&"enemy/glitch", Vector2i(5, 5))
+		var mt: Node2D
+		if i < 4 and AssetLoader.has_frames(&"npc/glitchb"):
+			var am := AnimatedSprite2D.new()
+			am.sprite_frames = AssetLoader.frames(&"npc/glitchb")
+			am.scale = Vector2(7, 7) / am.sprite_frames.get_frame_texture(
+				am.sprite_frames.get_animation_names()[0], 0).get_size()
+			am.play(am.sprite_frames.get_animation_names()[0])
+			mt = am
+		else:
+			mt = Sprite2D.new()
+			mt.texture = AssetLoader.texture(&"enemy/glitch", Vector2i(5, 5))
 		mt.modulate = Color(0.5, 1.0, 0.9, randf_range(0.25, 0.6))
 		mt.global_position = Vector2(randf() * 480.0, randf() * 270.0)
 		mt.z_index = -1
