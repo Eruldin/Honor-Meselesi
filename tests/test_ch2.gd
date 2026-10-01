@@ -115,6 +115,22 @@ func test_terminal_requires_drone_and_opens_gate() -> void:
 	assert_true(gate.open, "drone hackleyince kapi acilmali")
 
 
+func test_hacked_gate_reopens_on_reload() -> void:
+	# Regresyon: hack sonrasi olum/reload kapinin kapanip terminalin
+	# sifirlanmasina yol aciyordu — her denemede yeniden hack gerekirdi.
+	GameState.set_flag(&"gate_open_t_gate", true)
+	var term := HackTerminal.new()
+	term.gate_id = &"t_gate"
+	add_child_autofree(term)
+	await wait_seconds(0.05)
+	var gate := LaserGate.new()
+	gate.gate_id = &"t_gate"
+	add_child_autofree(gate)
+	await wait_seconds(0.05)  # deferred _bind_terminals
+	assert_true(gate.open, "bayrakli kapi acik baslar")
+	assert_true(term._done, "terminal tamamlanmis baslar — lamba yesil")
+
+
 # --- Dev koruma ---
 
 func test_guardian_blocks_all_but_battery() -> void:

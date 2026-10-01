@@ -42,11 +42,24 @@ func _bind_terminals() -> void:
 	for t in get_tree().get_nodes_in_group(&"terminals"):
 		if t.gate_id == gate_id:
 			t.hacked.connect(_on_hacked)
+	# Hack bayragi tasindiysa kapi acik baslar — olum/reload her
+	# denemede yeniden hack istemez.
+	if GameState.get_flag(&"gate_open_" + String(gate_id), false):
+		_open(true)
 
 
 func _on_hacked(_id: StringName) -> void:
+	GameState.set_flag(&"gate_open_" + String(gate_id), true)
+	_open(false)
+
+
+func _open(instant: bool) -> void:
 	open = true
 	hitbox.deactivate()
+	if instant:
+		beam.scale.y = 0.05
+		beam.modulate.a = 0.0
+		return
 	AudioManager.play_sfx(&"sfx/door", global_position, -2.0)
 	var tw := create_tween()
 	tw.tween_property(beam, "scale:y", 0.05, 0.3)
