@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_fd")
 id = &"robot"
-display_name = "Robot"
 sprite_asset = &"enemy/machine_guy/idle"
 sprite_color = Color(1, 1, 1, 1)
 body_size = Vector2(14, 20)

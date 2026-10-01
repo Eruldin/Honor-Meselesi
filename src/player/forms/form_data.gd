@@ -4,7 +4,6 @@ extends Resource
 ## VERI SETINI degistirir. Carpalar tuning.tres uzerinden uygulanir.
 
 @export var id: StringName = &""
-@export var display_name: String = ""
 @export var sprite_asset: StringName = &""      ## gercek sprite id (orn. enemy/rooster); bos: player/<id>/idle
 @export var sprite_color := Color.WHITE        ## sprite uzerine tint (golge icin koyu)
 @export var body_size := Vector2(12, 18)       ## collision + sprite

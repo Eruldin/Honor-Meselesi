@@ -5,8 +5,6 @@ extends Area2D
 
 signal struck(hurtbox: Hurtbox)
 
-@export var auto_damage_info := true
-
 var damage_info: DamageInfo
 var _hit_targets: Array[int] = []  ## bu aktivasyonda vurulanlar (instance_id)
 
