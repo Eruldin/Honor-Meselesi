@@ -45,7 +45,12 @@ func _ready() -> void:
 	hx_col.position = Vector2(0, -3)
 	hitbox.add_child(hx_col)
 	add_child(hitbox)
-	hitbox.activate(DamageInfo.make(1, self, Vector2(0, -80), true, true))
+	# Oyuncu ayrilinca yeniden kurulur — hedef listesi silinip sonraki
+	# temas tekrar vurabilir (tek aktivasyon omrunce bir vurus vardi).
+	var spike_info := DamageInfo.make(1, self, Vector2(0, -80), true, true)
+	hitbox.area_exited.connect(func(_a: Area2D) -> void:
+		hitbox.activate(spike_info))
+	hitbox.activate(spike_info)
 
 
 ## Hitbox vurabilmesi icin take_damage sarti; diken zarar gormez.
