@@ -184,6 +184,16 @@ func _build_entities() -> void:
 	t2.global_position = Vector2(920, FLOOR_Y - 10)
 	add_child(t2)
 
+	# Havada bozuk veri — boru bolgesindeki platformlari korur
+	var fs := FlyingSword.new()
+	fs.global_position = Vector2(640, FLOOR_Y - 95)
+	add_child(fs)
+
+	# Kargalar gokyuzu devriyesi — dinlenme noktasi oncesi son baski
+	var cw := Crow.new()
+	cw.global_position = Vector2(880, FLOOR_Y - 80)
+	add_child(cw)
+
 	var rest := RestPoint.new()
 	rest.checkpoint_id = &"ch4_plaza"
 	rest.global_position = Vector2(1060, FLOOR_Y - 12)
