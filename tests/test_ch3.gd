@@ -137,6 +137,12 @@ func test_vlad_phase2_darkness_and_eyes() -> void:
 		"karanlik Vlad'in cocugu — CanvasLayer degil (gozleri ezmez)")
 	assert_gt(b.eyes.z_index, b.darkness.z_index,
 		"ayni ebeveyn altinda goz z'i karanlik z'inden buyuk")
+	# Regresyon: kan kazigi z=0'daydi — faz 2'de uyarici isaret + kazik
+	# %82 karanligin altinda boguluyor, parry penceresi okunamaz oluyordu.
+	var s := BloodSpike.new()
+	add_child_autofree(s)
+	assert_gt(s.z_index, b.darkness.z_index,
+		"kazik telegraph'i karanlik ortusunun ustunde kalmali")
 
 
 func test_blood_spike_telegraph_then_hit() -> void:
