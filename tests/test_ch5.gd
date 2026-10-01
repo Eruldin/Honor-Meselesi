@@ -44,6 +44,22 @@ func test_bat_flies_and_dives() -> void:
 	assert_true(absf(b.velocity.length()) > 0.1, "bat hareket eder")
 
 
+func test_bat_dive_ends_without_wall_hit() -> void:
+	var sam := _make_samurai(Vector2(30, 10))
+	var b := AshBat.new()
+	b.global_position = Vector2(0, 0)
+	add_child_autofree(b)
+	for i in 90:
+		await get_tree().physics_frame
+		if b._diving:
+			break
+	assert_true(b._diving, "bat menzilde dalisa girer")
+	# Oyuncuyu cok uzaga al — dalis duvara degil, sureye vurur.
+	sam.global_position = Vector2(5000, 0)
+	await _frames(90)  # 1.5s > 1.2s dalis suresi
+	assert_false(b._diving, "dalis duvarsiz da 1.2s sonra biter")
+
+
 func test_guardian_phase_and_geyser() -> void:
 	var g := AshGuardian.new()
 	g.floor_y = 0.0

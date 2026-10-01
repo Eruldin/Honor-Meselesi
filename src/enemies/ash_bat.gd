@@ -41,7 +41,9 @@ func _physics_process(delta: float) -> void:
 		sprite.flip_h = dx < 0
 		if _diving:
 			velocity = velocity.normalized() * tuning.ash_bat_dive_speed
-			if velocity.length() < 1.0:
+			# Dalis, duvara vurmadan da _t suresinde biter — acik boslukta
+			# veya duvar boyunca sonsuza kaymaz.
+			if velocity.length() < 1.0 or _t >= 0.0:
 				_diving = false
 		elif absf(dx) < 90.0 and absf(dy) < 60.0:
 			# Dalis: oyuncuya dogru atil, sonra geri don
