@@ -100,6 +100,27 @@ func test_ch7_meta_assault_inverts_then_restores() -> void:
 	assert_false(scene.creature.controls_inverted, "pencere bitince kontrol duzelir")
 
 
+func test_ch7_heart_spear_steals_last_heart() -> void:
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(10)
+	scene._choice_decide()
+	await _frames(2)
+	# Boss'u %30'un altina indir — meta mizrak tetiklenir
+	scene.boss.health.take(int(scene.boss.health.max_health * 0.75))
+	await _frames(3)
+	assert_true(scene._spear_done, "kalp mizragi tetiklendi")
+	var idx: int = scene.creature.health.current - 1
+	assert_false(scene._hud._hearts[idx].visible,
+		"son dolu kalp HUD'dan sokuldu")
+	var found := false
+	for n in scene.get_children():
+		if n is HeartSpear:
+			found = true
+	assert_true(found, "mizrak sahnede")
+
+
 func test_credits_feeds_from_credits_md() -> void:
 	var c := Credits.new()
 	add_child_autofree(c)

@@ -21,7 +21,9 @@ var _hat_prop: Sprite2D
 var _black: ColorRect
 var _motes: Array[Sprite2D] = []
 var _hud_layer: CanvasLayer
+var _hud: HudPlayer
 var _meta_done := false
+var _spear_done := false
 ## Zorunlu secim ekrani durumu: {give, fight, idx, timer, layer}
 var _choice: Dictionary = {}
 
@@ -55,6 +57,12 @@ func _process(_delta: float) -> void:
 		if not _meta_done and boss.health.current <= boss.health.max_health * 0.55:
 			_meta_done = true
 			_meta_assault()
+		# Ikinci meta an: %30 can — HUD kalbi sokulup oyuncuya atilir.
+		if not _spear_done and _meta_done and is_instance_valid(creature) \
+				and not creature.controls_inverted \
+				and boss.health.current <= boss.health.max_health * 0.30:
+			_spear_done = true
+			_meta_spear()
 	# Zorunlu secim: "SAPKAYI VER" ustunde 0.35s duran imlec glitchle
 	# SAVAS'a kaydirilir — baris secenegi asla secemeyiz.
 	if not _choice.is_empty() and _choice.idx == 0:
@@ -153,7 +161,8 @@ func _spawn_fight() -> void:
 	add_child(hl)
 	# Yaratik kalpleri; portrede samuray degil yaratik yuzu (ruh cubugu yok —
 	# yaratigin soul harcama aksiyonu yok, bos cubuk gostermeyiz)
-	hl.add_child(HudPlayer.make(creature, false, &"enemy/glitch_creature"))
+	_hud = HudPlayer.make(creature, false, &"enemy/glitch_creature")
+	hl.add_child(_hud)
 
 	boss = SamuraiBoss.new()
 	boss.name = "Samurai"
@@ -384,6 +393,30 @@ func _meta_assault() -> void:
 	tw2.chain().tween_callback(func() -> void:
 		top.queue_free()
 		bottom.queue_free())
+
+
+## Ikinci MetaDirector ani: HUD'daki son dolu kalp yerinden sokulur,
+## glitchlenip yaratiga atilir (yavas homing). Degince hasar; sonra
+## kalp yuvasina geri ucar. <2 kalpte sokulmez — adil degil.
+func _meta_spear() -> void:
+	if _hud == null or not is_instance_valid(_hud) \
+			or creature.health.current < 2:
+		return
+	FX.glitch(1.0, 0.5)
+	AudioManager.play_sfx(&"sfx/glitch")
+	var idx := creature.health.current - 1
+	if idx >= _hud._hearts.size():
+		return
+	var heart := _hud._hearts[idx]
+	heart.visible = false
+	var spear := HeartSpear.new()
+	spear.global_position = heart.global_position + Vector2(4, 4)
+	add_child(spear)
+	spear.returned.connect(func(sp: HeartSpear) -> void:
+		if is_instance_valid(heart):
+			heart.visible = true
+		sp.queue_free(), CONNECT_ONE_SHOT)
+	spear.launch(creature)
 
 
 func _on_actor_died(actor: Node) -> void:
