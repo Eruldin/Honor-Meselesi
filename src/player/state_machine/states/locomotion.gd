@@ -47,7 +47,7 @@ class Jump:
 		sam.apply_gravity(delta)
 		if sam.input.jump_just_released():
 			sam.cut_jump()
-		if sam.velocity.y >= 0.0:
+		if (sam.velocity.y >= 0.0) != sam.gravity_flipped:
 			return Samurai.S_FALL
 		if sam.is_on_floor():
 			return Samurai.S_IDLE
@@ -63,10 +63,13 @@ class Fall:
 			return next
 		sam.apply_run(delta, sam.input.move_axis())
 		# Tavuk suzulusu: zipla tusuna basili tutunca yavas dusme.
-		if sam.form.can_glide and sam.input.jump_held() and sam.velocity.y > 0.0:
-			sam.velocity.y = minf(
-				sam.velocity.y + sam.tuning.gravity * sam.form.glide_gravity_mult * delta,
-				sam.form.glide_fall_speed)
+		var falling: bool = (sam.velocity.y > 0.0) != sam.gravity_flipped
+		if sam.form.can_glide and sam.input.jump_held() and falling:
+			var accel: float = sam.tuning.gravity * sam.form.glide_gravity_mult * delta
+			if sam.gravity_flipped:
+				sam.velocity.y = maxf(sam.velocity.y - accel, -sam.form.glide_fall_speed)
+			else:
+				sam.velocity.y = minf(sam.velocity.y + accel, sam.form.glide_fall_speed)
 		else:
 			sam.apply_gravity(delta)
 		# try_jump hem coyote'yi (havada) hem de buffer'i (inince) kapsar.

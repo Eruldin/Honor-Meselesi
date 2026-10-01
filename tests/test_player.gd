@@ -343,3 +343,34 @@ func test_fall_state_uses_fall_anim() -> void:
 	await _frames(10)
 	assert_eq(sam.sm.current_name, Samurai.S_FALL, "kurulum: dusme durumu")
 	assert_eq(sam._anims.animation, &"fall", "dusus animi ayri oynar")
+
+
+func test_glide_does_not_hobble_flipped_jump() -> void:
+	# Regresyon: gravity_flipped'te suzulme kontrolu yanlis isaretti —
+	# tavuk + ters yercekimi (ch4) ziplamayi 42px/s'e kisitliyordu.
+	GameState.unlock_form(&"tavuk")
+	sam.equip_form(&"tavuk")
+	sam.apply_pending_form()
+	assert_eq(sam.form.id, &"tavuk", "kurulum: tavuk formu")
+	sam.set_gravity_flipped(true)
+	sam.global_position = Vector2(0, -150)
+	sam.sm.change_to(Samurai.S_FALL, true)
+	sam.velocity.y = 200.0  # ters dunyada +y = yukselis (yerden uzaklasma)
+	ai.hold(&"jump")
+	await _frames(3)
+	assert_gt(sam.velocity.y, 42.0,
+		"ters yercekiminde suzulme ziplamayi felct etmez")
+	sam.set_gravity_flipped(false)
+
+
+func test_glide_normal_fall_still_caps() -> void:
+	GameState.unlock_form(&"tavuk")
+	sam.equip_form(&"tavuk")
+	sam.apply_pending_form()
+	sam.global_position = Vector2(0, -150)
+	sam.sm.change_to(Samurai.S_FALL, true)
+	sam.velocity.y = 300.0
+	ai.hold(&"jump")
+	await _frames(3)
+	assert_lte(sam.velocity.y, sam.form.glide_fall_speed + 1.0,
+		"normal suzulme dusme hizini sinirlar")
