@@ -28,6 +28,7 @@ var _boss_home := Vector2.ZERO
 var _respawn_pending := false
 var _glitch_t := 6.0
 var _flicker_t := 4.0
+var _code_t := 0.0
 
 
 func _ready() -> void:
@@ -70,6 +71,14 @@ func _process(delta: float) -> void:
 		if _flicker_t <= 0.0:
 			_flicker_t = randf_range(4.5, 10.0)
 			samurai.sprite_flash(Color(0.7, 1.2, 1.5))
+	# M9: ayak altindan dokulen kod parcaciklari — bellek dunyasi
+	# adimlarinda veri serpirir (kosarken zeminde kalan kirik veri).
+	if samurai != null and is_instance_valid(samurai) and samurai.is_on_floor() \
+			and absf(samurai.velocity.x) > 25.0:
+		_code_t -= delta
+		if _code_t <= 0.0:
+			_code_t = 0.09
+			_shed_code(samurai.global_position)
 
 	# Bosluk dususu: asama disina dusen 1 can kaybedip checkpoint'e doner
 	if samurai != null and not _respawn_pending 			and (samurai.global_position.y > 430.0 				or samurai.global_position.y < -80.0):
@@ -79,6 +88,23 @@ func _process(delta: float) -> void:
 		samurai.set_gravity_flipped(false)
 		FX.glitch(0.4, 0.3)
 		samurai.take_damage(DamageInfo.make(1, null, Vector2.ZERO, false, true))
+
+func _shed_code(at: Vector2) -> void:
+	var p := ColorRect.new()
+	p.size = Vector2(2, 2)
+	p.position = at + Vector2(randf_range(-6.0, 6.0), randf_range(8.0, 12.0))
+	var tones := [Color(0.5, 1.0, 1.1), Color(1.0, 0.55, 1.0), Color(0.9, 1.0, 0.6)]
+	p.color = tones[randi() % tones.size()]
+	p.color.a = randf_range(0.5, 0.8)
+	p.z_index = 4
+	add_child(p)
+	var dur := randf_range(0.5, 0.9)
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position:y", p.position.y + randf_range(10.0, 20.0), dur)
+	tw.tween_property(p, "position:x", p.position.x + randf_range(-14.0, 14.0), dur)
+	tw.chain().tween_property(p, "color:a", 0.0, 0.15)
+	tw.finished.connect(p.queue_free)
+
 
 func _build_terrain() -> void:
 	# Bosluk gokyuzu: derin mordan ufuk cizgisinde soluk magenta pariltiya
