@@ -347,7 +347,7 @@ func _on_boss_defeated() -> void:
 	var portal := PortalFx.make()
 	portal.global_position = Vector2(ARENA_R - 30, FLOOR_Y - 34)
 	add_child(portal)
-	AudioManager.play_music(&"music/victory")
+	AudioManager.play_music(&"music/victory", md.calm_track)
 
 	samurai.sm.change_to(Samurai.S_CUTSCENE, true)
 	var cutscene := CutscenePlayer.new()
