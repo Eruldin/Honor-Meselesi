@@ -24,6 +24,14 @@ func _on_hitstop(duration: float) -> void:
 	_slow_time(0.001, duration)
 
 
+func _exit_tree() -> void:
+	# Aktif istek acikken sahne free'si Engine.time_scale'i dusuk birakir —
+	# yeni sahne agir cekimde kalir; istekler sahneyle birlikte biter.
+	if not _ts_reqs.is_empty():
+		_ts_reqs.clear()
+		Engine.time_scale = 1.0
+
+
 ## Zaman olcegi istekleri cakissa da bagimsiz isler: aktif isteklerin en
 ## dusuk scale'i uygulanir, her istek kendi suresi dolunca duser — kisa bir
 ## istek uzun bir istegi erken kesmez (kill-beat icindeki hitstop durumu).
