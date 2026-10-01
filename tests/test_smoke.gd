@@ -32,6 +32,19 @@ func test_settings_menu_pauses_world() -> void:
 	assert_false(get_tree().paused, "Kapaninca devam etmeli")
 
 
+func test_settings_menu_free_releases_pause() -> void:
+	# Regresyon: acik menu sahne free'siyle yok olursa paused siziyor,
+	# yeni sahnede dunya donmus kaliyordu (soft-lock goruntusu).
+	var menu: SettingsMenu = SettingsMenu.new()
+	add_child(menu)
+	menu.toggle()
+	assert_true(get_tree().paused, "menu dunyayi durdurur")
+	menu.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_false(get_tree().paused, "menu yok olunca pause birakilir")
+
+
 func test_slowmo_short_request_does_not_clip_longer() -> void:
 	var fx: FxListener = add_child_autofree(FxListener.new())
 	Engine.time_scale = 1.0

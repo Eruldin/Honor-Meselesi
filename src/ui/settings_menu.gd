@@ -43,6 +43,13 @@ func _ready() -> void:
 			_rebuild_tab())
 
 
+func _exit_tree() -> void:
+	# Sahne free'si paused'i geri almaz — acik menuyle gecis yapilirsa
+	# yeni sahnede dunya donmus kalir; menu kapanirken pause'u birak.
+	if _open:
+		get_tree().paused = false
+
+
 func tr_ui(key: String) -> String:
 	return LABELS.get(Settings.language, LABELS["tr"]).get(key, key)
 
