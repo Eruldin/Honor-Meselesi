@@ -5,6 +5,7 @@ extends Node2D
 ## birakip CRT'ye siner -> sahne Prolog'a doner (dongu kapanir).
 
 const PROLOG_PATH := "res://src/levels/prolog/Prolog.tscn"
+const EPILOG_PATH := "res://src/levels/prolog/Epilog.tscn"
 const FLOOR_Y := 250.0
 
 @export var auto_advance := true
@@ -40,9 +41,14 @@ func _ready() -> void:
 	if auto_advance:
 		if GameState.get_flag(&"ch7_boss_dead", false):
 			if GameState.get_flag(&"ouroboros_done", false):
-				# Oyun tamamlanmis — dongu kapandi; Continue dogrudan
-				# Prolog'a doner (Ouroboros: basa sar).
-				call_deferred(&"_emit_scene_change", PROLOG_PATH)
+				if GameState.get_flag(&"epilog_done", false):
+					# Oyun tamamlanmis — dongu kapandi; Continue dogrudan
+					# Prolog'a doner (Ouroboros: basa sar).
+					call_deferred(&"_emit_scene_change", PROLOG_PATH)
+				else:
+					# Epilog yarida kesildi (quit/crash): kesme+jenerik
+					# sahnesine geri don — anlatim butun kalir.
+					call_deferred(&"_emit_scene_change", EPILOG_PATH)
 			else:
 				# Final oynandi ama epilog yarida kesildi (quit/crash):
 				# jenerik zincirini yeniden kur — soft-lock onlemi.
@@ -301,7 +307,7 @@ func _finish() -> void:
 	await get_tree().create_timer(1.0, false).timeout
 	if not is_instance_valid(self_ref.get_ref()):
 		return
-	var card := Label.new()
+	var card := Label.new()  # spec: '15 YIL SONRA...' karti
 	card.text = "15 YIL SONRA..." if Settings.language == "tr" else "15 YEARS LATER..."
 	card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	card.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -322,14 +328,10 @@ func _finish() -> void:
 	tw.tween_property(card, "modulate:a", 0.0, 0.8)
 	await tw.finished
 	cl.queue_free()
-	# Jenerik (CREDITS.md'den) sonra Prolog'a don
-	AudioManager.play_music(&"music/credits")
-	var credits := Credits.new()
-	add_child(credits)
-	credits.finished.connect(func() -> void:
-		if auto_advance:
-			EventBus.scene_change_requested.emit(PROLOG_PATH),
-		CONNECT_ONE_SHOT)
+	# Spec: kart sonrasi kulubeye donus (Prolog sahnesi, rolleri
+	# ters) + dikey glitch kesme + jenerik — Epilog sahnesi ustlenir.
+	if auto_advance:
+		EventBus.scene_change_requested.emit(EPILOG_PATH)
 
 
 func _emit_scene_change(path: String) -> void:

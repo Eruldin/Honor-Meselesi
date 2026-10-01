@@ -312,6 +312,7 @@ func test_ch7_finished_game_returns_to_prolog() -> void:
 	# arenada kaliyordu — tamamlanmis oyun Prolog'a doner (Ouroboros).
 	GameState.set_flag(&"ch7_boss_dead")
 	GameState.set_flag(&"ouroboros_done", true)
+	GameState.set_flag(&"epilog_done", true)
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	# Emit'in SceneRouter'a ulasmasi GUT sahnesini swap eder — dinleyiciyi
 	# test boyunca kes, sonra geri bagla.
@@ -323,6 +324,23 @@ func test_ch7_finished_game_returns_to_prolog() -> void:
 	await _frames(6)
 	assert_eq(got[0], "res://src/levels/prolog/Prolog.tscn",
 		"tamamlanmis oyun Prolog'a doner")
+	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
+
+
+func test_ch7_mid_epilogue_reload_resumes_epilog() -> void:
+	# Ouroboros oynandi ama epilog yarida kesildi (quit/crash):
+	# Continue epilog sahnesine geri doner — anlatim atlama yok.
+	GameState.set_flag(&"ch7_boss_dead")
+	GameState.set_flag(&"ouroboros_done", true)
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	EventBus.scene_change_requested.disconnect(SceneRouter.change_scene)
+	var got := [""]
+	EventBus.scene_change_requested.connect(
+		func(p: String) -> void: got[0] = p, CONNECT_ONE_SHOT)
+	add_child_autofree(scene)
+	await _frames(6)
+	assert_eq(got[0], "res://src/levels/prolog/Epilog.tscn",
+		"epilog-yarim reload Epilog'a doner")
 	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
 
 
