@@ -100,6 +100,7 @@ func on_reset() -> void:
 		darkness.queue_free()
 		darkness = null
 	eyes.z_index = 0
+	eyes.scale = Vector2.ONE
 
 
 func _physics_process(delta: float) -> void:
@@ -124,6 +125,9 @@ func _physics_process(delta: float) -> void:
 				_choose(dx)
 		State.SPIKES:
 			velocity.x = 0.0
+			# M6: karanlik fazda yon ipucu — gozler de telegraph'te nabizlanir.
+			if phase >= 1:
+				eyes.scale = Vector2.ONE * (1.0 + 0.35 * sin(_t * 18.0))
 			if _t <= 0.0:
 				_spawn_spikes()
 				bstate = State.GAP
@@ -134,10 +138,14 @@ func _physics_process(delta: float) -> void:
 			sprite.modulate = c
 			if anims != null:
 				anims.modulate = c
+			# M6: gozler karanligin ustunde — telegraph'i o da tasir.
+			if phase >= 1:
+				eyes.scale = Vector2.ONE * (1.0 + 0.45 * sin(_t * 22.0))
 			if _t <= 0.0:
 				bstate = State.LUNGE
 				_t = 0.25
 				_restore_modulate()
+				eyes.scale = Vector2.ONE
 				velocity.x = facing * tuning.vlad_lunge_speed
 				contact_hitbox.activate(DamageInfo.make(1, self,
 					Vector2(facing * 180, -50), true, false))
@@ -147,6 +155,8 @@ func _physics_process(delta: float) -> void:
 				_t = gap
 		State.GAP:
 			velocity.x = move_toward(velocity.x, 0.0, 700.0 * delta)
+			if eyes.scale != Vector2.ONE:
+				eyes.scale = eyes.scale.move_toward(Vector2.ONE, 3.0 * delta)
 			if _t <= 0.0:
 				bstate = State.APPROACH
 				_t = 1.6
@@ -164,6 +174,10 @@ func _choose(dx: float) -> void:
 		_:
 			bstate = State.LUNGE_TELL
 			_t = tuning.vlad_telegraph
+	# M6 spec: karanlikta stereo yon ipucu — pozisyonlu uyari sesi
+	# (2D player x-farkina gore panlar; gorsel alternatifle birlikte).
+	if phase >= 1:
+		AudioManager.play_sfx(&"sfx/ghost", global_position, -4.0, 0.9)
 
 
 func _spawn_spikes() -> void:

@@ -266,3 +266,29 @@ func test_ch3_moon_right_edge_fades() -> void:
 	var img := moon.texture.get_image()
 	assert_gt(img.get_pixel(100, 135).a, 0.5, "ic bolge opak")
 	assert_lt(img.get_pixel(478, 135).a, 0.5, "sag kenar fade'li")
+
+
+func test_vlad_phase2_eyes_pulse_on_tell() -> void:
+	# M6 spec: karanlik fazda yon ipucu hem stereo ses hem gorsel
+	# alternatif — telegraph sirasinda gozler nabizlanmali.
+	var b := CountVlad.new()
+	add_child_autofree(b)
+	b.activate()
+	var p := Node2D.new()
+	p.add_to_group(&"player")
+	add_child_autofree(p)
+	# hasar yolu sersemletme birakir — davranisi dondurur; fazi
+	# dogrudan kur ki telegraph davranisi izlenebilsin.
+	b.phase = 1
+	b.on_phase_changed(1)
+	assert_not_null(b.darkness, "faz 2 karanlik ortu kurulmali")
+	b.bstate = CountVlad.State.LUNGE_TELL
+	b._t = 0.5
+	var pulsed := false
+	for i in 12:
+		await get_tree().physics_frame
+		b._t = 0.5  # durumdan cikmasin diye _t'yi acikta tut
+		if absf(b.eyes.scale.x - 1.0) > 0.05:
+			pulsed = true
+			break
+	assert_true(pulsed, "faz 2 telegraph'te gozler nabizlanir (yon ipucu)")
