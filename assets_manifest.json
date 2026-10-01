@@ -488,6 +488,15 @@
    "fps": 10,
    "pack": "SunnyLand"
   },
+  "enemy/eagle/idle": {
+   "path": "env/sunnyland/Sunny land Add On Files/Assets/eagle/dive attack/spritesheet.png",
+   "frame": [
+    40,
+    41
+   ],
+   "fps": 10,
+   "pack": "SunnyLand"
+  },
   "enemy/eagle/hurt": {
    "files": [
     "env/sunnyland/Sunny land Add On Files/Assets/eagle/hurt/sprites/hurt1.png",

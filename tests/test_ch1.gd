@@ -234,6 +234,19 @@ func test_ch1_scene_builds_and_arena_triggers() -> void:
 	assert_true(ch1._boss_started)
 
 
+func test_ch1_eagles_spawn_with_real_sprite() -> void:
+	var ch1: Node2D = load(CH1_PATH).instantiate()
+	ch1.auto_advance = false
+	add_child_autofree(ch1)
+	await wait_seconds(0.2)
+	var eagles := 0
+	for n in ch1.find_children("*", "Eagle", true, false):
+		eagles += 1
+		if AssetLoader.has_frames(&"enemy/eagle/idle"):
+			assert_true(n.using_real_sprite, "kartal gercek sprite kullanir")
+	assert_eq(eagles, 2, "iki dalgic kartal yerlesir")
+
+
 func test_ch1_boss_death_flows_to_ch2() -> void:
 	var ch1: Node2D = load(CH1_PATH).instantiate()
 	ch1.auto_advance = false
