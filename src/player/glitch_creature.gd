@@ -5,6 +5,9 @@ extends CharacterBody2D
 ## tanesi (menzilli), dash'i kisa glitch-kaybolusu (i-frame).
 
 var input: InputSource
+## MetaDirector (ch7): boss sahnesi kontrolleri ters cevirir — sadece
+## yatay eksen (klasik adil inversion), isaret piktogrami ch7 verir.
+var controls_inverted := false
 var health: Health
 var hurtbox: Hurtbox
 var sprite: Sprite2D
@@ -107,6 +110,8 @@ func _physics_process(delta: float) -> void:
 	# Ucan: hafif yercekimi + dusuk maks dusus
 	velocity.y = minf(velocity.y + 500.0 * delta, 90.0)
 	var dir := input.move_axis()
+	if controls_inverted:
+		dir = -dir
 	velocity.x = move_toward(velocity.x, dir * 80.0, 500.0 * delta)
 	if absf(dir) > 0.1:
 		facing = 1 if dir > 0 else -1
