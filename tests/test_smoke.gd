@@ -126,3 +126,31 @@ func test_victory_sting_resumes_zone_music() -> void:
 	assert_eq(AudioManager._sting_resume, &"",
 		"resume tek seferlik")
 	AudioManager.stop_music()
+
+
+func test_slider_drag_survives_settings_rebuild() -> void:
+	# Regresyon: Settings.changed -> _rebuild_tab slider'i free ederdi;
+	# surukleme ilk adimda kopar, tutacak elden duserdi.
+	var menu: SettingsMenu = add_child_autofree(SettingsMenu.new())
+	menu.toggle()  # grafik sekmesi acik, sliderlar kurulu
+	var slider: HSlider = null
+	for row in menu._content.get_children():
+		for c in row.get_children():
+			if c is HSlider:
+				slider = c
+				break
+		if slider != null:
+			break
+	assert_not_null(slider, "grafik sekmesinde HSlider kurulu olmali")
+	slider.drag_started.emit()
+	Settings.set_fx_intensity(Settings.fx_intensity)  # changed emit eder
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_true(is_instance_valid(slider),
+		"surukleme sirasinda rebuild slider'i free etmemeli")
+	slider.drag_ended.emit(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_false(is_instance_valid(slider),
+		"drag bitince rebuild son degeri senkronlar")
+	menu.toggle()

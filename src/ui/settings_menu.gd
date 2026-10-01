@@ -31,6 +31,7 @@ var _tab_buttons := {}
 var _open := false
 var _tab: StringName = &"grafik"
 var _rebinding: StringName = &""
+var _slider_drag := false
 
 
 func _ready() -> void:
@@ -39,7 +40,9 @@ func _ready() -> void:
 	_build()
 	visible = false
 	Settings.changed.connect(func() -> void:
-		if _open:
+		# Surukleme ortasinda rebuild slider'i free edip tutacagi koparir —
+		# ilk adimda drag kilitlenirdi; bitince tek rebuild ile senkronlanir.
+		if _open and not _slider_drag:
 			_rebuild_tab())
 
 
@@ -260,6 +263,12 @@ func _slider_row(label_text: String, initial: float, setter: Callable) -> HBoxCo
 	slider.custom_minimum_size = Vector2(200, 0)
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slider.value_changed.connect(setter)
+	slider.drag_started.connect(func() -> void:
+		_slider_drag = true)
+	slider.drag_ended.connect(func(_v: bool) -> void:
+		_slider_drag = false
+		if _open:
+			_rebuild_tab())
 	row.add_child(slider)
 	return row
 
