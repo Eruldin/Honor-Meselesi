@@ -352,6 +352,8 @@ func _begin_cutscene() -> void:
 	_phase = &"cutscene"
 	samurai.sprite.scale = Vector2.ONE  # ayaga kalkti
 	samurai.sprite.position.y = 0.0
+	if samurai._anims != null:
+		samurai._anims.scale = Vector2.ONE  # fallback dalda ezik kalirdi
 	var sit := samurai.get_node_or_null("SitSprite")
 	if sit != null:
 		sit.queue_free()
@@ -470,6 +472,7 @@ func _apply_end_state() -> void:
 	samurai.sprite.visible = true
 	if samurai._anims != null:
 		samurai._anims.visible = true
+		samurai._anims.scale = Vector2.ONE
 	var sit := samurai.get_node_or_null("SitSprite")
 	if sit != null:
 		sit.queue_free()
