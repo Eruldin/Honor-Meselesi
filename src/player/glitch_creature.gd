@@ -172,6 +172,8 @@ func take_damage(info: DamageInfo) -> void:
 		return
 	health.take(info.damage)
 	_iframes = 0.8
+	EventBus.damage_dealt.emit(self, info)
+	FX.hitstop(0.06)
 	FX.shake(2.0, 0.2)
 	AudioManager.play_sfx(&"sfx/hurt", global_position)
 	sprite.modulate = Color(2.0, 0.6, 0.6)
