@@ -45,7 +45,10 @@ class Attack:
 
 	func exit() -> void:
 		sam.attack_hitbox.deactivate()
-		sam.combo_index = 0
+		if sam.combo_index >= 3:
+			sam.combo_index = 0          # finisher zinciri kapatti
+		elif sam.combo_index > 0:
+			sam.combo_grace_t = sam.tuning.combo_window
 		sam.combo_queued = false
 
 

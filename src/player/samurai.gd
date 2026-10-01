@@ -50,6 +50,7 @@ var jumps_used: int = 0
 var facing: int = 1
 var combo_index: int = 0
 var combo_queued: bool = false
+var combo_grace_t: float = 0.0  ## saldiri bitince zincir icin kisa pencere
 
 var coyote_timer: float = 0.0
 var jump_buffer_timer: float = 0.0
@@ -258,6 +259,12 @@ func _physics_process(delta: float) -> void:
 		jumps_used = 0
 	invuln_timer = maxf(invuln_timer - delta, 0.0)
 	dash_cooldown = maxf(dash_cooldown - delta, 0.0)
+	# Grace sayaci sadece saldiri disi durumlarda isler — zincir
+	# icindeyken combo_index canli kalir.
+	if sm.current_name != S_ATTACK:
+		combo_grace_t = maxf(combo_grace_t - delta, 0.0)
+		if combo_grace_t <= 0.0 and combo_index > 0:
+			combo_index = 0
 
 	# Kanama DoT: i-frame'i asmaz ama state degistirmez.
 	if bleed_ticks > 0:
@@ -419,7 +426,9 @@ func start_dash() -> void:
 
 
 func start_ground_attack() -> void:
-	combo_index = 1
+	# Grace penceresi icindeyse zincir kaldigi yerden surer;
+	# aksi halde 1. vurustan baslar.
+	combo_index = combo_index + 1 if combo_index > 0 else 1
 	combo_queued = false
 	velocity.x += facing * tuning.attack_lunge  # hafif ileri itme
 	# Kesik + savrus sesi Attack.enter()'da — kombo zincirinde her vurus icin.

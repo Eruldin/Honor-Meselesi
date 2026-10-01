@@ -60,7 +60,6 @@ extends Resource
 @export var guard_lunge_time: float = 0.3
 @export var guard_telegraph: float = 0.4
 @export var knight_speed: float = 21.0
-@export var sovalye_duration: float = 25.0    ## gecici sovalye formu suresi
 
 @export_group("Bolum 1 — Lord Cluck")
 @export var cluck_speed: float = 26.0
@@ -80,7 +79,6 @@ extends Resource
 @export_group("Bolum 2 — dusmanlar")
 @export var ninja_speed: float = 75.0
 @export var ninja_blink_dist: float = 46.0
-@export var drone_hover_h: float = 46.0       ## zeminden yukseklik
 @export var drone_fire_interval: float = 2.8
 @export var guardian_speed: float = 15.0
 @export var terminal_hack_time: float = 1.2   ## drone hack suresi

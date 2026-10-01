@@ -119,6 +119,21 @@ func test_combo_reaches_three_and_resets() -> void:
 	assert_eq(sam.combo_index, 0)
 
 
+func test_combo_grace_chains_late_press() -> void:
+	ai.tap(&"attack")
+	await _frames(2)
+	assert_eq(sam.combo_index, 1)
+	await _frames(20)   # saldiri bitti, IDLE; grace penceresi (0.4s) hala acik
+	assert_eq(sam.sm.current_name, Samurai.S_IDLE)
+	ai.tap(&"attack")
+	await _frames(2)
+	assert_eq(sam.combo_index, 2, "grace icinde gec basin zincirlemeli")
+	await _frames(50)   # saldiri + grace tamamen bitti
+	ai.tap(&"attack")
+	await _frames(2)
+	assert_eq(sam.combo_index, 1, "grace disi yeni zincir 1'den baslar")
+
+
 func test_dash_cancels_attack_recovery() -> void:
 	ai.tap(&"attack")
 	await _frames(2)
