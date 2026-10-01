@@ -46,6 +46,7 @@ func _physics_process(delta: float) -> void:
 			_diving = true
 			_t = -1.2  # dalis suresi (negatif sayac)
 			velocity = Vector2(dx, dy).normalized() * tuning.ash_bat_dive_speed
+			play_anim(&"jump", 0.7)  # bankada varsa dalis pozu
 		elif _t >= 0.0:
 			# Evi cevresinde sinirli salinim
 			var tx := _home.x + sin(_t * 0.9) * 26.0
