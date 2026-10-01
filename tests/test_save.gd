@@ -210,6 +210,21 @@ func test_corrupt_save_flag_vector_recover() -> void:
 	assert_true(pos is Dictionary, "bozuk Vector2 girdisi ham kalir — crash yok")
 
 
+func test_locked_current_form_falls_back() -> void:
+	# Save'de current_form golge ama kilitli formlar sadece samurai —
+	# oyuncu hic acmadigi forma dogamaz; samurai'a dusurulur.
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"version": 1,
+		"current_form": "golge",
+		"unlocked_forms": ["samurai"],
+	}))
+	f.close()
+	assert_eq(SaveSystem.load_game(), OK)
+	assert_eq(GameState.current_form, &"samurai",
+		"kilitli olmayan forma dogus engellenir")
+
+
 func test_garbage_save_json_fails_cleanly() -> void:
 	# Gecerli JSON ama Dictionary degil — devam etmeye calismak parse hatasi
 	# uretir, title _on_new_game'e duser.

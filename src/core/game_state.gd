@@ -150,3 +150,6 @@ func from_dict(data: Dictionary) -> void:
 			unlocked_forms.append(StringName(f))
 	if unlocked_forms.is_empty():
 		unlocked_forms.append(&"samurai")
+	if not unlocked_forms.has(current_form):
+		push_warning("Save: kilitli olmayan form '%s' — samurai'a dusuruldu" % current_form)
+		current_form = &"samurai"
