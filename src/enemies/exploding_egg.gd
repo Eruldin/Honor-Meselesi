@@ -94,7 +94,9 @@ func take_damage(info: DamageInfo) -> void:
 		_reflect_dir = int(signf(global_position.x - info.source.global_position.x))
 	if _reflect_dir == 0:
 		_reflect_dir = 1
-	# Patrona carptiginda hasar vermesi icin hitbox'i dusman katmanina ac
+	# Patrona carptiginda hasar vermesi icin hitbox'i dusman katmanina ac;
+	# katman 8'e gecmezse dusman hurtbox'lari (mask=8) onu hic goremez.
+	hitbox.collision_layer = 8
 	hitbox.collision_mask = 16
 	var hc := hitbox.get_child(0).shape as CircleShape2D
 	hc.radius = 8.0
