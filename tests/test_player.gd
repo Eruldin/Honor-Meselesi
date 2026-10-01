@@ -260,6 +260,18 @@ func test_invuln_blocks_repeat_hits() -> void:
 	assert_eq(sam.health.current, sam.tuning.max_health - 1)
 
 
+func test_cutscene_ignores_damage() -> void:
+	# Kesik-sahne sirasinda gelen vurus (gecikmeli mermi) senkronu bozmaz.
+	var src: Node2D = add_child_autofree(Node2D.new())
+	sam.invuln_timer = 0.0
+	sam.sm.change_to(Samurai.S_CUTSCENE, true)
+	sam.take_damage(DamageInfo.make(1, src))
+	assert_eq(sam.health.current, sam.tuning.max_health,
+		"cutscene'de can eksilmez")
+	assert_eq(sam.sm.current_name, Samurai.S_CUTSCENE,
+		"cutscene durumu korunur")
+
+
 # --- Ruh odaklamasi (focus heal) ---
 
 func test_focus_heal_spends_soul_and_heals() -> void:
