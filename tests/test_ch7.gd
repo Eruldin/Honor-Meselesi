@@ -47,6 +47,25 @@ func test_samurai_boss_slash_and_parry() -> void:
 	assert_signal_emitted(b, "defeated")
 
 
+func test_bolt_damages_samurai_boss() -> void:
+	# Yaratik'in tek saldirisi aktif boss'a erismeli — hurtbox dusman
+	# katmaninda, take_damage aktiflige bagli (BossBase).
+	var b := SamuraiBoss.new()
+	b.arena_left = -200
+	b.arena_right = 200
+	b.global_position = Vector2(60, 0)
+	add_child_autofree(b)
+	b.activate()
+	await _frames(3)
+	var bolt := GlitchBolt.new()
+	bolt.vel = Vector2.ZERO
+	bolt.global_position = b.global_position + Vector2(-4, -4)
+	add_child_autofree(bolt)
+	await _frames(10)
+	assert_lt(b.health.current, b.health.max_health,
+		"glitch tanesi boss'u yaralar")
+
+
 func test_ch7_scene_builds_fight() -> void:
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	scene.auto_advance = false  # intro cutscene'i atla, dogrudan savas
