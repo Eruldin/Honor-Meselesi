@@ -16,5 +16,5 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	add_to_group(&"summonling")
-	stagger_timer = 0.45
-	play_anim(&"appear", 0.45)
+	stagger_timer = 0.8
+	play_anim(&"appear", 0.8)

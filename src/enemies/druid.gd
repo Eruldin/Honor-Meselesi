@@ -18,7 +18,7 @@ func _physics_process(delta: float) -> void:
 	if _player != null and health.is_alive() and not is_staggered():
 		var dx: float = _player.global_position.x - global_position.x
 		if absf(dx) < 30.0 and _anim_lock <= 0.0:
-			play_anim(&"attack", 0.7)
+			play_anim(&"attack", 1.65)  # cast bankasi 1.62s — kilit tam oynatir
 			AudioManager.play_sfx(&"sfx/swipe", global_position, -10.0, 0.9)
 			_earth_burst(signf(dx))
 

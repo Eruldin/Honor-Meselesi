@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 
 func _summon() -> void:
 	stagger_timer = 1.1
-	play_anim(&"summon", 1.1)
+	play_anim(&"summon", 0.4)
 	await get_tree().create_timer(0.55).timeout
 	if not health.is_alive():
 		return
