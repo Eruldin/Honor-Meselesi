@@ -1,6 +1,23 @@
 # Honor Meselesi — Mevcut Sistem Raporu
 
-> Yol haritası Aşama 1 çıktısı. Tarih: 2026-09-30. Kaynaklar:
+> **Durum güncellemesi (2026-10-01, PR #16–#246):** Aşama 1'deki
+> tüm boşluklar kapandı — test sayısı 84 → 151, tamamı yeşil.
+> - §2.1 placeholder: 19 itch.io paketi + AI sheet'leri manifest'e
+>   bağlandı; sahnede placeholder sprite kalmadı.
+> - §2.3 Bölüm 1: ölü bahçe gauntlet, gizli odalar, mini-boss kapısı,
+>   arena rest'iyle ~1 saatlik akışa ulaştı.
+> - §2.4–2.6: tam ekran ayarlar + rebind (kalıcı), mouse doğrulandı,
+>   dinamik müzik (combat layer + crossfade + rest teması) işliyor.
+> - §2.7 roster: iki vizyon birleştirildi — mevcut boss'lar korunup
+>   meta-anlatı (Ouroboros) ile harmanlandı.
+> - Kapatılan hata aileleri: sahne-sınırı global sızıntısı (paused/
+>   time_scale/ambiyans), post-boss soft-lock (cleared-exit portal +
+>   ch7 epilog yeniden kurulumu), anim-kilit uyuşmazlığı, mermi-duvar
+>   geçişi, i-frame/temas-hasarı uçları, test-izolasyon zehirlemesi.
+> - Açık kalanlar (insan doğrulaması gerek): ses hissi (bu makinede
+>   WASAPI yok), parry hissi, boss yenilme deneyimi uçtan uca.
+
+> Yol haritası Aşama 1 çıktısı (orijinal, 2026-09-30). Kaynaklar:
 > `Master_Gelistirme_Promptu`, `Devin_AI_Ultra_Master_Prompt`,
 > `Epik_Senaryo_GDD`, boss/asset konsept sheet'leri (5 görsel),
 > `docs/DEVIN_PLAN.md`, `docs/SENARYO.md`, kod tabanı taraması,
