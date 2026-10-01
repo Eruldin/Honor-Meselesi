@@ -59,6 +59,36 @@ func test_vampire_bleed_dot() -> void:
 	assert_eq(s.health.current, hp0 - 3, "3 tick kanama = 3 hasar")
 
 
+func test_vampire_strike_bleeds_unparried() -> void:
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	var v := Vampire.new()
+	v.global_position = Vector2(290, 240)
+	v._player = s
+	add_child_autofree(v)
+	await wait_seconds(0.05)
+	v._strike()
+	assert_gt(s.bleed_ticks, 0, "parry'siz isirik kanama birakir")
+
+
+func test_vampire_strike_parried_no_bleed() -> void:
+	# Regresyon: take_damage parry'de erken donuyordu ama apply_bleed
+	# yine de uygulaniyordu — basarili parry kanamayi da engeller.
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	s.sm.change_to(Samurai.S_PARRY, true)
+	var v := Vampire.new()
+	v.global_position = Vector2(290, 240)
+	v._player = s
+	add_child_autofree(v)
+	await wait_seconds(0.05)
+	v._strike()
+	assert_true(s.parry_succeeded, "vurus parry'lenir")
+	assert_eq(s.bleed_ticks, 0, "parry'lenen isirik kanama birakmaz")
+
+
 # --- Kurtadam ---
 
 func test_werewolf_attack_not_parryable() -> void:
