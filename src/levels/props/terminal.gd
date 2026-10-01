@@ -40,6 +40,10 @@ func _ready() -> void:
 	add_to_group(&"terminals")
 	area_entered.connect(func(a: Area2D) -> void: _check(a))
 	area_exited.connect(func(a: Area2D) -> void: _stop(a))
+	# Kapi zaten aciksa terminal tamamlanmis baslar — lamba yesil.
+	if GameState.get_flag(&"gate_open_" + String(gate_id), false):
+		_done = true
+		_lamp.color = Color(0.3, 1.0, 0.5)
 
 
 func _player_from(area: Area2D) -> Node:
