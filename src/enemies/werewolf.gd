@@ -55,11 +55,16 @@ func _physics_process(delta: float) -> void:
 			if _t <= 0.0 and absf(_player.global_position.x - global_position.x) < 200.0:
 				wstate = WState.TELEGRAPH
 				_t = tuning.werewolf_telegraph
-				sprite.modulate = Color(1.3, 0.3, 0.3)  # kirmizi goz telegraph
+				var c := Color(1.3, 0.3, 0.3)  # kirmizi goz telegraph
+				sprite.modulate = c
+				if anims != null:
+					anims.modulate = c
 		WState.TELEGRAPH:
 			if _t <= 0.0:
 				wstate = WState.LEAP
 				sprite.modulate = Color(0.5, 0.35, 0.3)
+				if anims != null:
+					anims.modulate = Color.WHITE
 				# Oyuncuya dogru atil — PARRY'LENEMEZ vurus
 				var dir: Vector2 = (_player.global_position - global_position).normalized()
 				velocity = dir * tuning.werewolf_jump_speed
