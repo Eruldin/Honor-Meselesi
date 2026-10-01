@@ -3,18 +3,25 @@ extends Node
 ## eski kayitlari migrate etmek icin kullanilir.
 
 const SAVE_PATH := "user://save.json"
+const SAVE_TMP := "user://save.json.tmp"
 
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
 
+## Once gecici dosyaya yazar sonra atomik rename yapar — yazim sirasinda
+## cokme/kapanma ana save'i bozmaz.
 func save_game() -> Error:
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var f := FileAccess.open(SAVE_TMP, FileAccess.WRITE)
 	if f == null:
 		return FileAccess.get_open_error()
 	f.store_string(JSON.stringify(GameState.to_dict(), "\t"))
-	return OK
+	f.close()
+	# Windows'ta hedef varken rename basarisiz — once silinir.
+	if has_save():
+		DirAccess.remove_absolute(SAVE_PATH)
+	return DirAccess.rename_absolute(SAVE_TMP, SAVE_PATH)
 
 
 func load_game() -> Error:
