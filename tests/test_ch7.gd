@@ -213,11 +213,14 @@ func test_ch7_forced_choice_glitches_to_fight() -> void:
 	add_child_autofree(scene)
 	await _frames(10)
 	assert_false(scene.boss.active, "boss secim oncesi uyur")
+	assert_true(scene.creature.frozen,
+		"secim bir menu ani — uyuyan boss'a bolt ile bedava hasar yok")
 	scene._choice.idx = 0  # imlec SAPKAYI VER ustunde
 	await _frames(25)      # >0.35s ustunde durma
 	assert_eq(scene._choice.idx, 1, "buton glitchlenir, imlec SAVAS'a kayar")
 	scene._choice_decide()
 	assert_true(scene.boss.active, "secimden sonra boss aktif")
+	assert_false(scene.creature.frozen, "savas acilinca kontrol geri gelir")
 
 
 func test_ch7_meta_assault_inverts_then_restores() -> void:
