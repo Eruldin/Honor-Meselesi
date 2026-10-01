@@ -135,7 +135,9 @@ func _physics_process(delta: float) -> void:
 	if anims != null:
 		anims.flip_h = facing < 0
 		if not anims.is_playing() or anims.animation in [&"idle", &"walk"]:
-			anims.play(&"walk" if absf(velocity.x) > 10.0 else &"idle")
+			var want := &"walk" if absf(velocity.x) > 10.0 else &"idle"
+			if anims.animation != want or not anims.is_playing():
+				anims.play(want)
 	# Fliker: glitch karakteri hafif titrer
 	_flicker += delta
 	# Dokunulmazlik penceresinde goz kirpma (samurai ile ayni dil)
