@@ -217,3 +217,38 @@ func test_all_scene_paths_exist() -> void:
 func test_main_scene_exists() -> void:
 	var main: String = ProjectSettings.get_setting("application/run/main_scene", "")
 	assert_true(ResourceLoader.exists(main), "main_scene var olmali: " + main)
+
+
+func test_all_audio_ids_in_manifest() -> void:
+	# Kontrat: kodda literal gecen sfx/music/amb id'leri manifest'te var
+	# olmali — yazim hatasi sessizce isitilmez cue uretir (or. sfx/whoosh).
+	var f := FileAccess.open("res://assets_manifest.json", FileAccess.READ)
+	if f == null:
+		pending("manifest yok (CI)")
+		return
+	var man: Dictionary = JSON.parse_string(f.get_as_text())
+	var keys: Dictionary = man.get("assets", man)
+	var seen: Dictionary = {}
+	var stack: Array[String] = ["res://src", "res://tools"]
+	while not stack.is_empty():
+		var dpath: String = stack.pop_back()
+		var d := DirAccess.open(dpath)
+		if d == null:
+			continue
+		d.list_dir_begin()
+		var name := d.get_next()
+		while name != "":
+			if d.current_is_dir() and name != "." and name != "..":
+				stack.append(dpath + "/" + name)
+			elif name.ends_with(".gd"):
+				var src := FileAccess.get_file_as_string(dpath + "/" + name)
+				var re := RegEx.create_from_string(
+					r'&"(sfx|music|amb)/[A-Za-z0-9_/.-]+"')
+				for m in re.search_all(src):
+					var id := (m.get_string() as String).trim_prefix("&\"").trim_suffix("\"")
+					seen[id] = true
+			name = d.get_next()
+		d.list_dir_end()
+	assert_gt(seen.size(), 30, "en az 30 ses id'si kodda gecmeli")
+	for id in seen.keys():
+		assert_true(keys.has(id), "manifest'te olmayan ses id'si: " + id)
