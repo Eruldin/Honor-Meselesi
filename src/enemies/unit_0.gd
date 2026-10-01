@@ -166,11 +166,17 @@ func _choose_attack(dx: float) -> void:
 			_t = 0.35
 
 
-## Zirh: kirilmadikca hicbir dogrudan vurus gecmez (parry punch kirar).
+## Zirh: kirilmadikca ondeki vuruslar seker (parry punch kirar).
+## M5 spec: arka pil zayif nokta — arkadan gelen darbe her zaman
+## gecer (boss oyuncuya doner, arkaya dolanmak parry/dash ister).
 func take_damage(info: DamageInfo) -> void:
 	if not active or not health.is_alive():
 		return
-	if armor_broken:
+	var behind := false
+	if info.source != null:
+		var dx := info.source.global_position.x - global_position.x
+		behind = (dx > 0) != (facing > 0)
+	if armor_broken or behind:
 		super.take_damage(info)
 	else:
 		FX.spark(hurtbox.global_position + Vector2(facing * -10, -8))

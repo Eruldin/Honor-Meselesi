@@ -194,6 +194,28 @@ func test_unit0_armor_blocks_until_parried() -> void:
 	assert_lt(b.health.current, hp0, "zirh kirik: hasar gecmeli")
 
 
+func test_unit0_back_battery_weak_point() -> void:
+	# M5 spec: "arka pil zayif noktali dev koruma" — arkadan gelen
+	# darbe zirhi asar; onden vurus seker.
+	var b := Unit0.new()
+	add_child_autofree(b)
+	b.activate()
+	var src := Node2D.new()
+	add_child_autofree(src)
+	# Boss sola bakiyor (facing=-1) — saldirgan arkada (sagda) kalir.
+	b.facing = -1
+	src.global_position = b.global_position + Vector2(30, 0)
+	var hp0 := b.health.current
+	b.take_damage(DamageInfo.make(3, src))
+	assert_lt(b.health.current, hp0, "arka pil: arkadan vurus gecer")
+	# Ayni kaynak onde kalirsa zirh sektirir.
+	b.health.heal(99)
+	b.facing = 1
+	var hp1 := b.health.current
+	b.take_damage(DamageInfo.make(3, src))
+	assert_eq(b.health.current, hp1, "onden vurus zirha seker")
+
+
 func test_unit0_missile_parry_reflects() -> void:
 	var m := HomingMissile.new()
 	add_child_autofree(m)
