@@ -113,4 +113,8 @@ func _show_chapter_title(path: String) -> void:
 
 
 func reload() -> void:
+	# Gecis surerken gelen olum/respawn cagrisi yarismasin — devam eden
+	# sahne degisimi kazanir.
+	if _is_transitioning:
+		return
 	get_tree().reload_current_scene()
