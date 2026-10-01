@@ -319,6 +319,21 @@ func test_focus_noop_at_full_health() -> void:
 	assert_eq(GameState.soul, 12, "tam canda ruh korunur")
 
 
+func test_focus_blocked_while_dead() -> void:
+	# Regresyon: olum penceresinde F'ye basmak 6 ruhu bosa harcardi —
+	# heal(1) cani diriltirdi ama S_DEAD kalirdi; respawn yine olurdu.
+	var src: Node2D = add_child_autofree(Node2D.new())
+	sam.invuln_timer = 0.0
+	sam.take_damage(DamageInfo.make(99, src))
+	await _frames(2)
+	assert_eq(sam.sm.current_name, Samurai.S_DEAD, "kurulum: olu")
+	GameState.soul = 12
+	ai.tap(&"focus")
+	await _frames(3)
+	assert_eq(GameState.soul, 12, "oluyken ruh harcanmaz")
+	assert_eq(sam.sm.current_name, Samurai.S_DEAD, "olum durumu korunur")
+
+
 func test_fall_state_uses_fall_anim() -> void:
 	if not AssetLoader.has_frames(&"player/samurai/fall"):
 		pending("fall sprite'i yok (CI) — atlaniyor")

@@ -482,6 +482,8 @@ func ensure_up_hitbox() -> void:
 ## Ruh odaklamasi: 6 ruh -> 1 kalp (HK Focus karsiligi). Maliyet
 ## GameState'ten harcanir; HUD dolulugu oradan okur.
 func _try_focus_heal() -> void:
+	if sm.current_name in [S_DEAD, S_CUTSCENE]:
+		return
 	if health.current >= health.max_health:
 		return
 	if not GameState.try_spend_soul(6):
