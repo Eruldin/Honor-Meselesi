@@ -81,6 +81,25 @@ func test_dead_player_ignores_further_hits() -> void:
 	EventBus.actor_died.disconnect(tally)
 
 
+func test_spike_rehits_after_exit() -> void:
+	# Regresyon: hitbox tek kez aktive ediliyordu — oyuncu yalnizca bir
+	# kez hasar aliyor, sonraki temaslar sonsuza dek zararsiz kaliyordu.
+	_flat_ground()
+	var s := _make_samurai()
+	s.global_position = Vector2(300, 240)
+	var sp := Spike.new()
+	sp.global_position = Vector2(300, 252)
+	add_child_autofree(sp)
+	var hp0 := s.health.current
+	await wait_seconds(0.2)  # temas -> ilk vurus
+	assert_lt(s.health.current, hp0, "ilk temas vurmali")
+	s.global_position = Vector2(600, 240)  # ayril -> hitbox yeniden kurulur
+	await wait_seconds(1.0)  # i-frame suresi gecsin
+	s.global_position = Vector2(300, 240)  # geri don -> yeniden temas
+	await wait_seconds(0.3)
+	assert_lt(s.health.current, hp0 - 1, "ikinci temas tekrar vurmali")
+
+
 func test_guard_blocks_frontal_damage() -> void:
 	_flat_ground()
 	var s := _make_samurai()

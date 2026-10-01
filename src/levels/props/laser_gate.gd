@@ -27,7 +27,11 @@ func _ready() -> void:
 	col.shape = rect
 	hitbox.add_child(col)
 	add_child(hitbox)
-	hitbox.activate(DamageInfo.make(1, self, Vector2.ZERO, false, false))
+	# Oyuncu ayrilinca yeniden kurulur — temas tekrar vurabilir.
+	var gate_info := DamageInfo.make(1, self, Vector2.ZERO, false, false)
+	hitbox.area_exited.connect(func(_a: Area2D) -> void:
+		hitbox.activate(gate_info))
+	hitbox.activate(gate_info)
 
 	# Ayni id'li terminallerden "hacked" dinle — deferred: ekleme sirasindan
 	# bagimsiz (terminal once/sonra eklense de baglanir)
