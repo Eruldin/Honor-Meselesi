@@ -295,13 +295,17 @@ func test_ch7_finished_game_returns_to_prolog() -> void:
 	GameState.set_flag(&"ch7_boss_dead")
 	GameState.set_flag(&"ouroboros_done", true)
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
-	var got := [StringName()]
+	# Emit'in SceneRouter'a ulasmasi GUT sahnesini swap eder — dinleyiciyi
+	# test boyunca kes, sonra geri bagla.
+	EventBus.scene_change_requested.disconnect(SceneRouter.change_scene)
+	var got := [""]
 	EventBus.scene_change_requested.connect(
-		func(p: StringName) -> void: got[0] = p, CONNECT_ONE_SHOT)
+		func(p: String) -> void: got[0] = p, CONNECT_ONE_SHOT)
 	add_child_autofree(scene)
 	await _frames(6)
-	assert_eq(String(got[0]), "res://src/levels/prolog/Prolog.tscn",
+	assert_eq(got[0], "res://src/levels/prolog/Prolog.tscn",
 		"tamamlanmis oyun Prolog'a doner")
+	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
 
 
 func test_ch7_boss_dead_rebuilds_epilogue() -> void:
