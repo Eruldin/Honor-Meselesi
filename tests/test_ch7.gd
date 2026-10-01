@@ -435,3 +435,17 @@ func test_creature_death_disables_hurtbox() -> void:
 	c.take_damage(DamageInfo.make(999, null))
 	await _frames(3)
 	assert_false(c.hurtbox.monitorable, "olu yaratik vurulamaz")
+
+
+func test_creature_death_keeps_die_anim() -> void:
+	# Olum vurusunda health.died -> _on_died die animini baslatir; take_damage
+	# sonrasi hurt animi onu ezmemeli.
+	var c := GlitchCreature.new()
+	c.set_input_source(AIInputSource.new())
+	add_child_autofree(c)
+	c.take_damage(DamageInfo.make(999, null))
+	assert_true(c.dead, "olum vurusu oldu bayragini koyar")
+	if c.anims != null:
+		assert_eq(c.anims.animation, &"die", "die animi hurt ile ezilmez")
+	else:
+		pending("dark_character bankasi yok (CI) — atlaniyor")
