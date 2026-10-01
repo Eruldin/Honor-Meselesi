@@ -449,3 +449,23 @@ func test_creature_death_keeps_die_anim() -> void:
 		assert_eq(c.anims.animation, &"die", "die animi hurt ile ezilmez")
 	else:
 		pending("dark_character bankasi yok (CI) — atlaniyor")
+
+
+func test_creature_walk_anim_progresses() -> void:
+	# Regresyon: play("walk") her frame'de ayni animi restart ediyordu —
+	# yuruyus kare 0'da donuyordu.
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	add_child_autofree(c)
+	if c.anims == null:
+		pending("dark_character bankasi yok (CI) — atlaniyor")
+		return
+	ai.axis(1.0)
+	var progressed := false
+	for i in 30:
+		await get_tree().physics_frame
+		if c.anims.animation == &"walk" and c.anims.frame > 0:
+			progressed = true
+			break
+	assert_true(progressed, "walk animi kare ilerletir — restart edilmez")
