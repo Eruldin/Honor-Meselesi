@@ -42,10 +42,12 @@ func _ready() -> void:
 	health.max_health = 4
 	health.reset()
 	# Kul goruntusu: kor-turuncu tona cekilmis samurai sheet'i.
+	# (_anims sadece sheet asset'i varken olusur — assetsiz ortamda sprite'a kalir.)
 	var ash := Color(1.05, 0.72, 0.5, 1.0)
 	sprite.modulate = ash
-	_anims.modulate = ash
-	_anims.speed_scale = 0.9
+	if _anims != null:
+		_anims.modulate = ash
+		_anims.speed_scale = 0.9
 
 
 func _physics_process(delta: float) -> void:
