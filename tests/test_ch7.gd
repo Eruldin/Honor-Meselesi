@@ -308,6 +308,41 @@ func test_ch7_finished_game_returns_to_prolog() -> void:
 	EventBus.scene_change_requested.connect(SceneRouter.change_scene)
 
 
+func test_creature_frozen_halts_input_but_falls() -> void:
+	# Regresyon: Ouroboros sinemasi boyunca yaratik girdi okumaya devam
+	# ediyordu — oyuncu son kesikte bolt atip sinemayi bozabiliyordu.
+	add_child_autofree(_make_floor(Vector2(0, 0), Vector2(400, 20)))
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	c.global_position = Vector2(0, -40)
+	add_child_autofree(c)
+	await _frames(3)
+	c.frozen = true
+	ai.axis(1.0)
+	ai.tap(&"attack")
+	var x0 := c.global_position.x
+	await _frames(15)
+	assert_lt(absf(c.global_position.x - x0), 1.0,
+		"frozen yaratik yurumez")
+	await _frames(40)
+	assert_true(c.is_on_floor(), "yercekimi surer — yere oturur")
+	var found := false
+	for n in get_children():
+		if n is GlitchBolt:
+			found = true
+	assert_false(found, "frozen yaratik bolt atmaz")
+
+
+func test_ch7_boss_defeat_freezes_creature() -> void:
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(6)
+	scene._on_boss_defeated()
+	assert_true(scene.creature.frozen, "final kesigi girdiyi dondurur")
+
+
 func test_ch7_boss_dead_rebuilds_epilogue() -> void:
 	# Regresyon: boss-oldu bayragi yazili ama epilog yarida kesilmis
 	# (quit/crash) — reload'da jenerik zinciri yeniden kurulur.
