@@ -287,3 +287,40 @@ func test_credits_feeds_from_credits_md() -> void:
 	watch_signals(c)
 	c._finish()
 	assert_signal_emitted(c, "finished")
+
+
+func test_ch7_finished_game_returns_to_prolog() -> void:
+	# Regresyon: final+epilog tamamlandiktan sonra Continue bos
+	# arenada kaliyordu — tamamlanmis oyun Prolog'a doner (Ouroboros).
+	GameState.set_flag(&"ch7_boss_dead")
+	GameState.set_flag(&"ouroboros_done", true)
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	var got := [StringName()]
+	EventBus.scene_change_requested.connect(
+		func(p: StringName) -> void: got[0] = p, CONNECT_ONE_SHOT)
+	add_child_autofree(scene)
+	await _frames(6)
+	assert_eq(String(got[0]), "res://src/levels/prolog/Prolog.tscn",
+		"tamamlanmis oyun Prolog'a doner")
+
+
+func test_ch7_boss_dead_rebuilds_epilogue() -> void:
+	# Regresyon: boss-oldu bayragi yazili ama epilog yarida kesilmis
+	# (quit/crash) — reload'da jenerik zinciri yeniden kurulur.
+	GameState.set_flag(&"ch7_boss_dead")
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	add_child_autofree(scene)
+	await _frames(4)
+	var credits_before := 0
+	for c in scene.get_children():
+		if c is Credits:
+			credits_before += 1
+	assert_eq(credits_before, 0, "jenerik kart once gelir")
+	await get_tree().create_timer(2.6, true, false, true).timeout
+	var found := false
+	for n in scene.get_children():
+		if n is CanvasLayer:
+			for c in n.get_children():
+				if c is Label and c.text == "15 YIL SONRA...":
+					found = true
+	assert_true(found, "epilog karti yeniden gosterilir")
