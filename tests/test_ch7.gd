@@ -104,6 +104,44 @@ func test_creature_inverted_controls() -> void:
 	assert_lt(c.global_position.x, 0.0, "ters kontrolde saga tusa sola gider")
 
 
+func _make_floor(center: Vector2, size: Vector2) -> StaticBody2D:
+	var body := StaticBody2D.new()
+	body.collision_layer = 1
+	body.collision_mask = 0
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = size
+	col.shape = rect
+	body.add_child(col)
+	body.global_position = center
+	return body
+
+
+func test_creature_cannot_air_hop() -> void:
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	add_child_autofree(c)
+	await _frames(10)  # havada dusuyor
+	ai.tap(&"jump")
+	await _frames(10)  # buffer suresi gecer — hop olmaz
+	assert_gt(c.velocity.y, -60.0, "havada hop yok — ucus kapatildi")
+
+
+func test_creature_grounded_hop_with_buffer() -> void:
+	add_child_autofree(_make_floor(Vector2(0, 0), Vector2(400, 20)))
+	var c := GlitchCreature.new()
+	var ai := AIInputSource.new()
+	c.set_input_source(ai)
+	c.global_position = Vector2(0, -30)
+	add_child_autofree(c)
+	await _frames(30)  # hafif yercekimi — yavas oturur
+	assert_true(c.is_on_floor(), "kurulum: yaratik zeminde")
+	ai.tap(&"jump")
+	await _frames(2)
+	assert_lt(c.velocity.y, -30.0, "zeminde hop ziplar (kisa serbest birakma ile bile)")
+
+
 func test_ch7_forced_choice_glitches_to_fight() -> void:
 	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
 	scene.auto_advance = false
