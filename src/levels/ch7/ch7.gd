@@ -405,12 +405,15 @@ func _meta_spear() -> void:
 	FX.glitch(1.0, 0.5)
 	AudioManager.play_sfx(&"sfx/glitch")
 	var idx := creature.health.current - 1
-	if idx >= _hud._hearts.size():
-		return
-	var heart := _hud._hearts[idx]
-	heart.visible = false
+	# Asset'siz kurulumda HUD yedek bara duser, _hearts bos kalir —
+	# mizrak yine de atilir (sprite AssetLoader yedegiyle cizilir).
+	var heart: TextureRect = _hud._hearts[idx] \
+		if idx < _hud._hearts.size() else null
+	if heart != null:
+		heart.visible = false
 	var spear := HeartSpear.new()
-	spear.global_position = heart.global_position + Vector2(4, 4)
+	spear.global_position = heart.global_position + Vector2(4, 4) \
+		if heart != null else Vector2(36, 10)
 	add_child(spear)
 	spear.returned.connect(func(sp: HeartSpear) -> void:
 		if is_instance_valid(heart):

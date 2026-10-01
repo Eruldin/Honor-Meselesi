@@ -112,8 +112,9 @@ func test_ch7_heart_spear_steals_last_heart() -> void:
 	await _frames(3)
 	assert_true(scene._spear_done, "kalp mizragi tetiklendi")
 	var idx: int = scene.creature.health.current - 1
-	assert_false(scene._hud._hearts[idx].visible,
-		"son dolu kalp HUD'dan sokuldu")
+	if idx < scene._hud._hearts.size():
+		assert_false(scene._hud._hearts[idx].visible,
+			"son dolu kalp HUD'dan sokuldu")
 	var found := false
 	for n in scene.get_children():
 		if n is HeartSpear:
