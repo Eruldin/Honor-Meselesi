@@ -122,6 +122,22 @@ func test_ch7_heart_spear_steals_last_heart() -> void:
 	assert_true(found, "mizrak sahnede")
 
 
+func test_ch7_epilogue_shows_fifteen_years_card() -> void:
+	var scene: Node2D = load("res://src/levels/ch7/Ch7.tscn").instantiate()
+	scene.auto_advance = false
+	add_child_autofree(scene)
+	await _frames(5)
+	scene._finish()  # async — kart 1s sonra belirir
+	await get_tree().create_timer(1.4, true, false, true).timeout
+	var found := false
+	for n in scene.get_children():
+		if n is CanvasLayer:
+			for c in n.get_children():
+				if c is Label and c.text == "15 YIL SONRA...":
+					found = true
+	assert_true(found, "epilog '15 YIL SONRA...' kartini gosterir")
+
+
 func test_credits_feeds_from_credits_md() -> void:
 	var c := Credits.new()
 	add_child_autofree(c)
