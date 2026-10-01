@@ -58,7 +58,8 @@ func _ready() -> void:
 	_build_anims()
 
 	health = Health.new()
-	health.max_health = 5
+	# M11 zorluk: samuray ile ayni can havuzu ayari (KOLAY +1, ZOR -1).
+	health.max_health = maxi(1, 5 + Settings.difficulty_health_delta())
 	add_child(health)
 	health.died.connect(_on_died)
 

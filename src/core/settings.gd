@@ -17,6 +17,19 @@ var fullscreen: bool = false       ## pencere modu
 var window_scale: int = 3          ## 480x270 * n pencere boyutu
 var bind_overrides: Dictionary = {}  ## action -> seri InputEvent (k/m/j)
 var seen_flash_warning: bool = false  ## isiga duyarlilik uyarisi gosterildi
+var difficulty: int = 1              ## M11 zorluk: 0=KOLAY(+1 kalp) 1=NORMAL 2=ZOR(-1 kalp)
+
+
+func difficulty_health_delta() -> int:
+	return [1, 0, -1][clampi(difficulty, 0, 2)]
+
+
+func set_difficulty(v: int) -> void:
+	v = clampi(v, 0, 2)
+	if v == difficulty:
+		return
+	difficulty = v
+	_commit()
 
 
 func _apply_bus_volume() -> void:
@@ -164,6 +177,7 @@ func save_settings() -> void:
 		"window_scale": window_scale,
 		"binds": bind_overrides,
 		"seen_flash_warning": seen_flash_warning,
+		"difficulty": difficulty,
 	}))
 	f.close()
 	# Windows'ta hedef varken rename basarisiz — once silinir.
@@ -188,6 +202,7 @@ func load_settings() -> void:
 	fullscreen = bool(data.get("fullscreen", false))
 	window_scale = int(data.get("window_scale", 3))
 	seen_flash_warning = bool(data.get("seen_flash_warning", false))
+	difficulty = clampi(int(data.get("difficulty", 1)), 0, 2)
 	var raw_binds: Variant = data.get("binds", {})
 	if raw_binds is Dictionary:
 		for k: String in raw_binds:
