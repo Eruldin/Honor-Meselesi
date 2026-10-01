@@ -317,7 +317,7 @@ func _process(delta: float) -> void:
 		if _step_timer <= 0.0:
 			_step_timer = 0.28
 			var is_dash = sm.current_name == S_DASH
-			if form != null and form.id == &"knight":
+			if form != null and form.id == &"sovalye":
 				# Zirhli form: agir adim sesi — govde agirligi duyulur.
 				AudioManager.play_sfx(
 					&"sfx/footstep2" if _step_alt else &"sfx/footstep",
