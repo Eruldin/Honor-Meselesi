@@ -10,6 +10,12 @@ class Rest:
 		sam.velocity = Vector2.ZERO
 		sam.sprite_flash(Color(0.4, 1.0, 0.6))
 		sam.health.reset()
+		# M9: bellek dunyasinda yorgunluk — basini ellerine alma pozu
+		if GameState.current_chapter == &"ch6":
+			sam.set_weary_visual(true)
+
+	func exit() -> void:
+		sam.set_weary_visual(false)
 
 	func physics_process(delta: float) -> StringName:
 		sam.apply_gravity(delta)

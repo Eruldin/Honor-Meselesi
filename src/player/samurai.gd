@@ -503,6 +503,41 @@ func sprite_flash(color: Color) -> void:
 	_flash_timer = 0.09
 
 
+var _weary: Sprite2D
+
+## M9: bellek dunyasinda checkpoint'te yorgunluk pozu — basini ellerine
+## alma. Sadece ch6'da Rest durumu cagirir; diger bolumlerde gosterilmez.
+func set_weary_visual(on: bool) -> void:
+	if on:
+		if _weary == null:
+			if not AssetLoader.has_asset(&"prop/player_weary"):
+				return
+			_weary = Sprite2D.new()
+			_weary.texture = AssetLoader.texture(&"prop/player_weary")
+			var ss := _weary.texture.get_size()
+			_weary.offset = Vector2(-ss.x / 2.0, -ss.y + 11.0)
+			_weary.scale = Vector2.ONE * (30.0 / ss.y)
+			add_child(_weary)
+		if _weary == null:
+			return
+		var use_anims := _anims != null and _anims.visible
+		_weary.flip_h = (_anims.flip_h if use_anims else sprite.flip_h)
+		_weary.modulate = sprite.modulate
+		_weary.visible = true
+		sprite.visible = false
+		if _anims != null:
+			_anims.visible = false
+	else:
+		if _weary != null:
+			_weary.visible = false
+		var real := form == null or form.id == &"samurai"
+		if _anims != null:
+			_anims.visible = real
+			sprite.visible = not real
+		else:
+			sprite.visible = true
+
+
 ## Dash sirasinda kareye kopyalanip silinen soluk goruntu (HK dash izi).
 func spawn_dash_ghost() -> void:
 	# Form donusumunde _anims gizlenir ve sprite gercek texture tasir —
