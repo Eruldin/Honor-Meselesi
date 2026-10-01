@@ -108,6 +108,34 @@ func _build_terrain() -> void:
 		_walls.append(wall)
 		add_child(wall)
 
+	# Mezarlik zemini: mezar taslari gruplari, kirik citler, kuru agaclar.
+	# Sutunlar gokyuzunde asili — zeminde yasanan yer burasi.
+	var stone := Color(0.55, 0.5, 0.65)
+	for spec in [[115.0, &"prop/grave_1"], [205.0, &"prop/grave_3"],
+			[385.0, &"prop/grave_2"], [475.0, &"prop/grave_1"],
+			[755.0, &"prop/grave_3"], [850.0, &"prop/grave_2"],
+			[925.0, &"prop/grave_1"], [1090.0, &"prop/grave_2"],
+			[1310.0, &"prop/grave_1"], [1385.0, &"prop/grave_3"]]:
+		_add_deco_ground(spec[1], spec[0], 0.8, stone)
+	_add_deco_ground(&"prop/deadtree_1", 60.0, 0.55, Color(0.4, 0.34, 0.5))
+	_add_deco_ground(&"prop/deadtree_2", 1040.0, 0.5,
+		Color(0.36, 0.3, 0.46), true)
+	_add_deco_ground(&"prop/fence", 300.0, 0.8, Color(0.5, 0.44, 0.58))
+	_add_deco_ground(&"prop/fence", 880.0, 0.8, Color(0.5, 0.44, 0.58), true)
+
+
+func _add_deco_ground(id: StringName, x: float, scale := 1.0,
+		modulate := Color.WHITE, flip := false) -> void:
+	## Alt kenari zemine oturan dekor.
+	if not AssetLoader.has_asset(id):
+		return
+	var s := Sprite2D.new()
+	s.texture = AssetLoader.texture(id)
+	s.scale = Vector2(-scale if flip else scale, scale)
+	s.position = Vector2(x, FLOOR_Y - s.texture.get_height() * scale * 0.5)
+	s.modulate = modulate
+	add_child(s)
+
 
 func _make_wall(center: Vector2) -> StaticBody2D:
 	var body := StaticBody2D.new()
