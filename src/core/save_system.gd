@@ -21,7 +21,10 @@ func save_game() -> Error:
 	# Windows'ta hedef varken rename basarisiz — once silinir.
 	if has_save():
 		DirAccess.remove_absolute(SAVE_PATH)
-	return DirAccess.rename_absolute(SAVE_TMP, SAVE_PATH)
+	var err := DirAccess.rename_absolute(SAVE_TMP, SAVE_PATH)
+	if err == OK:
+		EventBus.game_saved.emit()
+	return err
 
 
 func load_game() -> Error:

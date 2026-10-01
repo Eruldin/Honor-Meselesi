@@ -16,6 +16,21 @@ var _form_icon: TextureRect
 var _form_time: ColorRect
 var _form_id: StringName = &"samurai"
 var _soul_notch: ColorRect
+var _save_mark: Control
+var _save_tw: Tween
+
+
+class SaveMark:
+	## Kaydedildi isareti — kucuk disket glifi; autosave'de kisa parlar.
+	extends Control
+
+	func _draw() -> void:
+		var c := Color(0.75, 0.72, 0.55)
+		var d := Color(0.14, 0.12, 0.18)
+		draw_rect(Rect2(0, 0, 9, 9), c)
+		draw_rect(Rect2(2, 0, 5, 3), d)
+		draw_rect(Rect2(2, 5, 5, 3), d)
+		draw_rect(Rect2(3, 6, 3, 1), c)
 
 
 var _portrait_id: StringName = &"ui/hud_portrait"
@@ -97,6 +112,25 @@ func _ready() -> void:
 			fr.stretch_mode = TextureRect.STRETCH_SCALE
 			fr.size = Vector2(110, 10)
 			pb.root.add_child(fr)
+
+	# Kaydedildi isareti — sag ustte kisa parlar (autosave geri bildirimi)
+	_save_mark = SaveMark.new()
+	_save_mark.position = Vector2(466, 6)
+	_save_mark.size = Vector2(9, 9)
+	_save_mark.modulate.a = 0.0
+	add_child(_save_mark)
+	EventBus.game_saved.connect(_on_saved)
+
+
+func _on_saved() -> void:
+	if _save_mark == null:
+		return
+	if _save_tw != null and _save_tw.is_running():
+		_save_tw.kill()
+	_save_mark.modulate.a = 0.9
+	_save_tw = create_tween()
+	_save_tw.tween_interval(1.0)
+	_save_tw.tween_property(_save_mark, "modulate:a", 0.0, 0.5)
 
 
 ## Aktif form rozeti: samuray disi formlarda form sprite'ini gosterir.

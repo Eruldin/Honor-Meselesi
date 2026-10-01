@@ -19,3 +19,6 @@ signal form_changed(form_id: StringName)
 signal scene_change_requested(path: String)
 signal cutscene_started(id: StringName)
 signal cutscene_finished(id: StringName)
+
+## SaveSystem basarili kayit sonrasi — HUD kucuk kayit isareti yakip soner.
+signal game_saved

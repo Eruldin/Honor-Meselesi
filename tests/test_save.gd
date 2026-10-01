@@ -108,6 +108,13 @@ func test_rebind_steals_conflicting_key() -> void:
 	Settings.save_settings()
 
 
+func test_save_emits_game_saved_signal() -> void:
+	# HUD kayit isareti bu sinyali dinler — basarili kayitta tetiklenmeli.
+	watch_signals(EventBus)
+	assert_eq(SaveSystem.save_game(), OK)
+	assert_signal_emitted(EventBus, "game_saved")
+
+
 func test_death_mark_cycle() -> void:
 	GameState.current_chapter = &"ch3"
 	GameState.soul = 7
