@@ -343,8 +343,9 @@ func _fight_choice() -> void:
 	add_child(layer)
 	var box := HBoxContainer.new()
 	box.add_theme_constant_override("separation", 64)
-	var give := _choice_label("SAPKAYI VER")
-	var fight := _choice_label("SAVAS")
+	var tr := Settings.language == "tr"
+	var give := _choice_label("SAPKAYI VER" if tr else "GIVE HAT")
+	var fight := _choice_label("SAVAS" if tr else "FIGHT")
 	box.add_child(give)
 	box.add_child(fight)
 	layer.add_child(box)
