@@ -197,7 +197,11 @@ func audio(logical_id: StringName) -> AudioStream:
 		return _cache[key]
 	if not has_asset(logical_id):
 		return null
-	var path := _resolve_external(_manifest[logical_id]["path"])
+	var entry: Dictionary = _manifest[logical_id]
+	var p: String = entry.get("path", "")
+	if p.is_empty() and entry.has("files") and entry["files"].size() > 0:
+		p = entry["files"][0]
+	var path := _resolve_external(p)
 	var ext := path.get_extension().to_lower()
 	var s: AudioStream = null
 	match ext:

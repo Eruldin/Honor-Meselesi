@@ -318,8 +318,6 @@ func _build_terrain() -> void:
 	# 1) Koy (0 - 1200) — japon koyu: ay + dag panoramasi + alacakaranlik
 	ParallaxBg.add(self, LEVEL_W, [
 		{id = &"bg/dusk_sky", scroll = 0.0, x0 = 0, x1 = 1200},
-		{id = &"bg/j_mountains", scroll = 0.06, x0 = 0, x1 = 1200,
-			modulate = Color(0.8, 0.7, 0.85)},
 		{id = &"bg/dusk_far", scroll = 0.10, x0 = 0, x1 = 1200},
 		{id = &"bg/dusk_mid", scroll = 0.22, x0 = 0, x1 = 1200},
 		{id = &"bg/taiga_mid", scroll = 0.30, x0 = 0, x1 = 1200,
@@ -608,19 +606,19 @@ func _build_terrain() -> void:
 	add_child(dark)
 
 	# === KOY DEKORU ===
-	var house_mod := Color(0.75, 0.6, 0.62)
+	var house_mod := Color(0.95, 0.82, 0.78)
 	# === JAPON KOYU ===
 	# Torii girisi — koyun batı ucunda ikonik kapi
 	_add_deco_ground(&"prop/torii", 48, FLOOR_Y + 2, 1.15,
 		Color(0.9, 0.55, 0.45))
 	# Samurayin evi — prolog evinin dis gorunumu
 	_add_deco_ground(&"prop/house_main", 178, FLOOR_Y + 4, 0.78,
-		Color(0.88, 0.75, 0.7))
+		Color(1.0, 0.9, 0.85))
 	# Mahalle evleri — ayni tip japon evi, farkli tonlarla varyasyon
 	_add_deco_ground(&"prop/house_main", 520, FLOOR_Y + 4, 0.7,
-		Color(0.75, 0.62, 0.62))
+		Color(0.92, 0.78, 0.78))
 	_add_deco_ground(&"prop/house_main", 905, FLOOR_Y + 4, 0.74,
-		Color(0.82, 0.66, 0.58))
+		Color(0.98, 0.85, 0.75))
 	# Tas pagoda fenerler — sokak aydinlatmasi + sicak hale
 	for x in [300.0, 660.0, 1010.0]:
 		_add_deco_ground(&"prop/stone_lamp", x, FLOOR_Y, 0.55,

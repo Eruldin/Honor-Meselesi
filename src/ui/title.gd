@@ -94,7 +94,7 @@ func _build_scenery() -> void:
 		sam.sprite_frames = frames
 		sam.play(&"default")
 		sam.scale = Vector2(0.85, 0.85)
-		sam.position = Vector2(240, 192)
+		sam.position = Vector2(240, 206)
 		sam.z_index = 4
 		add_child(sam)
 
@@ -112,15 +112,22 @@ func _build_scenery() -> void:
 	# Glitch Yaratik — arada belirip statikle gozden kaybolur (onsezme)
 	_creature = Sprite2D.new()
 	_creature.texture = AssetLoader.texture(&"enemy/glitch_creature", Vector2i(14, 12))
-	_creature.modulate = Color(0.55, 0.9, 1.0, 0.95)
+	_creature.modulate = Color(1.0, 1.0, 1.0, 0.95)
+	_creature.scale = Vector2(0.4, 0.4)
 	_creature.z_index = 7
 	_creature.visible = false
 	add_child(_creature)
 
 
 func _build_menu() -> void:
-	# Gercek logo varsa kullan (ui/logo), yoksa metin basliga dus
+	# Gercek logo varsa kullan (ui/logo), yoksa metin basliga dus.
+	# ui/logo portre/HUD sprite'ina isaret ediyorsa basligi ezmesin diye
+	# boyutu dogrula: en az 120px genislikteki gercek bir logo olmali.
+	var logo_ok := false
 	if AssetLoader.has_asset(&"ui/logo"):
+		var lt := AssetLoader.texture(&"ui/logo")
+		logo_ok = lt != null and lt.get_width() >= 120
+	if logo_ok:
 		var logo := Sprite2D.new()
 		logo.texture = AssetLoader.texture(&"ui/logo")
 		logo.centered = true
